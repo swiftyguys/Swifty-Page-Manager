@@ -2,7 +2,7 @@
     "name": "swiftyguys/swiftypages",
     "description": "Swifty Pages",
     "type": "wordpress-plugin",
-    "license": "Commercial",
+    "license": "GPL2",
     "authors": [
         {
             "name": "SwiftyGuys - Jeroen Hoekstra",
