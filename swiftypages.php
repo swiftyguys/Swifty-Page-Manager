@@ -11,13 +11,15 @@ Plugin URI: https://bitbucket.org/swiftyguys/SwiftyPages
 
 class SwiftyPages
 {
+    protected $plugin_file;
     protected $plugin_dir;
     protected $plugin_dir_url;
 
     public function __construct()
     {
-        $this->plugin_dir     = dirname( __FILE__ );
-        $this->plugin_dir_url = plugin_dir_url( __FILE__ );
+        $this->plugin_file    =  __FILE__ ;
+        $this->plugin_dir     =  dirname( $this->plugin_file );
+        $this->plugin_dir_url = plugin_dir_url( $this->plugin_file );
         define( "CMS_TPV_VERSION", "1.2.21" );
         define( "CMS_TPV_NAME", "CMS Tree Page View" );
         define( "CMS_TPV_URL", $this->plugin_dir_url );
@@ -586,7 +588,7 @@ class SwiftyPages
     function cms_tpv_set_plugin_row_meta( $links, $file )
     {
 
-        if ( $file === "cms-tree-page-view/index.php" )
+        if ( $file === basename(dirname($this->plugin_file)).'/'.basename($this->plugin_file) )
         {
             return array_merge(
                 $links,
@@ -633,7 +635,7 @@ class SwiftyPages
             foreach ( $options[ "dashboard" ] as $one_dashboard_post_type )
             {
                 $post_type_object = get_post_type_object( $one_dashboard_post_type );
-                $new_func_name    = create_function( '', "cms_tpv_dashboard('$one_dashboard_post_type');" );
+                $new_func_name    = create_function( '', "$this->cms_tpv_dashboard('$one_dashboard_post_type');" );
                 if ( !empty( $post_type_object ) )
                 {
                     $widget_name = sprintf( _x( '%1$s Tree', "name of dashboard", "cms-tree-page-view" ), $post_type_object->labels->name );
@@ -693,7 +695,7 @@ class SwiftyPages
             }
         }
 
-        add_submenu_page( 'options-general.php', CMS_TPV_NAME, CMS_TPV_NAME, "administrator", "cms-tpv-options", "cms_tpv_options" );
+        add_submenu_page( 'options-general.php', CMS_TPV_NAME, CMS_TPV_NAME, "administrator", "cms-tpv-options", array($this,"cms_tpv_options") );
 
     }
 
