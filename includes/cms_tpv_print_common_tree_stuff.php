@@ -310,28 +310,28 @@ if (true) {
     </div>
 
 <!-- SwiftySite template with actions -->
-            <span class="ss-page-actions">
-                <span class="button button-primary ss-button ss-button-add-page" data-ss-action="add"
-                      title='<?php _e( "Add page(s)", 'swiftypages' ) ?>'>
-                    <span class="dashicons ss-icon dashicons-plus"></span>
-                </span>
-                <span class="button button-primary ss-button ss-button-page-settings" data-ss-action="settings"
-                      title='<?php _e( "Edit page", 'swiftypages' ) ?>'>
-                    <span class="dashicons ss-icon dashicons-admin-generic"></span>
-                </span>
-                <span class="button button-primary ss-button ss-button-delete-page" data-ss-action="delete"
-                      title='<?php _e( "Delete page", 'swiftypages' ) ?>'>
-                    <span class="dashicons ss-icon dashicons-no"></span>
-                </span>
-                <span class="button button-primary ss-button ss-button-edit-page" data-ss-action="edit"
-                      title='<?php _e( "Edit page content", 'swiftypages' ) ?>'>
-                    <span class="dashicons ss-icon dashicons-admin-tools"></span>
-                </span>
-                <span class="button button-primary ss-button ss-button-view-page" data-ss-action="view"
-                      title='<?php _e( "View page", 'swiftypages' ) ?>'>
-                    <span class="dashicons ss-icon dashicons-visibility"></span>
-                </span>
-            </span>
+    <span class="ss-page-actions">
+        <span class="button button-primary ss-button ss-button-add-page" data-ss-action="add"
+              title='<?php _e( "Add page(s)", "cms-tree-page-view" ) ?>'>
+            <span class="dashicons ss-icon dashicons-plus"></span>
+        </span>
+        <span class="button button-primary ss-button ss-button-page-settings" data-ss-action="settings"
+              title='<?php _e( "Edit page", "cms-tree-page-view" ) ?>'>
+            <span class="dashicons ss-icon dashicons-admin-generic"></span>
+        </span>
+        <span class="button button-primary ss-button ss-button-delete-page" data-ss-action="delete"
+              title='<?php _e( "Delete page", "cms-tree-page-view" ) ?>'>
+            <span class="dashicons ss-icon dashicons-no"></span>
+        </span>
+        <span class="button button-primary ss-button ss-button-edit-page" data-ss-action="edit"
+              title='<?php _e( "Edit page content", "cms-tree-page-view" ) ?>'>
+            <span class="dashicons ss-icon dashicons-admin-tools"></span>
+        </span>
+        <span class="button button-primary ss-button ss-button-view-page" data-ss-action="view"
+              title='<?php _e( "View page", "cms-tree-page-view" ) ?>'>
+            <span class="dashicons ss-icon dashicons-visibility"></span>
+        </span>
+    </span>
 
 <!-- SwiftySite template Delete -->
             <span class="ss-page-delete-span ss-container" style="display: none;">
@@ -378,7 +378,7 @@ if (true) {
                 </form>
             </span>
 
-<!-- SwiftySite template Add/Edit -->
+            <!-- SwiftySite template Add/Edit -->
             <span class="ss-page-add-edit-span ss-container" style="display: none;">
                 <form method="post" class="ss-form ss-page-add-edit-doit"
                       action="<?php echo admin_url( 'admin-ajax.php', 'relative' ); ?>">
@@ -395,125 +395,174 @@ if (true) {
                             style="">
                             <td colspan="5" class="colspanchange">
                                 <fieldset class="inline-edit-col-left">
-                                    <div class="inline-edit-col">
+                                    <div class="inline-edit-col ss-basic-container">
                                         <label for="ss-menu-button-text" class="ss-label">
-                                                <span class="title">
-                                                    <?php _e( "Menu button text", 'swiftypages' ) ?>
-                                                </span>
-                                                <span class="input-text-wrap">
-                                                    <input name="cms_tpv_add_new_pages_names[]" type="text"
-                                                           id="ss-menu-button-text" class="ss-input ss-input-text"
-                                                           title="Enter menu button text">
-                                                </span>
+                                            <span class="title">
+                                                <?php _e( "Menu button text", "cms-tree-page-view" ) ?>
+                                            </span>
+                                            <span class="input-text-wrap">
+                                                <input name="cms_tpv_add_new_pages_names[]"
+                                                       type="text"
+                                                       class="ss-input ss-input-text"
+                                                       title="Enter menu button text">
+                                            </span>
                                         </label>
                                         <label for="ss-page-title-seo" class="ss-label">
-                                                <span class="title">
-                                                    <?php _e( "Page title for search engines", 'swiftypages' ) ?>
-                                                </span>
-                                                <span class="input-text-wrap">
-                                                    <input name="page-title-seo" type="text" id="ss-page-title-seo"
-                                                           class="ss-input ss-input-text"
-                                                           title="Enter page title for search engines">
-                                                </span>
+                                            <span class="title">
+                                                <?php _e( "Page title for Google", "cms-tree-page-view" ) ?>
+                                            </span>
+                                            <span class="input-text-wrap">
+                                                <input name="page-title-seo"
+                                                       type="text"
+                                                       class="ss-input ss-input-text"
+                                                       title="Enter page title for search engines">
+                                            </span>
+                                        </label>
+                                        <label class="ss-label">
+                                            <span class="title">
+                                                <?php _e( "Page position in tree", "cms-tree-page-view" ) ?>
+                                            </span>
+                                            <span class="input-text-wrap">
+                                                <label class="alignleft ss-radio-label">
+                                                    <input name="cms_tpv_add_type"
+                                                           type="radio"
+                                                           value="after"
+                                                           class="ss-input-radio">
+                                                    <span class="radiobutton-title">
+                                                        <?php _e( "Next", "cms-tree-page-view" ) ?>
+                                                    </span>
+                                                </label>
+                                                <label class="alignleft ss-radio-label">
+                                                    <input name="cms_tpv_add_type"
+                                                           type="radio"
+                                                           value="inside"
+                                                           class="ss-input-radio">
+                                                    <span class="radiobutton-title">
+                                                        <?php _e( "Sub", "cms-tree-page-view" ) ?>
+                                                    </span>
+                                                </label>
+                                            </span>
                                         </label>
                                         <label for="ss-custom-page-url" class="ss-label">
-                                                <span class="title">
-                                                    <?php _e( "Customize page url", 'swiftypages' ) ?>
-                                                </span>
-                                                <span class="input-text-wrap">
-                                                    <input name="post_name" type="text" id="ss-custom-page-url"
-                                                           class="ss-input ss-input-text"
-                                                           title="Enter a custom page url">
-                                                </span>
+                                            <span class="title">
+                                                <?php _e( "Customize page url", "cms-tree-page-view" ) ?>
+                                            </span>
+                                            <span class="input-text-wrap">
+                                                <input name="post_name"
+                                                       type="text"
+                                                       class="ss-input ss-input-text"
+                                                       title="Enter a custom page url">
+                                            </span>
                                         </label>
-                                        <label for="ss-page-type" class="ss-label">
-                                                <span class="title">
-                                                    <?php _e( "Page type", 'swiftypages' ) ?>
-                                                </span>
-                                                <span class="input-text-wrap">
-                                                    <select name="page-type" id="ss-page-type"
-                                                            class="ss-input ss-input-select" title="Select a page type">
-                                                        <option value="1" selected="selected">Page type 1</option>
-                                                        <option value="2">Page type 2</option>
-                                                        <option value="3">Page type 3</option>
-                                                    </select>
-                                                </span>
+                                        <label class="ss-label">
+                                            <span class="title">
+                                                <?php _e( "Show in menu", "cms-tree-page-view" ) ?>
+                                            </span>
+                                             <span class="input-text-wrap">
+                                                <label class="alignleft ss-radio-label">
+                                                    <input name="ss-show-in-menu"
+                                                           type="radio"
+                                                           value="show"
+                                                           class="ss-input-radio">
+                                                    <span class="radiobutton-title">
+                                                        <?php _e( "Show", "cms-tree-page-view" ) ?>
+                                                    </span>
+                                                </label>
+                                                <label class="alignleft ss-radio-label">
+                                                    <input name="ss-show-in-menu"
+                                                           type="radio"
+                                                           value="hide"
+                                                           class="ss-input-radio">
+                                                    <span class="radiobutton-title">
+                                                        <?php _e( "Hide", "cms-tree-page-view" ) ?>
+                                                    </span>
+                                                </label>
+                                            </span>
                                         </label>
-                                    </div>
-                                </fieldset>
-                                <fieldset class="inline-edit-col-center">
-                                    <div class="inline-edit-col">
-                                        <div class="inline-edit-group">
-                                                <span class="title">
-                                                    <?php _e( "Show in menu", 'swiftypages' ) ?>
-                                                </span>
-                                        </div>
-                                        <div class="inline-edit-group">
-                                                <span class="input-text-wrap">
-                                                    <label class="alignleft">
-                                                        <input name="show-in-menu" id="ss-show-in-menu-show"
-                                                               type="radio" value="show" class="ss-input-radio">
-                                                        <span class="radiobutton-title">
-                                                            <?php _e( "Show", 'swiftypages' ) ?>
-                                                        </span>
-                                                    </label>
-                                                    <label class="alignleft">
-                                                        <input name="show-in-menu" id="ss-show-in-menu-hide"
-                                                               type="radio" value="hide" class="ss-input-radio">
-                                                        <span class="radiobutton-title">
-                                                            <?php _e( "Hide", 'swiftypages' ) ?>
-                                                        </span>
-                                                    </label>
-                                                </span>
-                                        </div>
-
-                                        <div class="inline-edit-group">
-                                                <span class="title">
-                                                    <?php _e( "Position of page", 'swiftypages' ) ?>
-                                                </span>
-                                        </div>
-                                        <div class="inline-edit-group">
-                                                <span class="input-text-wrap">
-                                                    <label class="alignleft">
-                                                        <input name="cms_tpv_add_type" id="ss-page-position-next"
-                                                               type="radio" value="after" class="ss-input-radio">
-                                                        <span class="radiobutton-title">
-                                                            <?php _e( "Next", 'swiftypages' ) ?>
-                                                        </span>
-                                                    </label>
-                                                    <label class="alignleft">
-                                                        <input name="cms_tpv_add_type" id="ss-page-position-sub"
-                                                               type="radio" value="inside" class="ss-input-radio">
-                                                        <span class="radiobutton-title">
-                                                            <?php _e( "Sub", 'swiftypages' ) ?>
-                                                        </span>
-                                                    </label>
-                                                </span>
-                                        </div>
-
-                                        <div class="inline-edit-group">
-                                                <span class="title">
-                                                    <?php _e( "Draft or live", 'swiftypages' ) ?>
-                                                </span>
-                                        </div>
-                                        <div class="inline-edit-group">
-                                                <span class="input-text-wrap">
-                                                    <label class="alignleft">
-                                                        <input name="cms_tpv_add_status" id="ss-page-state-draft"
-                                                               type="radio" value="draft" class="ss-input-radio">
-                                                        <span class="radiobutton-title">
-                                                            <?php _e( "Draft", 'swiftypages' ) ?>
-                                                        </span>
-                                                    </label>
-                                                    <label class="alignleft">
-                                                        <input name="cms_tpv_add_status" id="ss-page-state-live"
-                                                               type="radio" value="published" class="ss-input-radio">
-                                                        <span class="radiobutton-title">
-                                                            <?php _e( "Live", 'swiftypages' ) ?>
-                                                        </span>
-                                                    </label>
-                                                </span>
-                                        </div>
+                                        <label class="ss-label">
+                                            <span class="title">
+                                                <?php _e( "Draft or live", "cms-tree-page-view" ) ?>
+                                            </span>
+                                            <span class="input-text-wrap">
+                                                <label class="alignleft ss-radio-label">
+                                                    <input name="cms_tpv_add_status"
+                                                           type="radio"
+                                                           value="draft"
+                                                           class="ss-input-radio">
+                                                    <span class="radiobutton-title">
+                                                        <?php _e( "Draft", "cms-tree-page-view" ) ?>
+                                                    </span>
+                                                </label>
+                                                <label class="alignleft ss-radio-label">
+                                                    <input name="cms_tpv_add_status"
+                                                           type="radio"
+                                                           value="published"
+                                                           class="ss-input-radio">
+                                                    <span class="radiobutton-title">
+                                                        <?php _e( "Live", "cms-tree-page-view" ) ?>
+                                                    </span>
+                                                </label>
+                                            </span>
+                                        </label>
+                                        <label class="ss-label">
+                                            <span class="title">
+                                                <?php _e( "Show or hide header", "cms-tree-page-view" ) ?>
+                                            </span>
+                                            <span class="input-text-wrap">
+                                                <label class="alignleft ss-radio-label">
+                                                    <input name="ss-header-visibility"
+                                                           type="radio"
+                                                           value="show"
+                                                           class="ss-input-radio">
+                                                    <span class="radiobutton-title">
+                                                        <?php _e( "Show", "cms-tree-page-view" ) ?>
+                                                    </span>
+                                                </label>
+                                                <label class="alignleft ss-radio-label">
+                                                    <input name="ss-header-visibility"
+                                                           type="radio"
+                                                           value="published"
+                                                           class="ss-input-radio">
+                                                    <span class="radiobutton-title">
+                                                        <?php _e( "Hide", "cms-tree-page-view" ) ?>
+                                                    </span>
+                                                </label>
+                                            </span>
+                                        </label>
+                                        <label class="ss-label">
+                                            <span class="title">
+                                                <?php _e( "Show or hide sidebar", "cms-tree-page-view" ) ?>
+                                            </span>
+                                            <span class="input-text-wrap">
+                                                <label class="alignleft ss-radio-label">
+                                                    <input name="ss-sidebar-visibility"
+                                                           type="radio"
+                                                           value="draft"
+                                                           class="ss-input-radio">
+                                                    <span class="radiobutton-title">
+                                                        <?php _e( "Left", "cms-tree-page-view" ) ?>
+                                                    </span>
+                                                </label>
+                                                <label class="alignleft ss-radio-label">
+                                                    <input name="ss-sidebar-visibility"
+                                                           type="radio"
+                                                           value="published"
+                                                           class="ss-input-radio">
+                                                    <span class="radiobutton-title">
+                                                        <?php _e( "Right", "cms-tree-page-view" ) ?>
+                                                    </span>
+                                                </label>
+                                                <label class="alignleft ss-radio-label">
+                                                    <input name="ss-sidebar-visibility"
+                                                           type="radio"
+                                                           value="published"
+                                                           class="ss-input-radio">
+                                                    <span class="radiobutton-title">
+                                                        <?php _e( "Hide", "cms-tree-page-view" ) ?>
+                                                    </span>
+                                                </label>
+                                            </span>
+                                        </label>
                                     </div>
                                 </fieldset>
                                 <fieldset class="inline-edit-col-right">

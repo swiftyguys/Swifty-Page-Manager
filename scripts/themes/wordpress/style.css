@@ -144,6 +144,15 @@
     margin-bottom: 10px;
 }
 
+.ss-label {
+    clear: both;
+}
+
+.alignleft.ss-radio-label {
+    padding: 0 20px 0 0;
+    width: 50px;
+}
+
 #wpbody-content .cms_tpv_container {
     margin-right: 0px;
 }

@@ -48,11 +48,11 @@ var Swifty = (function ( $, document, undefined ) {
     };
 
     ss.getPageActionsSpan = function ( el ) {
-        return $( el ).closest( 'div.cms_tpv_wrapper' ).find( 'span.ss-page-actions' );
+        return $( el ).closest( 'div.cms_tpv_wrapper' ).find( 'span.ss-page-actions' ).clone();
     };
 
     ss.getPageAddEdit = function ( el ) {
-        return $( el ).closest( 'div.cms_tpv_wrapper' ).find( 'span.ss-page-add-edit-span' );
+        return $( el ).closest( 'div.cms_tpv_wrapper' ).find( 'span.ss-page-add-edit-span' ).clone();
     };
 
     ss.getPageDelete = function ( el ) {
@@ -78,7 +78,7 @@ var Swifty = (function ( $, document, undefined ) {
             var permalink = $li.data( "permalink" );
             var editlink = $li.data( "editlink" );
             var pageFormTmpl, ssForm;
-console.log($li.data());
+
             switch ( action ) {
                 case "add":
                 case "settings":
