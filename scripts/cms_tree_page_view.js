@@ -39,20 +39,18 @@ var Swifty = (function ( $, document, undefined ) {
             } );
     };
 
-    ss.getPageActions = function ( a ) {
-        $( a )
-            .append(
-                this.getPageActionsSpan( a )
-            )
-            .show();
+    ss.getPageActions = function ( $li ) {
+        var $a = $li.find( '> a' );
+
+        $a.append( this.getPageActionsSpan( $a ) ).show();
     };
 
-    ss.getPageActionsSpan = function ( el ) {
-        return $( el ).closest( 'div.cms_tpv_wrapper' ).find( 'span.ss-page-actions' ).clone();
+    ss.getPageActionsSpan = function ( $el ) {
+        return $el.closest( 'div.cms_tpv_wrapper' ).find( 'span.ss-page-actions' )
     };
 
     ss.getPageAddEdit = function ( el ) {
-        return $( el ).closest( 'div.cms_tpv_wrapper' ).find( 'span.ss-page-add-edit-span' ).clone();
+        return $( el ).closest( 'div.cms_tpv_wrapper' ).find( 'span.ss-page-add-edit-span' )
     };
 
     ss.getPageDelete = function ( el ) {
@@ -63,7 +61,7 @@ var Swifty = (function ( $, document, undefined ) {
         var $container = $( ev.target );
 
         this.adaptTreeLinkElements( $container.find( 'a' ) );
-        this.getPageActions( $container.find( 'li:first a' ) );
+        this.getPageActions( $container.find( 'li:first' ) );
     };
 
     ss.setupListeners = function () {
@@ -124,22 +122,28 @@ var Swifty = (function ( $, document, undefined ) {
             }
         } );
 
-        $( document ).on( 'click', '.ss-page-actions > .ss-button', function ( ev ) {
-            ev.preventDefault();
-
-            var $button = $( this );
-            var $li = $button.closest( 'li' );
-        } );
-
         $( document ).on( 'click', 'a.ss-page-add-edit-save', function ( ev ) {
-            console.log('test');
-
-
             var $form = $( this ).closest( 'form' );
 
             ev.preventDefault();
 
             $form.submit();
+        } );
+    };
+
+    ss.ss_tree_loaded = function( ev /*, data*/ ) {
+        var $container = $( ev.target );
+
+        ss.pageTreeLoaded( ev );
+
+        $( $container ).on( 'click', 'a.ss-page-tree-element', function ( event ) {
+            $( '.ss-page-buttons' ).remove();
+
+            if ( $( event.target ).is( 'a' ) ) {
+                var $li = $( event.target ).closest( 'li' );
+
+                ss.getPageActions( $li );
+            }
         } );
     };
 
@@ -422,7 +426,8 @@ jQuery( function ( $ ) {
         } );
 
         // whole tre loaded
-        $elm.bind( "loaded.jstree", cms_tpv_tree_loaded );
+        //$elm.bind( "loaded.jstree", cms_tpv_tree_loaded );
+        $elm.bind( "loaded.jstree", Swifty.ss_tree_loaded );
 
         $elm.jstree( treeOptionsTmp );
 
@@ -454,8 +459,6 @@ function cms_tpv_tree_loaded( event, data ) {
     $container.find( "a.hover" ).removeClass( "hover" );
     $container.find( "div.cms_tpv_page_actions" ).removeClass( "cms_tpv_page_actions_visible" );
     $container.find( "div.cms_tpv_page_actions_visible" ).removeClass( "cms_tpv_page_actions_visible" );
-
-    Swifty.pageTreeLoaded( event );
 
     // when mouse enters a/link
     // start timer and if no other a/link has been moused over since it started it's ok to show this one
@@ -491,14 +494,6 @@ function cms_tpv_tree_loaded( event, data ) {
 
         } else {
             //console.log("timer not added because doit visible");
-        }
-    } );
-
-    jQuery( $container ).on( 'click', 'a.ss-page-tree-element', function ( ev ) {
-        jQuery( '.ss-page-buttons' ).remove();
-
-        if ( jQuery( ev.target ).is( 'a' ) ) {
-            Swifty.getPageActions( ev.target );
         }
     } );
 
