@@ -43,6 +43,7 @@ class SwiftyPages
         add_action( 'wp_ajax_cms_tpv_move_page', array( $this, 'cms_tpv_move_page' ) );
         add_action( 'wp_ajax_cms_tpv_add_page', array( $this, 'cms_tpv_add_page' ) );
         add_action( 'wp_ajax_cms_tpv_add_pages', array( $this, 'cms_tpv_add_pages' ) );
+        add_action( 'wp_ajax_swiftypages_post_settings', array( $this, 'wp_ajax_swiftypages_post_settings' ) );
 
 // activation
         register_activation_hook( $this->plugin_file, array( $this, 'cms_tpv_install' ) );
@@ -1360,6 +1361,18 @@ class SwiftyPages
                 return apply_filters( 'the_modified_author', $last_user->display_name );
             }
         }
+    }
+
+    public function wp_ajax_swiftypages_post_settings() {
+        $post_id = intval( $_REQUEST['post_id'] );
+        header( 'Content-Type: text/javascript' );
+        $post = get_post($post_id);
+?>
+var li = jQuery( 'li#cms-tpv-<?php echo $post_id; ?>' );
+li.find( 'input[name="cms_tpv_add_new_pages_names[]"]' ).val( <?php echo json_encode($post->post_title); ?> );
+li.find( 'input[name="post_name"]' ).val( <?php echo json_encode($post->post_name); ?> );
+<?php
+        exit;
     }
 
 }

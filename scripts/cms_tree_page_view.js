@@ -1050,7 +1050,16 @@ jQuery( function ( $ ) {
         // Move wordpress table with view etc above cms tree page view so the icons get the correct position
         var viewswitch = $( "div.view-switch" );
         viewswitch.appendTo( cmstpv_postsoverview_wrap );
-
     }
+
+    jQuery('.ss-button-page-settings').click( function( event ) {
+        event.preventDefault();
+        var $node = jQuery( this ).parents('li');
+        jQuery.post( ajaxurl
+                   , { "action": "swiftypages_post_settings"
+                     , "post_id": $node.data('post_id')
+                     }
+                   );
+    });
 
 } );
