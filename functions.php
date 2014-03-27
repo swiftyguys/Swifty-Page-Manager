@@ -236,7 +236,9 @@ function cms_tpv_add_pages() {
 
 	// Done. Redirect to the first page created.
 	$first_post_edit_link = get_edit_post_link($arr_added_pages_ids[0], "");
-	wp_redirect($first_post_edit_link);
+	//wp_redirect($first_post_edit_link);
+
+	echo '<script type="text/javascript">window.location=\'edit.php?post_type=page&page=cms-tpv-page-page\';</script>';
 
 	exit;
 
@@ -366,7 +368,25 @@ function cms_admin_enqueue_scripts() {
 			"Password_protected_page" => __("Password protected page", 'cms-tree-page-view'),
 			"Adding_page" => __("Adding page...", 'cms-tree-page-view'),
 			"Adding" => __("Adding ...", 'cms-tree-page-view'),
-			"No posts found" => __("No posts found.", 'cms-tree-page-view')
+			"No posts found" => __("No posts found.", 'cms-tree-page-view'),
+
+			"Menu_button_text" => __("Menu button text", 'cms-tree-page-view'),
+			"Page_type" => __("Page type", 'cms-tree-page-view'),
+			"Page_title_for_search_engines" => __("Page title for search engines", 'cms-tree-page-view'),
+			"Customize_page_url" => __("Customize page url", 'cms-tree-page-view'),
+			"Show_in_menu" => __("Show in menu", 'cms-tree-page-view'),
+			"Show" => __("Show", 'cms-tree-page-view'),
+			"Hide" => __("Hide", 'cms-tree-page-view'),
+			"Position_of_page" => __("Position of page", 'cms-tree-page-view'),
+			"Next" => __("Next", 'cms-tree-page-view'),
+			"Sub" => __("Sub", 'cms-tree-page-view'),
+			"Draft_or_live" => __("Draft or live", 'cms-tree-page-view'),
+			"Draft" => __("Draft", 'cms-tree-page-view'),
+			"Live" => __("Live", 'cms-tree-page-view'),
+			"Edit_page_content" => __("Edit page content", 'cms-tree-page-view'),
+			"Delete page" => __("Delete page", 'cms-tree-page-view'),
+			"Delete" => __("Delete", 'cms-tree-page-view'),
+			"Delete_are_you_sure?" => __(" Are you sure you want to permanently delete this page with all it's content?", "cms-tree-page-view")
 		);
 		wp_localize_script( "cms_tree_page_view", 'cmstpv_l10n', $oLocale);
 
@@ -586,7 +606,7 @@ function cms_tpv_admin_menu() {
 		} else {
 			$slug = "edit.php?post_type=$one_menu_post_type";
 		}
-		
+
 		$post_type_object = get_post_type_object($one_menu_post_type);
 
 		// Only try to add menu if we got a valid post type object
@@ -1085,6 +1105,210 @@ function cms_tpv_print_common_tree_stuff($post_type = "") {
 				<div class="cms_tpv_page_actions_columns"></div>
 				<span class="cms_tpv_page_actions_arrow"></span>
 			</div>
+
+            <!-- SwiftySite template with actions -->
+            <span class="ss-page-actions">
+                <span class="button button-primary ss-button ss-button-add-page" data-ss-action="add" title='<?php _e("Add page(s)", "cms-tree-page-view") ?>'>
+                    <span class="dashicons ss-icon dashicons-plus"></span>
+                </span>
+                <span class="button button-primary ss-button ss-button-page-settings" data-ss-action="settings" title='<?php _e("Edit page", "cms-tree-page-view")?>'>
+                    <span class="dashicons ss-icon dashicons-admin-generic"></span>
+                </span>
+                <span class="button button-primary ss-button ss-button-delete-page" data-ss-action="delete" title='<?php _e("Delete page", "cms-tree-page-view")?>'>
+                    <span class="dashicons ss-icon dashicons-no"></span>
+                </span>
+                <span class="button button-primary ss-button ss-button-edit-page" data-ss-action="edit" title='<?php _e("Edit page content", "cms-tree-page-view")?>'>
+                    <span class="dashicons ss-icon dashicons-admin-tools"></span>
+                </span>
+                <span class="button button-primary ss-button ss-button-view-page" data-ss-action="view" title='<?php _e("View page", "cms-tree-page-view")?>'>
+                    <span class="dashicons ss-icon dashicons-visibility"></span>
+                </span>
+            </span>
+
+            <!-- SwiftySite template Delete -->
+            <span class="ss-page-delete-span ss-container" style="display: none;">
+                <form method="post" class="ss-form" action="<?php echo admin_url( 'admin-ajax.php', 'relative' ); ?>">
+                    <input type="hidden" name="action" value="cms_tpv_add_pages">
+                    <input type="hidden" name="ref_post_id" value="">
+                    <?php wp_nonce_field("cms-tpv-add-pages") ?>
+
+                    <!-- lang for wpml -->
+                    <input type="hidden" name="lang" value="">
+
+                    <table class="ss-table wp-list-table widefat fixed pages">
+                        <tbody>
+                            <tr class="inline-edit-row inline-edit-row-page inline-edit-page quick-edit-row quick-edit-row-page inline-edit-page inline-editor" style="">
+                                <td colspan="5" class="colspanchange">
+                                    <fieldset class="inline-edit-col-left">
+                                        <div class="inline-edit-col">
+                                            <div class="inline-edit-group">
+                                                <span class="title">
+                                                    <?php _e("Are you sure you want to permanently delete this page with all it's content?", "cms-tree-page-view") ?>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <fieldset class="inline-edit-col-right">
+                                        <div class="inline-edit-group ss-buttons-confirm">
+                                            <a accesskey="c" href="#inline-edit" class="button-secondary cancel alignright ss-button">
+                                                <?php _e("Cancel", "cms-tree-page-view") ?>
+                                            </a>
+                                            <br class="clear">
+                                            <a accesskey="s" href="#inline-edit" class="button-primary delete alignright ss-button">
+                                                <?php _e("Delete", "cms-tree-page-view") ?>
+                                            </a>
+                                            <span class="error" style="display:none"></span>
+                                        </div>
+                                    </fieldset>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </span>
+
+            <!-- SwiftySite template Add/Edit -->
+            <span class="ss-page-add-edit-span ss-container" style="display: none;">
+                <form method="post" class="ss-form ss-page-add-edit-doit" action="<?php echo admin_url( 'admin-ajax.php', 'relative' ); ?>">
+                    <input type="hidden" name="action" value="cms_tpv_add_pages">
+                    <input type="hidden" name="ref_post_id" value="">
+                    <?php wp_nonce_field("cms-tpv-add-pages") ?>
+
+                    <!-- lang for wpml -->
+                    <input type="hidden" name="lang" value="">
+
+                    <table class="ss-table wp-list-table widefat fixed pages">
+                        <tbody>
+                            <tr class="inline-edit-row inline-edit-row-page inline-edit-page quick-edit-row quick-edit-row-page inline-edit-page inline-editor" style="">
+                                <td colspan="5" class="colspanchange">
+                                    <fieldset class="inline-edit-col-left">
+                                        <div class="inline-edit-col">
+                                            <label for="ss-menu-button-text" class="ss-label">
+                                                <span class="title">
+                                                    <?php _e("Menu button text", "cms-tree-page-view") ?>
+                                                </span>
+                                                <span class="input-text-wrap">
+                                                    <input name="cms_tpv_add_new_pages_names[]" type="text" id="ss-menu-button-text" class="ss-input ss-input-text" title="Enter menu button text">
+                                                </span>
+                                            </label>
+                                            <label for="ss-page-title-seo" class="ss-label">
+                                                <span class="title">
+                                                    <?php _e("Page title for search engines", "cms-tree-page-view") ?>
+                                                </span>
+                                                <span class="input-text-wrap">
+                                                    <input name="page-title-seo" type="text" id="ss-page-title-seo" class="ss-input ss-input-text" title="Enter page title for search engines">
+                                                </span>
+                                            </label>
+                                            <label for="ss-custom-page-url" class="ss-label">
+                                                <span class="title">
+                                                    <?php _e("Customize page url", "cms-tree-page-view") ?>
+                                                </span>
+                                                <span class="input-text-wrap">
+                                                    <input name="post_name" type="text" id="ss-custom-page-url" class="ss-input ss-input-text" title="Enter a custom page url">
+                                                </span>
+                                            </label>
+                                            <label for="ss-page-type" class="ss-label">
+                                                <span class="title">
+                                                    <?php _e("Page type", "cms-tree-page-view") ?>
+                                                </span>
+                                                <span class="input-text-wrap">
+                                                    <select name="page-type" id="ss-page-type" class="ss-input ss-input-select" title="Select a page type">
+                                                        <option value="1" selected="selected">Page type 1</option>
+                                                        <option value="2">Page type 2</option>
+                                                        <option value="3">Page type 3</option>
+                                                    </select>
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </fieldset>
+                                    <fieldset class="inline-edit-col-center">
+                                        <div class="inline-edit-col">
+                                            <div class="inline-edit-group">
+                                                <span class="title">
+                                                    <?php _e("Show in menu", "cms-tree-page-view") ?>
+                                                </span>
+                                            </div>
+                                            <div class="inline-edit-group">
+                                                <span class="input-text-wrap">
+                                                    <label class="alignleft">
+                                                        <input name="show-in-menu" id="ss-show-in-menu-show" type="radio" value="show" class="ss-input-radio">
+                                                        <span class="radiobutton-title">
+                                                            <?php _e("Show", "cms-tree-page-view") ?>
+                                                        </span>
+                                                    </label>
+                                                    <label class="alignleft">
+                                                        <input name="show-in-menu" id="ss-show-in-menu-hide" type="radio" value="hide" class="ss-input-radio">
+                                                        <span class="radiobutton-title">
+                                                            <?php _e("Hide", "cms-tree-page-view") ?>
+                                                        </span>
+                                                    </label>
+                                                </span>
+                                            </div>
+
+                                            <div class="inline-edit-group">
+                                                <span class="title">
+                                                    <?php _e("Position of page", "cms-tree-page-view") ?>
+                                                </span>
+                                            </div>
+                                            <div class="inline-edit-group">
+                                                <span class="input-text-wrap">
+                                                    <label class="alignleft">
+                                                        <input name="cms_tpv_add_type" id="ss-page-position-next" type="radio" value="after" class="ss-input-radio">
+                                                        <span class="radiobutton-title">
+                                                            <?php _e("Next", "cms-tree-page-view") ?>
+                                                        </span>
+                                                    </label>
+                                                    <label class="alignleft">
+                                                        <input name="cms_tpv_add_type" id="ss-page-position-sub" type="radio" value="inside" class="ss-input-radio">
+                                                        <span class="radiobutton-title">
+                                                            <?php _e("Sub", "cms-tree-page-view") ?>
+                                                        </span>
+                                                    </label>
+                                                </span>
+                                            </div>
+
+                                            <div class="inline-edit-group">
+                                                <span class="title">
+                                                    <?php _e("Draft or live", "cms-tree-page-view") ?>
+                                                </span>
+                                            </div>
+                                            <div class="inline-edit-group">
+                                                <span class="input-text-wrap">
+                                                    <label class="alignleft">
+                                                        <input name="cms_tpv_add_status" id="ss-page-state-draft" type="radio" value="draft" class="ss-input-radio">
+                                                        <span class="radiobutton-title">
+                                                            <?php _e("Draft", "cms-tree-page-view") ?>
+                                                        </span>
+                                                    </label>
+                                                    <label class="alignleft">
+                                                        <input name="cms_tpv_add_status" id="ss-page-state-live" type="radio" value="published" class="ss-input-radio">
+                                                        <span class="radiobutton-title">
+                                                            <?php _e("Live", "cms-tree-page-view") ?>
+                                                        </span>
+                                                    </label>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <fieldset class="inline-edit-col-right">
+                                        <div class="inline-edit-group ss-buttons-confirm">
+                                            <a accesskey="c" href="#inline-edit" class="button-secondary alignright ss-button ss-page-add-edit-cancel">
+                                                <?php _e("Cancel", "cms-tree-page-view") ?>
+                                            </a>
+                                            <br class="clear">
+                                            <a accesskey="s" href="#inline-edit" class="button-primary alignright ss-button ss-page-add-edit-save">
+                                                <?php _e("Save", "cms-tree-page-view") ?>
+                                            </a>
+                                            <span class="error" style="display:none"></span>
+                                        </div>
+                                    </fieldset>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </span>
+            </div>
 			<?php
 		}
 
