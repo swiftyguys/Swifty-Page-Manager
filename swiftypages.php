@@ -1364,7 +1364,7 @@ class SwiftyPages
     }
 
     public function wp_ajax_swiftypages_post_settings() {
-        $post_id = intval( $_REQUEST['post_id'] );
+        $post_id = intval( $_REQUEST['post_ID'] );
         header( 'Content-Type: text/javascript' );
         $post = get_post($post_id);
 ?>

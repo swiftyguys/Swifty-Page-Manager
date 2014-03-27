@@ -1057,9 +1057,25 @@ jQuery( function ( $ ) {
         var $node = jQuery( this ).parents('li');
         jQuery.post( ajaxurl
                    , { "action": "swiftypages_post_settings"
-                     , "post_id": $node.data('post_id')
+                     , "post_ID": $node.data('post_id')
                      }
                    );
+        // return false; // Enable to prevent opening details here
+    });
+
+    jQuery('.ss-page-add-edit-save').click( function( event ) {
+        event.preventDefault();
+        var $li = jQuery( this ).parents('li');
+        jQuery.post( ajaxurl
+                   , { 'action': 'inline-save'
+                     , 'post_type':  'page'
+                     , '_inline_edit': jQuery('input#_inline_edit').val()
+                     , 'post_ID':    $li.data('post_id')
+                     , 'post_title': $li.find( 'input[name="cms_tpv_add_new_pages_names[]"]' ).val()
+                     , 'post_name':  $li.find( 'input[name="post_name"]' ).val()
+                     }
+                   );
+        return false;
     });
 
 } );

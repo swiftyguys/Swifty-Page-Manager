@@ -586,6 +586,7 @@ if (true) {
                 </form>
             </span>
         </div>
+        <?php _get_list_table('WP_Posts_List_Table')->inline_edit(); ?>
 <?php
 }
 
