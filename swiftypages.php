@@ -51,7 +51,15 @@ class SwiftyPages
         add_action( 'plugins_loaded', array( $this, 'cms_tpv_plugins_loaded' ), 1 );
     }
 
-
+    public function __call( $method, $args ) {
+        if ( preg_match( '/^cms_tpv_dashboard__(\w+)$/', $method, $matches ) ) {
+            $post_type = $matches[1];
+            $this->cms_tpv_print_common_tree_stuff( $post_type );
+        }
+        else {
+            throw new Exception( sprintf( 'SwiftyPages: unknown method called: %s', $method ) );
+        }
+    }
 
     /**
      * Example how to use action cms_tree_page_view_post_can_edit to modify if a user can edit the page/post
@@ -634,24 +642,16 @@ class SwiftyPages
             foreach ( $options[ "dashboard" ] as $one_dashboard_post_type )
             {
                 $post_type_object = get_post_type_object( $one_dashboard_post_type );
-                $new_func_name    = create_function( '', "$this->cms_tpv_dashboard('$one_dashboard_post_type');" );
                 if ( !empty( $post_type_object ) )
                 {
                     $widget_name = sprintf( _x( '%1$s Tree', "name of dashboard", 'swiftypages' ), $post_type_object->labels->name );
-                    wp_add_dashboard_widget( "cms_tpv_dashboard_widget_{$one_dashboard_post_type}", $widget_name, $new_func_name );
+                    wp_add_dashboard_widget( "cms_tpv_dashboard_widget_{$one_dashboard_post_type}"
+                                           , $widget_name
+                                           , array( $this, 'cms_tpv_dashboard__'.$one_dashboard_post_type ) ); // automagic funtion
                 }
             }
         }
 
-    }
-
-
-    /**
-     * Output on dashboard
-     */
-    function cms_tpv_dashboard( $post_type = "" )
-    {
-        $this->cms_tpv_print_common_tree_stuff( $post_type );
     }
 
 // Add items to the wp admin menu
