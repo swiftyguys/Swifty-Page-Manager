@@ -17,12 +17,12 @@ class SwiftyPages
 
     public function __construct()
     {
-        $this->plugin_file    =  __FILE__ ;
-        $this->plugin_dir     =  dirname( $this->plugin_file );
-        $this->plugin_dir_url = plugin_dir_url( $this->plugin_file );
+        $this->plugin_file    = __FILE__ ;
+        $this->plugin_dir     = dirname( $this->plugin_file );
+        $this->plugin_dir_url = plugins_url( basename($this->plugin_dir) );
         define( "CMS_TPV_VERSION", "1.2.21" );
         define( "CMS_TPV_NAME", "CMS Tree Page View" );
-        define( "CMS_TPV_URL", $this->plugin_dir_url );
+        define( "CMS_TPV_URL", $this->plugin_dir_url . '/' );
 
         add_action( 'init', array( $this, 'cms_tpv_load_textdomain' ) );
 
