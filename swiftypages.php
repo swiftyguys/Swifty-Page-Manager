@@ -13,13 +13,15 @@ class SwiftyPages
 {
     protected $plugin_file;
     protected $plugin_dir;
+    protected $plugin_basename;
     protected $plugin_dir_url;
 
     public function __construct()
     {
-        $this->plugin_file    = __FILE__ ;
-        $this->plugin_dir     = dirname( $this->plugin_file );
-        $this->plugin_dir_url = plugins_url( basename($this->plugin_dir) );
+        $this->plugin_file     = __FILE__ ;
+        $this->plugin_dir      = dirname( $this->plugin_file );
+        $this->plugin_basename = basename( $this->plugin_dir );
+        $this->plugin_dir_url  = plugins_url( basename($this->plugin_dir) );
         define( "CMS_TPV_VERSION", "1.2.21" );
         define( "CMS_TPV_NAME", "CMS Tree Page View" );
         define( "CMS_TPV_URL", $this->plugin_dir_url . '/' );
@@ -43,10 +45,7 @@ class SwiftyPages
         add_action( 'wp_ajax_cms_tpv_add_pages', array( $this, 'cms_tpv_add_pages' ) );
 
 // activation
-        register_activation_hook( WP_PLUGIN_DIR . "/cms-tree-page-view/index.php", array( $this, 'cms_tpv_install' ) );
-
-// To test activation hook, uncomment function below
-// cms_tpv_install();
+        register_activation_hook( $this->plugin_file, array( $this, 'cms_tpv_install' ) );
 
 // catch upgrade
         add_action( 'plugins_loaded', array( $this, 'cms_tpv_plugins_loaded' ), 1 );
@@ -458,7 +457,7 @@ class SwiftyPages
                 "Edit_page_content"                           => __( "Edit page content", 'swiftypages' ),
                 "Delete page"                                 => __( "Delete page", 'swiftypages' ),
                 "Delete"                                      => __( "Delete", 'swiftypages' ),
-                "Delete_are_you_sure?"                        => __( " Are you sure you want to permanently delete this page with all it's content?", "cms-tree-page-view" )
+                "Delete_are_you_sure?"                        => __( " Are you sure you want to permanently delete this page with all it's content?", 'swiftypages' )
             );
             wp_localize_script( "cms_tree_page_view", 'cmstpv_l10n', $oLocale );
 
@@ -471,7 +470,7 @@ class SwiftyPages
         // echo "load textdomain";
         if ( is_admin() )
         {
-            load_plugin_textdomain( 'swiftypages', WP_CONTENT_DIR . "/plugins/languages", "/cms-tree-page-view/languages" );
+            load_plugin_textdomain( 'swiftypages', WP_CONTENT_DIR . "/plugins/languages", "/".$this->plugin_basename."/languages" );
         }
     }
 
@@ -638,7 +637,7 @@ class SwiftyPages
                 $new_func_name    = create_function( '', "$this->cms_tpv_dashboard('$one_dashboard_post_type');" );
                 if ( !empty( $post_type_object ) )
                 {
-                    $widget_name = sprintf( _x( '%1$s Tree', "name of dashboard", "cms-tree-page-view" ), $post_type_object->labels->name );
+                    $widget_name = sprintf( _x( '%1$s Tree', "name of dashboard", 'swiftypages' ), $post_type_object->labels->name );
                     wp_add_dashboard_widget( "cms_tpv_dashboard_widget_{$one_dashboard_post_type}", $widget_name, $new_func_name );
                 }
             }
@@ -688,8 +687,8 @@ class SwiftyPages
             if ( !empty( $post_type_object ) )
             {
 
-                $menu_name  = _x( "Tree View", "name in menu", "cms-tree-page-view" );
-                $page_title = sprintf( _x( '%1$s Tree View', "title on page with tree", "cms-tree-page-view" ), $post_type_object->labels->name );
+                $menu_name  = _x( "Tree View", "name in menu", 'swiftypages' );
+                $page_title = sprintf( _x( '%1$s Tree View', "title on page with tree", 'swiftypages' ), $post_type_object->labels->name );
                 add_submenu_page( $slug, $page_title, $menu_name, $post_type_object->cap->edit_posts, "cms-tpv-page-$one_menu_post_type", array( $this, "cms_tpv_pages_page" ) );
 
             }

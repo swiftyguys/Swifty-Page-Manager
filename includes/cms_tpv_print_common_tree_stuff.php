@@ -215,10 +215,10 @@ if (true) {
         <h4 class="cms_tpv_page_actions_headline"></h4>
 
         <p class="cms_tpv_action_edit_and_view">
-            <a href="#" title='<?php _e( "Edit page", "cms-tree-page-view" ) ?>'
-               class='cms_tpv_action_edit'><?php _e( "Edit", "cms-tree-page-view" ) ?></a>
-            <a href="#" title='<?php _e( "View page", "cms-tree-page-view" ) ?>'
-               class='cms_tpv_action_view'><?php _e( "View", "cms-tree-page-view" ) ?></a>
+            <a href="#" title='<?php _e( "Edit page", 'swiftypages' ) ?>'
+               class='cms_tpv_action_edit'><?php _e( "Edit", 'swiftypages' ) ?></a>
+            <a href="#" title='<?php _e( "View page", 'swiftypages' ) ?>'
+               class='cms_tpv_action_view'><?php _e( "View", 'swiftypages' ) ?></a>
         </p>
 
         <!-- links to add page -->
@@ -227,18 +227,18 @@ if (true) {
             <span class='cms_tpv_action_add_page'><?php echo $post_type_object->labels->add_new_item ?></span>
 
             <a class='cms_tpv_action_add_page_after' href="#"
-               title='<?php _e( "Add new page after", "cms-tree-page-view" ) ?>'><?php _e( "After", "cms-tree-page-view" ) ?></a>
+               title='<?php _e( "Add new page after", 'swiftypages' ) ?>'><?php _e( "After", 'swiftypages' ) ?></a>
 
             <?php
             // if post type is hierarchical we can add pages inside
             if ( $this->cms_tpv_is_post_type_hierarchical( $post_type_object ) )
             {
                 ?><a class='cms_tpv_action_add_page_inside' href="#"
-                     title='<?php _e( "Add new page inside", "cms-tree-page-view" ) ?>' ><?php _e( "Inside", "cms-tree-page-view" ) ?></a><?php
+                     title='<?php _e( "Add new page inside", 'swiftypages' ) ?>' ><?php _e( "Inside", 'swiftypages' ) ?></a><?php
             }
             // if post status = draft then we can not add pages inside because wordpress currently can not keep its parent if we edit the page
             ?>
-            <!-- <span class="cms_tpv_action_add_page_inside_disallowed"><?php _e( "Can not create page inside of a page with draft status", "cms-tree-page-view" ) ?></span> -->
+            <!-- <span class="cms_tpv_action_add_page_inside_disallowed"><?php _e( "Can not create page inside of a page with draft status", 'swiftypages' ) ?></span> -->
 
         </p>
 
@@ -255,7 +255,7 @@ if (true) {
 
                 <!-- <fieldset> -->
 
-                <h4><?php _e( "Add page(s)", "cms-tree-page-view" ) ?></h4>
+                <h4><?php _e( "Add page(s)", 'swiftypages' ) ?></h4>
 
                 <div>
                     <!-- Pages<br> -->
@@ -267,26 +267,26 @@ if (true) {
                 </div>
 
                 <div class="cms_tpv_add_position">
-                    <?php _e( "Position", "cms-tree-page-view" ) ?><br>
+                    <?php _e( "Position", 'swiftypages' ) ?><br>
                     <label><input type="radio" name="cms_tpv_add_type"
-                                  value="after"> <?php _e( "After", "cms-tree-page-view" ) ?></label>
+                                  value="after"> <?php _e( "After", 'swiftypages' ) ?></label>
                     <label><input type="radio" name="cms_tpv_add_type"
-                                  value="inside"> <?php _e( "Inside", "cms-tree-page-view" ) ?></label>
+                                  value="inside"> <?php _e( "Inside", 'swiftypages' ) ?></label>
                 </div>
 
 
                 <div>
-                    <?php _e( "Status", "cms-tree-page-view" ) ?><br>
+                    <?php _e( "Status", 'swiftypages' ) ?><br>
                     <label><input type="radio" name="cms_tpv_add_status" value="draft"
-                                  checked> <?php _e( "Draft", "cms-tree-page-view" ) ?></label>
+                                  checked> <?php _e( "Draft", 'swiftypages' ) ?></label>
                     <label><input type="radio" name="cms_tpv_add_status"
-                                  value="published"> <?php _e( "Published", "cms-tree-page-view" ) ?></label>
+                                  value="published"> <?php _e( "Published", 'swiftypages' ) ?></label>
                 </div>
 
                 <div>
-                    <input type="submit" value="<?php _e( "Add", "cms-tree-page-view" ) ?>" class="button-primary">
-                    <?php _e( "or", "cms-tree-page-view" ) ?>
-                    <a href="#" class="cms_tpv_add_cancel"><?php _e( "cancel", "cms-tree-page-view" ) ?></a>
+                    <input type="submit" value="<?php _e( "Add", 'swiftypages' ) ?>" class="button-primary">
+                    <?php _e( "or", 'swiftypages' ) ?>
+                    <a href="#" class="cms_tpv_add_cancel"><?php _e( "cancel", 'swiftypages' ) ?></a>
                 </div>
 
                 <!-- </fieldset> -->
@@ -296,12 +296,12 @@ if (true) {
         </div>
 
         <dl>
-            <dt><?php _e( "Last modified", "cms-tree-page-view" ) ?></dt>
+            <dt><?php _e( "Last modified", 'swiftypages' ) ?></dt>
             <dd>
-                <span class="cms_tpv_page_actions_modified_time"></span> <?php _e( "by", "cms-tree-page-view" ) ?>
+                <span class="cms_tpv_page_actions_modified_time"></span> <?php _e( "by", 'swiftypages' ) ?>
                 <span class="cms_tpv_page_actions_modified_by"></span>
             </dd>
-            <dt><?php _e( "Page ID", "cms-tree-page-view" ) ?></dt>
+            <dt><?php _e( "Page ID", 'swiftypages' ) ?></dt>
             <dd><span class="cms_tpv_page_actions_page_id"></span></dd>
         </dl>
 
@@ -312,23 +312,23 @@ if (true) {
 <!-- SwiftySite template with actions -->
             <span class="ss-page-actions">
                 <span class="button button-primary ss-button ss-button-add-page" data-ss-action="add"
-                      title='<?php _e( "Add page(s)", "cms-tree-page-view" ) ?>'>
+                      title='<?php _e( "Add page(s)", 'swiftypages' ) ?>'>
                     <span class="dashicons ss-icon dashicons-plus"></span>
                 </span>
                 <span class="button button-primary ss-button ss-button-page-settings" data-ss-action="settings"
-                      title='<?php _e( "Edit page", "cms-tree-page-view" ) ?>'>
+                      title='<?php _e( "Edit page", 'swiftypages' ) ?>'>
                     <span class="dashicons ss-icon dashicons-admin-generic"></span>
                 </span>
                 <span class="button button-primary ss-button ss-button-delete-page" data-ss-action="delete"
-                      title='<?php _e( "Delete page", "cms-tree-page-view" ) ?>'>
+                      title='<?php _e( "Delete page", 'swiftypages' ) ?>'>
                     <span class="dashicons ss-icon dashicons-no"></span>
                 </span>
                 <span class="button button-primary ss-button ss-button-edit-page" data-ss-action="edit"
-                      title='<?php _e( "Edit page content", "cms-tree-page-view" ) ?>'>
+                      title='<?php _e( "Edit page content", 'swiftypages' ) ?>'>
                     <span class="dashicons ss-icon dashicons-admin-tools"></span>
                 </span>
                 <span class="button button-primary ss-button ss-button-view-page" data-ss-action="view"
-                      title='<?php _e( "View page", "cms-tree-page-view" ) ?>'>
+                      title='<?php _e( "View page", 'swiftypages' ) ?>'>
                     <span class="dashicons ss-icon dashicons-visibility"></span>
                 </span>
             </span>
@@ -352,7 +352,7 @@ if (true) {
                                     <div class="inline-edit-col">
                                         <div class="inline-edit-group">
                                                 <span class="title">
-                                                    <?php _e( "Are you sure you want to permanently delete this page with all it's content?", "cms-tree-page-view" ) ?>
+                                                    <?php _e( "Are you sure you want to permanently delete this page with all it's content?", 'swiftypages' ) ?>
                                                 </span>
                                         </div>
                                     </div>
@@ -361,12 +361,12 @@ if (true) {
                                     <div class="inline-edit-group ss-buttons-confirm">
                                         <a accesskey="c" href="#inline-edit"
                                            class="button-secondary cancel alignright ss-button">
-                                            <?php _e( "Cancel", "cms-tree-page-view" ) ?>
+                                            <?php _e( "Cancel", 'swiftypages' ) ?>
                                         </a>
                                         <br class="clear">
                                         <a accesskey="s" href="#inline-edit"
                                            class="button-primary delete alignright ss-button">
-                                            <?php _e( "Delete", "cms-tree-page-view" ) ?>
+                                            <?php _e( "Delete", 'swiftypages' ) ?>
                                         </a>
                                         <span class="error" style="display:none"></span>
                                     </div>
@@ -398,7 +398,7 @@ if (true) {
                                     <div class="inline-edit-col">
                                         <label for="ss-menu-button-text" class="ss-label">
                                                 <span class="title">
-                                                    <?php _e( "Menu button text", "cms-tree-page-view" ) ?>
+                                                    <?php _e( "Menu button text", 'swiftypages' ) ?>
                                                 </span>
                                                 <span class="input-text-wrap">
                                                     <input name="cms_tpv_add_new_pages_names[]" type="text"
@@ -408,7 +408,7 @@ if (true) {
                                         </label>
                                         <label for="ss-page-title-seo" class="ss-label">
                                                 <span class="title">
-                                                    <?php _e( "Page title for search engines", "cms-tree-page-view" ) ?>
+                                                    <?php _e( "Page title for search engines", 'swiftypages' ) ?>
                                                 </span>
                                                 <span class="input-text-wrap">
                                                     <input name="page-title-seo" type="text" id="ss-page-title-seo"
@@ -418,7 +418,7 @@ if (true) {
                                         </label>
                                         <label for="ss-custom-page-url" class="ss-label">
                                                 <span class="title">
-                                                    <?php _e( "Customize page url", "cms-tree-page-view" ) ?>
+                                                    <?php _e( "Customize page url", 'swiftypages' ) ?>
                                                 </span>
                                                 <span class="input-text-wrap">
                                                     <input name="post_name" type="text" id="ss-custom-page-url"
@@ -428,7 +428,7 @@ if (true) {
                                         </label>
                                         <label for="ss-page-type" class="ss-label">
                                                 <span class="title">
-                                                    <?php _e( "Page type", "cms-tree-page-view" ) ?>
+                                                    <?php _e( "Page type", 'swiftypages' ) ?>
                                                 </span>
                                                 <span class="input-text-wrap">
                                                     <select name="page-type" id="ss-page-type"
@@ -445,7 +445,7 @@ if (true) {
                                     <div class="inline-edit-col">
                                         <div class="inline-edit-group">
                                                 <span class="title">
-                                                    <?php _e( "Show in menu", "cms-tree-page-view" ) ?>
+                                                    <?php _e( "Show in menu", 'swiftypages' ) ?>
                                                 </span>
                                         </div>
                                         <div class="inline-edit-group">
@@ -454,14 +454,14 @@ if (true) {
                                                         <input name="show-in-menu" id="ss-show-in-menu-show"
                                                                type="radio" value="show" class="ss-input-radio">
                                                         <span class="radiobutton-title">
-                                                            <?php _e( "Show", "cms-tree-page-view" ) ?>
+                                                            <?php _e( "Show", 'swiftypages' ) ?>
                                                         </span>
                                                     </label>
                                                     <label class="alignleft">
                                                         <input name="show-in-menu" id="ss-show-in-menu-hide"
                                                                type="radio" value="hide" class="ss-input-radio">
                                                         <span class="radiobutton-title">
-                                                            <?php _e( "Hide", "cms-tree-page-view" ) ?>
+                                                            <?php _e( "Hide", 'swiftypages' ) ?>
                                                         </span>
                                                     </label>
                                                 </span>
@@ -469,7 +469,7 @@ if (true) {
 
                                         <div class="inline-edit-group">
                                                 <span class="title">
-                                                    <?php _e( "Position of page", "cms-tree-page-view" ) ?>
+                                                    <?php _e( "Position of page", 'swiftypages' ) ?>
                                                 </span>
                                         </div>
                                         <div class="inline-edit-group">
@@ -478,14 +478,14 @@ if (true) {
                                                         <input name="cms_tpv_add_type" id="ss-page-position-next"
                                                                type="radio" value="after" class="ss-input-radio">
                                                         <span class="radiobutton-title">
-                                                            <?php _e( "Next", "cms-tree-page-view" ) ?>
+                                                            <?php _e( "Next", 'swiftypages' ) ?>
                                                         </span>
                                                     </label>
                                                     <label class="alignleft">
                                                         <input name="cms_tpv_add_type" id="ss-page-position-sub"
                                                                type="radio" value="inside" class="ss-input-radio">
                                                         <span class="radiobutton-title">
-                                                            <?php _e( "Sub", "cms-tree-page-view" ) ?>
+                                                            <?php _e( "Sub", 'swiftypages' ) ?>
                                                         </span>
                                                     </label>
                                                 </span>
@@ -493,7 +493,7 @@ if (true) {
 
                                         <div class="inline-edit-group">
                                                 <span class="title">
-                                                    <?php _e( "Draft or live", "cms-tree-page-view" ) ?>
+                                                    <?php _e( "Draft or live", 'swiftypages' ) ?>
                                                 </span>
                                         </div>
                                         <div class="inline-edit-group">
@@ -502,14 +502,14 @@ if (true) {
                                                         <input name="cms_tpv_add_status" id="ss-page-state-draft"
                                                                type="radio" value="draft" class="ss-input-radio">
                                                         <span class="radiobutton-title">
-                                                            <?php _e( "Draft", "cms-tree-page-view" ) ?>
+                                                            <?php _e( "Draft", 'swiftypages' ) ?>
                                                         </span>
                                                     </label>
                                                     <label class="alignleft">
                                                         <input name="cms_tpv_add_status" id="ss-page-state-live"
                                                                type="radio" value="published" class="ss-input-radio">
                                                         <span class="radiobutton-title">
-                                                            <?php _e( "Live", "cms-tree-page-view" ) ?>
+                                                            <?php _e( "Live", 'swiftypages' ) ?>
                                                         </span>
                                                     </label>
                                                 </span>
@@ -520,12 +520,12 @@ if (true) {
                                     <div class="inline-edit-group ss-buttons-confirm">
                                         <a accesskey="c" href="#inline-edit"
                                            class="button-secondary alignright ss-button ss-page-add-edit-cancel">
-                                            <?php _e( "Cancel", "cms-tree-page-view" ) ?>
+                                            <?php _e( "Cancel", 'swiftypages' ) ?>
                                         </a>
                                         <br class="clear">
                                         <a accesskey="s" href="#inline-edit"
                                            class="button-primary alignright ss-button ss-page-add-edit-save">
-                                            <?php _e( "Save", "cms-tree-page-view" ) ?>
+                                            <?php _e( "Save", 'swiftypages' ) ?>
                                         </a>
                                         <span class="error" style="display:none"></span>
                                     </div>
