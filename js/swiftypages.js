@@ -199,6 +199,25 @@ var Swifty = (function ( $, document, undefined ) {
             return false;
         } );
 
+        $( '.ss-page-add-save' ).click( function( event ) {
+            $li = $(this).closest('li');
+
+            jQuery.post( ajaxurl
+                , { 'action': 'swiftypages_add_page'
+                    , 'post_type':  'page'
+                    , '_inline_edit': jQuery('input#_inline_edit').val()
+                    , 'parent_id': $li.attr('id')
+                    , 'add_mode': 'after' // 'after' or 'inside'
+                    , 'post_title': $li.find( 'input[name="post_title"]' ).val()
+                    , 'post_name':  $li.find( 'input[name="post_name"]' ).val()
+                }
+            );
+
+            event.preventDefault();
+            event.stopPropagation();
+            return false;
+        } );
+
         $( '.delete.ss-button' ).click( function( event ) {
             var $li = $( this ).closest( 'li' );
 

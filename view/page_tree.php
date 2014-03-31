@@ -462,6 +462,9 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                             <a accesskey="s" class="button-primary alignright ss-button ss-page-add-edit-save">
                                         <?php _e( "Save", 'swiftypages' ) ?>
                                     </a>
+                                    <a accesskey="s" class="button-primary alignright ss-button ss-page-add-save">
+                                        <?php _e( "Save New", 'swiftypages' ) ?>
+                                    </a>
                                 </div>
                             </fieldset>
                         </td>

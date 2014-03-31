@@ -410,72 +410,44 @@ class SwiftyPages
     {
         global $wpdb;
 
-        /*
-        (
-        [action] => swiftypages_add_page
-        [pageID] => swiftypages-id-1318
-        type
-        )
-        */
-        $type       = $_POST[ "type" ];
-        $pageID     = $_POST[ "pageID" ];
-        $pageID     = str_replace( "swiftypages-id-", "", $pageID );
-        $page_title = trim( $_POST[ "page_title" ] );
-        $post_type  = $_POST[ "post_type" ];
-        $wpml_lang  = $_POST[ "wpml_lang" ];
-        if ( !$page_title )
+        $parentID   = $_POST[ "parent_id" ];
+        $parentID   = intval( str_replace( "swiftypages-id-", "", $parentID ) );
+        $wpml_lang  = isset($_POST[ "wpml_lang" ]) ? $_POST[ "wpml_lang" ] : false;
+        $post_title = trim( $_POST[ "post_title" ] );
+        if ( !$post_title )
         {
-            $page_title = __( "New page", 'swiftypages' );
+            $post_title = __( "New page", 'swiftypages' );
         }
 
-        $ref_post = get_post( $pageID );
+        $ref_post = get_post( $parentID );
+        $post_new                   = array();
+        $post_new[ "post_type" ]    = $_POST[ "post_type" ];
+        $post_new[ "post_status" ]  = "draft";
+        $post_new[ "post_title" ]   = $post_title;
+        $post_new[ "post_content" ] = "";
 
-        if ( "after" == $type )
+        if ( "after" == $_POST[ "add_mode" ] )
         {
-
-            /*
-                add page under/below ref_post
-            */
-
             // update menu_order of all pages below our page
-            $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+2 WHERE post_parent = %d AND menu_order >= %d AND id <> %d ", $ref_post->post_parent, $ref_post->menu_order, $ref_post->ID ) );
-
+            $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+2 WHERE post_parent = %d AND menu_order >= %d AND id <> %d "
+                                        , $ref_post->post_parent
+                                        , $ref_post->menu_order
+                                        , $ref_post->ID
+                                        )
+                        );
             // create a new page and then goto it
-            $post_new                   = array();
             $post_new[ "menu_order" ]   = $ref_post->menu_order + 1;
             $post_new[ "post_parent" ]  = $ref_post->post_parent;
-            $post_new[ "post_type" ]    = "page";
-            $post_new[ "post_status" ]  = "draft";
-            $post_new[ "post_title" ]   = $page_title;
-            $post_new[ "post_content" ] = "";
-            $post_new[ "post_type" ]    = $post_type;
-            $newPostID                  = wp_insert_post( $post_new );
-
         }
-        else
+        elseif ( "inside" == $_POST[ "add_mode" ] )
         {
-            if ( "inside" == $type )
-            {
-
-                /*
-                    add page inside ref_post
-                */
-
-                // update menu_order, so our new post is the only one with order 0
-                $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+1 WHERE post_parent = %d", $ref_post->ID ) );
-
-                $post_new                   = array();
-                $post_new[ "menu_order" ]   = 0;
-                $post_new[ "post_parent" ]  = $ref_post->ID;
-                $post_new[ "post_type" ]    = "page";
-                $post_new[ "post_status" ]  = "draft";
-                $post_new[ "post_title" ]   = $page_title;
-                $post_new[ "post_content" ] = "";
-                $post_new[ "post_type" ]    = $post_type;
-                $newPostID                  = wp_insert_post( $post_new );
-
-            }
+            // update menu_order, so our new post is the only one with order 0
+            $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+1 WHERE post_parent = %d", $ref_post->ID ) );
+            $post_new[ "menu_order" ]   = 0;
+            $post_new[ "post_parent" ]  = $ref_post->ID;
         }
+        $newPostID                  = wp_insert_post( $post_new );
+
 
         if ( $newPostID )
         {
@@ -492,8 +464,6 @@ class SwiftyPages
             // fail, tell js
             echo "0";
         }
-
-
         exit;
     }
 
