@@ -258,7 +258,7 @@ class SwiftyPages
         */
         $mode   = "tree";
         $class  = isset( $_GET[ "mode" ] ) && $_GET[ "mode" ] == $mode ? " class='current' " : "";
-        $title  = __( "Tree View", 'swiftypages' );
+        $title  = __( "SwiftyPages", 'swiftypages' );
         $tree_a = "<a href='" . esc_url( add_query_arg( 'mode', $mode, $_SERVER[ 'REQUEST_URI' ] ) ) . "' $class> <img id='view-switch-$mode' src='" . esc_url( includes_url( 'images/blank.gif' ) ) . "' width='20' height='20' title='$title' alt='$title' /></a>\n";
 
         // Copy of wordpress own, if it does not exist
@@ -512,7 +512,7 @@ class SwiftyPages
         $post = get_post($post_id);
         ?>
         var li = jQuery( 'li#cms-tpv-<?php echo $post_id; ?>' );
-        li.find( 'input[name="cms_tpv_add_new_pages_names[]"]' ).val( <?php echo json_encode($post->post_title); ?> );
+        li.find( 'input[name="post_title"]' ).val( <?php echo json_encode($post->post_title); ?> );
         li.find( 'input[name="post_name"]' ).val( <?php echo json_encode($post->post_name); ?> );
         <?php
         exit;

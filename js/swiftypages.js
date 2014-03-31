@@ -34,81 +34,101 @@ var Swifty = (function ( $, document, undefined ) {
         $( a ).css( {
             width: '97%'
         } ).attr( {
-                href: 'javascript:;',
-                class: 'ss-page-tree-element'
-            } );
+            href: 'javascript:;',
+            class: 'ss-page-tree-element'
+        } );
     };
 
-    ss.getPageActions = function ( $li ) {
+    ss.resetPageTree = function () {
+        var $tree = $( 'div.jstree' );
+
+        $tree.find( 'li' ).data( 'cur-action', '' );
+        $tree.find( 'span.ss-container' ).remove();
+    };
+
+    ss.preparePageActionButtons = function ( $li ) {
         var $a = $li.find( '> a' );
+        var $tree = $li.closest( 'div.jstree' );
+        var $tmpl = this.getPageActionButtonsTmpl();
 
-        $a.append( this.getPageActionsSpan( $a ) ).show();
+        $tree.find( 'span.ss-page-actions-tmpl' ).remove();
+
+        $a.append( $tmpl );
     };
 
-    ss.getPageActionsSpan = function ( $el ) {
-        return $el.closest( 'div.cms_tpv_wrapper' ).find( 'span.ss-page-actions' )
+    ss.getPageActionButtonsTmpl = function () {
+        return $( 'span.ss-page-actions-tmpl.__TMPL__' ).clone( true ).removeClass( '__TMPL__ ss-hidden' );
     };
 
-    ss.getPageAddEdit = function ( el ) {
-        return $( el ).closest( 'div.cms_tpv_wrapper' ).find( 'span.ss-page-add-edit-span' )
+    ss.preparePageActions = function ( $li, action ) {
+        var selector = {
+            'add': 'ss-page-add-edit-tmpl',
+            'settings': 'ss-page-add-edit-tmpl',
+            'delete': 'ss-page-delete-tmpl',
+            'edit': 'ss-page-edit-tmpl'
+        }[ action ];
+        var $tmpl = this.getPageActionsTmpl( selector );
+
+        $li.data( 'cur-action', action );
+        $li.find( '> a' ).after( $tmpl.removeClass( 'ss-hidden' ) );
     };
 
-    ss.getPageDelete = function ( el ) {
-        return $( el ).closest( 'div.cms_tpv_wrapper' ).find( 'span.ss-page-delete-span' );
+    ss.getPageActionsTmpl = function ( selector ) {
+        return $( 'span.' + selector + '.__TMPL__' ).clone( true ).removeClass( '__TMPL__' );
     };
 
     ss.pageTreeLoaded = function ( ev ) {
         var $container = $( ev.target );
 
         this.adaptTreeLinkElements( $container.find( 'a' ) );
-        this.getPageActions( $container.find( 'li:first' ) );
+        this.preparePageActionButtons( $container.find( 'li:first' ) );
+
+        setTimeout( function () {
+            $( 'a.jstree-clicked' ).removeClass( 'jstree-clicked' );
+            $container.find( 'li:first > a' ).addClass( 'jstree-clicked' );
+        }, 1 );
     };
 
     ss.setupListeners = function () {
         var self = this;
 
-        $( document ).on( 'click', '.ss-page-actions > .ss-button', function ( ev ) {
-            ev.preventDefault();
+        $( document ).on( 'click', '.ss-page-tree-element', function ( event ) {
+            var $li = $( this ).closest( 'li' );
 
+            ss.resetPageTree();
+            ss.preparePageActionButtons( $li );
+
+            event.preventDefault();
+            event.stopPropagation();
+        } );
+
+        $( document ).on( 'click', '.ss-button', function ( event ) {
             var $button = $( this );
             var $li = $button.closest( 'li' );
             var action = $button.data( 'ss-action' );
             var permalink = $li.data( "permalink" );
-            var editlink = $li.data( "editlink" );
-            var pageFormTmpl, ssForm;
 
             switch ( action ) {
                 case "add":
                 case "settings":
-                    pageFormTmpl = self.getPageAddEdit( this );
-                    ssForm = $li.children( '.ss-page-add-edit-span' );
-
-                    $( '.ss-container:visible' ).not( ssForm ).hide();
-
-                    if ( !ssForm.length ) {
-                        $li.append( pageFormTmpl );
-                    }
-
-                    $li.find( "[name='lang']" ).val( cms_tpv_get_wpml_selected_lang( this ) );
-                    $li.find( "[name='ref_post_id']" ).val( $li.data( "post_id" ) );
-
-                    $li.children( '.ss-page-add-edit-span' ).show();
-
-                    break;
                 case "delete":
-                    pageFormTmpl = self.getPageDelete( this );
-                    ssForm = $li.children( '.ss-page-delete-span' );
-
-                    $( '.ss-container:visible' ).not( ssForm ).hide();
-
-                    if ( !ssForm.length ) {
-                        $li.append( pageFormTmpl );
+                case "edit":
+                    if ( $li.data( 'cur-action' ) && $li.data( 'cur-action' ) === action ) {
+                        ss.resetPageTree();
+                    } else {
+                        ss.resetPageTree();
+                        ss.preparePageActions( $li, action );
                     }
 
-                    $li.children( '.ss-page-delete-span' ).show();
-
-                    break;
-                case "edit":
+                    if ( action === 'settings' ) {
+                        $.post(
+                            ajaxurl,
+                            {
+                                'action': 'swiftypages_post_settings',
+                                'post_ID': $li.data( 'post_id' )
+                            }
+                        );
+                    }
 
                     break;
                 case "view":
@@ -116,35 +136,55 @@ var Swifty = (function ( $, document, undefined ) {
 
                     break;
                 default:
-                    $( '.ss-container:visible' ).hide();
+                    $( 'span.ss-container:visible' ).remove();
 
                     break;
             }
-        } );
 
-        $( document ).on( 'click', 'a.ss-page-add-edit-save', function ( ev ) {
-            var $form = $( this ).closest( 'form' );
-
-            ev.preventDefault();
-
-            $form.submit();
+            event.preventDefault();
+            event.stopPropagation();
         } );
     };
 
     ss.ss_tree_loaded = function( ev /*, data*/ ) {
-        var $container = $( ev.target );
-
         ss.pageTreeLoaded( ev );
 
-        $( $container ).on( 'click', 'a.ss-page-tree-element', function ( event ) {
-            $( '.ss-page-buttons' ).remove();
+        $( '.ss-page-add-edit-save' ).click( function( event ) {
+            var $li = $( this ).closest( 'li' );
+            var action = $li.data( 'cur-action' );
+            var opts = {};
 
-            if ( $( event.target ).is( 'a' ) ) {
-                var $li = $( event.target ).closest( 'li' );
-
-                ss.getPageActions( $li );
+            if ( action === "add" ) {
             }
+
+            if ( action === "settings" ) {
+            }
+
+            jQuery.post( ajaxurl
+                , { 'action': 'inline-save'
+                    , 'post_type':  'page'
+                    , '_inline_edit': jQuery('input#_inline_edit').val()
+                    , 'post_ID':    $li.data('post_id')
+                    , 'post_title': $li.find( 'input[name="post_title"]' ).val()
+                    , 'post_name':  $li.find( 'input[name="post_name"]' ).val()
+                }
+            );
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            return false;
         } );
+
+        $( '.delete.ss-button' ).click( function( event ) {
+            var $li = $( this ).closest( 'li' );
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            return false;
+        } );
+
     };
 
     return ss;
@@ -316,21 +356,21 @@ jQuery( function ( $ ) {
     // try to override css
     var height = "20", height2 = "18", ins_height = "20";
     css_string = '' +
-                 '.jstree ul, .jstree li { display:block; margin:0 0 0 0; padding:0 0 0 0; list-style-type:none; } ' +
-                 '.jstree li { display:block; min-height:' + height + 'px; line-height:' + height + 'px; white-space:nowrap; margin-left:18px; min-width:18px; } ' +
-                 '.jstree-rtl li { margin-left:0; margin-right:18px; } ' +
-                 '.jstree > ul > li { margin-left:0px; } ' +
-                 '.jstree-rtl > ul > li { margin-right:0px; } ' +
-                 '.jstree ins { display:inline-block; text-decoration:none; width:18px; height:' + height + 'px; margin:0 0 0 0; padding:0; } ' +
-                 '.jstree a { display:inline-block; line-height:' + height2 + 'px; height:' + height2 + 'px; color:black; white-space:nowrap; text-decoration:none; padding:1px 2px; margin:0; } ' +
-                 '.jstree a:focus { outline: none; } ' +
-                 '.jstree a > ins { height:' + ins_height + 'px; width:16px; } ' +
-                 '.jstree a > .jstree-icon { margin-right:3px; } ' +
-                 '.jstree-rtl a > .jstree-icon { margin-left:3px; margin-right:0; } ' +
-                 'li.jstree-open > ul { display:block; } ' +
-                 'li.jstree-closed > ul { display:none; } ' +
-                 '#vakata-dragged { background-color: white; };' +
-                 '';
+        '.jstree ul, .jstree li { display:block; margin:0 0 0 0; padding:0 0 0 0; list-style-type:none; } ' +
+        '.jstree li { display:block; min-height:' + height + 'px; line-height:' + height + 'px; white-space:nowrap; margin-left:18px; min-width:18px; } ' +
+        '.jstree-rtl li { margin-left:0; margin-right:18px; } ' +
+        '.jstree > ul > li { margin-left:0px; } ' +
+        '.jstree-rtl > ul > li { margin-right:0px; } ' +
+        '.jstree ins { display:inline-block; text-decoration:none; width:18px; height:' + height + 'px; margin:0 0 0 0; padding:0; } ' +
+        '.jstree a { display:inline-block; line-height:' + height2 + 'px; height:' + height2 + 'px; color:black; white-space:nowrap; text-decoration:none; padding:1px 2px; margin:0; } ' +
+        '.jstree a:focus { outline: none; } ' +
+        '.jstree a > ins { height:' + ins_height + 'px; width:16px; } ' +
+        '.jstree a > .jstree-icon { margin-right:3px; } ' +
+        '.jstree-rtl a > .jstree-icon { margin-left:3px; margin-right:0; } ' +
+        'li.jstree-open > ul { display:block; } ' +
+        'li.jstree-closed > ul { display:none; } ' +
+        '#vakata-dragged { background-color: white; };' +
+        '';
     $.vakata.css.add_sheet( {
         str: css_string,
         title: "jstree_cms_tpv"
@@ -1047,31 +1087,4 @@ jQuery( function ( $ ) {
         var viewswitch = $( "div.view-switch" );
         viewswitch.appendTo( cmstpv_postsoverview_wrap );
     }
-
-    jQuery('.ss-button-page-settings').click( function( event ) {
-        event.preventDefault();
-        var $node = jQuery( this ).parents('li');
-        jQuery.post( ajaxurl
-                   , { "action": "swiftypages_post_settings"
-                     , "post_ID": $node.data('post_id')
-                     }
-                   );
-        // return false; // Enable to prevent opening details here
-    });
-
-    jQuery('.ss-page-add-edit-save').click( function( event ) {
-        event.preventDefault();
-        var $li = jQuery( this ).parents('li');
-        jQuery.post( ajaxurl
-                   , { 'action': 'inline-save'
-                     , 'post_type':  'page'
-                     , '_inline_edit': jQuery('input#_inline_edit').val()
-                     , 'post_ID':    $li.data('post_id')
-                     , 'post_title': $li.find( 'input[name="cms_tpv_add_new_pages_names[]"]' ).val()
-                     , 'post_name':  $li.find( 'input[name="post_name"]' ).val()
-                     }
-                   );
-        return false;
-    });
-
 } );

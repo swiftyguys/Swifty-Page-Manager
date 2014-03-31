@@ -28,6 +28,8 @@
 
 .jstree-wordpress .jstree-no-icons a .jstree-icon { display:none; }
 
+.jstree-wordpress .jstree-search { font-style:italic; }
+
 .jstree-wordpress .jstree-no-icons .jstree-checkbox { display:inline-block; }
 .jstree-wordpress .jstree-no-checkboxes .jstree-checkbox { display:none !important; }
 .jstree-wordpress .jstree-checked > a > .jstree-checkbox { background-position:-38px -19px; }
@@ -42,6 +44,7 @@
 #vakata-dragged.jstree-wordpress .jstree-invalid { background:url("d.png") -18px -53px no-repeat !important; }
 #jstree-marker.jstree-wordpress { background:url("d.png") -41px -57px no-repeat !important; text-indent:-100px; }
 
+.jstree-wordpress a.jstree-search { color:aqua; }
 .jstree-wordpress .jstree-locked a { color:silver; cursor:default; }
 
 #vakata-contextmenu.jstree-wordpress-context,
@@ -89,10 +92,14 @@
 /* IE6 END */
 
 .jstree-wordpress li {
-	position: relative;
+    position: relative;
 }
 
-.ss-page-actions {
+.ss-container {
+    position: relative;
+}
+
+.ss-page-actions-tmpl {
     right: 0;
     position: absolute;
     margin: 3px 3px 0 0;
@@ -102,8 +109,8 @@
     padding-top: 3px;
 }
 
-.ss-page-add-edit-span,
-.ss-page-delete-span {
+.ss-page-add-edit-tmpl,
+.ss-page-delete-tmpl {
     display: list-item;
     margin-left: 36px;
 }
@@ -112,7 +119,7 @@
     padding: 9px;
 }
 
-.ss-page-delete-span .inline-edit-row fieldset span.title {
+.ss-page-delete-tmpl .inline-edit-row fieldset span.title {
     line-height: 7em;
 }
 
@@ -164,4 +171,8 @@
 
 #wpbody-content .quick-edit-row-page .inline-edit-col-right {
     width: 19%;
+}
+
+.ss-hidden {
+    display: none;
 }

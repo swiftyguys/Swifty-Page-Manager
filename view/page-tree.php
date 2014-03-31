@@ -10,19 +10,7 @@ $post_new_file = "post-new.php?post_type=page";
 ?>
 <div class="wrap">
     <?php echo get_screen_icon(); ?>
-    <h2><?php
-
-        $page_title = sprintf( _x( '%1$s Tree View', "headline of page with tree", 'swiftypages' ), $post_type_object->labels->name );
-        echo $page_title;
-
-        // Add "add new" link the same way as the regular post page has
-        if ( current_user_can( $post_type_object->cap->create_posts ) )
-        {
-            echo ' <a href="' . esc_url( $post_new_file ) . '" class="add-new-h2">' . esc_html( $post_type_object->labels->add_new ) . '</a>';
-        }
-
-        ?></h2>
-
+    <h2><?php echo _x( 'SwiftyPages', "headline of page with tree", 'swiftypages' ); ?></h2>
     <?php
 
     $get_pages_args = array( "post_type" => $post_type );
@@ -295,11 +283,11 @@ $post_new_file = "post-new.php?post_type=page";
         <div class="cms_tpv_page_actions_columns"></div>
         <span class="cms_tpv_page_actions_arrow"></span>
     </div>
+</div>
 
-    <!-- SwiftySite template with actions -->
-    <span class="ss-page-actions">
-        <span class="button button-primary ss-button ss-button-add-page" data-ss-action="add"
-              title='<?php _e( "Add page(s)", 'swiftypages' ) ?>'>
+<!-- SwiftySite template page buttons-->
+<span class="ss-page-actions-tmpl __TMPL__ ss-hidden">
+    <span class="button button-primary ss-button ss-button-add-page" data-ss-action="add" title='<?php _e( "Add page(s)", 'swiftypages' ) ?>'>
             <span class="dashicons ss-icon dashicons-plus"></span>
         </span>
         <span class="button button-primary ss-button ss-button-page-settings" data-ss-action="settings"
@@ -321,15 +309,8 @@ $post_new_file = "post-new.php?post_type=page";
     </span>
 
     <!-- SwiftySite template Delete -->
-            <span class="ss-page-delete-span ss-container" style="display: none;">
-                <form method="post" class="ss-form" action="<?php echo admin_url( 'admin-ajax.php', 'relative' ); ?>">
-                    <input type="hidden" name="action" value="cms_tpv_add_pages">
-                    <input type="hidden" name="ref_post_id" value="">
-                    <?php wp_nonce_field( "cms-tpv-add-pages" ) ?>
-
-                    <!-- lang for wpml -->
-                    <input type="hidden" name="lang" value="">
-
+<span class="ss-container ss-page-delete-tmpl __TMPL__ ss-hidden">
+    <form method="post" class="ss-form ss-page-delete-form">
                     <table class="ss-table wp-list-table widefat fixed pages">
                         <tbody>
                         <tr class="inline-edit-row inline-edit-row-page inline-edit-page quick-edit-row quick-edit-row-page inline-edit-page inline-editor"
@@ -355,7 +336,6 @@ $post_new_file = "post-new.php?post_type=page";
                                            class="button-primary delete alignright ss-button">
                                             <?php _e( "Delete", 'swiftypages' ) ?>
                                         </a>
-                                        <span class="error" style="display:none"></span>
                                     </div>
                                 </fieldset>
                             </td>
@@ -366,20 +346,11 @@ $post_new_file = "post-new.php?post_type=page";
             </span>
 
     <!-- SwiftySite template Add/Edit -->
-            <span class="ss-page-add-edit-span ss-container" style="display: none;">
-                <form method="post" class="ss-form ss-page-add-edit-doit"
-                      action="<?php echo admin_url( 'admin-ajax.php', 'relative' ); ?>">
-                <input type="hidden" name="action" value="cms_tpv_add_pages">
-                <input type="hidden" name="ref_post_id" value="">
-                <?php wp_nonce_field( "cms-tpv-add-pages" ) ?>
-
-                <!-- lang for wpml -->
-                <input type="hidden" name="lang" value="">
-
+<span class="ss-container ss-page-add-edit-tmpl __TMPL__ ss-hidden">
+    <form method="post" class="ss-form ss-page-add-edit-form">
                 <table class="ss-table wp-list-table widefat fixed pages">
                     <tbody>
-                    <tr class="inline-edit-row inline-edit-row-page inline-edit-page quick-edit-row quick-edit-row-page inline-edit-page inline-editor"
-                        style="">
+            <tr class="inline-edit-row inline-edit-row-page inline-edit-page quick-edit-row quick-edit-row-page inline-edit-page inline-editor">
                         <td colspan="5" class="colspanchange">
                             <fieldset class="inline-edit-col-left">
                                 <div class="inline-edit-col ss-basic-container">
@@ -388,7 +359,7 @@ $post_new_file = "post-new.php?post_type=page";
                                                 <?php _e( "Menu button text", "cms-tree-page-view" ) ?>
                                             </span>
                                             <span class="input-text-wrap">
-                                                <input name="cms_tpv_add_new_pages_names[]"
+                                    <input name="post_title"
                                                        type="text"
                                                        class="ss-input ss-input-text"
                                                        title="Enter menu button text">
@@ -411,7 +382,7 @@ $post_new_file = "post-new.php?post_type=page";
                                             </span>
                                             <span class="input-text-wrap">
                                                 <label class="alignleft ss-radio-label">
-                                                    <input name="cms_tpv_add_type"
+                                        <input name="ss-page-position"
                                                            type="radio"
                                                            value="after"
                                                            class="ss-input-radio">
@@ -420,7 +391,7 @@ $post_new_file = "post-new.php?post_type=page";
                                                     </span>
                                                 </label>
                                                 <label class="alignleft ss-radio-label">
-                                                    <input name="cms_tpv_add_type"
+                                        <input name="ss-page-position"
                                                            type="radio"
                                                            value="inside"
                                                            class="ss-input-radio">
@@ -472,7 +443,7 @@ $post_new_file = "post-new.php?post_type=page";
                                             </span>
                                             <span class="input-text-wrap">
                                                 <label class="alignleft ss-radio-label">
-                                                    <input name="cms_tpv_add_status"
+                                        <input name="_status"
                                                            type="radio"
                                                            value="draft"
                                                            class="ss-input-radio">
@@ -481,9 +452,9 @@ $post_new_file = "post-new.php?post_type=page";
                                                     </span>
                                                 </label>
                                                 <label class="alignleft ss-radio-label">
-                                                    <input name="cms_tpv_add_status"
+                                        <input name="_status"
                                                            type="radio"
-                                                           value="published"
+                                               value="publish"
                                                            class="ss-input-radio">
                                                     <span class="radiobutton-title">
                                                         <?php _e( "Live", "cms-tree-page-view" ) ?>
@@ -508,7 +479,7 @@ $post_new_file = "post-new.php?post_type=page";
                                                 <label class="alignleft ss-radio-label">
                                                     <input name="ss-header-visibility"
                                                            type="radio"
-                                                           value="published"
+                                               value="hide"
                                                            class="ss-input-radio">
                                                     <span class="radiobutton-title">
                                                         <?php _e( "Hide", "cms-tree-page-view" ) ?>
@@ -524,7 +495,7 @@ $post_new_file = "post-new.php?post_type=page";
                                                 <label class="alignleft ss-radio-label">
                                                     <input name="ss-sidebar-visibility"
                                                            type="radio"
-                                                           value="draft"
+                                               value="left"
                                                            class="ss-input-radio">
                                                     <span class="radiobutton-title">
                                                         <?php _e( "Left", "cms-tree-page-view" ) ?>
@@ -533,7 +504,7 @@ $post_new_file = "post-new.php?post_type=page";
                                                 <label class="alignleft ss-radio-label">
                                                     <input name="ss-sidebar-visibility"
                                                            type="radio"
-                                                           value="published"
+                                               value="right"
                                                            class="ss-input-radio">
                                                     <span class="radiobutton-title">
                                                         <?php _e( "Right", "cms-tree-page-view" ) ?>
@@ -542,7 +513,7 @@ $post_new_file = "post-new.php?post_type=page";
                                                 <label class="alignleft ss-radio-label">
                                                     <input name="ss-sidebar-visibility"
                                                            type="radio"
-                                                           value="published"
+                                               value="hide"
                                                            class="ss-input-radio">
                                                     <span class="radiobutton-title">
                                                         <?php _e( "Hide", "cms-tree-page-view" ) ?>
@@ -554,16 +525,13 @@ $post_new_file = "post-new.php?post_type=page";
                             </fieldset>
                             <fieldset class="inline-edit-col-right">
                                 <div class="inline-edit-group ss-buttons-confirm">
-                                    <a accesskey="c" href="#inline-edit"
-                                       class="button-secondary alignright ss-button ss-page-add-edit-cancel">
+                            <a accesskey="c" class="button-secondary alignright ss-button ss-page-add-edit-cancel">
                                         <?php _e( "Cancel", 'swiftypages' ) ?>
                                     </a>
                                     <br class="clear">
-                                    <a accesskey="s" href="#inline-edit"
-                                       class="button-primary alignright ss-button ss-page-add-edit-save">
+                            <a accesskey="s" class="button-primary alignright ss-button ss-page-add-edit-save">
                                         <?php _e( "Save", 'swiftypages' ) ?>
                                     </a>
-                                    <span class="error" style="display:none"></span>
                                 </div>
                             </fieldset>
                         </td>
@@ -572,19 +540,15 @@ $post_new_file = "post-new.php?post_type=page";
                 </table>
                 </form>
             </span>
-    </div>
-<!--    --><?php //_get_list_table('WP_Posts_List_Table')->inline_edit(); ?>
+<?php // _get_list_table('WP_Posts_List_Table')->inline_edit(); ?>
+            <?php wp_nonce_field( "inlineeditnonce", '_inline_edit' ) ?>
     <?php
     }
 
     if ( empty( $pages ) )
     {
-
         echo '<div class="updated fade below-h2"><p>' . __( "No posts found.", 'swiftypages' ) . '</p></div>';
-
     }
 
     ?>
-</div>
-
 </div>
