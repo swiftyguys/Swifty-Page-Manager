@@ -9,16 +9,14 @@
 
 $arrPages = $this->_get_pages( "parent=$pageID&view=$this->_view&post_type=$post_type" );
 
-if ( $arrPages )
-{
+if ( $arrPages ):
 
     $current_screen = get_current_screen();
     $screen = convert_to_screen( "edit" );
-#return;
 
-// If this is set to null then quick/bul edit stops working on posts (not pages)
-// If did set it to null sometime. Can't remember why...
-// $screen->post_type = null;
+    // If this is set to null then quick/bul edit stops working on posts (not pages)
+    // If did set it to null sometime. Can't remember why...
+    // $screen->post_type = null;
 
     $post_type_object = get_post_type_object( $post_type );
     ob_start(); // some plugins, for example magic fields, return javascript and things here. we're not compatible with that, so just swallow any output
@@ -31,12 +29,10 @@ if ( $arrPages )
 
 // Translated post statuses
     $post_statuses = get_post_statuses();
-
-
-    ?>[<?php
-    for ( $i = 0, $pagesCount = sizeof( $arrPages ); $i < $pagesCount; $i++ )
-    {
-
+?>
+[
+<?php
+    for ( $i = 0, $pagesCount = sizeof( $arrPages ); $i < $pagesCount; $i++ ):
         $onePage       = $arrPages[ $i ];
         $tmpPost       = $post;
         $post          = $onePage;
@@ -49,10 +45,7 @@ if ( $arrPages )
         $hasChildren = false;
 
         // if viewing trash, don't get children. we watch them "flat" instead
-        if ( $this->_view == "trash" )
-        {
-        }
-        else
+        if ( $this->_view != "trash" )
         {
             $arrChildPages = $this->_get_pages( "parent={$onePage->ID}&view=$this->_view&post_type=$post_type" );
         }
@@ -184,64 +177,51 @@ if ( $arrPages )
             $str_columns = "<dl>$str_columns</dl>";
         }
         $str_columns = json_encode( $str_columns );
-        ?>
-        {
+?>
+    {
         "data": {
-        "title": <?php echo json_encode( $title ) ?>,
-        "attr": {
-        "href": "<?php echo $editLink ?>"
-        <?php /* , "xid": "cms-tpv-<?php echo $onePage->ID ?>" */ ?>
-        }<?php /*,
-					"xicon": "<?php echo $this->plugin_dir_url . "/images/page_white_text.png" ?>"*/
-        ?>
+                "title": <?php echo json_encode( $title ) ?>,
+                "attr": {
+                    "href": "<?php echo $editLink ?>"
+                }
         },
         "attr": {
-        <?php /* "xhref": "<?php echo $editLink ?>", */ ?>
-        "id": "cms-tpv-<?php echo $onePage->ID ?>",
-        <?php /* "xtitle": "<?php _e("Click to edit. Drag to move.", 'swiftypages') ?>", */ ?>
-        "class": "<?php echo $page_css ?>"
+            "id": "swiftypages-id-<?php echo $onePage->ID ?>",
+            "class": "<?php echo $page_css ?>"
         },
         <?php echo $strState ?>
         "metadata": {
-        "id": "cms-tpv-<?php echo $onePage->ID ?>",
-        "post_id": "<?php echo $onePage->ID ?>",
-        "post_type": "<?php echo $onePage->post_type ?>",
-        "post_status": "<?php echo $onePage->post_status ?>",
-        "post_status_translated": "<?php echo isset( $post_statuses[ $onePage->post_status ] ) ? $post_statuses[ $onePage->post_status ] : $onePage->post_status ?>",
-        "rel": "<?php echo $rel ?>",
-        "childCount": <?php echo ( !empty( $arrChildPages ) ) ? sizeof( $arrChildPages ) : 0; ?>,
-        "permalink": "<?php echo htmlspecialchars_decode( get_permalink( $onePage->ID ) ) ?>",
-        "editlink": "<?php echo htmlspecialchars_decode( $editLink ) ?>",
-        "modified_time": "<?php echo $post_modified_time ?>",
-        "modified_author": "<?php echo $post_author ?>",
-        "columns": <?php echo $str_columns ?>,
-        "user_can_edit_page": "<?php echo (int) $user_can_edit_page ?>",
-        "user_can_add_page_inside": "<?php echo (int) $user_can_add_inside ?>",
-        "user_can_add_page_after": "<?php echo (int) $user_can_add_after ?>",
-        "post_title": <?php echo json_encode( $title ) ?>
+            "id": "swiftypages-id-<?php echo $onePage->ID ?>",
+            "post_id": "<?php echo $onePage->ID ?>",
+            "post_type": "<?php echo $onePage->post_type ?>",
+            "post_status": "<?php echo $onePage->post_status ?>",
+            "post_status_translated": "<?php echo isset( $post_statuses[ $onePage->post_status ] ) ? $post_statuses[ $onePage->post_status ] : $onePage->post_status ?>",
+            "rel": "<?php echo $rel ?>",
+            "childCount": <?php echo ( !empty( $arrChildPages ) ) ? sizeof( $arrChildPages ) : 0; ?>,
+            "permalink": "<?php echo htmlspecialchars_decode( get_permalink( $onePage->ID ) ) ?>",
+            "editlink": "<?php echo htmlspecialchars_decode( $editLink ) ?>",
+            "modified_time": "<?php echo $post_modified_time ?>",
+            "modified_author": "<?php echo $post_author ?>",
+            "columns": <?php echo $str_columns ?>,
+            "user_can_edit_page": "<?php echo (int) $user_can_edit_page ?>",
+            "user_can_add_page_inside": "<?php echo (int) $user_can_add_inside ?>",
+            "user_can_add_page_after": "<?php echo (int) $user_can_add_after ?>",
+            "post_title": <?php echo json_encode( $title ) ?>
         }
-        <?php
+<?php
         // if id is in $arrOpenChilds then also output children on this one
         // TODO: if only "a few" (< 100?) pages then load all, but keep closed, so we don't have to do the ajax thingie
-        if ( $hasChildren && isset( $arrOpenChilds ) && in_array( $onePage->ID, $arrOpenChilds ) )
-        {
-            ?>, "children": <?php
-            $this->_print_childs( $onePage->ID, $arrOpenChilds, $post_type );
-            ?><?php
-        }
-        ?>
-
-        }
-        <?php
-        // no comma for last page
-        if ( $i < $pagesCount - 1 )
-        {
-            ?>,<?php
-        }
-
-        // return orgiginal post
-        $post = $tmpPost;
-
+        if ( $hasChildren && isset( $arrOpenChilds ) && in_array( $onePage->ID, $arrOpenChilds ) ):
+?>
+        , "children": <?php $this->_print_childs( $onePage->ID, $arrOpenChilds, $post_type ); ?>
+<?php   endif;  ?>
     }
-    ?>]<?php
-}
+<?php   if ( $i < $pagesCount - 1 ): // no comma for last page ?>
+    ,
+<?php   endif; ?>
+<?php
+    endfor;
+?>
+]
+<?php
+endif;

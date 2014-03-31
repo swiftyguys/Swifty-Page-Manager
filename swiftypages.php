@@ -120,7 +120,7 @@ class SwiftyPages
         );
         wp_localize_script( "swiftypages", 'swiftypages_l10n', $oLocale );
 
-        require( $this->plugin_dir . '/view/page-tree.php' );
+        require( $this->plugin_dir . '/view/page_tree.php' );
     }
 
     function ajax_get_childs()
@@ -187,7 +187,7 @@ class SwiftyPages
 
                 foreach ( $arrNodesToOpen as $oneNodeID )
                 {
-                    $sReturn .= "\"#cms-tpv-{$oneNodeID}\",";
+                    $sReturn .= "\"#swiftypages-id-{$oneNodeID}\",";
                 }
                 $sReturn = preg_replace( '/,$/', "", $sReturn );
                 if ( $sReturn )
@@ -214,17 +214,16 @@ class SwiftyPages
                 // regular get
 
                 $id = ( isset( $_GET[ "id" ] ) ) ? $_GET[ "id" ] : null;
-                $id = (int) str_replace( "cms-tpv-", "", $id );
+                $id = (int) str_replace( "swiftypages-id-", "", $id );
 
                 $jstree_open = array();
                 if ( isset( $_COOKIE[ "jstree_open" ] ) )
                 {
-                    $jstree_open = $_COOKIE[ "jstree_open" ]; // like this: [jstree_open] => cms-tpv-1282,cms-tpv-1284,cms-tpv-3
-                    #var_dump($jstree_open); string(22) "#cms-tpv-14,#cms-tpv-2"
+                    $jstree_open = $_COOKIE[ "jstree_open" ]; // like this: [jstree_open] => swiftypages-id-1282,swiftypages-id-1284,swiftypages-id-3
                     $jstree_open = explode( ",", $jstree_open );
                     for ( $i = 0; $i < sizeof( $jstree_open ); $i++ )
                     {
-                        $jstree_open[ $i ] = (int) str_replace( "#cms-tpv-", "", $jstree_open[ $i ] );
+                        $jstree_open[ $i ] = (int) str_replace( "#swiftypages-id-", "", $jstree_open[ $i ] );
                     }
                 }
                 $this->_print_childs( $id, $jstree_open, $post_type );
@@ -267,7 +266,7 @@ class SwiftyPages
         {
 
             $mode      = "list";
-            $class     = isset( $_GET[ "mode" ] ) && $_GET[ "mode" ] != $mode ? " class='cmstpv_add_list_view' " : " class='cmstpv_add_list_view current' ";
+            $class     = isset( $_GET[ "mode" ] ) && $_GET[ "mode" ] != $mode ? " class='swiftypages_add_list_view' " : " class='swiftypages_add_list_view current' ";
             $title     = __( "List View" ); /* translation not missing - exists in wp */
             $wp_list_a = "<a href='" . esc_url( add_query_arg( 'mode', $mode, $_SERVER[ 'REQUEST_URI' ] ) ) . "' $class><img id='view-switch-$mode' src='" . esc_url( includes_url( 'images/blank.gif' ) ) . "' width='20' height='20' title='$title' alt='$title' /></a>\n";
 
@@ -282,7 +281,7 @@ class SwiftyPages
         {
 
             $out .= sprintf( '
-			<div class="cmstpv-postsoverview-wrap">
+			<div class="swiftypages-postsoverview-wrap">
 				%1$s
 			</div>
 		', $tree_common_stuff );
@@ -310,8 +309,8 @@ class SwiftyPages
         $ref_node_id = $_POST[ "ref_node_id" ];
         $type        = $_POST[ "type" ];
 
-        $node_id     = str_replace( "cms-tpv-", "", $node_id );
-        $ref_node_id = str_replace( "cms-tpv-", "", $ref_node_id );
+        $node_id     = str_replace( "swiftypages-id-", "", $node_id );
+        $ref_node_id = str_replace( "swiftypages-id-", "", $ref_node_id );
 
         $_POST[ "skip_sitepress_actions" ] = true; // sitepress.class.php->save_post_actions
 
@@ -421,14 +420,14 @@ class SwiftyPages
 
         /*
         (
-        [action] => cms_tpv_add_page
-        [pageID] => cms-tpv-1318
+        [action] => swiftypages_add_page
+        [pageID] => swiftypages-id-1318
         type
         )
         */
         $type       = $_POST[ "type" ];
         $pageID     = $_POST[ "pageID" ];
-        $pageID     = str_replace( "cms-tpv-", "", $pageID );
+        $pageID     = str_replace( "swiftypages-id-", "", $pageID );
         $page_title = trim( $_POST[ "page_title" ] );
         $post_type  = $_POST[ "post_type" ];
         $wpml_lang  = $_POST[ "wpml_lang" ];
@@ -511,7 +510,7 @@ class SwiftyPages
         header( 'Content-Type: text/javascript' );
         $post = get_post($post_id);
         ?>
-        var li = jQuery( 'li#cms-tpv-<?php echo $post_id; ?>' );
+        var li = jQuery( 'li#swiftypages-id-<?php echo $post_id; ?>' );
         li.find( 'input[name="post_title"]' ).val( <?php echo json_encode($post->post_title); ?> );
         li.find( 'input[name="post_name"]' ).val( <?php echo json_encode($post->post_name); ?> );
         <?php

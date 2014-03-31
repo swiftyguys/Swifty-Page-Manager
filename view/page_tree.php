@@ -72,16 +72,16 @@ $post_new_file = "post-new.php?post_type=page";
 
 
     // output js for the root/top level
-    // function cms_tpv_print_childs($pageID, $view = "all", $arrOpenChilds = null, $post_type) {
+    // function swiftypages_print_childs($pageID, $view = "all", $arrOpenChilds = null, $post_type) {
     // @todo: make into function since used at other places
     $jstree_open = array();
     if ( isset( $_COOKIE[ "jstree_open" ] ) )
     {
-        $jstree_open = $_COOKIE[ "jstree_open" ]; // like this: [jstree_open] => cms-tpv-1282,cms-tpv-1284,cms-tpv-3
+        $jstree_open = $_COOKIE[ "jstree_open" ]; // like this: [jstree_open] => swiftypages-id-1282,swiftypages-id-1284,swiftypages-id-3
         $jstree_open = explode( ",", $jstree_open );
         for ( $i = 0; $i < sizeof( $jstree_open ); $i++ )
         {
-            $jstree_open[ $i ] = (int) str_replace( "#cms-tpv-", "", $jstree_open[ $i ] );
+            $jstree_open[ $i ] = (int) str_replace( "#swiftypages-id-", "", $jstree_open[ $i ] );
         }
     }
 
@@ -103,9 +103,9 @@ $post_new_file = "post-new.php?post_type=page";
         } );
     </script>
 
-    <div class="cms_tpv_wrapper">
-    <input type="hidden" name="cms_tpv_meta_post_type" value="<?php echo $post_type ?>"/>
-    <input type="hidden" name="cms_tpv_meta_wpml_language" value="<?php echo $wpml_current_lang ?>"/>
+    <div class="swiftypages_wrapper">
+    <input type="hidden" name="swiftypages_meta_post_type" value="<?php echo $post_type ?>"/>
+    <input type="hidden" name="swiftypages_meta_wpml_language" value="<?php echo $wpml_current_lang ?>"/>
     <?php
 
     // check if WPML is activated and show a language-menu
@@ -117,7 +117,7 @@ $post_new_file = "post-new.php?post_type=page";
         if ( sizeof( $wpml_langs ) >= 1 )
         {
             $lang_out = "";
-            $lang_out .= "<ul class='cms-tpv-subsubsub cms_tvp_switch_langs'>";
+            $lang_out .= "<ul class='swiftypages-subsubsub swiftypages_switch_langs'>";
             foreach ( $wpml_langs as $one_lang )
             {
                 $one_lang_details = $sitepress->get_language_details( $one_lang[ "language_code" ] ); // english_name | display_name
@@ -132,7 +132,7 @@ $post_new_file = "post-new.php?post_type=page";
 
                 $lang_out .= "
 						<li>
-							<a class='cms_tvp_switch_lang $selected cms_tpv_switch_language_code_{$one_lang["language_code"]}' href='#'>
+							<a class='swiftypages_switch_lang $selected swiftypages_switch_language_code_{$one_lang["language_code"]}' href='#'>
 								$one_lang_details[display_name]
 								<span class='count'>(" . $lang_count . ")</span>
 							</a> |</li>";
@@ -149,139 +149,86 @@ $post_new_file = "post-new.php?post_type=page";
     // start the party!
 
     ?>
-    <ul class="cms-tpv-subsubsub cms-tpv-subsubsub-select-view">
-        <li class="cms_tvp_view_is_status_view">
-            <a class="cms_tvp_view_all  <?php echo ( $this->_view == "all" ) ? "current" : "" ?>"
+    <ul class="swiftypages-subsubsub swiftypages-subsubsub-select-view">
+        <li class="swiftypages_view_is_status_view">
+            <a class="swiftypages_view_all  <?php echo ( $this->_view == "all" ) ? "current" : "" ?>"
                href="#" <?php echo $status_data_attributes[ "all" ] ?>>
                 <?php _e( "All", 'swiftypages' ) ?>
                 <span class="count">(<?php echo $post_count_all ?>)</span>
             </a> |
         </li>
-        <li class="cms_tvp_view_is_status_view">
-            <a class="cms_tvp_view_public <?php echo ( $this->_view == "public" ) ? "current" : "" ?>"
+        <li class="swiftypages_view_is_status_view">
+            <a class="swiftypages_view_public <?php echo ( $this->_view == "public" ) ? "current" : "" ?>"
                href="#" <?php echo $status_data_attributes[ "publish" ] ?>>
                 <?php _e( "Public", 'swiftypages' ) ?>
                 <span class="count">(<?php echo $post_count_publish ?>)</span>
             </a> |
         </li>
-        <li class="cms_tvp_view_is_status_view">
-            <a class="cms_tvp_view_trash <?php echo ( $this->_view == "trash" ) ? "current" : "" ?>"
+        <li class="swiftypages_view_is_status_view">
+            <a class="swiftypages_view_trash <?php echo ( $this->_view == "trash" ) ? "current" : "" ?>"
                href="#" <?php echo $status_data_attributes[ "trash" ] ?>>
                 <?php _e( "Trash", 'swiftypages' ) ?>
                 <span class="count">(<?php echo $post_count_trash ?>)</span>
             </a>
         </li>
 
-        <li><a href="#" class="cms_tpv_open_all"><?php _e( "Expand", 'swiftypages' ) ?></a> |</li>
-        <li><a href="#" class="cms_tpv_close_all"><?php _e( "Collapse", 'swiftypages' ) ?></a></li>
+        <li><a href="#" class="swiftypages_open_all"><?php _e( "Expand", 'swiftypages' ) ?></a> |</li>
+        <li><a href="#" class="swiftypages_close_all"><?php _e( "Collapse", 'swiftypages' ) ?></a></li>
 
     </ul>
 
-    <div class="cms_tpv_working">
+    <div class="swiftypages_working">
         <?php _e( "Loading...", 'swiftypages' ) ?>
     </div>
 
-    <div class="cms_tpv_message updated below-h2 hidden"><p>Message goes here.</p></div>
+    <div class="swiftypages_message updated below-h2 hidden"><p>Message goes here.</p></div>
 
-    <div class="cms_tpv_container tree-default">
+    <div class="swiftypages_container tree-default">
         <?php _e( "Loading tree", 'swiftypages' ) ?>
     </div>
 
     <div style="clear: both;"></div>
 
     <!-- template forpopup with actions -->
-    <div class="cms_tpv_page_actions">
+    <div class="swiftypages_page_actions">
 
-        <!-- cms_tpv_page_actions_page_id -->
-        <h4 class="cms_tpv_page_actions_headline"></h4>
+        <!-- swiftypages_page_actions_page_id -->
+        <h4 class="swiftypages_page_actions_headline"></h4>
 
-        <p class="cms_tpv_action_edit_and_view">
+        <p class="swiftypages_action_edit_and_view">
             <a href="#" title='<?php _e( "Edit page", 'swiftypages' ) ?>'
-               class='cms_tpv_action_edit'><?php _e( "Edit", 'swiftypages' ) ?></a>
+               class='swiftypages_action_edit'><?php _e( "Edit", 'swiftypages' ) ?></a>
             <a href="#" title='<?php _e( "View page", 'swiftypages' ) ?>'
-               class='cms_tpv_action_view'><?php _e( "View", 'swiftypages' ) ?></a>
+               class='swiftypages_action_view'><?php _e( "View", 'swiftypages' ) ?></a>
         </p>
 
         <!-- links to add page -->
-        <p class="cms_tpv_action_add_and_edit_page">
+        <p class="swiftypages_action_add_and_edit_page">
 
-            <span class='cms_tpv_action_add_page'><?php echo $post_type_object->labels->add_new_item ?></span>
+            <span class='swiftypages_action_add_page'><?php echo $post_type_object->labels->add_new_item ?></span>
 
-            <a class='cms_tpv_action_add_page_after' href="#"
+            <a class='swiftypages_action_add_page_after' href="#"
                title='<?php _e( "Add new page after", 'swiftypages' ) ?>'><?php _e( "After", 'swiftypages' ) ?></a>
 
-            <a class='cms_tpv_action_add_page_inside' href="#"
+            <a class='swiftypages_action_add_page_inside' href="#"
                      title='<?php _e( "Add new page inside", 'swiftypages' ) ?>' ><?php _e( "Inside", 'swiftypages' ) ?></a>
 
-            <!-- <span class="cms_tpv_action_add_page_inside_disallowed"><?php _e( "Can not create page inside of a page with draft status", 'swiftypages' ) ?></span> -->
+            <!-- <span class="swiftypages_action_add_page_inside_disallowed"><?php _e( "Can not create page inside of a page with draft status", 'swiftypages' ) ?></span> -->
 
         </p>
-
-        <div class="cms_tpv_action_add_doit">
-
-            <form method="post" action="<?php echo admin_url( 'admin-ajax.php', 'relative' ); ?>">
-
-                <input type="hidden" name="action" value="cms_tpv_add_pages">
-                <input type="hidden" name="ref_post_id" value="">
-                <?php wp_nonce_field( "cms-tpv-add-pages" ) ?>
-
-                <!-- lang for wpml -->
-                <input type="hidden" name="lang" value="">
-
-                <!-- <fieldset> -->
-
-                <h4><?php _e( "Add page(s)", 'swiftypages' ) ?></h4>
-
-                <div>
-                    <!-- Pages<br> -->
-                    <ul class="cms_tpv_action_add_doit_pages">
-                        <li><span></span><input
-                                placeholder="<?php _e( "Enter title here" ) /* translation not missing - exists in wp */ ?>"
-                                type="text" name="cms_tpv_add_new_pages_names[]"></li>
-                    </ul>
-                </div>
-
-                <div class="cms_tpv_add_position">
-                    <?php _e( "Position", 'swiftypages' ) ?><br>
-                    <label><input type="radio" name="cms_tpv_add_type"
-                                  value="after"> <?php _e( "After", 'swiftypages' ) ?></label>
-                    <label><input type="radio" name="cms_tpv_add_type"
-                                  value="inside"> <?php _e( "Inside", 'swiftypages' ) ?></label>
-                </div>
-
-
-                <div>
-                    <?php _e( "Status", 'swiftypages' ) ?><br>
-                    <label><input type="radio" name="cms_tpv_add_status" value="draft"
-                                  checked> <?php _e( "Draft", 'swiftypages' ) ?></label>
-                    <label><input type="radio" name="cms_tpv_add_status"
-                                  value="published"> <?php _e( "Published", 'swiftypages' ) ?></label>
-                </div>
-
-                <div>
-                    <input type="submit" value="<?php _e( "Add", 'swiftypages' ) ?>" class="button-primary">
-                    <?php _e( "or", 'swiftypages' ) ?>
-                    <a href="#" class="cms_tpv_add_cancel"><?php _e( "cancel", 'swiftypages' ) ?></a>
-                </div>
-
-                <!-- </fieldset> -->
-
-            </form>
-
-        </div>
 
         <dl>
             <dt><?php _e( "Last modified", 'swiftypages' ) ?></dt>
             <dd>
-                <span class="cms_tpv_page_actions_modified_time"></span> <?php _e( "by", 'swiftypages' ) ?>
-                <span class="cms_tpv_page_actions_modified_by"></span>
+                <span class="swiftypages_page_actions_modified_time"></span> <?php _e( "by", 'swiftypages' ) ?>
+                <span class="swiftypages_page_actions_modified_by"></span>
             </dd>
             <dt><?php _e( "Page ID", 'swiftypages' ) ?></dt>
-            <dd><span class="cms_tpv_page_actions_page_id"></span></dd>
+            <dd><span class="swiftypages_page_actions_page_id"></span></dd>
         </dl>
 
-        <div class="cms_tpv_page_actions_columns"></div>
-        <span class="cms_tpv_page_actions_arrow"></span>
+        <div class="swiftypages_page_actions_columns"></div>
+        <span class="swiftypages_page_actions_arrow"></span>
     </div>
 </div>
 
