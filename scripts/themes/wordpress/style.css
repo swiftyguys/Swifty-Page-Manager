@@ -92,10 +92,14 @@
 /* IE6 END */
 
 .jstree-wordpress li {
-	position: relative;
+    position: relative;
 }
 
-.ss-page-actions {
+.ss-container {
+    position: relative;
+}
+
+.ss-page-actions-tmpl {
     right: 0;
     position: absolute;
     margin: 3px 3px 0 0;
@@ -105,8 +109,8 @@
     padding-top: 3px;
 }
 
-.ss-page-add-edit-span,
-.ss-page-delete-span {
+.ss-page-add-edit-tmpl,
+.ss-page-delete-tmpl {
     display: list-item;
     margin-left: 36px;
 }
@@ -115,7 +119,7 @@
     padding: 9px;
 }
 
-.ss-page-delete-span .inline-edit-row fieldset span.title {
+.ss-page-delete-tmpl .inline-edit-row fieldset span.title {
     line-height: 7em;
 }
 
@@ -167,4 +171,8 @@
 
 #wpbody-content .quick-edit-row-page .inline-edit-col-right {
     width: 19%;
+}
+
+.ss-hidden {
+    display: none;
 }
