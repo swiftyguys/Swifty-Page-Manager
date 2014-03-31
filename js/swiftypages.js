@@ -42,7 +42,7 @@ var Swifty = (function ( $, document, undefined ) {
     ss.resetPageTree = function () {
         var $tree = $( 'div.jstree' );
 
-        $tree.find( 'li' ).data( 'cur-action', '' );
+        //$tree.find( 'li' ).data( 'cur-action', '' );
         $tree.find( 'span.ss-container' ).remove();
     };
 
@@ -149,26 +149,40 @@ var Swifty = (function ( $, document, undefined ) {
     ss.ss_tree_loaded = function( ev /*, data*/ ) {
         ss.pageTreeLoaded( ev );
 
-        $( '.ss-page-add-edit-save' ).click( function( event ) {
+        $( document ).on( 'click', '.ss-page-add-edit-save', function( event ) {
             var $li = $( this ).closest( 'li' );
             var action = $li.data( 'cur-action' );
-            var opts = {};
+
+            console.log('EVENT', action);
 
             if ( action === "add" ) {
             }
 
             if ( action === "settings" ) {
-            }
+                console.log('EVENT settings');
+                $.post(
+                    ajaxurl,
+                    {
+                        'action':       'inline-save',
+                        'post_type':    'page',
+                        'post_ID':      $li.data( 'post_id' ),
+                        'post_title':   $li.find( 'input[name="post_title"]' ).val(),
+                        'post_name':    $li.find( 'input[name="post_name"]' ).val(),
+                        '_inline_edit': $( 'input#_inline_edit' ).val()
+                    }
+                ).then( function() {
+                        console.log('TEST');
+                    ss.resetPageTree();
 
-            jQuery.post( ajaxurl
-                , { 'action': 'inline-save'
-                    , 'post_type':  'page'
-                    , '_inline_edit': jQuery('input#_inline_edit').val()
-                    , 'post_ID':    $li.data('post_id')
-                    , 'post_title': $li.find( 'input[name="post_title"]' ).val()
-                    , 'post_name':  $li.find( 'input[name="post_name"]' ).val()
-                }
-            );
+                    $.post(
+                        ajaxurl,
+                        {
+                            'action': 'swiftypages_post_settings',
+                            'post_ID': $li.data( 'post_id' )
+                        }
+                    );
+                } );
+            }
 
             event.preventDefault();
             event.stopPropagation();

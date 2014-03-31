@@ -510,7 +510,16 @@ class SwiftyPages
         header( 'Content-Type: text/javascript' );
         $post = get_post($post_id);
         ?>
-        var li = jQuery( 'li#swiftypages-id-<?php echo $post_id; ?>' );
+        var li = jQuery( 'li#cms-tpv-<?php echo $post_id; ?>' );
+
+li.find( '> a' ).contents().filter( function() {
+    if ( this.nodeType === 3 ) {
+        this.nodeValue: <?php echo json_encode($post->post_title); ?>
+    }
+
+    return;
+} );
+
         li.find( 'input[name="post_title"]' ).val( <?php echo json_encode($post->post_title); ?> );
         li.find( 'input[name="post_name"]' ).val( <?php echo json_encode($post->post_name); ?> );
         <?php
