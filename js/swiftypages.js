@@ -186,16 +186,21 @@ var Swifty = (function ( $, document, undefined ) {
 
             event.preventDefault();
             event.stopPropagation();
-
             return false;
         } );
 
         $( '.delete.ss-button' ).click( function( event ) {
             var $li = $( this ).closest( 'li' );
 
+            jQuery.post( ajaxurl
+                , { 'action': 'delete-page'
+                    , '_ajax_nonce': $li.data('delete_nonce')
+                    , 'id':    $li.data('post_id')
+                }
+            );
+
             event.preventDefault();
             event.stopPropagation();
-
             return false;
         } );
 
@@ -646,7 +651,6 @@ function swiftypages_mouseover_li( e ) {
             div_actions_for_post_type.find( ".swiftypages_page_actions_modified_time" ).text( $li.data( "modified_time" ) );
             div_actions_for_post_type.find( ".swiftypages_page_actions_modified_by" ).text( $li.data( "modified_author" ) );
             div_actions_for_post_type.find( ".swiftypages_page_actions_page_id" ).text( $li.data( "post_id" ) );
-            div_actions_for_post_type.find( ".swiftypages_page_actions_columns" ).html( unescape( $li.data( "columns" ) ) );
 
             // add post title as headline
             div_actions_for_post_type.find( ".swiftypages_page_actions_headline" ).html( $li.data( "post_title" ) );

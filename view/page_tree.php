@@ -3,9 +3,8 @@
  * Variables that need to be set:
  * @var SwiftyPages $this
  */
-$post_type = 'page';
-$post_type_object = get_post_type_object( $post_type );
-$post_new_file = "post-new.php?post_type=page";
+$post_type_object = get_post_type_object( $this->_post_type );
+$post_new_file = "post-new.php?post_type=".$this->_post_type;
 
 ?>
 <div class="wrap">
@@ -13,7 +12,7 @@ $post_new_file = "post-new.php?post_type=page";
     <h2><?php echo _x( 'SwiftyPages', "headline of page with tree", 'swiftypages' ); ?></h2>
     <?php
 
-    $get_pages_args = array( "post_type" => $post_type );
+    $get_pages_args = array( "post_type" => $this->_post_type );
 
     $pages = $this->_get_pages( $get_pages_args );
 
@@ -41,7 +40,7 @@ $post_new_file = "post-new.php?post_type=page";
 // Count code for WPML, mostly taken/inspired from  WPML Multilingual CMS, sitepress.class.php
         $langs = array();
 
-        $wpml_post_counts = $this->_get_wpml_post_counts( $post_type );
+        $wpml_post_counts = $this->_get_wpml_post_counts( $this->_post_type );
 
         $post_count_all     = (int) @$wpml_post_counts[ "private" ][ $wpml_current_lang ] + (int) @$wpml_post_counts[ "future" ][ $wpml_current_lang ] + (int) @$wpml_post_counts[ "publish" ][ $wpml_current_lang ] + (int) @$wpml_post_counts[ "draft" ][ $wpml_current_lang ];
         $post_count_publish = (int) @$wpml_post_counts[ "publish" ][ $wpml_current_lang ];
@@ -64,7 +63,7 @@ $post_new_file = "post-new.php?post_type=page";
     }
     else
     {
-        $post_count         = wp_count_posts( $post_type );
+        $post_count         = wp_count_posts( $this->_post_type );
         $post_count_all     = $post_count->publish + $post_count->future + $post_count->draft + $post_count->pending + $post_count->private;
         $post_count_publish = $post_count->publish;
         $post_count_trash   = $post_count->trash;
@@ -85,26 +84,18 @@ $post_new_file = "post-new.php?post_type=page";
         }
     }
 
+    $jsonData = $this->_get_childrenJsonData( 0, $jstree_open, $this->_post_type );
 
-    ob_start();
-    $this->_print_childs( 0, $jstree_open, $post_type );
-
-    $json_data = ob_get_clean();
-
-    if ( !$json_data )
-    {
-        $json_data = '{}';
-    }
     ?>
     <script type="text/javascript">
         jQuery( function ( $ ) {
             var swiftypages_jsondata = $.data( document, 'swiftypages_jsondata' );
-            swiftypages_jsondata["<?php echo $post_type ?>"] = <?php echo $json_data ?>;
+            swiftypages_jsondata["<?php echo $this->_post_type ?>"] = <?php echo json_encode( $jsonData ); ?>;
         } );
     </script>
 
     <div class="swiftypages_wrapper">
-    <input type="hidden" name="swiftypages_meta_post_type" value="<?php echo $post_type ?>"/>
+    <input type="hidden" name="swiftypages_meta_post_type" value="<?php echo $this->_post_type ?>"/>
     <input type="hidden" name="swiftypages_meta_wpml_language" value="<?php echo $wpml_current_lang ?>"/>
     <?php
 
@@ -164,13 +155,6 @@ $post_new_file = "post-new.php?post_type=page";
                 <span class="count">(<?php echo $post_count_publish ?>)</span>
             </a> |
         </li>
-        <li class="swiftypages_view_is_status_view">
-            <a class="swiftypages_view_trash <?php echo ( $this->_view == "trash" ) ? "current" : "" ?>"
-               href="#" <?php echo $status_data_attributes[ "trash" ] ?>>
-                <?php _e( "Trash", 'swiftypages' ) ?>
-                <span class="count">(<?php echo $post_count_trash ?>)</span>
-            </a>
-        </li>
 
         <li><a href="#" class="swiftypages_open_all"><?php _e( "Expand", 'swiftypages' ) ?></a> |</li>
         <li><a href="#" class="swiftypages_close_all"><?php _e( "Collapse", 'swiftypages' ) ?></a></li>
@@ -227,7 +211,6 @@ $post_new_file = "post-new.php?post_type=page";
             <dd><span class="swiftypages_page_actions_page_id"></span></dd>
         </dl>
 
-        <div class="swiftypages_page_actions_columns"></div>
         <span class="swiftypages_page_actions_arrow"></span>
     </div>
 </div>

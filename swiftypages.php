@@ -16,6 +16,7 @@ class SwiftyPages
     protected $plugin_dir_url;
     protected $_plugin_version = '0.0.2';
     protected $_view = 'all';
+    protected $_post_type = 'page';
 
     /**
      * Constructor
@@ -27,6 +28,9 @@ class SwiftyPages
         $this->plugin_dir_url  = plugins_url( basename($this->plugin_dir) );
         if ( !empty($_GET[ "view" ]) ) {
             $this->_view = $_GET[ "view" ];
+        }
+        if ( !empty($_GET[ "post_type" ]) ) {
+            $this->_post_type = $_GET[ "post_type" ];
         }
         add_action( 'admin_head', array( $this, "admin_head" ) );
         add_action( 'admin_menu', array($this,'admin_menu') );
@@ -47,7 +51,8 @@ class SwiftyPages
     }
 
     public function admin_menu() {
-        add_submenu_page( 'edit.php?post_type=page', __( 'SwiftyPages', 'swiftypages' )
+        add_submenu_page( 'edit.php?post_type='.$this->_post_type
+                        , __( 'SwiftyPages', 'swiftypages' )
                         , __( 'SwiftyPages', 'swiftypages' )
                         , 'manage_options'
                         , 'page-tree'
@@ -129,12 +134,11 @@ class SwiftyPages
 
         $action    = $_GET[ "action" ];
         $view      = $this->_view; // all | public | trash
-        $post_type = 'page';
         $search    = ( isset( $_GET[ "search_string" ] ) ) ? trim( $_GET[ "search_string" ] ) : ""; // exits if we're doing a search
 
         // Check if user is allowed to get the list. For example subscribers should not be allowed to
         // Use same capability that is required to add the menu
-        $post_type_object = get_post_type_object( $post_type );
+        $post_type_object = get_post_type_object( $this->_post_type );
         if ( !current_user_can( $post_type_object->cap->edit_posts ) )
         {
             die( __( 'Cheatin&#8217; uh?' ) );
@@ -152,18 +156,9 @@ class SwiftyPages
 
                 // what to search: since all we see in the GUI is the title, just search that
                 global $wpdb;
-                $sqlsearch = "%{$search}%";
-                // feels bad to leave out the "'" in the query, but prepare seems to add it..??
-                $sql            = $wpdb->prepare( "SELECT id, post_parent FROM $wpdb->posts WHERE post_type = 'page' AND post_title LIKE %s", $sqlsearch );
-                $hits           = $wpdb->get_results( $sql );
-                $arrNodesToOpen = array();
-                foreach ( $hits as $oneHit )
-                {
-                    $arrNodesToOpen[ ] = $oneHit->post_parent;
-                }
 
-                $arrNodesToOpen  = array_unique( $arrNodesToOpen );
-                $arrNodesToOpen2 = array();
+
+                $arrNodesToOpen = array();
                 // find all parents to the arrnodestopen
                 foreach ( $arrNodesToOpen as $oneNode )
                 {
@@ -182,7 +177,6 @@ class SwiftyPages
                     }
                 }
 
-                $arrNodesToOpen = array_merge( $arrNodesToOpen, $arrNodesToOpen2 );
                 $sReturn        = "";
 
                 foreach ( $arrNodesToOpen as $oneNodeID )
@@ -226,7 +220,8 @@ class SwiftyPages
                         $jstree_open[ $i ] = (int) str_replace( "#swiftypages-id-", "", $jstree_open[ $i ] );
                     }
                 }
-                $this->_print_childs( $id, $jstree_open, $post_type );
+                $jsonData = $this->_get_childrenJsonData( $id, $jstree_open );
+                print json_encode( $jsonData );
                 exit;
             }
         }
@@ -239,9 +234,6 @@ class SwiftyPages
      */
     function filter_views_edit_postsoverview( $filter_var )
     {
-
-        $current_screen = get_current_screen();
-
         ob_start();
         $this->view_page_tree();
         $tree_common_stuff = ob_get_clean();
@@ -262,7 +254,7 @@ class SwiftyPages
 
         // Copy of wordpress own, if it does not exist
         $wp_list_a = "";
-        if ( is_post_type_hierarchical( $current_screen->post_type ) )
+        if ( is_post_type_hierarchical( $this->_post_type ) )
         {
 
             $mode      = "list";
@@ -602,8 +594,119 @@ li.find( '> a' ).contents().filter( function() {
 
     }
 
-    protected function _print_childs( $pageID, $arrOpenChilds = null, $post_type ) {
-        require $this->plugin_dir . '/view/print_childs.php';
+    protected function _get_childrenJsonData( $pageID ) {
+
+        $jsonData = array();
+        $arrPages = $this->_get_pages( "parent=$pageID&view=$this->_view&post_type=$this->_post_type" );
+        if ( $arrPages ) {
+            foreach ( $arrPages as $page ) {
+                $jsonData[] = $this->_get_pageJsonData( $page );
+            }
+        }
+        return $jsonData;
+    }
+
+    protected function _get_pageJsonData( $onePage ) {
+        $pageJsonData = array();
+
+        $post          = $onePage;
+        $page_id       = $onePage->ID;
+        $arrChildPages = null;
+
+        $hasChildren = false;
+
+        $post_statuses = get_post_statuses();
+        $post_type_object = get_post_type_object( $this->_post_type );
+
+        // if viewing trash, don't get children. we watch them "flat" instead
+        if ( $this->_view != "trash" )
+        {
+            $arrChildPages = $this->_get_pages( "parent={$onePage->ID}&view={$this->_view}&post_type={$this->_post_type}" );
+            if ( !empty( $arrChildPages ) )
+            {
+                $hasChildren = true;
+            }
+        }
+
+        $editLink    = get_edit_post_link( $onePage->ID, 'notDisplay' );
+
+        // type of node
+        $rel = $onePage->post_status;
+        if ( $onePage->post_password )
+        {
+            $rel = "password";
+        }
+
+        // modified time
+        $post_modified_time = strtotime( $onePage->post_modified );
+        $post_modified_time = date_i18n( get_option( 'date_format' ), $post_modified_time, false );
+
+        // last edited by
+        setup_postdata( $post );
+
+        if ( $last_id = get_post_meta( $post->ID, '_edit_last', true ) )
+        {
+            $last_user = get_userdata( $last_id );
+            if ( $last_user !== false )
+            {
+                $post_author = apply_filters( 'the_modified_author', $last_user->display_name );
+            }
+        }
+        if ( empty( $post_author ) )
+        {
+            $post_author = __( "Unknown user", 'swiftypages' );
+        }
+
+        $title = get_the_title( $onePage->ID ); // so hooks and stuff will do their work
+        if ( empty( $title ) )
+        {
+            $title = __( "<Untitled page>", 'swiftypages' );
+        }
+
+        $user_can_edit_page  = apply_filters( "cms_tree_page_view_post_can_edit", current_user_can( $post_type_object->cap->edit_post, $page_id ), $page_id );
+        $user_can_add_inside = apply_filters( "cms_tree_page_view_post_user_can_add_inside", current_user_can( $post_type_object->cap->create_posts, $page_id ), $page_id );
+        $user_can_add_after  = apply_filters( "cms_tree_page_view_post_user_can_add_after", current_user_can( $post_type_object->cap->create_posts, $page_id ), $page_id );
+        $arr_page_css_styles = array();
+        $arr_page_css_styles[] = "swiftypages_user_can_edit_page_" . ( $user_can_edit_page ? 'yes' : 'no' );
+        $arr_page_css_styles[] = "swiftypages_user_can_add_page_inside_" . ( $user_can_add_inside ? 'yes' : 'no' );
+        $arr_page_css_styles[] = "swiftypages_user_can_add_page_after_" . ( $user_can_add_after ? 'yes' : 'no' );
+
+        $pageJsonData['data'] = array();
+        $pageJsonData['data']['title'] = $title;
+        $pageJsonData['data']['attr'] = array();
+        $pageJsonData['data']['attr']['href'] = $editLink;
+
+        $pageJsonData['attr'] = array();
+        $pageJsonData['attr']['id'] = "swiftypages-id-" . $onePage->ID;
+        $pageJsonData['attr']['class'] = join( ' ', $arr_page_css_styles );
+
+        $pageJsonData['metadata'] = array();
+        $pageJsonData['metadata']["id"] = "swiftypages-id-".$onePage->ID;
+        $pageJsonData['metadata']["post_id"] = $onePage->ID;
+        $pageJsonData['metadata']["post_type"] = $onePage->post_type;
+        $pageJsonData['metadata']["post_status"] = $onePage->post_status;
+        $pageJsonData['metadata']["post_status_translated"] = isset( $post_statuses[ $onePage->post_status ] ) ? $post_statuses[ $onePage->post_status ] : $onePage->post_status;
+        $pageJsonData['metadata']["rel"] = $rel;
+        $pageJsonData['metadata']["childCount"] = ( !empty( $arrChildPages ) ) ? sizeof( $arrChildPages ) : 0;
+        $pageJsonData['metadata']["permalink"] = htmlspecialchars_decode( get_permalink( $onePage->ID ) );
+        $pageJsonData['metadata']["editlink"] = htmlspecialchars_decode( $editLink );
+        $pageJsonData['metadata']["modified_time"] = $post_modified_time;
+        $pageJsonData['metadata']["modified_author"] = $post_author;
+        $pageJsonData['metadata']["user_can_edit_page"] = (int) $user_can_edit_page;
+        $pageJsonData['metadata']["user_can_add_page_inside"] = (int) $user_can_add_inside;
+        $pageJsonData['metadata']["user_can_add_page_after"] = (int) $user_can_add_after;
+        $pageJsonData['metadata']["post_title"] = $title;
+        $pageJsonData['metadata']["delete_nonce"] = wp_create_nonce( "delete-page_".$onePage->ID, '_trash' );
+
+        // if no children, output no state
+        if ( $hasChildren ) {
+            $pageJsonData[ 'state' ] = 'closed';
+            if ( $hasChildren ) {
+                $pageJsonData[ 'children' ] = $this->_get_childrenJsonData( $onePage->ID );
+            }
+        }
+
+        return $pageJsonData;
     }
 
     /**

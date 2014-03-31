@@ -372,16 +372,6 @@ p.swiftypages_action_edit_and_view
 	display: none;
 }
 
-.swiftypages_page_actions_columns table td {
-	font-size: 11px;
-}
-
-.swiftypages_page_actions_columns .vers {
-	display: inline;
-	padding-right: 2px;
-	vertical-align: middle;
-}
-
 li.swiftypages_user_can_edit_page_no a {
 	opacity: .6; /* Standard: FF gt 1.5, Opera, Safari */
 	-ms-filter: "alpha(opacity=60)"; /* IE 8 */
