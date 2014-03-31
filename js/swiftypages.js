@@ -113,11 +113,21 @@ var Swifty = (function ( $, document, undefined ) {
                 case "settings":
                 case "delete":
                 case "edit":
-                    if ( $li.data( 'cur-action' ) && $li.data( 'cur-action' ) === action ) {
-                        ss.resetPageTree();
+//                    if ( $li.data( 'cur-action' ) && $li.data( 'cur-action' ) === action ) {
+//                        ss.resetPageTree();
+//                    } else {
+//                        ss.resetPageTree();
+//                        ss.preparePageActions( $li, action );
+//                    }
+
+                    console.log( $li.find( 'span.ss-container' ).length );
+
+                    if ( $li.find( 'span.ss-container' ).length && $li.data( 'cur-action' ) && $li.data( 'cur-action' ) === action  ) {
+                        $li.find( 'span.ss-container' ).remove();
                     } else {
-                        ss.resetPageTree();
+                        $li.find( 'span.ss-container' ).remove();
                         ss.preparePageActions( $li, action );
+                        $li.data( 'cur-action', action );
                     }
 
                     if ( action === 'settings' ) {
