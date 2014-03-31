@@ -382,7 +382,7 @@ p.cms_tpv_action_edit_and_view
 	vertical-align: middle;
 }
 
-li.cms_tpv_user_can_edit_page_no a {
+li.swiftypages_user_can_edit_page_no a {
 	opacity: .6; /* Standard: FF gt 1.5, Opera, Safari */
 	-ms-filter: "alpha(opacity=60)"; /* IE 8 */
 }

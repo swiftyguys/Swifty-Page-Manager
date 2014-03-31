@@ -102,29 +102,29 @@ if ( $arrPages )
 
         if ( $user_can_edit_page )
         {
-            $arr_page_css_styles[ ] = "cms_tpv_user_can_edit_page_yes";
+            $arr_page_css_styles[ ] = "swiftypages_user_can_edit_page_yes";
         }
         else
         {
-            $arr_page_css_styles[ ] = "cms_tpv_user_can_edit_page_no";
+            $arr_page_css_styles[ ] = "swiftypages_user_can_edit_page_no";
         }
 
         if ( $user_can_add_inside )
         {
-            $arr_page_css_styles[ ] = "cms_tpv_user_can_add_page_inside_yes";
+            $arr_page_css_styles[ ] = "swiftypages_user_can_add_page_inside_yes";
         }
         else
         {
-            $arr_page_css_styles[ ] = "cms_tpv_user_can_add_page_inside_no";
+            $arr_page_css_styles[ ] = "swiftypages_user_can_add_page_inside_no";
         }
 
         if ( $user_can_add_after )
         {
-            $arr_page_css_styles[ ] = "cms_tpv_user_can_add_page_after_yes";
+            $arr_page_css_styles[ ] = "swiftypages_user_can_add_page_after_yes";
         }
         else
         {
-            $arr_page_css_styles[ ] = "cms_tpv_user_can_add_page_after_no";
+            $arr_page_css_styles[ ] = "swiftypages_user_can_add_page_after_no";
         }
 
         $page_css = join( " ", $arr_page_css_styles );
