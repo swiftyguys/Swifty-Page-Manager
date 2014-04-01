@@ -92,16 +92,6 @@ var Swifty = (function ( $, document, undefined ) {
     ss.setupListeners = function () {
         var self = this;
 
-        $( document ).on( 'click', '.ss-page-tree-element', function ( event ) {
-            var $li = $( this ).closest( 'li' );
-
-            ss.resetPageTree();
-            ss.preparePageActionButtons( $li );
-
-            event.preventDefault();
-            event.stopPropagation();
-        } );
-
         $( document ).on( 'click', '.ss-button', function ( event ) {
             var $button = $( this );
             var $li = $button.closest( 'li' );
@@ -199,34 +189,29 @@ var Swifty = (function ( $, document, undefined ) {
             return false;
         } );
 
-        $( '.ss-page-add-save' ).click( function( event ) {
-            $li = $(this).closest('li');
+        $( '.ss-page-tree-element' ).on( 'click', function ( event ) {
+            var $li = $( this ).closest( 'li' );
 
-            jQuery.post( ajaxurl
-                , { 'action': 'swiftypages_add_page'
-                    , 'post_type':  'page'
-                    , '_inline_edit': jQuery('input#_inline_edit').val()
-                    , 'parent_id': $li.attr('id')
-                    , 'add_mode': 'after' // 'after' or 'inside'
-                    , 'post_title': $li.find( 'input[name="post_title"]' ).val()
-                    , 'post_name':  $li.find( 'input[name="post_name"]' ).val()
-                }
-            );
+            ss.resetPageTree();
+            ss.preparePageActionButtons( $li );
 
             event.preventDefault();
             event.stopPropagation();
-            return false;
         } );
 
-        $( '.delete.ss-button' ).click( function( event ) {
+        $( '.delete.ss-button' ).on( 'click', function( event ) {
             var $li = $( this ).closest( 'li' );
 
-            jQuery.post( ajaxurl
-                , { 'action': 'delete-page'
-                    , '_ajax_nonce': $li.data('delete_nonce')
-                    , 'id':    $li.data('post_id')
+            $.post(
+                ajaxurl,
+                {
+                    'action': 'delete-page',
+                    'id': $li.data( 'post_id' ),
+                    '_ajax_nonce': $li.data( 'delete_nonce' )
                 }
-            );
+            ).done( function() {
+                location.reload();
+            } );
 
             event.preventDefault();
             event.stopPropagation();
