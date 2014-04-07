@@ -12,7 +12,7 @@ Don't use this anymore since it's against the repository guidelines
 
 .swiftypages_wrapper {
 	z-index: 10;
-	margin-right: 250px;
+	/*margin-right: 250px;*/
 }
 
 .postbox .swiftypages_wrapper {
@@ -27,7 +27,7 @@ Don't use this anymore since it's against the repository guidelines
 }
 
 #wpbody-content .swiftypages_container {
-	margin-right: 250px;
+	/*margin-right: 250px;*/
 }
 
 #dashboard-widgets-wrap .swiftypages_container {

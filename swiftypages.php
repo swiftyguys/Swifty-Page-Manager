@@ -470,7 +470,22 @@ class SwiftyPages
     public function ajax_post_settings() {
         $post_id = intval( $_REQUEST['post_ID'] );
         header( 'Content-Type: text/javascript' );
-        $post = get_post($post_id);
+
+        $post_id     = intval( $_REQUEST[ 'post_ID' ] );
+        $post        = get_post( $post_id );
+        $post_meta   = get_post_meta( $post_id );
+        $post_status     = ( $post->post_status == 'private' ) ? 'publish' : $post->post_status; // _status
+        $ss_show_in_menu = ( $post->post_status == 'private' ) ? 'hide' : 'show';
+
+        $defaults    = array( 'ss_page_title_seo' => $post->post_title
+                            , 'ss_sidebar_visibility' => 'hide'
+                            , 'ss_header_visibility' => 'hide' );
+
+        foreach ( $defaults as $key => $val ) {
+            if ( !isset( $post_meta[$key] ) ) {
+                $post_meta[$key] = $val;
+            }
+        }
         ?>
         var li = jQuery( 'li#cms-tpv-<?php echo $post_id; ?>' );
 
@@ -479,8 +494,13 @@ li.find( '> a' ).contents().filter( function() {
         this.nodeValue: <?php echo json_encode($post->post_title); ?>
     }
 
-    return;
-} );
+        li.find( 'input[name="post_title"]' ).val( <?php echo json_encode( $post->post_title ); ?> );
+        li.find( 'input[name="ss_page_title-seo"]' ).val( [ <?php echo json_encode( $post_meta[ 'ss_page_title_seo' ] ); ?> ] );
+        li.find( 'input[name="post_name"]' ).val( <?php echo json_encode( $post->post_name ); ?> );
+        li.find( 'input[name="_status"][value=<?php echo json_encode( $post_status ); ?>]' ).prop('checked', true);
+        li.find( 'input[name="ss_show_in_menu"][value=<?php echo json_encode( $ss_show_in_menu ); ?>]' ).prop('checked', true);
+        li.find( 'input[name="ss_sidebar_visibility"][value=<?php echo json_encode( $post_meta[ 'ss_sidebar_visibility' ] ); ?>]' ).prop('checked', true);
+        li.find( 'input[name="ss_header_visibility"][value=<?php echo json_encode( $post_meta[ 'ss_header_visibility' ] ); ?>]' ).prop('checked', true);
 
         li.find( 'input[name="post_title"]' ).val( <?php echo json_encode($post->post_title); ?> );
         li.find( 'input[name="post_name"]' ).val( <?php echo json_encode($post->post_name); ?> );

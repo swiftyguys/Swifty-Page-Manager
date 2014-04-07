@@ -312,7 +312,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                             </span>
                                             <span class="input-text-wrap">
                                                 <label class="alignleft ss-radio-label">
-                                        <input name="ss-page-position"
+                                        <input name="ss_page_position"
                                                            type="radio"
                                                            value="after"
                                                            class="ss-input-radio">
@@ -321,7 +321,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                                     </span>
                                                 </label>
                                                 <label class="alignleft ss-radio-label">
-                                        <input name="ss-page-position"
+                                        <input name="ss_page_position"
                                                            type="radio"
                                                            value="inside"
                                                            class="ss-input-radio">
@@ -348,7 +348,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                             </span>
                                              <span class="input-text-wrap">
                                                 <label class="alignleft ss-radio-label">
-                                                    <input name="ss-show-in-menu"
+                                                    <input name="ss_show_in_menu"
                                                            type="radio"
                                                            value="show"
                                                            class="ss-input-radio">
@@ -357,7 +357,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                                     </span>
                                                 </label>
                                                 <label class="alignleft ss-radio-label">
-                                                    <input name="ss-show-in-menu"
+                                                    <input name="ss_show_in_menu"
                                                            type="radio"
                                                            value="hide"
                                                            class="ss-input-radio">
@@ -398,7 +398,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                             </span>
                                             <span class="input-text-wrap">
                                                 <label class="alignleft ss-radio-label">
-                                                    <input name="ss-header-visibility"
+                                                    <input name="ss_header_visibility"
                                                            type="radio"
                                                            value="show"
                                                            class="ss-input-radio">
@@ -407,7 +407,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                                     </span>
                                                 </label>
                                                 <label class="alignleft ss-radio-label">
-                                                    <input name="ss-header-visibility"
+                                                    <input name="ss_header_visibility"
                                                            type="radio"
                                                value="hide"
                                                            class="ss-input-radio">
@@ -423,7 +423,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                             </span>
                                             <span class="input-text-wrap">
                                                 <label class="alignleft ss-radio-label">
-                                                    <input name="ss-sidebar-visibility"
+                                                    <input name="ss_sidebar_visibility"
                                                            type="radio"
                                                value="left"
                                                            class="ss-input-radio">
@@ -432,7 +432,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                                     </span>
                                                 </label>
                                                 <label class="alignleft ss-radio-label">
-                                                    <input name="ss-sidebar-visibility"
+                                                    <input name="ss_sidebar_visibility"
                                                            type="radio"
                                                value="right"
                                                            class="ss-input-radio">
@@ -441,9 +441,9 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                                     </span>
                                                 </label>
                                                 <label class="alignleft ss-radio-label">
-                                                    <input name="ss-sidebar-visibility"
+                                                    <input name="ss_sidebar_visibility"
                                                            type="radio"
-                                               value="hide"
+                                                           value="hide"
                                                            class="ss-input-radio">
                                                     <span class="radiobutton-title">
                                                         <?php _e( "Hide", "cms-tree-page-view" ) ?>
