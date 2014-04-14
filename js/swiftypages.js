@@ -209,9 +209,9 @@ var Swifty = (function ( $, document, undefined ) {
             $.post(
                 ajaxurl,
                 {
-                    'action': 'delete-page',
-                    'id': $li.data( 'post_id' ),
-                    '_ajax_nonce': $li.data( 'delete_nonce' )
+                    'action': 'swiftypages_delete_page',
+                    'post_ID': $li.data( 'post_id' ),
+                    '_inline_edit': $( 'input#_inline_edit' ).val()
                 }
             ).done( function() {
                 location.reload();
