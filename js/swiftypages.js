@@ -92,7 +92,17 @@ var Swifty = (function ( $, document, undefined ) {
     ss.setupListeners = function () {
         var self = this;
 
-        $( document ).on( 'click', '.ss-button', function ( event ) {
+        $( document ).on( 'click', '.ss-page-tree-element', function ( event ) {
+            var $li = $( this ).closest( 'li' );
+
+            ss.resetPageTree();
+            ss.preparePageActionButtons( $li );
+
+            event.preventDefault();
+            event.stopPropagation();
+        } );
+
+        $( document ).on( 'click', '.ss-page-button', function ( event ) {
             var $button = $( this );
             var $li = $button.closest( 'li' );
             var action = $button.data( 'ss-action' );
@@ -149,57 +159,51 @@ var Swifty = (function ( $, document, undefined ) {
     ss.ss_tree_loaded = function( ev /*, data*/ ) {
         ss.pageTreeLoaded( ev );
 
-        $( document ).on( 'click', '.ss-page-add-edit-save', function( event ) {
+        $( 'a.save.ss-button' ).on( 'click', function( event ) {
             var $li = $( this ).closest( 'li' );
             var action = $li.data( 'cur-action' );
+            var settings = {
+                'action': 'swiftypages_save_page',
+                'post_type': 'page',
+                'post_title': $li.find( 'input[name="post_title"]' ).val(),
+                'post_name': $li.find( 'input[name="post_name"]' ).val(),
+                'add_mode': $li.find( 'input[name="add_mode"]:checked' ).val(),   // after | inside
+                'post_status': $li.find( 'input[name="post_status"]:checked' ).val(),   // draft | publish
+                'ss_show_in_menu': $li.find( 'input[name="ss_show_in_menu"]:checked' ).val(),   // show | hide
+                'ss_page_title_seo': $li.find( 'input[name="ss_page_title_seo"]' ).val(),
+                'ss_header_visibility': $li.find( 'input[name="ss_header_visibility"]:checked' ).val(),   // show | hide
+                'ss_sidebar_visibility': $li.find( 'input[name="ss_sidebar_visibility"]:checked' ).val(),   // left | right | hide
+                '_inline_edit': $( 'input#_inline_edit' ).val()
+            };
 
-            console.log('EVENT', action);
-
-            if ( action === "add" ) {
-            }
-
-            if ( action === "settings" ) {
-                console.log('EVENT settings');
-                $.post(
-                    ajaxurl,
-                    {
-                        'action':       'inline-save',
-                        'post_type':    'page',
-                        'post_ID':      $li.data( 'post_id' ),
-                        'post_title':   $li.find( 'input[name="post_title"]' ).val(),
-                        'post_name':    $li.find( 'input[name="post_name"]' ).val(),
-                        '_inline_edit': $( 'input#_inline_edit' ).val()
-                    }
-                ).then( function() {
-                        console.log('TEST');
-                    ss.resetPageTree();
-
-                    $.post(
-                        ajaxurl,
-                        {
-                            'action': 'swiftypages_post_settings',
-                            'post_ID': $li.data( 'post_id' )
-                        }
-                    );
+            if ( action === "add" ) {   // Page creation
+                $.extend( true, settings, {
+                    'parent_id': $li.attr( 'id' )
+                } );
+            } else if ( action === "settings" ) {   // Page editing
+                $.extend( true, settings, {
+                    'post_ID': $li.data( 'post_id' )
                 } );
             }
+
+            $.post(
+                ajaxurl,
+                settings
+            ).done( function() {
+                if ( action === "add" ) {   // Page creation
+                    location.reload();
+                } else if ( action === "settings" ) {   // Page editing
+                    ss.resetPageTree();
+                    ss.getPageSettings( $li );
+                }
+            } );
 
             event.preventDefault();
             event.stopPropagation();
             return false;
         } );
 
-        $( '.ss-page-tree-element' ).on( 'click', function ( event ) {
-            var $li = $( this ).closest( 'li' );
-
-            ss.resetPageTree();
-            ss.preparePageActionButtons( $li );
-
-            event.preventDefault();
-            event.stopPropagation();
-        } );
-
-        $( '.delete.ss-button' ).on( 'click', function( event ) {
+        $( 'a.delete.ss-button' ).on( 'click', function( event ) {
             var $li = $( this ).closest( 'li' );
 
             $.post(
@@ -218,6 +222,14 @@ var Swifty = (function ( $, document, undefined ) {
             return false;
         } );
 
+        $( 'a.cancel.ss-button' ).on( 'click', function( event ) {
+            $( 'span.ss-container:visible' ).remove();
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            return false;
+        } );
     };
 
     return ss;

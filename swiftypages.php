@@ -36,7 +36,7 @@ class SwiftyPages
         add_action( 'admin_menu', array($this,'admin_menu') );
         add_action( 'wp_ajax_swiftypages_get_childs',    array( $this, 'ajax_get_childs' ) );
         add_action( 'wp_ajax_swiftypages_move_page',     array( $this, 'ajax_move_page' ) );
-        add_action( 'wp_ajax_swiftypages_add_page',      array( $this, 'ajax_add_page' ) );
+        add_action( 'wp_ajax_swiftypages_save_page',     array( $this, 'ajax_save_page' ) );
         add_action( 'wp_ajax_swiftypages_post_settings', array( $this, 'ajax_post_settings' ) );
 
     }
@@ -406,63 +406,99 @@ class SwiftyPages
         exit;
     }
 
-    function ajax_add_page()
+    function ajax_save_page()
     {
         global $wpdb;
 
-        $parentID   = $_POST[ "parent_id" ];
-        $parentID   = intval( str_replace( "swiftypages-id-", "", $parentID ) );
-        $wpml_lang  = isset($_POST[ "wpml_lang" ]) ? $_POST[ "wpml_lang" ] : false;
+        $post_id    = intval( $_POST[ "post_ID" ] );
+        $wpml_lang  = isset( $_POST[ "wpml_lang" ] ) ? $_POST[ "wpml_lang" ] : false;
         $post_title = trim( $_POST[ "post_title" ] );
+        $post_name  = trim( $_POST[ "post_name" ] );   // url
+
         if ( !$post_title )
         {
             $post_title = __( "New page", 'swiftypages' );
         }
 
-        $ref_post = get_post( $parentID );
-        $post_new                   = array();
-        $post_new[ "post_type" ]    = $_POST[ "post_type" ];
-        $post_new[ "post_status" ]  = "draft";
-        $post_new[ "post_title" ]   = $post_title;
-        $post_new[ "post_content" ] = "";
+        $ss_page_title_seo     = trim( $_POST[ "ss_page_title_seo" ] );
+        $ss_show_in_menu       = $_POST[ "ss_show_in_menu" ];
+        $ss_header_visibility  = $_POST[ "ss_header_visibility" ];
+        $ss_sidebar_visibility = $_POST[ "ss_sidebar_visibility" ];
 
-        if ( "after" == $_POST[ "add_mode" ] )
-        {
-            // update menu_order of all pages below our page
-            $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+2 WHERE post_parent = %d AND menu_order >= %d AND id <> %d "
-                                        , $ref_post->post_parent
-                                        , $ref_post->menu_order
-                                        , $ref_post->ID
-                                        )
-                        );
-            // create a new page and then goto it
-            $post_new[ "menu_order" ]   = $ref_post->menu_order + 1;
-            $post_new[ "post_parent" ]  = $ref_post->post_parent;
-        }
-        elseif ( "inside" == $_POST[ "add_mode" ] )
-        {
-            // update menu_order, so our new post is the only one with order 0
-            $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+1 WHERE post_parent = %d", $ref_post->ID ) );
-            $post_new[ "menu_order" ]   = 0;
-            $post_new[ "post_parent" ]  = $ref_post->ID;
-        }
-        $newPostID                  = wp_insert_post( $post_new );
+        $post_data = array();
 
+        $post_data[ "post_title" ]  = $post_title;
+        $post_data[ "post_name" ]   = $post_name;
+        $post_data[ "post_type" ]   = $_POST[ "post_type" ];
+        $post_data[ "post_status" ] = $_POST[ "post_status" ];
 
-        if ( $newPostID )
+        if ( isset( $post_id ) && !empty( $post_id ) )  // We're in edit mode
         {
-            // return editlink for the newly created page
-            $editLink = get_edit_post_link( $newPostID, '' );
-            if ( $wpml_lang )
+            $post_data[ "ID" ] = $post_id;
+            $id_saved = wp_update_post( $post_data );
+
+            if ( $id_saved )
             {
-                $editLink = add_query_arg( "lang", $wpml_lang, $editLink );
+                update_post_meta( $id_saved, 'ss_show_in_menu', $ss_show_in_menu );
+                update_post_meta( $id_saved, 'ss_page_title_seo', $ss_page_title_seo );
+                update_post_meta( $id_saved, 'ss_header_visibility', $ss_header_visibility );
+                update_post_meta( $id_saved, 'ss_sidebar_visibility', $ss_sidebar_visibility );
+
+                echo "1";
             }
-            echo $editLink;
+            else
+            {
+                // fail, tell js
+                echo "0";
+            }
         }
-        else
+        else   // We're in create mode
         {
-            // fail, tell js
-            echo "0";
+            $post_data[ "post_content" ] = "";
+
+            $parent_id = $_POST[ "parent_id" ];
+            $parent_id = intval( str_replace( "swiftypages-id-", "", $parent_id ) );
+            $ref_post  = get_post( $parent_id );
+
+            if ( "after" == $_POST[ "add_mode" ] )
+            {
+                // update menu_order of all pages below our page
+                $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+2 WHERE post_parent = %d AND menu_order >= %d AND id <> %d "
+                                            , $ref_post->post_parent
+                                            , $ref_post->menu_order
+                                            , $ref_post->ID
+                                            )
+                            );
+
+                // create a new page and then goto it
+                $post_data[ "menu_order" ]  = $ref_post->menu_order + 1;
+                $post_data[ "post_parent" ] = $ref_post->post_parent;
+            }
+            elseif ( "inside" == $_POST[ "add_mode" ] )
+            {
+                // update menu_order, so our new post is the only one with order 0
+                $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+1 WHERE post_parent = %d", $ref_post->ID ) );
+
+                $post_data[ "menu_order" ]  = 0;
+                $post_data[ "post_parent" ] = $ref_post->ID;
+            }
+
+            $id_saved = wp_insert_post( $post_data );
+
+            if ( $id_saved )
+            {
+                add_post_meta( $id_saved, 'ss_show_in_menu', $ss_show_in_menu, 1 );
+                add_post_meta( $id_saved, 'ss_page_title_seo', $ss_page_title_seo, 1 );
+                add_post_meta( $id_saved, 'ss_header_visibility', $ss_header_visibility, 1 );
+                add_post_meta( $id_saved, 'ss_sidebar_visibility', $ss_sidebar_visibility, 1 );
+
+                echo "1";
+            }
+            else
+            {
+                // fail, tell js
+                echo "0";
+            }
         }
         exit;
     }
@@ -471,21 +507,29 @@ class SwiftyPages
         $post_id = intval( $_REQUEST['post_ID'] );
         header( 'Content-Type: text/javascript' );
 
-        $post_id     = intval( $_REQUEST[ 'post_ID' ] );
-        $post        = get_post( $post_id );
-        $post_meta   = get_post_meta( $post_id );
+        $post_id   = intval( $_REQUEST[ 'post_ID' ] );
+        $post      = get_post( $post_id );
+        $post_meta = get_post_meta( $post_id );
         $post_status     = ( $post->post_status == 'private' ) ? 'publish' : $post->post_status; // _status
         $ss_show_in_menu = ( $post->post_status == 'private' ) ? 'hide' : 'show';
 
-        $defaults    = array( 'ss_page_title_seo' => $post->post_title
-                            , 'ss_sidebar_visibility' => 'hide'
-                            , 'ss_header_visibility' => 'hide' );
+        $defaults = array( 'ss_show_in_menu'       => 'show'
+                         , 'ss_page_title_seo'     => $post->post_title
+                         , 'ss_header_visibility'  => 'hide'
+                         , 'ss_sidebar_visibility' => 'hide'
+                         );
 
         foreach ( $defaults as $key => $val ) {
-            if ( !isset( $post_meta[$key] ) ) {
-                $post_meta[$key] = $val;
+            if ( !isset( $post_meta[ $key ] ) ) {
+                $post_meta[ $key ] = $val;
             }
         }
+
+        if ( $post_meta[ 'ss_show_in_menu' ] == 'show' ) {
+            // post_status can be private, so then the page must not be visible in the menu.
+            $post_meta[ 'ss_show_in_menu' ] = $ss_show_in_menu;
+        }
+
         ?>
         var li = jQuery( 'li#cms-tpv-<?php echo $post_id; ?>' );
 
@@ -494,13 +538,13 @@ li.find( '> a' ).contents().filter( function() {
         this.nodeValue: <?php echo json_encode($post->post_title); ?>
     }
 
-        li.find( 'input[name="post_title"]' ).val( <?php echo json_encode( $post->post_title ); ?> );
-        li.find( 'input[name="ss_page_title-seo"]' ).val( [ <?php echo json_encode( $post_meta[ 'ss_page_title_seo' ] ); ?> ] );
-        li.find( 'input[name="post_name"]' ).val( <?php echo json_encode( $post->post_name ); ?> );
-        li.find( 'input[name="_status"][value=<?php echo json_encode( $post_status ); ?>]' ).prop('checked', true);
-        li.find( 'input[name="ss_show_in_menu"][value=<?php echo json_encode( $ss_show_in_menu ); ?>]' ).prop('checked', true);
-        li.find( 'input[name="ss_sidebar_visibility"][value=<?php echo json_encode( $post_meta[ 'ss_sidebar_visibility' ] ); ?>]' ).prop('checked', true);
-        li.find( 'input[name="ss_header_visibility"][value=<?php echo json_encode( $post_meta[ 'ss_header_visibility' ] ); ?>]' ).prop('checked', true);
+        li.find( 'input[name="post_title"]'  ).val(   <?php echo json_encode( $post->post_title ); ?>   );
+        li.find( 'input[name="post_name"]'   ).val(   <?php echo json_encode( $post->post_name  ); ?>   );
+        li.find( 'input[name="post_status"]' ).val( [ <?php echo json_encode( $post_status      ); ?> ] );
+        li.find( 'input[name="ss_show_in_menu"]'       ).val( [ <?php echo json_encode( $post_meta[ 'ss_show_in_menu'       ] ); ?> ] );
+        li.find( 'input[name="ss_page_title_seo"]'     ).val( [ <?php echo json_encode( $post_meta[ 'ss_page_title_seo'     ] ); ?> ] );
+        li.find( 'input[name="ss_header_visibility"]'  ).val( [ <?php echo json_encode( $post_meta[ 'ss_header_visibility'  ] ); ?> ] );
+        li.find( 'input[name="ss_sidebar_visibility"]' ).val( [ <?php echo json_encode( $post_meta[ 'ss_sidebar_visibility' ] ); ?> ] );
 
         li.find( 'input[name="post_title"]' ).val( <?php echo json_encode($post->post_title); ?> );
         li.find( 'input[name="post_name"]' ).val( <?php echo json_encode($post->post_name); ?> );

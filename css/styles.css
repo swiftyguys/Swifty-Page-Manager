@@ -499,3 +499,93 @@ for posts overview enabled mode
 	float: left;
 }
 
+.ss-container {
+    position: relative;
+}
+
+.ss-page-actions-tmpl {
+    right: 0;
+    position: absolute;
+    margin: 3px 3px 0 0;
+}
+
+.ss-button .ss-icon {
+    padding-top: 3px;
+}
+
+.ss-page-add-edit-tmpl,
+.ss-page-delete-tmpl {
+    display: list-item;
+    margin-left: 36px;
+}
+
+.ss-page-form {
+    padding: 9px;
+}
+
+.ss-page-delete-tmpl .inline-edit-row fieldset span.title {
+    line-height: 7em;
+}
+
+.ss-form .inline-edit-row fieldset label span.title {
+    width: 15em;
+}
+
+.ss-form .inline-edit-row fieldset label span.input-text-wrap {
+    margin-left: 15em;
+}
+
+.ss-form .inline-edit-row fieldset .inline-edit-group {
+    line-height: 30px;
+}
+
+.ss-buttons-confirm {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding-right: 10px;
+}
+
+.ss-buttons-confirm .ss-button {
+    width: 100px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.ss-label {
+    clear: both;
+}
+
+label.ss-label span.title {
+    height: 29px;
+    line-height: 29px;
+}
+
+.ss-radio-label {
+    line-height: 29px;
+}
+
+.alignleft.ss-radio-label {
+    padding: 0 20px 0 0;
+    width: 50px;
+}
+
+#wpbody-content .swiftypages_container {
+    margin-right: 0px;
+}
+
+#wpbody-content .quick-edit-row-page .inline-edit-col-left {
+    width: 60%;
+}
+
+#wpbody-content .quick-edit-row-page .inline-edit-col-center {
+    width: 20%;
+}
+
+#wpbody-content .quick-edit-row-page .inline-edit-col-right {
+    width: 19%;
+}
+
+.ss-hidden {
+    display: none;
+}
