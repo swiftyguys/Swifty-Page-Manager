@@ -339,7 +339,10 @@ class SwiftyPages
 
                 $treeNode = $this->_getByPageId( $post_node->ID );
                 $postRefNode = $this->_getByPageId( $post_ref_node->ID );
-                if ( $treeNode && $treeNode->menuItem && $postRefNode && $postRefNode->menuItem ) {
+                if ( $treeNode
+                     && isset( $treeNode->menuItem )
+                     && $postRefNode
+                     && isset( $postRefNode->menuItem ) ) {
                     $menu_item_data = $this->_getMenuItemDataForSave( $treeNode->menuItem );
                     $menu_item_data['menu-item-position']  = 0;
                     $menu_item_data['menu-item-parent-id'] = $postRefNode->menuItem->ID;
@@ -372,9 +375,14 @@ class SwiftyPages
 
                 $treeNode = $this->_getByPageId( $post_node->ID );
                 $postRefNode = $this->_getByPageId( $post_ref_node->ID );
-                if ( $treeNode && $treeNode->menuItem && $postRefNode && $postRefNode->menuItem ) {
-                    $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+1 WHERE post_parent = %d", $postRefNode->menuItem->menu_item_parent ) );
-                    $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+1 WHERE menu_order >= %d AND post_type = %s", $postRefNode->menuItem->menu_order + 1, 'nav_menu_item' ) );
+                if ( $treeNode
+                     && isset( $treeNode->menuItem )
+                     && $postRefNode
+                     && isset( $postRefNode->menuItem ) ) {
+                    $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+1 WHERE post_parent = %d",
+                                                  $postRefNode->menuItem->menu_item_parent ) );
+                    $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+1 WHERE menu_order >= %d AND post_type = %s",
+                                                  $postRefNode->menuItem->menu_order + 1, 'nav_menu_item' ) );
                     $menu_item_data = $this->_getMenuItemDataForSave( $treeNode->menuItem );
                     $menu_item_data['menu-item-position']  = $postRefNode->menuItem->menu_order;
                     $menu_item_data['menu-item-parent-id'] = $postRefNode->menuItem->menu_item_parent;
@@ -391,8 +399,10 @@ class SwiftyPages
 
                 // update menu_order of all posts with the same parent ref_post_node and with a menu_order of the same as ref_post_node, but do not include ref_post_node
                 // +2 since multiple can have same menu order and we want our moved post to have a unique "spot"
-                $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+2 WHERE post_parent = %d AND menu_order >= %d AND id <> %d ", $post_ref_node->post_parent, $post_ref_node->menu_order, $post_ref_node->ID ) );
-
+                $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+2 WHERE post_parent = %d AND menu_order >= %d AND id <> %d ",
+                                              $post_ref_node->post_parent,
+                                              $post_ref_node->menu_order,
+                                              $post_ref_node->ID ) );
                 // update menu_order of post_node to the same that ref_post_node_had+1
                 #$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = %d, post_parent = %d WHERE ID = %d", $post_ref_node->menu_order+1, $post_ref_node->post_parent, $post_node->ID ) );
 
@@ -403,6 +413,22 @@ class SwiftyPages
                     "post_type"   => $post_ref_node->post_type
                 );
                 wp_update_post( $post_to_save );
+
+                $treeNode = $this->_getByPageId( $post_node->ID );
+                $postRefNode = $this->_getByPageId( $post_ref_node->ID );
+                if ( $treeNode
+                     && isset( $treeNode->menuItem )
+                     && $postRefNode
+                     && isset( $postRefNode->menuItem ) ) {
+                    $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+2 WHERE post_parent = %d AND menu_order >= %d AND id <> %d ",
+                                                  $postRefNode->menuItem->menu_item_parent,
+                                                  $postRefNode->menuItem->menu_order ,
+                                                  $postRefNode->menuItem->ID ) );
+                    $menu_item_data = $this->_getMenuItemDataForSave( $treeNode->menuItem );
+                    $menu_item_data['menu-item-position']  = $postRefNode->menuItem->menu_order + 1;
+                    $menu_item_data['menu-item-parent-id'] = $postRefNode->menuItem->menu_item_parent;
+                    wp_update_nav_menu_item( $this->_getMainMenuId(), $treeNode->menuItem->ID, $menu_item_data );
+                }
 
                 echo "did after";
             }
@@ -866,7 +892,7 @@ li.find( '> a' ).contents().filter( function() {
     protected function _getMenuItemDataForSave( $menuItem ) {
         $menu_item_data = array();
         $menu_item_data['menu-item-attr-title']  = $menuItem->attr_title;
-        $menu_item_data['menu-item-classes']     = $menuItem->classes;
+        $menu_item_data['menu-item-classes']     = implode( ' ', $menuItem->classes );
         $menu_item_data['menu-item-db-id']       = $menuItem->db_id;
         $menu_item_data['menu-item-description'] = $menuItem->description;
         $menu_item_data['menu-item-object']      = $menuItem->object;
