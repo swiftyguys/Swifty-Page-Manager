@@ -223,7 +223,8 @@ class SwiftyPages
                         $jstree_open[ $i ] = (int) str_replace( "#swiftypages-id-", "", $jstree_open[ $i ] );
                     }
                 }
-                $jsonData = $this->_get_childrenJsonData( $id, $jstree_open );
+                $this->getTree();
+                $jsonData = $this->getJsonData( $this->_byPageId[$id], $jstree_open );
                 print json_encode( $jsonData );
                 exit;
             }
@@ -651,6 +652,8 @@ li.find( '> a' ).contents().filter( function() {
         $args['post_status'] = 'any';
         $args['view'] = 'all';
         $args['numberposts'] = -1;
+        $args['orderby'] = 'menu_order';
+        $args['order'] = 'ASC';
         $pages = get_posts( $args );
         $added = true;
         while ( !empty($pages) && $added ) {
