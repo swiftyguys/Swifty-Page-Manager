@@ -14,8 +14,6 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
 
     $get_pages_args = array( "post_type" => $this->_post_type );
 
-    $pages = $this->_get_pages( $get_pages_args );
-
     // check if wpml is active and if this post type is one of its enabled ones
     $wpml_current_lang = "";
     $wmpl_active_for_post = false;
@@ -84,7 +82,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
         }
     }
 
-    $jsonData = $this->_get_childrenJsonData( 0, $jstree_open, $this->_post_type );
+    $jsonData = $this->getJsonData( $this->getTree() );
 
     ?>
     <script type="text/javascript">
@@ -425,7 +423,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
 <?php
     }
 
-    if ( empty( $pages ) )
+    if ( empty( $jsonData ) )
     {
         echo '<div class="updated fade below-h2"><p>' . __( "No posts found.", 'swiftypages' ) . '</p></div>';
     }

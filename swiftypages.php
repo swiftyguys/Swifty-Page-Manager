@@ -17,6 +17,8 @@ class SwiftyPages
     protected $_plugin_version = '0.0.2';
     protected $_view = 'all';
     protected $_post_type = 'page';
+    protected $_tree = null;
+    protected $_byPageId = null;
 
     /**
      * Constructor
@@ -41,7 +43,7 @@ class SwiftyPages
 
     }
 
-    function admin_head()
+    public function admin_head()
     {
         $currentScreen = get_current_screen();
         if ( 'pages_page_page-tree' == $currentScreen->base ) {
@@ -128,7 +130,7 @@ class SwiftyPages
         require( $this->plugin_dir . '/view/page_tree.php' );
     }
 
-    function ajax_get_childs()
+    public function ajax_get_childs()
     {
         header( "Content-type: application/json" );
 
@@ -232,7 +234,7 @@ class SwiftyPages
     /**
      * Output tree and html code for post overview page
      */
-    function filter_views_edit_postsoverview( $filter_var )
+    public function filter_views_edit_postsoverview( $filter_var )
     {
         ob_start();
         $this->view_page_tree();
@@ -286,7 +288,7 @@ class SwiftyPages
 
     }
 
-    function ajax_move_page()
+    public function ajax_move_page()
     {
         /*
          the node that was moved,
@@ -406,7 +408,7 @@ class SwiftyPages
         exit;
     }
 
-    function ajax_save_page()
+    public function ajax_add_page()
     {
         global $wpdb;
 
@@ -552,6 +554,45 @@ li.find( '> a' ).contents().filter( function() {
         exit;
     }
 
+    public function getTree() {
+        if ( is_null( $this->_tree ) ) {
+            $this->_tree = new StdClass();
+            $this->_tree->menuItem = new StdClass();
+            $this->_tree->menuItem->ID = 0; // Fake menu item as root.
+            $this->_tree->children = array();
+            $this->_byPageId = array();
+            $this->_byPageId [ 0 ] = &$this->_tree;
+            $mainMenuId = $this->_getMainMenuId();
+            if ( $mainMenuId ) {
+                $this->_addMenuPages( $mainMenuId, $this->_tree );
+            }
+            $this->_addAllPages();
+        }
+        return $this->_tree;
+    }
+
+    public function getJsonData( &$branch ) {
+        $result = array();
+        $childKeys = array_keys( $branch->children );
+        foreach ( $childKeys as $childKey ) {
+            $child = &$branch->children[$childKey];
+            $newBranch = $this->_get_pageJsonData( $child->page );
+            /**
+             * if no children, output no state
+             * if viewing trash, don't get children. we watch them "flat" instead
+             */
+            if ( $this->_view != "trash" ) {
+                $newBranch[ 'children' ] = $this->getJsonData( $child );
+                if ( count($newBranch[ 'children' ]) ) {
+                    $newBranch[ 'state' ] = 'closed';
+                }
+            }
+
+            $result[] = $newBranch;
+        }
+        return $result;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////
 
     protected function _addRoute( $route, $callable ) {
@@ -561,83 +602,74 @@ li.find( '> a' ).contents().filter( function() {
         $_registered_pages[$hookName] = true;
     }
 
-    protected function _get_pages( $args = null )
-    {
-        $defaults = array(
-            "post_type" => "page",
-            "parent"    => "",
-            "view"      => "all" // all | public | trash
-        );
-        $r        = wp_parse_args( $args, $defaults );
-
-        $get_posts_args = array(
-            "numberposts"         => "-1",
-            "orderby"             => "menu_order title",
-            "order"               => "ASC",
-            // "caller_get_posts" => 1, // get sticky posts in natural order (or so I understand it anyway). Deprecated since 3.1
-            "ignore_sticky_posts" => 1,
-            // "post_type" => "any",
-            "post_type"           => $r[ "post_type" ],
-            "xsuppress_filters"   => "0"
-        );
-        if ( $r[ "parent" ] )
-        {
-            $get_posts_args[ "post_parent" ] = $r[ "parent" ];
-        }
-        else
-        {
-            $get_posts_args[ "post_parent" ] = "0";
-        }
-        if ( $r[ "view" ] == "all" )
-        {
-            $get_posts_args[ "post_status" ] = "any"; // "any" seems to get all but auto-drafts
-        }
-        elseif ( $r[ "view" ] == "trash" )
-        {
-
-            $get_posts_args[ "post_status" ] = "trash";
-
-            // if getting trash, just get all pages, don't care about parent?
-            // because otherwise we have to mix trashed pages and pages with other statuses. messy.
-            $get_posts_args[ "post_parent" ] = null;
-
-        }
-        else
-        {
-            $get_posts_args[ "post_status" ] = "publish";
-        }
-
-        // does not work with plugin role scoper. don't know why, but this should fix it
-        remove_action( "get_pages", array( 'ScoperHardway', 'flt_get_pages' ), 1, 2 );
-
-        // does not work with plugin ALO EasyMail Newsletter
-        remove_filter( 'get_pages', 'ALO_exclude_page' );
-
-        #do_action_ref_array('parse_query', array(&$this));
-        #print_r($get_posts_args);
-
-        $pages = get_posts( $get_posts_args );
-
-        // filter out pages for wpml, by applying same filter as get_pages does
-        // only run if wpml is available or always?
-        // Note: get_pages filter uses orderby comma separated and with the key sort_column
-        $get_posts_args[ "sort_column" ] = str_replace( " ", ", ", $get_posts_args[ "orderby" ] );
-        $pages                           = apply_filters( 'get_pages', $pages, $get_posts_args );
-
-        return $pages;
-
-    }
-
-    protected function _get_childrenJsonData( $pageID ) {
-
-        $jsonData = array();
-        $arrPages = $this->_get_pages( "parent=$pageID&view=$this->_view&post_type=$this->_post_type" );
-        if ( $arrPages ) {
-            foreach ( $arrPages as $page ) {
-                $jsonData[] = $this->_get_pageJsonData( $page );
+    protected function _addMenuPages( $menuId, &$parentBranch ) {
+        $menuItems = wp_get_nav_menu_items( $menuId );
+        /** @var WP_Post $menuItem */
+        foreach ( $menuItems as $menuItem ) {
+            if ( $menuItem->menu_item_parent == $parentBranch->menuItem->ID ) {
+                $newBranch = new stdClass();
+                $newBranch->menuItem = $menuItem;
+                $newBranch->children = array();
+                $this->_byPageId[ $menuItem->object_id ] = &$newBranch;
+                $this->_addMenuPages( $menuId, $newBranch );
+                $parentBranch->children[] = &$newBranch;
+                unset( $newBranch );
             }
         }
-        return $jsonData;
+    }
+
+    protected function _addAllPages() {
+        $args = array();
+        $args['post_type'] = 'page';
+        $args['post_status'] = 'any';
+        $args['view'] = 'all';
+        $args['numberposts'] = -1;
+        $pages = get_posts( $args );
+        $added = true;
+        while ( !empty($pages) && $added ) {
+            $added = false;
+            $keys = array_keys( $pages );
+            foreach ( $keys as $key ) {
+                $page = $pages[$key];
+                if ( isset( $this->_byPageId[$page->ID] ) ) {
+                    $branch = &$this->_byPageId[$page->ID];
+                    $branch->page = $page;
+                    unset( $branch );
+                    unset( $pages[$key] );
+                    $added = true;
+                }
+                else if ( isset( $this->_byPageId[ $page->post_parent ] ) ) {
+                    $parentBranch = &$this->_byPageId[$page->post_parent];
+                    $newBranch = new stdClass();
+                    $newBranch->page = $page;
+                    $newBranch->children = array();
+                    $this->_byPageId[ $newBranch->page->ID ] = &$newBranch;
+                    $parentBranch->children[] = &$newBranch;
+                    unset( $newBranch );
+                    unset( $pages[$key] );
+                    $added = true;
+                }
+            }
+        }
+        // Add rest to root
+        $parentBranch = &$this->_tree;
+        foreach ( $pages as $page ) {
+            $newBranch = new stdClass();
+            $newBranch->page = $page;
+            $newBranch->children = array();
+            $this->_byPageId[ $newBranch->page->ID ] = &$newBranch;
+            $parentBranch->children[] = &$newBranch;
+            unset( $newBranch );
+        }
+    }
+
+    protected function _getMainMenuId() {
+        $result = false;
+        $menus = wp_get_nav_menus();
+        if ( !empty( $menus[0] ) ) {
+            $result = $menus[0]->term_id;
+        }
+        return $result;
     }
 
     protected function _get_pageJsonData( $onePage ) {
@@ -647,20 +679,8 @@ li.find( '> a' ).contents().filter( function() {
         $page_id       = $onePage->ID;
         $arrChildPages = null;
 
-        $hasChildren = false;
-
         $post_statuses = get_post_statuses();
         $post_type_object = get_post_type_object( $this->_post_type );
-
-        // if viewing trash, don't get children. we watch them "flat" instead
-        if ( $this->_view != "trash" )
-        {
-            $arrChildPages = $this->_get_pages( "parent={$onePage->ID}&view={$this->_view}&post_type={$this->_post_type}" );
-            if ( !empty( $arrChildPages ) )
-            {
-                $hasChildren = true;
-            }
-        }
 
         $editLink    = get_edit_post_link( $onePage->ID, 'notDisplay' );
 
@@ -731,14 +751,6 @@ li.find( '> a' ).contents().filter( function() {
         $pageJsonData['metadata']["user_can_add_page_after"] = (int) $user_can_add_after;
         $pageJsonData['metadata']["post_title"] = $title;
         $pageJsonData['metadata']["delete_nonce"] = wp_create_nonce( "delete-page_".$onePage->ID, '_trash' );
-
-        // if no children, output no state
-        if ( $hasChildren ) {
-            $pageJsonData[ 'state' ] = 'closed';
-            if ( $hasChildren ) {
-                $pageJsonData[ 'children' ] = $this->_get_childrenJsonData( $onePage->ID );
-            }
-        }
 
         return $pageJsonData;
     }
