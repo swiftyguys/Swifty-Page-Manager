@@ -326,7 +326,6 @@ class SwiftyPages
 
             if ( "inside" == $type )
             {
-
                 // post_node is moved inside ref_post_node
                 // add ref_post_node as parent to post_node and set post_nodes menu_order to 0
                 // @todo: shouldn't menu order of existing items be changed?
@@ -337,6 +336,27 @@ class SwiftyPages
                     "post_type"   => $post_ref_node->post_type
                 );
                 wp_update_post( $post_to_save );
+
+                $treeNode = $this->_getByPageId( $post_node->ID );
+                $postRefNode = $this->_getByPageId( $post_ref_node->ID );
+                if ( $treeNode && $treeNode->menuItem && $postRefNode && $postRefNode->menuItem ) {
+                    $menu_item_data = array();
+                    $menu_item_data['menu-item-attr-title']  = $treeNode->menuItem->attr_title;
+                    $menu_item_data['menu-item-classes']     = $treeNode->menuItem->classes;
+                    $menu_item_data['menu-item-db-id']       = $treeNode->menuItem->db_id;
+                    $menu_item_data['menu-item-description'] = $treeNode->menuItem->description;
+                    $menu_item_data['menu-item-object']      = $treeNode->menuItem->object;
+                    $menu_item_data['menu-item-object-id']   = $treeNode->menuItem->object_id;
+                    $menu_item_data['menu-item-target']      = $treeNode->menuItem->target;
+                    $menu_item_data['menu-item-title']       = $treeNode->menuItem->title;
+                    $menu_item_data['menu-item-type']        = $treeNode->menuItem->post_type;
+                    $menu_item_data['menu-item-url']         = $treeNode->menuItem->url;
+                    $menu_item_data['menu-item-xfn']         = $treeNode->menuItem->xfn;
+                    // Changes:
+                    $menu_item_data['menu-item-position']    = 0;
+                    $menu_item_data['menu-item-parent-id']   = $postRefNode->menuItem->ID;
+                    wp_update_nav_menu_item( $this->_getMainMenuId(), $treeNode->menuItem->ID, $menu_item_data );
+                }
 
                 echo "did inside";
 
@@ -604,19 +624,20 @@ li.find( '> a' ).contents().filter( function() {
         $childKeys = array_keys( $branch->children );
         foreach ( $childKeys as $childKey ) {
             $child = &$branch->children[$childKey];
-            $newBranch = $this->_get_pageJsonData( $child->page );
-            /**
-             * if no children, output no state
-             * if viewing trash, don't get children. we watch them "flat" instead
-             */
-            if ( $this->_view != "trash" ) {
-                $newBranch[ 'children' ] = $this->getJsonData( $child );
-                if ( count($newBranch[ 'children' ]) ) {
-                    $newBranch[ 'state' ] = 'closed';
+            if ( isset( $child->page ) ) {
+                $newBranch = $this->_get_pageJsonData( $child->page );
+                /**
+                 * if no children, output no state
+                 * if viewing trash, don't get children. we watch them "flat" instead
+                 */
+                if ( $this->_view != "trash" ) {
+                    $newBranch[ 'children' ] = $this->getJsonData( $child );
+                    if ( count($newBranch[ 'children' ]) ) {
+                        $newBranch[ 'state' ] = 'closed';
+                    }
                 }
+                $result[] = $newBranch;
             }
-
-            $result[] = $newBranch;
         }
         return $result;
     }
@@ -691,6 +712,16 @@ li.find( '> a' ).contents().filter( function() {
             $parentBranch->children[] = &$newBranch;
             unset( $newBranch );
         }
+    }
+
+    /**
+     * @param integer $pageId
+     */
+    protected function &_getByPageId( $pageId ) {
+        if ( null == $this->_tree ) {
+            $this->getTree();
+        }
+        return ( isset( $this->_byPageId[ $pageId ] ) ) ? $this->_byPageId[ $pageId ] : null;
     }
 
     protected function _getMainMenuId() {
