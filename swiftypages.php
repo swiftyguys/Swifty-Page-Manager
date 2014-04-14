@@ -506,7 +506,7 @@ class SwiftyPages
         exit;
     }
 
-    function ajax_delete_page()
+    public function ajax_delete_page()
     {
         $post_id = intval( $_POST[ "post_ID" ] );
 
