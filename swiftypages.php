@@ -340,21 +340,9 @@ class SwiftyPages
                 $treeNode = $this->_getByPageId( $post_node->ID );
                 $postRefNode = $this->_getByPageId( $post_ref_node->ID );
                 if ( $treeNode && $treeNode->menuItem && $postRefNode && $postRefNode->menuItem ) {
-                    $menu_item_data = array();
-                    $menu_item_data['menu-item-attr-title']  = $treeNode->menuItem->attr_title;
-                    $menu_item_data['menu-item-classes']     = $treeNode->menuItem->classes;
-                    $menu_item_data['menu-item-db-id']       = $treeNode->menuItem->db_id;
-                    $menu_item_data['menu-item-description'] = $treeNode->menuItem->description;
-                    $menu_item_data['menu-item-object']      = $treeNode->menuItem->object;
-                    $menu_item_data['menu-item-object-id']   = $treeNode->menuItem->object_id;
-                    $menu_item_data['menu-item-target']      = $treeNode->menuItem->target;
-                    $menu_item_data['menu-item-title']       = $treeNode->menuItem->title;
-                    $menu_item_data['menu-item-type']        = $treeNode->menuItem->post_type;
-                    $menu_item_data['menu-item-url']         = $treeNode->menuItem->url;
-                    $menu_item_data['menu-item-xfn']         = $treeNode->menuItem->xfn;
-                    // Changes:
-                    $menu_item_data['menu-item-position']    = 0;
-                    $menu_item_data['menu-item-parent-id']   = $postRefNode->menuItem->ID;
+                    $menu_item_data = $this->_getMenuItemDataForSave( $treeNode->menuItem );
+                    $menu_item_data['menu-item-position']  = 0;
+                    $menu_item_data['menu-item-parent-id'] = $postRefNode->menuItem->ID;
                     wp_update_nav_menu_item( $this->_getMainMenuId(), $treeNode->menuItem->ID, $menu_item_data );
                 }
 
@@ -372,7 +360,7 @@ class SwiftyPages
 
                 // update menu order with +1 for all pages below ref_node, this should fix the problem with "unmovable" pages because of
                 // multiple pages with the same menu order (...which is not the fault of this plugin!)
-                $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+1 WHERE menu_order >= %d", $post_ref_node->menu_order + 1 ) );
+                $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+1 WHERE menu_order >= %d AND post_type = %s", $post_ref_node->menu_order + 1, 'page' ) );
 
                 $post_to_save = array(
                     "ID"          => $post_node->ID,
@@ -381,6 +369,17 @@ class SwiftyPages
                     "post_type"   => $post_ref_node->post_type
                 );
                 wp_update_post( $post_to_save );
+
+                $treeNode = $this->_getByPageId( $post_node->ID );
+                $postRefNode = $this->_getByPageId( $post_ref_node->ID );
+                if ( $treeNode && $treeNode->menuItem && $postRefNode && $postRefNode->menuItem ) {
+                    $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+1 WHERE post_parent = %d", $postRefNode->menuItem->menu_item_parent ) );
+                    $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+1 WHERE menu_order >= %d AND post_type = %s", $postRefNode->menuItem->menu_order + 1, 'nav_menu_item' ) );
+                    $menu_item_data = $this->_getMenuItemDataForSave( $treeNode->menuItem );
+                    $menu_item_data['menu-item-position']  = $postRefNode->menuItem->menu_order;
+                    $menu_item_data['menu-item-parent-id'] = $postRefNode->menuItem->menu_item_parent;
+                    wp_update_nav_menu_item( $this->_getMainMenuId(), $treeNode->menuItem->ID, $menu_item_data );
+                }
 
                 echo "did before";
 
@@ -718,10 +717,14 @@ li.find( '> a' ).contents().filter( function() {
      * @param integer $pageId
      */
     protected function &_getByPageId( $pageId ) {
+        $result = null;
         if ( null == $this->_tree ) {
             $this->getTree();
         }
-        return ( isset( $this->_byPageId[ $pageId ] ) ) ? $this->_byPageId[ $pageId ] : null;
+        if ( isset( $this->_byPageId[ $pageId ] ) ) {
+            $result = &$this->_byPageId[ $pageId ];
+        }
+        return $result;
     }
 
     protected function _getMainMenuId() {
@@ -860,6 +863,23 @@ li.find( '> a' ).contents().filter( function() {
         return $arr_counts;
     }
 
+    protected function _getMenuItemDataForSave( $menuItem ) {
+        $menu_item_data = array();
+        $menu_item_data['menu-item-attr-title']  = $menuItem->attr_title;
+        $menu_item_data['menu-item-classes']     = $menuItem->classes;
+        $menu_item_data['menu-item-db-id']       = $menuItem->db_id;
+        $menu_item_data['menu-item-description'] = $menuItem->description;
+        $menu_item_data['menu-item-object']      = $menuItem->object;
+        $menu_item_data['menu-item-object-id']   = $menuItem->object_id;
+        $menu_item_data['menu-item-parent-id']   = $menuItem->menu_item_parent;
+        $menu_item_data['menu-item-position']    = $menuItem->menu_order;
+        $menu_item_data['menu-item-target']      = $menuItem->target;
+        $menu_item_data['menu-item-title']       = $menuItem->title;
+        $menu_item_data['menu-item-type']        = $menuItem->post_type;
+        $menu_item_data['menu-item-url']         = $menuItem->url;
+        $menu_item_data['menu-item-xfn']         = $menuItem->xfn;
+        return $menu_item_data;
+    }
 }
 
 $SwiftyPages = new SwiftyPages();
