@@ -40,6 +40,7 @@ class SwiftyPages
         add_action( 'wp_ajax_swiftypages_move_page',     array( $this, 'ajax_move_page' ) );
         add_action( 'wp_ajax_swiftypages_save_page',     array( $this, 'ajax_save_page' ) );
         add_action( 'wp_ajax_swiftypages_delete_page',   array( $this, 'ajax_delete_page' ) );
+        add_action( 'wp_ajax_swiftypages_publish_page',  array( $this, 'ajax_publish_page' ) );
         add_action( 'wp_ajax_swiftypages_post_settings', array( $this, 'ajax_post_settings' ) );
 
     }
@@ -497,8 +498,7 @@ class SwiftyPages
             }
             else
             {
-                // fail, tell js
-                echo "0";
+                echo "0";   // fail, tell js
             }
         }
         else   // We're in create mode
@@ -545,8 +545,7 @@ class SwiftyPages
             }
             else
             {
-                // fail, tell js
-                echo "0";
+                echo "0";   // fail, tell js
             }
         }
         exit;
@@ -568,11 +567,33 @@ class SwiftyPages
                 delete_post_meta( $post_id, 'ss_sidebar_visibility' );
 
                 echo "1";
-            } else
-            {
-                // fail, tell js
-                echo "0";
             }
+            else
+            {
+                echo "0";   // fail, tell js
+            }
+        }
+        else
+        {
+            echo "0";   // fail, tell js
+        }
+
+        exit;
+    }
+
+    public function ajax_publish_page()
+    {
+        $post_id = intval( $_POST[ "post_ID" ] );
+
+        if ( isset( $post_id ) && !empty( $post_id ) )
+        {
+            wp_publish_post( $post_id );
+
+            echo "1";
+        }
+        else
+        {
+            echo "0";   // fail, tell js
         }
 
         exit;

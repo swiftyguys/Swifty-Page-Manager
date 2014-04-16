@@ -230,6 +230,9 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
     <span class="button button-primary ss-button ss-page-button" data-ss-action="view" title='<?php _e( "View page", 'swiftypages' ) ?>'>
         <span class="dashicons ss-icon dashicons-visibility"></span>
     </span>
+    <span class="button button-primary ss-button ss-page-button" data-ss-action="publish" title='<?php _e( "Publish page", 'swiftypages' ) ?>'>
+        <span class="dashicons ss-icon dashicons-upload"></span>
+    </span>
 </span>
 
 <!-- SwiftySite template Delete -->
@@ -310,6 +313,9 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                         </label>
                                     </span>
                                 </label>
+                                <div class="inline-edit-col ss-more">More</div>
+                            </div>
+                            <div class="inline-edit-col ss-advanced-container">
                                 <label class="ss-label">
                                     <span class="title">
                                         <?php _e( "Customize page url", "cms-tree-page-view" ) ?>
@@ -400,6 +406,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                         </label>
                                     </span>
                                 </label>
+                                <div class="inline-edit-col ss-less">Less</div>
                             </div>
                         </fieldset>
                         <fieldset class="inline-edit-col-right">

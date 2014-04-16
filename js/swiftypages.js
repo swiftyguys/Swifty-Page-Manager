@@ -18,8 +18,6 @@ var Swifty = (function ( $, document, undefined ) {
         if ( this.isSwifty ) {
             //ss.disableElements();
         }
-
-        this.setupListeners();
     };
 
     ss.disableElements = function () {
@@ -32,7 +30,7 @@ var Swifty = (function ( $, document, undefined ) {
 
     ss.adaptTreeLinkElements = function ( a ) {
         $( a ).css( {
-            width: '97%'
+            width: '98%'
         } ).attr( {
             href: 'javascript:;',
             class: 'ss-page-tree-element'
@@ -40,20 +38,26 @@ var Swifty = (function ( $, document, undefined ) {
     };
 
     ss.resetPageTree = function () {
-        var $tree = $( 'div.jstree' );
+        var $tree = $( 'div.swiftypages_container' );
 
         //$tree.find( 'li' ).data( 'cur-action', '' );
         $tree.find( 'span.ss-container' ).remove();
+        $tree.find( 'a.jstree-clicked' ).removeClass( 'jstree-clicked' );
     };
 
     ss.preparePageActionButtons = function ( $li ) {
         var $a = $li.find( '> a' );
-        var $tree = $li.closest( 'div.jstree' );
+        var isDraft = $a.find( 'span.post_type_draft' ).length;
+        var $tree = $li.closest( 'div.swiftypages_container' );
         var $tmpl = this.getPageActionButtonsTmpl();
 
         $tree.find( 'span.ss-page-actions-tmpl' ).remove();
 
-        $a.append( $tmpl );
+        if ( !isDraft ) {
+            $tmpl.find( '[data-ss-action="publish"]' ).hide();
+        }
+
+        $a.addClass( 'jstree-clicked' ).append( $tmpl );
     };
 
     ss.getPageActionButtonsTmpl = function () {
@@ -68,6 +72,10 @@ var Swifty = (function ( $, document, undefined ) {
             'edit': 'ss-page-edit-tmpl'
         }[ action ];
         var $tmpl = this.getPageActionsTmpl( selector );
+
+        $tmpl.find( 'div.ss-advanced-container' ).hide();
+        $tmpl.find( 'div.ss-less' ).hide();
+        $tmpl.find( 'div.ss-more' ).show();
 
         $li.data( 'cur-action', action );
         $li.find( '> a' ).after( $tmpl.removeClass( 'ss-hidden' ) );
@@ -89,10 +97,20 @@ var Swifty = (function ( $, document, undefined ) {
         }, 1 );
     };
 
-    ss.setupListeners = function () {
-        var self = this;
+    ss.getPageSettings = function( $li ) {
+        $.post(
+            ajaxurl,
+            {
+                'action': 'swiftypages_post_settings',
+                'post_ID': $li.data( 'post_id' )
+            }
+        );
+    };
 
-        $( document ).on( 'click', '.ss-page-tree-element', function ( event ) {
+    ss.ss_tree_loaded = function( ev /*, data*/ ) {
+        ss.pageTreeLoaded( ev );
+
+        $( 'a.ss-page-tree-element' ).on( 'click', function ( event ) {
             var $li = $( this ).closest( 'li' );
 
             ss.resetPageTree();
@@ -102,7 +120,7 @@ var Swifty = (function ( $, document, undefined ) {
             event.stopPropagation();
         } );
 
-        $( document ).on( 'click', '.ss-page-button', function ( event ) {
+        $( 'span.ss-page-button' ).on( 'click', function ( event ) {
             var $button = $( this );
             var $li = $button.closest( 'li' );
             var action = $button.data( 'ss-action' );
@@ -145,6 +163,19 @@ var Swifty = (function ( $, document, undefined ) {
                     document.location = permalink;
 
                     break;
+                case "publish":
+                    $.post(
+                        ajaxurl,
+                        {
+                            'action': 'swiftypages_publish_page',
+                            'post_ID': $li.data( 'post_id' ),
+                            '_inline_edit': $( 'input#_inline_edit' ).val()
+                        }
+                    ).done( function() {
+                        location.reload();
+                    } );
+
+                    break;
                 default:
                     $( 'span.ss-container:visible' ).remove();
 
@@ -154,10 +185,6 @@ var Swifty = (function ( $, document, undefined ) {
             event.preventDefault();
             event.stopPropagation();
         } );
-    };
-
-    ss.ss_tree_loaded = function( ev /*, data*/ ) {
-        ss.pageTreeLoaded( ev );
 
         $( 'a.save.ss-button' ).on( 'click', function( event ) {
             var $li = $( this ).closest( 'li' );
@@ -190,12 +217,7 @@ var Swifty = (function ( $, document, undefined ) {
                 ajaxurl,
                 settings
             ).done( function() {
-                if ( action === "add" ) {   // Page creation
-                    location.reload();
-                } else if ( action === "settings" ) {   // Page editing
-                    ss.resetPageTree();
-                    ss.getPageSettings( $li );
-                }
+                location.reload();
             } );
 
             event.preventDefault();
@@ -227,6 +249,22 @@ var Swifty = (function ( $, document, undefined ) {
 
             event.preventDefault();
             event.stopPropagation();
+
+            return false;
+        } );
+
+        $( 'div.ss-more' ).on( 'click', function( event ) {
+            $( 'div.ss-advanced-container' ).show();
+            $( 'div.ss-less' ).show();
+            $( 'div.ss-more' ).hide();
+
+            return false;
+        } );
+
+        $( 'div.ss-less' ).on( 'click', function( event ) {
+            $( 'div.ss-advanced-container' ).hide();
+            $( 'div.ss-less' ).hide();
+            $( 'div.ss-more' ).show();
 
             return false;
         } );
@@ -516,7 +554,6 @@ jQuery( function ( $ ) {
         $elm.bind( "loaded.jstree", Swifty.ss_tree_loaded );
 
         $elm.jstree( treeOptionsTmp );
-
     } );
 
 } ); // end ondomready

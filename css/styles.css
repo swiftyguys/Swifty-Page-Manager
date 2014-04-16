@@ -509,10 +509,6 @@ for posts overview enabled mode
     margin: 3px 3px 0 0;
 }
 
-.ss-button .ss-icon {
-    padding-top: 3px;
-}
-
 .ss-page-add-edit-tmpl,
 .ss-page-delete-tmpl {
     display: list-item;
@@ -554,11 +550,12 @@ for posts overview enabled mode
 
 .ss-label {
     clear: both;
+    height: 30px;
 }
 
 label.ss-label span.title {
-    height: 29px;
-    line-height: 29px;
+    height: 30px;
+    line-height: 30px;
 }
 
 .ss-radio-label {
@@ -588,4 +585,26 @@ label.ss-label span.title {
 
 .ss-hidden {
     display: none;
+}
+
+.button.button-primary.ss-button.ss-page-button {
+    /*background: transparent;*/
+    /*border: none;*/
+    /*-webkit-box-shadow: none;*/
+    /*box-shadow: none;*/
+    /*color: #333;*/
+    /*text-decoration: none;*/
+}
+
+.ss-button .ss-icon {
+    padding-top: 3px;
+}
+
+.ss-more,
+.ss-less {
+    height: 30px;
+    position: absolute;
+    right: 50%;
+    margin-top: -15px;
+    font-size: 16px;
 }
