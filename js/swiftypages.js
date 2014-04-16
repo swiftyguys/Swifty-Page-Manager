@@ -1163,4 +1163,21 @@ jQuery( function ( $ ) {
         var viewswitch = $( "div.view-switch" );
         viewswitch.appendTo( swiftypages_postsoverview_wrap );
     }
+
+    $('span.ss-noposts-add').click( function() {
+        $.post(
+            ajaxurl,
+            {
+                'action': 'swiftypages_save_page',
+                'post_type': 'page',
+                'post_title': 'Home',
+                'add_mode': 'after',
+                '_inline_edit': $( 'input#_inline_edit' ).val()
+            },
+            function () {
+                window.location.reload();
+            }
+        );
+    } );
+
 } );

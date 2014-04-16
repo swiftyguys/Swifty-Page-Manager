@@ -433,6 +433,11 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
     if ( empty( $jsonData ) )
     {
         echo '<div class="updated fade below-h2"><p>' . __( "No posts found.", 'swiftypages' ) . '</p></div>';
+?>
+    <span class="button button-primary ss-button ss-page-button ss-noposts-add" data-ss-action="add" title='<?php _e( "Add page(s)", 'swiftypages' ) ?>'>
+        <span class="dashicons ss-icon dashicons-plus"></span>
+    </span>
+<?php
     }
 
 ?>
