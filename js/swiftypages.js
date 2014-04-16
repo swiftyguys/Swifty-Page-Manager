@@ -30,7 +30,7 @@ var Swifty = (function ( $, document, undefined ) {
 
     ss.adaptTreeLinkElements = function ( a ) {
         $( a ).css( {
-            width: '98%'
+            width: '100%'
         } ).attr( {
             href: 'javascript:;',
             class: 'ss-page-tree-element'
@@ -431,7 +431,9 @@ jQuery( function ( $ ) {
     swiftypages_message = $( "div.swiftypages_message" );
 
     // try to override css
-    var height = "20", height2 = "18", ins_height = "20";
+//    var height = "20", height2 = "18", ins_height = "20";
+    var height = "36", height2 = "34", ins_height = "36";  // SwiftyPages icons are bigger than the normal jstree icons
+
     css_string = '' +
         '.jstree ul, .jstree li { display:block; margin:0 0 0 0; padding:0 0 0 0; list-style-type:none; } ' +
         '.jstree li { display:block; min-height:' + height + 'px; line-height:' + height + 'px; white-space:nowrap; margin-left:18px; min-width:18px; } ' +

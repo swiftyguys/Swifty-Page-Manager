@@ -42,7 +42,7 @@
 #vakata-dragged.jstree-wordpress ins { background:transparent !important; line-height: 36px; }
 #vakata-dragged.jstree-wordpress .jstree-ok { background:url("d.png") -2px -106px no-repeat !important; width: 36px; height: 36px; }
 #vakata-dragged.jstree-wordpress .jstree-invalid { background:url("d.png") -35px -106px no-repeat !important; width: 36px; height: 36px; }
-#jstree-marker.jstree-wordpress { background:url("d.png") -82px -114px no-repeat !important; text-indent:-100px; width: 36px; height: 36px; }
+#jstree-marker.jstree-wordpress { background:url("d.png") -82px -114px no-repeat !important; text-indent:-100px; width: 36px; height: 36px; margin-top:-6px; }
 
 .jstree-wordpress a.jstree-search { color:aqua; }
 .jstree-wordpress .jstree-locked a { color:silver; cursor:default; }
@@ -61,7 +61,8 @@
 .jstree ins { width:36px; height:36px; }
 .jstree a { line-height:35px; height:35px; padding:0; color:#808080; font-size:14px; vertical-align:bottom; text-decoration:none; }
 .jstree a > ins { height:36px; width:36px; }
-.jstree li { min-height:32px; line-height:32px; margin-left:36px; min-width:36px; }
+.jstree li { min-height:36px; line-height:36px; margin-left:36px; min-width:36px; overflow:hidden; }
+.jstree li:hover { overflow:hidden; }
 .jstree-wordpress .jstree-clicked { background: #ddd; border: none; }
 .jstree-wordpress .jstree-hovered { background: #ddd; border: none; }
 .jstree-wordpress.jstree-focused { background: none; }
@@ -97,6 +98,7 @@
 
 #vakata-dragged.jstree-wordpress {
     border: 1px solid #808080;
+    background-color: white;
     height: 36px;
     line-height: 36px;
     font-size: 18px;
