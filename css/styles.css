@@ -600,11 +600,11 @@ label.ss-label span.title {
     padding-top: 3px;
 }
 
-.ss-more,
-.ss-less {
-    height: 30px;
-    position: absolute;
-    right: 50%;
-    margin-top: -15px;
-    font-size: 16px;
+.ss-label.ss-more,
+.ss-label.ss-less {
+    float: right;
+}
+
+.inline-edit-row .input-text-wrap input[type=text].ss-input-small {
+    width: 50%;
 }

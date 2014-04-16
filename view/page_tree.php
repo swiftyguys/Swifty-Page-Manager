@@ -283,7 +283,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                         <?php _e( "Menu button text", "cms-tree-page-view" ) ?>
                                     </span>
                                     <span class="input-text-wrap">
-                                        <input name="post_title" type="text" class="ss-input ss-input-text" title="Enter menu button text">
+                                        <input name="post_title" type="text" class="ss-input ss-input-small ss-input-text" title="Enter menu button text">
                                     </span>
                                 </label>
                                 <label class="ss-label">
@@ -313,7 +313,11 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                         </label>
                                     </span>
                                 </label>
-                                <div class="inline-edit-col ss-more">More</div>
+                                <label class="ss-label ss-more">
+                                    <a accesskey="s" class="button-secondary alignright ss-button more">
+                                        <?php _e( "More", 'swiftypages' ) ?>
+                                    </a>
+                                </label>
                             </div>
                             <div class="inline-edit-col ss-advanced-container">
                                 <label class="ss-label">
@@ -406,7 +410,11 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                         </label>
                                     </span>
                                 </label>
-                                <div class="inline-edit-col ss-less">Less</div>
+                                <label class="ss-label ss-less">
+                                    <a accesskey="s" class="button-secondary alignright ss-button less">
+                                        <?php _e( "Less", 'swiftypages' ) ?>
+                                    </a>
+                                </label>
                             </div>
                         </fieldset>
                         <fieldset class="inline-edit-col-right">

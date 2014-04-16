@@ -73,9 +73,13 @@ var Swifty = (function ( $, document, undefined ) {
         }[ action ];
         var $tmpl = this.getPageActionsTmpl( selector );
 
-        $tmpl.find( 'div.ss-advanced-container' ).hide();
-        $tmpl.find( 'div.ss-less' ).hide();
-        $tmpl.find( 'div.ss-more' ).show();
+        if ( action === 'settings' ) {
+            $tmpl.find( '.ss-label:eq(2)' ).hide();
+        }
+
+        $tmpl.find( '.ss-advanced-container' ).hide();
+        $tmpl.find( '.ss-less' ).hide();
+        $tmpl.find( '.ss-more' ).show();
 
         $li.data( 'cur-action', action );
         $li.find( '> a' ).after( $tmpl.removeClass( 'ss-hidden' ) );
@@ -247,18 +251,18 @@ var Swifty = (function ( $, document, undefined ) {
             return false;
         } );
 
-        $( 'div.ss-more' ).on( 'click', function( event ) {
-            $( 'div.ss-advanced-container' ).show();
-            $( 'div.ss-less' ).show();
-            $( 'div.ss-more' ).hide();
+        $( 'a.more.ss-button' ).on( 'click', function( event ) {
+            $( '.ss-advanced-container' ).show();
+            $( '.ss-less' ).show();
+            $( '.ss-more' ).hide();
 
             return false;
         } );
 
-        $( 'div.ss-less' ).on( 'click', function( event ) {
-            $( 'div.ss-advanced-container' ).hide();
-            $( 'div.ss-less' ).hide();
-            $( 'div.ss-more' ).show();
+        $( 'a.less.ss-button' ).on( 'click', function( event ) {
+            $( '.ss-advanced-container' ).hide();
+            $( '.ss-less' ).hide();
+            $( '.ss-more' ).show();
 
             return false;
         } );
