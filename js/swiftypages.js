@@ -149,15 +149,14 @@ var Swifty = (function ( $, document, undefined ) {
                     }
 
                     break;
-
                 case "edit":
-                    document.location = $li.data('editlink');
-                    break;
+                    document.location = $li.data( 'editlink' );
 
+                    break;
                 case "view":
                     document.location = permalink;
-                    break;
 
+                    break;
                 case "publish":
                     $.post(
                         ajaxurl,

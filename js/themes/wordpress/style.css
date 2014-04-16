@@ -39,9 +39,9 @@
 .jstree-wordpress .jstree-unchecked > a > .jstree-checkbox:hover { background-position:-2px -37px; }
 .jstree-wordpress .jstree-undetermined > a > .jstree-checkbox:hover { background-position:-20px -37px; }
 
-#vakata-dragged.jstree-wordpress ins { background:transparent !important; }
-#vakata-dragged.jstree-wordpress .jstree-ok { background:url("d.png") -4px -106px no-repeat !important; width: 36px; height: 36px; }
-#vakata-dragged.jstree-wordpress .jstree-invalid { background:url("d.png") -36px -106px no-repeat !important; width: 36px; height: 36px; }
+#vakata-dragged.jstree-wordpress ins { background:transparent !important; line-height: 36px; }
+#vakata-dragged.jstree-wordpress .jstree-ok { background:url("d.png") -2px -106px no-repeat !important; width: 36px; height: 36px; }
+#vakata-dragged.jstree-wordpress .jstree-invalid { background:url("d.png") -35px -106px no-repeat !important; width: 36px; height: 36px; }
 #jstree-marker.jstree-wordpress { background:url("d.png") -82px -114px no-repeat !important; text-indent:-100px; width: 36px; height: 36px; }
 
 .jstree-wordpress a.jstree-search { color:aqua; }
@@ -96,7 +96,7 @@
 }
 
 #vakata-dragged.jstree-wordpress {
-    border: 1px solid red;
+    border: 1px solid #808080;
     height: 36px;
     line-height: 36px;
     font-size: 18px;
