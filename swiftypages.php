@@ -838,8 +838,7 @@ li.find( '> a' ).contents().filter( function() {
 
         $pageJsonData['data'] = array();
         $pageJsonData['data']['title'] = $title;
-        $pageJsonData['data']['attr'] = array();
-        $pageJsonData['data']['attr']['href'] = $editLink;
+        $pageJsonData['data']['edit_link'] = $editLink;
 
         $pageJsonData['attr'] = array();
         $pageJsonData['attr']['id'] = "swiftypages-id-" . $onePage->ID;

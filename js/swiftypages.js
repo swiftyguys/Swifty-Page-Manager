@@ -130,18 +130,8 @@ var Swifty = (function ( $, document, undefined ) {
                 case "add":
                 case "settings":
                 case "delete":
-                case "edit":
-//                    if ( $li.data( 'cur-action' ) && $li.data( 'cur-action' ) === action ) {
-//                        ss.resetPageTree();
-//                    } else {
-//                        ss.resetPageTree();
-//                        ss.preparePageActions( $li, action );
-//                    }
-
-                    console.log( $li.find( 'span.ss-container' ).length );
-
-                    if ( $li.find( 'span.ss-container' ).length && $li.data( 'cur-action' ) && $li.data( 'cur-action' ) === action  ) {
-                        $li.find( 'span.ss-container' ).remove();
+                    if ( $li.data( 'cur-action' ) && $li.data( 'cur-action' ) === action ) {
+                        ss.resetPageTree();
                     } else {
                         $li.find( 'span.ss-container' ).remove();
                         ss.preparePageActions( $li, action );
@@ -159,10 +149,15 @@ var Swifty = (function ( $, document, undefined ) {
                     }
 
                     break;
+
+                case "edit":
+                    document.location = $li.data('editlink');
+                    break;
+
                 case "view":
                     document.location = permalink;
-
                     break;
+
                 case "publish":
                     $.post(
                         ajaxurl,
