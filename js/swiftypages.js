@@ -114,7 +114,7 @@ var Swifty = (function ( $, document, undefined ) {
     ss.ss_tree_loaded = function( ev /*, data*/ ) {
         ss.pageTreeLoaded( ev );
 
-        $( 'a.ss-page-tree-element' ).on( 'click', function ( event ) {
+        $( '.ss-page-tree-element' ).on( 'click', function ( event ) {
             var $li = $( this ).closest( 'li' );
 
             ss.resetPageTree();
@@ -124,7 +124,7 @@ var Swifty = (function ( $, document, undefined ) {
             event.stopPropagation();
         } );
 
-        $( 'span.ss-page-button' ).on( 'click', function ( event ) {
+        $( '.ss-page-button' ).on( 'click', function ( event ) {
             var $button = $( this );
             var $li = $button.closest( 'li' );
             var action = $button.data( 'ss-action' );
@@ -184,7 +184,7 @@ var Swifty = (function ( $, document, undefined ) {
             event.stopPropagation();
         } );
 
-        $( 'a.save.ss-button' ).on( 'click', function( event ) {
+        $( '.save.ss-button' ).on( 'click', function( event ) {
             var $li = $( this ).closest( 'li' );
             var action = $li.data( 'cur-action' );
             var settings = {
@@ -223,7 +223,7 @@ var Swifty = (function ( $, document, undefined ) {
             return false;
         } );
 
-        $( 'a.delete.ss-button' ).on( 'click', function( event ) {
+        $( '.delete.ss-button' ).on( 'click', function( event ) {
             var $li = $( this ).closest( 'li' );
 
             $.post(
@@ -242,7 +242,7 @@ var Swifty = (function ( $, document, undefined ) {
             return false;
         } );
 
-        $( 'a.cancel.ss-button' ).on( 'click', function( event ) {
+        $( '.cancel.ss-button' ).on( 'click', function( event ) {
             $( 'span.ss-container:visible' ).remove();
 
             event.preventDefault();
@@ -251,7 +251,7 @@ var Swifty = (function ( $, document, undefined ) {
             return false;
         } );
 
-        $( 'a.more.ss-button' ).on( 'click', function( event ) {
+        $( '.more.ss-button' ).on( 'click', function( event ) {
             $( '.ss-advanced-container' ).show();
             $( '.ss-less' ).show();
             $( '.ss-more' ).hide();
@@ -259,7 +259,7 @@ var Swifty = (function ( $, document, undefined ) {
             return false;
         } );
 
-        $( 'a.less.ss-button' ).on( 'click', function( event ) {
+        $( '.less.ss-button' ).on( 'click', function( event ) {
             $( '.ss-advanced-container' ).hide();
             $( '.ss-less' ).hide();
             $( '.ss-more' ).show();

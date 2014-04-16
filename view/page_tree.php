@@ -253,13 +253,9 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                         </fieldset>
                         <fieldset class="inline-edit-col-right">
                             <div class="inline-edit-group ss-buttons-confirm">
-                                <a accesskey="c" href="#inline-edit" class="button-secondary alignright ss-button cancel">
-                                    <?php _e( "Cancel", 'swiftypages' ) ?>
-                                </a>
+                                <input type="button" class="button-secondary alignright ss-button cancel" value="<?php _e( "Cancel", 'swiftypages' ) ?>" />
                                 <br class="clear">
-                                <a accesskey="s" href="#inline-edit" class="button-primary alignright ss-button delete">
-                                    <?php _e( "Delete", 'swiftypages' ) ?>
-                                </a>
+                                <input type="button" class="button-primary alignright ss-button delete" value="<?php _e( "Delete", 'swiftypages' ) ?>" />
                             </div>
                         </fieldset>
                     </td>
@@ -283,7 +279,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                         <?php _e( "Menu button text", "cms-tree-page-view" ) ?>
                                     </span>
                                     <span class="input-text-wrap">
-                                        <input name="post_title" type="text" class="ss-input ss-input-small ss-input-text" title="Enter menu button text">
+                                        <input name="post_title" type="text" class="ss-input ss-input-small ss-input-text" title="Enter menu button text" />
                                     </span>
                                 </label>
                                 <label class="ss-label">
@@ -291,7 +287,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                         <?php _e( "Page title for Google", "cms-tree-page-view" ) ?>
                                     </span>
                                     <span class="input-text-wrap">
-                                        <input name="ss_page_title_seo" type="text" class="ss-input ss-input-text" title="Enter page title for search engines">
+                                        <input name="ss_page_title_seo" type="text" class="ss-input ss-input-text" title="Enter page title for search engines" />
                                     </span>
                                 </label>
                                 <label class="ss-label">
@@ -300,13 +296,13 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                     </span>
                                     <span class="input-text-wrap">
                                         <label class="alignleft ss-radio-label">
-                                            <input name="add_mode" type="radio" value="after" class="ss-input-radio">
+                                            <input name="add_mode" type="radio" value="after" class="ss-input-radio" />
                                             <span class="radiobutton-title">
                                                 <?php _e( "Next", "cms-tree-page-view" ) ?>
                                             </span>
                                         </label>
                                         <label class="alignleft ss-radio-label">
-                                            <input name="add_mode" type="radio" value="inside" class="ss-input-radio">
+                                            <input name="add_mode" type="radio" value="inside" class="ss-input-radio" />
                                             <span class="radiobutton-title">
                                                 <?php _e( "Sub", "cms-tree-page-view" ) ?>
                                             </span>
@@ -314,9 +310,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                     </span>
                                 </label>
                                 <label class="ss-label ss-more">
-                                    <a accesskey="s" class="button-secondary alignright ss-button more">
-                                        <?php _e( "More", 'swiftypages' ) ?>
-                                    </a>
+                                    <input type="button" class="button-secondary alignright ss-button more" value="<?php _e( "More", 'swiftypages' ) ?>" />
                                 </label>
                             </div>
                             <div class="inline-edit-col ss-advanced-container">
@@ -325,7 +319,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                         <?php _e( "Customize page url", "cms-tree-page-view" ) ?>
                                     </span>
                                     <span class="input-text-wrap">
-                                        <input name="post_name" type="text" class="ss-input ss-input-text" title="Enter a custom page url">
+                                        <input name="post_name" type="text" class="ss-input ss-input-text" title="Enter a custom page url" />
                                     </span>
                                 </label>
                                 <label class="ss-label">
@@ -334,13 +328,13 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                     </span>
                                     <span class="input-text-wrap">
                                         <label class="alignleft ss-radio-label">
-                                            <input name="ss_show_in_menu" type="radio" value="show" class="ss-input-radio">
+                                            <input name="ss_show_in_menu" type="radio" value="show" class="ss-input-radio" />
                                             <span class="radiobutton-title">
                                                 <?php _e( "Show", "cms-tree-page-view" ) ?>
                                             </span>
                                         </label>
                                         <label class="alignleft ss-radio-label">
-                                            <input name="ss_show_in_menu" type="radio" value="hide" class="ss-input-radio">
+                                            <input name="ss_show_in_menu" type="radio" value="hide" class="ss-input-radio" />
                                             <span class="radiobutton-title">
                                                 <?php _e( "Hide", "cms-tree-page-view" ) ?>
                                             </span>
@@ -353,13 +347,13 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                     </span>
                                     <span class="input-text-wrap">
                                         <label class="alignleft ss-radio-label">
-                                            <input name="post_status" type="radio" value="draft" class="ss-input-radio">
+                                            <input name="post_status" type="radio" value="draft" class="ss-input-radio" />
                                             <span class="radiobutton-title">
                                                 <?php _e( "Draft", "cms-tree-page-view" ) ?>
                                             </span>
                                         </label>
                                         <label class="alignleft ss-radio-label">
-                                            <input name="post_status" type="radio" value="publish" class="ss-input-radio">
+                                            <input name="post_status" type="radio" value="publish" class="ss-input-radio" />
                                             <span class="radiobutton-title">
                                                 <?php _e( "Live", "cms-tree-page-view" ) ?>
                                             </span>
@@ -372,13 +366,13 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                     </span>
                                     <span class="input-text-wrap">
                                         <label class="alignleft ss-radio-label">
-                                            <input name="ss_header_visibility" type="radio" value="show" class="ss-input-radio">
+                                            <input name="ss_header_visibility" type="radio" value="show" class="ss-input-radio" />
                                             <span class="radiobutton-title">
                                                 <?php _e( "Show", "cms-tree-page-view" ) ?>
                                             </span>
                                         </label>
                                         <label class="alignleft ss-radio-label">
-                                            <input name="ss_header_visibility" type="radio" value="hide" class="ss-input-radio">
+                                            <input name="ss_header_visibility" type="radio" value="hide" class="ss-input-radio" />
                                             <span class="radiobutton-title">
                                                 <?php _e( "Hide", "cms-tree-page-view" ) ?>
                                             </span>
@@ -391,19 +385,19 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                     </span>
                                     <span class="input-text-wrap">
                                         <label class="alignleft ss-radio-label">
-                                            <input name="ss_sidebar_visibility" type="radio" value="left" class="ss-input-radio">
+                                            <input name="ss_sidebar_visibility" type="radio" value="left" class="ss-input-radio" />
                                             <span class="radiobutton-title">
                                                 <?php _e( "Left", "cms-tree-page-view" ) ?>
                                             </span>
                                         </label>
                                         <label class="alignleft ss-radio-label">
-                                            <input name="ss_sidebar_visibility" type="radio" value="right" class="ss-input-radio">
+                                            <input name="ss_sidebar_visibility" type="radio" value="right" class="ss-input-radio" />
                                             <span class="radiobutton-title">
                                                 <?php _e( "Right", "cms-tree-page-view" ) ?>
                                             </span>
                                         </label>
                                         <label class="alignleft ss-radio-label">
-                                            <input name="ss_sidebar_visibility" type="radio" value="hide" class="ss-input-radio">
+                                            <input name="ss_sidebar_visibility" type="radio" value="hide" class="ss-input-radio" />
                                             <span class="radiobutton-title">
                                                 <?php _e( "Hide", "cms-tree-page-view" ) ?>
                                             </span>
@@ -411,21 +405,15 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                     </span>
                                 </label>
                                 <label class="ss-label ss-less">
-                                    <a accesskey="s" class="button-secondary alignright ss-button less">
-                                        <?php _e( "Less", 'swiftypages' ) ?>
-                                    </a>
+                                    <input type="button" class="button-secondary alignright ss-button less" value="<?php _e( "Less", 'swiftypages' ) ?>" />
                                 </label>
                             </div>
                         </fieldset>
                         <fieldset class="inline-edit-col-right">
                             <div class="inline-edit-group ss-buttons-confirm">
-                                <a accesskey="c" class="button-secondary alignright ss-button cancel">
-                                    <?php _e( "Cancel", 'swiftypages' ) ?>
-                                </a>
+                                <input type="button" class="button-secondary alignright ss-button cancel" value="<?php _e( "Cancel", 'swiftypages' ) ?>" />
                                 <br class="clear">
-                                <a accesskey="s" class="button-primary alignright ss-button save">
-                                    <?php _e( "Save", 'swiftypages' ) ?>
-                                </a>
+                                <input type="button" class="button-primary alignright ss-button save" value="<?php _e( "Save", 'swiftypages' ) ?>" />
                             </div>
                         </fieldset>
                     </td>
