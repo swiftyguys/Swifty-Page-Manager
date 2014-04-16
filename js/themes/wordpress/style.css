@@ -40,9 +40,9 @@
 .jstree-wordpress .jstree-undetermined > a > .jstree-checkbox:hover { background-position:-20px -37px; }
 
 #vakata-dragged.jstree-wordpress ins { background:transparent !important; }
-#vakata-dragged.jstree-wordpress .jstree-ok { background:url("d.png") -2px -53px no-repeat !important; }
-#vakata-dragged.jstree-wordpress .jstree-invalid { background:url("d.png") -18px -53px no-repeat !important; }
-#jstree-marker.jstree-wordpress { background:url("d.png") -41px -57px no-repeat !important; text-indent:-100px; }
+#vakata-dragged.jstree-wordpress .jstree-ok { background:url("d.png") -4px -106px no-repeat !important; width: 36px; height: 36px; }
+#vakata-dragged.jstree-wordpress .jstree-invalid { background:url("d.png") -36px -106px no-repeat !important; width: 36px; height: 36px; }
+#jstree-marker.jstree-wordpress { background:url("d.png") -82px -114px no-repeat !important; text-indent:-100px; width: 36px; height: 36px; }
 
 .jstree-wordpress a.jstree-search { color:aqua; }
 .jstree-wordpress .jstree-locked a { color:silver; cursor:default; }
@@ -93,4 +93,17 @@
 
 .jstree-wordpress li {
     position: relative;
+}
+
+#vakata-dragged.jstree-wordpress {
+    border: 1px solid red;
+    height: 36px;
+    line-height: 36px;
+    font-size: 18px;
+    padding-left: 40px;
+}
+
+#vakata-dragged.jstree-wordpress .post_type,
+#vakata-dragged.jstree-wordpress .ss-page-actions-tmpl {
+    display: none;
 }
