@@ -557,6 +557,10 @@ class SwiftyPages
 
         if ( isset( $post_id ) && !empty( $post_id ) )
         {
+            $menuItems = wp_get_associated_nav_menu_items( $post_id, 'post_type', 'page' );
+            foreach ( $menuItems as $menuItemId ) {
+                wp_delete_post( $menuItemId, true );
+            }
             $post_data = wp_delete_post( $post_id, true );
 
             if ( is_object( $post_data ) )
@@ -671,7 +675,8 @@ li.find( '> a' ).contents().filter( function() {
         foreach ( $childKeys as $childKey ) {
             $child = &$branch->children[$childKey];
             if ( isset( $child->page ) ) {
-                $newBranch = $this->_get_pageJsonData( $child->page );
+                $menuItem = ( isset( $child->menuItem ) ) ? $child->menuItem : null;
+                $newBranch = $this->_get_pageJsonData( $child->page, $menuItem );
                 /**
                  * if no children, output no state
                  * if viewing trash, don't get children. we watch them "flat" instead
@@ -698,7 +703,10 @@ li.find( '> a' ).contents().filter( function() {
     }
 
     protected function _addMenuPages( $menuId, &$parentBranch ) {
-        $menuItems = wp_get_nav_menu_items( $menuId );
+        static $menuItems; // This variable is saved inside this function if it is called multiple times.
+        if ( empty($menuItems) ) {
+            $menuItems = wp_get_nav_menu_items( $menuId );
+        }
         /** @var WP_Post $menuItem */
         foreach ( $menuItems as $menuItem ) {
             if ( $menuItem->menu_item_parent == $parentBranch->menuItem->ID ) {
@@ -783,7 +791,12 @@ li.find( '> a' ).contents().filter( function() {
         return $result;
     }
 
-    protected function _get_pageJsonData( $onePage ) {
+    /**
+     * @param WP_Post $onePage
+     * @param WP_Post|null $oneMenu
+     * @return array
+     */
+    protected function _get_pageJsonData( $onePage, $oneMenu ) {
         $pageJsonData = array();
 
         $post          = $onePage;
@@ -838,7 +851,6 @@ li.find( '> a' ).contents().filter( function() {
 
         $pageJsonData['data'] = array();
         $pageJsonData['data']['title'] = $title;
-        $pageJsonData['data']['edit_link'] = $editLink;
 
         $pageJsonData['attr'] = array();
         $pageJsonData['attr']['id'] = "swiftypages-id-" . $onePage->ID;
@@ -861,6 +873,9 @@ li.find( '> a' ).contents().filter( function() {
         $pageJsonData['metadata']["user_can_add_page_after"] = (int) $user_can_add_after;
         $pageJsonData['metadata']["post_title"] = $title;
         $pageJsonData['metadata']["delete_nonce"] = wp_create_nonce( "delete-page_".$onePage->ID, '_trash' );
+        if ( !empty( $oneMenu ) ) {
+            $pageJsonData['metadata']["menu_id"] = $oneMenu->ID;
+        }
 
         return $pageJsonData;
     }
