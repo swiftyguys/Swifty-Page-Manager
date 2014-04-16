@@ -19,6 +19,7 @@ class SwiftyPages
     protected $_post_type = 'page';
     protected $_tree = null;
     protected $_byPageId = null;
+    protected $_mainMenuItems = null;
 
     /**
      * Constructor
@@ -548,6 +549,37 @@ class SwiftyPages
                 echo "0";   // fail, tell js
             }
         }
+
+        //  Update menu item
+        if ( $ss_show_in_menu ) {
+            $post = get_post( $post_id );
+            $existingMenuItem = $this->_getPageMenuItem( $post_id );
+            $parentMenuItem = ( $post->post_parent ) ? $this->_getPageMenuItem( $post->post_parent ) : null;
+            $menuItem = new stdClass();
+            if ( empty( $existingMenuItem ) ) {
+                $menuItem->db_id = 0;
+                $menuItem->menu_item_parent = 0;
+                $menuItem->menu_order = 0;
+//                if ( $parentMenuItem ) {
+//                    if ( "inside" == $_POST[ "add_mode" ] ) {
+//                    } elseif ( "after" == $_POST[ "add_mode" ] ) {
+//                        $menuItem->menu_order = $parentMenuItem->menu_order + 1;;
+//                        $menuItem->menu_item_parent = $parentMenuItem->post_parent;
+//                    }
+//                }
+            } else {
+                $menuItem->db_id = $existingMenuItem->db_id;
+            }
+            $menuItem->post_type = 'post_type';
+            $menuItem->post_status = 'publish';
+            $menuItem->post_name = $id_saved;
+            $menuItem->object_id = $id_saved;
+            $menuItem->object = 'page';
+            $menuItem->menu_item_parent = $parentMenuItem->ID;
+            wp_update_nav_menu_item( $this->_getMainMenuId(), $menuItem->db_id, $this->_getMenuItemDataForSave( $menuItem ) );
+        }
+        //  /Update menu item
+
         exit;
     }
 
@@ -702,11 +734,18 @@ li.find( '> a' ).contents().filter( function() {
         $_registered_pages[$hookName] = true;
     }
 
-    protected function _addMenuPages( $menuId, &$parentBranch ) {
-        static $menuItems; // This variable is saved inside this function if it is called multiple times.
-        if ( empty($menuItems) ) {
-            $menuItems = wp_get_nav_menu_items( $menuId );
+    /**
+     * @return WP_Post[]|null
+     */
+    protected function _getMainMenuItems() {
+        if ( is_null( $this->_mainMenuItems ) ) {
+            $this->_mainMenuItems = wp_get_nav_menu_items( $this->_getMainMenuId() );
         }
+        return $this->_mainMenuItems;
+    }
+
+    protected function _addMenuPages( $menuId, &$parentBranch ) {
+        $menuItems = $this->_getMainMenuItems();
         /** @var WP_Post $menuItem */
         foreach ( $menuItems as $menuItem ) {
             if ( $menuItem->menu_item_parent == $parentBranch->menuItem->ID ) {
@@ -926,14 +965,16 @@ li.find( '> a' ).contents().filter( function() {
 
     protected function _getMenuItemDataForSave( $menuItem ) {
         $menu_item_data = array();
-        $menu_item_data['menu-item-attr-title']  = $menuItem->attr_title;
+        $menu_item_data['menu-item-attr-title']  = $menuItem->post_excerpt;
         $menu_item_data['menu-item-classes']     = implode( ' ', $menuItem->classes );
         $menu_item_data['menu-item-db-id']       = $menuItem->db_id;
-        $menu_item_data['menu-item-description'] = $menuItem->description;
+        $menu_item_data['menu-item-description'] = $menuItem->post_content;
+        $menu_item_data['menu-item-name']        = $menuItem->post_name;
         $menu_item_data['menu-item-object']      = $menuItem->object;
         $menu_item_data['menu-item-object-id']   = $menuItem->object_id;
         $menu_item_data['menu-item-parent-id']   = $menuItem->menu_item_parent;
         $menu_item_data['menu-item-position']    = $menuItem->menu_order;
+        $menu_item_data['menu-item-status']      = $menuItem->post_status;
         $menu_item_data['menu-item-target']      = $menuItem->target;
         $menu_item_data['menu-item-title']       = $menuItem->title;
         $menu_item_data['menu-item-type']        = $menuItem->post_type;
@@ -941,6 +982,23 @@ li.find( '> a' ).contents().filter( function() {
         $menu_item_data['menu-item-xfn']         = $menuItem->xfn;
         return $menu_item_data;
     }
+
+    /**
+     * @param $post_id
+     * @return null|WP_Post
+     */
+    protected function _getPageMenuItem( $post_id ) {
+        $result = null;
+        $menuItems = $this->_getMainMenuItems();
+        foreach( $menuItems as $menuItem ) {
+            if ( 'page' == $menuItem->object && $post_id == $menuItem->object_id ) {
+                $result = $menuItem;
+                break;
+            }
+        }
+        return $result;
+    }
+
 }
 
 $SwiftyPages = new SwiftyPages();
