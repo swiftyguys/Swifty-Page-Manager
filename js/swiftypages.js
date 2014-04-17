@@ -198,7 +198,7 @@ var Swifty = (function ( $, document, undefined ) {
                 'post_name': $li.find( 'input[name="post_name"]' ).val(),
                 'add_mode': $li.find( 'input[name="add_mode"]:checked' ).val(),   // after | inside
                 'post_status': $li.find( 'input[name="post_status"]:checked' ).val(),   // draft | publish
-                'ss_show_in_menu': $li.find( 'input[name="ss_show_in_menu"]:checked' ).val(),   // show | hide
+                'ss_show_in_menu': $li.find( 'input[name="ss_show_in_menu"]:checked' ).val() || 'show',   // show | hide
                 'ss_page_title_seo': $li.find( 'input[name="ss_page_title_seo"]' ).val(),
                 'ss_header_visibility': $li.find( 'input[name="ss_header_visibility"]:checked' ).val(),   // show | hide
                 'ss_sidebar_visibility': $li.find( 'input[name="ss_sidebar_visibility"]:checked' ).val(),   // left | right | hide
@@ -919,6 +919,10 @@ function swiftypages_bind_clean_node() {
             "type": nodePosition,
             "icl_post_language": selected_lang
         }, function ( data, textStatus ) {
+            if ( nodePosition == "inside" && jQuery( nodeR ).hasClass( 'swiftypages_show_page_in_menu_no' ) ) {
+                jQuery( nodeBeingMoved ).removeClass( 'swiftypages_show_page_in_menu_yes' )
+                                        .addClass( 'swiftypages_show_page_in_menu_no' );
+            }
         } );
 
     } );

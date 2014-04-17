@@ -322,6 +322,8 @@ class SwiftyPages
             $post_node     = get_post( $node_id );
             $post_ref_node = get_post( $ref_node_id );
 
+            $show_ref_page_in_menu = get_post_meta( $ref_node_id, 'ss_show_in_menu', true );
+
             // first check that post_node (moved post) is not in trash. we do not move them
             if ( $post_node->post_status == "trash" )
             {
@@ -339,7 +341,13 @@ class SwiftyPages
                     "post_parent" => $post_ref_node->ID,
                     "post_type"   => $post_ref_node->post_type
                 );
-                wp_update_post( $post_to_save );
+
+                $id_saved = wp_update_post( $post_to_save );
+
+                if ( $id_saved && $show_ref_page_in_menu != 'show' )
+                {
+                    update_post_meta( $id_saved, 'ss_show_in_menu', 'hide' );
+                }
 
                 $treeNode = $this->_getByPageId( $post_node->ID );
                 $postRefNode = $this->_getByPageId( $post_ref_node->ID );
