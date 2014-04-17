@@ -608,3 +608,16 @@ label.ss-label span.title {
 .inline-edit-row .input-text-wrap input[type=text].ss-input-small {
     width: 50%;
 }
+
+li a.ss-page-tree-element {
+    font-size: larger;
+}
+
+li.swiftypages_show_page_in_menu_no a.ss-page-tree-element {
+    color: #bbb;
+}
+
+li.swiftypages_show_page_in_menu_no a.ss-page-tree-element ins {
+    opacity: 0.4;
+    filter: alpha(opacity=40);
+}

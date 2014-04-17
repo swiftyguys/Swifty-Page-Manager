@@ -882,6 +882,7 @@ li.find( '> a' ).contents().filter( function() {
             $title = __( "<Untitled page>", 'swiftypages' );
         }
 
+        $show_page_in_menu   = get_post_meta( $page_id, 'ss_show_in_menu', true );
         $user_can_edit_page  = apply_filters( "cms_tree_page_view_post_can_edit", current_user_can( $post_type_object->cap->edit_post, $page_id ), $page_id );
         $user_can_add_inside = apply_filters( "cms_tree_page_view_post_user_can_add_inside", current_user_can( $post_type_object->cap->create_posts, $page_id ), $page_id );
         $user_can_add_after  = apply_filters( "cms_tree_page_view_post_user_can_add_after", current_user_can( $post_type_object->cap->create_posts, $page_id ), $page_id );
@@ -889,6 +890,7 @@ li.find( '> a' ).contents().filter( function() {
         $arr_page_css_styles[] = "swiftypages_user_can_edit_page_" . ( $user_can_edit_page ? 'yes' : 'no' );
         $arr_page_css_styles[] = "swiftypages_user_can_add_page_inside_" . ( $user_can_add_inside ? 'yes' : 'no' );
         $arr_page_css_styles[] = "swiftypages_user_can_add_page_after_" . ( $user_can_add_after ? 'yes' : 'no' );
+        $arr_page_css_styles[] = "swiftypages_show_page_in_menu_" . ( $show_page_in_menu == 'show' ? 'yes' : 'no' );
 
         $pageJsonData['data'] = array();
         $pageJsonData['data']['title'] = $title;
