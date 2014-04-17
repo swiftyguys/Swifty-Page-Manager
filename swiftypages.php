@@ -126,7 +126,9 @@ class SwiftyPages
             "Edit_page_content"                           => __( "Edit page content", 'swiftypages' ),
             "Delete page"                                 => __( "Delete page", 'swiftypages' ),
             "Delete"                                      => __( "Delete", 'swiftypages' ),
-            "Delete_are_you_sure?"                        => __( " Are you sure you want to permanently delete this page with all it's content?", 'swiftypages' )
+            "Delete_are_you_sure?"                        => __( " Are you sure you want to permanently delete this page with all it's content?", 'swiftypages' ),
+            "More"                                        => __( "More", 'swiftypages' ),
+            "Less"                                        => __( "Less", 'swiftypages' )
         );
         wp_localize_script( "swiftypages", 'swiftypages_l10n', $oLocale );
 
