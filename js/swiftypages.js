@@ -73,6 +73,10 @@ var Swifty = (function ( $, document, undefined ) {
         }[ action ];
         var $tmpl = this.getPageActionsTmpl( selector );
 
+        if ( action === 'add' ) {
+            $tmpl.find( 'input[name="ss_show_in_menu"][value="show"]' ).prop( 'checked', true );
+        }
+
         if ( action === 'settings' ) {
             $tmpl.find( '.ss-label:eq(2)' ).hide();
         }
