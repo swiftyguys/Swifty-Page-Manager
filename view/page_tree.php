@@ -170,47 +170,6 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
     </div>
 
     <div style="clear: both;"></div>
-
-    <!-- template forpopup with actions -->
-    <div class="swiftypages_page_actions">
-
-        <!-- swiftypages_page_actions_page_id -->
-        <h4 class="swiftypages_page_actions_headline"></h4>
-
-        <p class="swiftypages_action_edit_and_view">
-            <a href="#" title='<?php _e( "Edit page", 'swiftypages' ) ?>'
-               class='swiftypages_action_edit'><?php _e( "Edit", 'swiftypages' ) ?></a>
-            <a href="#" title='<?php _e( "View page", 'swiftypages' ) ?>'
-               class='swiftypages_action_view'><?php _e( "View", 'swiftypages' ) ?></a>
-        </p>
-
-        <!-- links to add page -->
-        <p class="swiftypages_action_add_and_edit_page">
-
-            <span class='swiftypages_action_add_page'><?php echo $post_type_object->labels->add_new_item ?></span>
-
-            <a class='swiftypages_action_add_page_after' href="#"
-               title='<?php _e( "Add new page after", 'swiftypages' ) ?>'><?php _e( "After", 'swiftypages' ) ?></a>
-
-            <a class='swiftypages_action_add_page_inside' href="#"
-                     title='<?php _e( "Add new page inside", 'swiftypages' ) ?>' ><?php _e( "Inside", 'swiftypages' ) ?></a>
-
-            <!-- <span class="swiftypages_action_add_page_inside_disallowed"><?php _e( "Can not create page inside of a page with draft status", 'swiftypages' ) ?></span> -->
-
-        </p>
-
-        <dl>
-            <dt><?php _e( "Last modified", 'swiftypages' ) ?></dt>
-            <dd>
-                <span class="swiftypages_page_actions_modified_time"></span> <?php _e( "by", 'swiftypages' ) ?>
-                <span class="swiftypages_page_actions_modified_by"></span>
-            </dd>
-            <dt><?php _e( "Page ID", 'swiftypages' ) ?></dt>
-            <dd><span class="swiftypages_page_actions_page_id"></span></dd>
-        </dl>
-
-        <span class="swiftypages_page_actions_arrow"></span>
-    </div>
 </div>
 
 <!-- SwiftySite template page buttons-->

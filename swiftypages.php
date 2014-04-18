@@ -848,9 +848,8 @@ li.find( '> a' ).contents().filter( function() {
     protected function _get_pageJsonData( $onePage, $oneMenu ) {
         $pageJsonData = array();
 
-        $post          = $onePage;
-        $page_id       = $onePage->ID;
-        $arrChildPages = null;
+        $post    = $onePage;
+        $page_id = $onePage->ID;
 
         $post_statuses = get_post_statuses();
         $post_type_object = get_post_type_object( $this->_post_type );
@@ -914,7 +913,6 @@ li.find( '> a' ).contents().filter( function() {
         $pageJsonData['metadata']["post_status"] = $onePage->post_status;
         $pageJsonData['metadata']["post_status_translated"] = isset( $post_statuses[ $onePage->post_status ] ) ? $post_statuses[ $onePage->post_status ] : $onePage->post_status;
         $pageJsonData['metadata']["rel"] = $rel;
-        $pageJsonData['metadata']["childCount"] = ( !empty( $arrChildPages ) ) ? sizeof( $arrChildPages ) : 0;
         $pageJsonData['metadata']["permalink"] = htmlspecialchars_decode( get_permalink( $onePage->ID ) );
         $pageJsonData['metadata']["editlink"] = htmlspecialchars_decode( $editLink );
         $pageJsonData['metadata']["modified_time"] = $post_modified_time;
