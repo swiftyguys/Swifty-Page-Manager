@@ -4,23 +4,15 @@ SwiftyPages
 
 */
 
-var swiftyPagesTree,
+var $swiftyPagesTree,
     swiftyPagesTreeOptions,
-    swiftyPagesMessage;
+    $swiftyPagesMessage;
 
 var SwiftyPages = ( function ( $, document, undefined ) {
     var ss = {};
 
     ss.init = function () {
         this.startListeners();
-    };
-
-    ss.disableElements = function () {
-        var $addNewBtn = $( '.add-new-h2' );
-        var $switchViewVtn = $( '.view-switch' );
-
-        $addNewBtn.length && $addNewBtn.hide();
-        $switchViewVtn.length && $switchViewVtn.hide();
     };
 
     ss.startListeners = function () {
@@ -292,7 +284,7 @@ var SwiftyPages = ( function ( $, document, undefined ) {
         var $wrapper = $( el ).closest( '.swiftypages_wrapper' );
         var treeOptionsTmp = $.extend( true, {}, swiftyPagesTreeOptions );
 
-        swiftyPagesMessage.hide();
+        $swiftyPagesMessage.hide();
 
         $wrapper.find( '.swiftypages_view_all, .swiftypages_view_public, .swiftypages_view_trash' ).removeClass( 'current' );
         $wrapper.find( '.swiftypages_container' ).jstree( 'destroy' ).html( '' );
@@ -300,11 +292,11 @@ var SwiftyPages = ( function ( $, document, undefined ) {
         SwiftyPages.bindCleanNodes();
 
         // Mark selected link
-        if ( view == 'all' ) {
+        if ( view === 'all' ) {
             $wrapper.find( '.swiftypages_view_all' ).addClass( 'current' );
-        } else if ( view == 'public' ) {
+        } else if ( view === 'public' ) {
             $wrapper.find( '.swiftypages_view_public' ).addClass( 'current' );
-        } else if ( view == 'trash' ) {
+        } else if ( view === 'trash' ) {
             $wrapper.find( '.swiftypages_view_trash' ).addClass( 'current' );
         } else {
 
@@ -391,23 +383,23 @@ var SwiftyPages = ( function ( $, document, undefined ) {
     };
 
     ss.bindCleanNodes = function () {
-        swiftyPagesTree.bind( 'move_node.jstree', function ( ev, data ) {
-            var nodeBeingMoved = data.rslt.o;
+        $swiftyPagesTree.bind( 'move_node.jstree', function ( ev, data ) {
+            var nodeBeingMoved = $( data.rslt.o );
+            var nodeR = $( data.rslt.r );
+            var nodeRef = $( data.rslt.or );
             var nodePosition = data.rslt.p;
-            var nodeR = data.rslt.r;
-            var nodeRef = data.rslt.or;
             var selectedLang = ss.getWPMLSelectedLang( nodeBeingMoved );
             var nodeId, refNodeId;
 
-            if ( nodePosition == 'before' ) {
-                nodeId = $( nodeBeingMoved ).attr( 'id' );
-                refNodeId = $( nodeRef ).attr( 'id' );
-            } else if ( nodePosition == 'after' ) {
-                nodeId = $( nodeBeingMoved ).attr( 'id' );
-                refNodeId = $( nodeR ).attr( 'id' );
-            } else if ( nodePosition == 'inside' ) {
-                nodeId = $( nodeBeingMoved ).attr( 'id' );
-                refNodeId = $( nodeR ).attr( 'id' );
+            if ( nodePosition === 'before' ) {
+                nodeId = nodeBeingMoved.attr( 'id' );
+                refNodeId = nodeRef.attr( 'id' );
+            } else if ( nodePosition === 'after' ) {
+                nodeId = nodeBeingMoved.attr( 'id' );
+                refNodeId = nodeR.attr( 'id' );
+            } else if ( nodePosition === 'inside' ) {
+                nodeId = nodeBeingMoved.attr( 'id' );
+                refNodeId = nodeR.attr( 'id' );
             }
 
             // Update parent or menu order
@@ -418,48 +410,45 @@ var SwiftyPages = ( function ( $, document, undefined ) {
                 'type': nodePosition,
                 'icl_post_language': selectedLang
             }, function ( /*data, textStatus*/ ) {
-                if ( nodePosition == 'inside' && $( nodeR ).hasClass( 'swiftypages_show_page_in_menu_no' ) ) {
-                    $( nodeBeingMoved ).removeClass( 'swiftypages_show_page_in_menu_yes' )
-                                       .addClass( 'swiftypages_show_page_in_menu_no' );
+                if ( nodePosition === 'inside' && nodeR.hasClass( 'swiftypages_show_page_in_menu_no' ) ) {
+                    nodeBeingMoved.removeClass( 'swiftypages_show_page_in_menu_yes' )
+                                  .addClass( 'swiftypages_show_page_in_menu_no' );
                 }
             } );
         } );
 
-        swiftyPagesTree.bind( 'clean_node.jstree', function ( ev, data ) {
+        $swiftyPagesTree.bind( 'clean_node.jstree', function ( ev, data ) {
             var obj = ( data.rslt.obj );
 
-            if ( obj && obj != -1 ) {
+            if ( obj && obj !== -1 ) {
                 obj.each( function ( i, el ) {
-                    var li = $( el );
-                    var aFirst = li.find( 'a:first' );
-                    var rel = li.data( 'rel' );
-                    var postStatus = li.data( 'post_status' );
-                    var postStatusToShow = '';
+                    var $li = $( el );
+                    var aFirst = $li.find( 'a:first' );
+                    var rel = $li.data( 'rel' );
+                    var postStatus = $li.data( 'post_status' );
+                    var postStatusToShow = swiftypages_l10n[ 'Status_' + postStatus + '_ucase' ];
 
                     // Check that we haven't added our stuff already
-                    if ( li.data( 'done_swiftypages_clean_node' ) ) {
+                    if ( $li.data( 'done_swiftypages_clean_node' ) ) {
                         return;
                     } else {
-                        li.data( 'done_swiftypages_clean_node', true );
+                        $li.data( 'done_swiftypages_clean_node', true );
                     }
 
                     // Add protection type
-                    if ( rel == 'password' ) {
+                    if ( rel === 'password' ) {
                         aFirst.find( 'ins' ).after(
                             '<span class="post_protected" title="' + swiftypages_l10n.Password_protected_page + '">&nbsp;</span>'
                         );
                     }
 
-                    // Add page type
-                    // post_status can be any value because of plugins like Edit flow
+                    // Post_status can be any value because of plugins like Edit flow
                     // Check if we have an existing translation for the string, otherwise use the post status directly
-                    if ( postStatusToShow = swiftypages_l10n[ 'Status_' + postStatus + '_ucase' ] ) {
-                        // it's ok
-                    } else {
+                    if ( !postStatusToShow ) {
                         postStatusToShow = postStatus;
                     }
 
-                    if ( postStatus != 'publish' ) {
+                    if ( postStatus !== 'publish' ) {
                         aFirst.find( 'ins' ).first().after(
                             '<span class="post_type post_type_' + postStatus + '">' + postStatusToShow + '</span>'
                         );
@@ -478,8 +467,8 @@ var SwiftyPages = ( function ( $, document, undefined ) {
 jQuery( function ( $ ) {
     SwiftyPages.init();
 
-    swiftyPagesTree = $( '.swiftypages_container' );
-    swiftyPagesMessage = $( '.swiftypages_message' );
+    $swiftyPagesTree = $( '.swiftypages_container' );
+    $swiftyPagesMessage = $( '.swiftypages_message' );
 
     // Override css
     var height = '36';
@@ -507,7 +496,6 @@ jQuery( function ( $ ) {
         title: 'jstree_swiftypages'
     } );
 
-    //noinspection FunctionWithInconsistentReturnsJS
     swiftyPagesTreeOptions = {
         plugins: [ 'themes', 'json_data', 'cookies', 'dnd', 'types', 'ui' ],
         core: {
@@ -529,8 +517,8 @@ jQuery( function ( $ ) {
                 'success': function ( data /*, status*/ ) {
                     // If data is null or empty = show message about no nodes
                     if ( data === null || !data ) {
-                        swiftyPagesMessage.html( '<p>' + swiftypages_l10n[ 'No pages found' ] + '</p>' );
-                        swiftyPagesMessage.show();
+                        $swiftyPagesMessage.html( '<p>' + swiftypages_l10n[ 'No pages found' ] + '</p>' );
+                        $swiftyPagesMessage.show();
                     }
                 },
                 'error': function ( data, status ) {
@@ -546,11 +534,11 @@ jQuery( function ( $ ) {
         }
     };
 
-    if ( swiftyPagesTree.length > 0 ) {
+    if ( $swiftyPagesTree.length > 0 ) {
         SwiftyPages.bindCleanNodes();
     }
 
-    swiftyPagesTree.each( function ( i, el ) {
+    $swiftyPagesTree.each( function ( i, el ) {
         var $el = $( el );
         var treeOptionsTmp = $.extend( true, {}, swiftyPagesTreeOptions );
         var postType = SwiftyPages.getPostType( el );
