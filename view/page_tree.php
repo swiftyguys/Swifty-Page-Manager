@@ -14,19 +14,19 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
 
     $get_pages_args = array( "post_type" => $this->_post_type );
 
-    // check if wpml is active and if this post type is one of its enabled ones
-    $wpml_current_lang = "";
+    // Check if wpml is active and if this post type is one of its enabled ones
+    $wpml_current_lang    = "";
     $wmpl_active_for_post = false;
+
     if ( defined( "ICL_SITEPRESS_VERSION" ) )
     {
-
         $wpml_post_types = $sitepress->get_translatable_documents();
+
         if ( array_key_exists( $post_type, $wpml_post_types ) )
         {
             $wmpl_active_for_post = true;
             $wpml_current_lang    = $sitepress->get_current_language();
         }
-
     }
 
     $status_data_attributes = array( "all" => "", "publish" => "", "trash" => "" );
@@ -34,15 +34,14 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
     // Calculate post counts
     if ( $wpml_current_lang )
     {
-
-// Count code for WPML, mostly taken/inspired from  WPML Multilingual CMS, sitepress.class.php
+        // Count code for WPML, mostly taken/inspired from  WPML Multilingual CMS, sitepress.class.php
         $langs = array();
 
         $wpml_post_counts = $this->_get_wpml_post_counts( $this->_post_type );
 
         $post_count_all     = (int) @$wpml_post_counts[ "private" ][ $wpml_current_lang ] + (int) @$wpml_post_counts[ "future" ][ $wpml_current_lang ] + (int) @$wpml_post_counts[ "publish" ][ $wpml_current_lang ] + (int) @$wpml_post_counts[ "draft" ][ $wpml_current_lang ];
         $post_count_publish = (int) @$wpml_post_counts[ "publish" ][ $wpml_current_lang ];
-        $post_count_trash   = (int) @$wpml_post_counts[ "trash" ][ $wpml_current_lang ];
+        $post_count_trash   = (int) @$wpml_post_counts[ "trash"   ][ $wpml_current_lang ];
 
         foreach ( $wpml_post_counts[ "publish" ] as $one_wpml_lang => $one_wpml_lang_count )
         {
@@ -50,14 +49,14 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
             {
                 continue;
             }
+
             $lang_post_count_all     = (int) @$wpml_post_counts[ "publish" ][ $one_wpml_lang ] + (int) @$wpml_post_counts[ "draft" ][ $one_wpml_lang ];
             $lang_post_count_publish = (int) @$wpml_post_counts[ "publish" ][ $one_wpml_lang ];
-            $lang_post_count_trash   = (int) @$wpml_post_counts[ "trash" ][ $one_wpml_lang ];
-            $status_data_attributes[ "all" ] .= " data-post-count-{$one_wpml_lang}='{$lang_post_count_all}' ";
+            $lang_post_count_trash   = (int) @$wpml_post_counts[ "trash"   ][ $one_wpml_lang ];
+            $status_data_attributes[ "all"     ] .= " data-post-count-{$one_wpml_lang}='{$lang_post_count_all}' ";
             $status_data_attributes[ "publish" ] .= " data-post-count-{$one_wpml_lang}='{$lang_post_count_publish}' ";
-            $status_data_attributes[ "trash" ] .= " data-post-count-{$one_wpml_lang}='{$lang_post_count_trash}' ";
+            $status_data_attributes[ "trash"   ] .= " data-post-count-{$one_wpml_lang}='{$lang_post_count_trash}' ";
         }
-
     }
     else
     {
@@ -72,10 +71,12 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
     // function swiftypages_print_childs($pageID, $view = "all", $arrOpenChilds = null, $post_type) {
     // @todo: make into function since used at other places
     $jstree_open = array();
+
     if ( isset( $_COOKIE[ "jstree_open" ] ) )
     {
         $jstree_open = $_COOKIE[ "jstree_open" ]; // like this: [jstree_open] => swiftypages-id-1282,swiftypages-id-1284,swiftypages-id-3
         $jstree_open = explode( ",", $jstree_open );
+
         for ( $i = 0; $i < sizeof( $jstree_open ); $i++ )
         {
             $jstree_open[ $i ] = (int) str_replace( "#swiftypages-id-", "", $jstree_open[ $i ] );
@@ -88,29 +89,31 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
     <script type="text/javascript">
         jQuery( function ( $ ) {
             var swiftypages_jsondata = $.data( document, 'swiftypages_jsondata' );
-            swiftypages_jsondata["<?php echo $this->_post_type ?>"] = <?php echo json_encode( $jsonData ); ?>;
+            swiftypages_jsondata[ "<?php echo $this->_post_type ?>" ] = <?php echo json_encode( $jsonData ); ?>;
         } );
     </script>
 
     <div class="swiftypages_wrapper">
-    <input type="hidden" name="swiftypages_meta_post_type" value="<?php echo $this->_post_type ?>"/>
-    <input type="hidden" name="swiftypages_meta_wpml_language" value="<?php echo $wpml_current_lang ?>"/>
+        <input type="hidden" name="swiftypages_meta_post_type" value="<?php echo $this->_post_type ?>" />
+        <input type="hidden" name="swiftypages_meta_wpml_language" value="<?php echo $wpml_current_lang ?>" />
     <?php
 
-    // check if WPML is activated and show a language-menu
+    // Check if WPML is activated and show a language-menu
     if ( $wmpl_active_for_post )
     {
-
         $wpml_langs       = icl_get_languages();
         $wpml_active_lang = null;
+
         if ( sizeof( $wpml_langs ) >= 1 )
         {
-            $lang_out = "";
+            $lang_out  = "";
             $lang_out .= "<ul class='swiftypages-subsubsub swiftypages_switch_langs'>";
+
             foreach ( $wpml_langs as $one_lang )
             {
                 $one_lang_details = $sitepress->get_language_details( $one_lang[ "language_code" ] ); // english_name | display_name
                 $selected         = "";
+
                 if ( $one_lang[ "active" ] )
                 {
                     $wpml_active_lang = $one_lang;
@@ -118,25 +121,22 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                 }
 
                 $lang_count = (int) @$wpml_post_counts[ "publish" ][ $one_lang[ "language_code" ] ] + (int) @$wpml_post_counts[ "draft" ][ $one_lang[ "language_code" ] ];
-
-                $lang_out .= "
-						<li>
-							<a class='swiftypages_switch_lang $selected swiftypages_switch_language_code_{$one_lang["language_code"]}' href='#'>
-								$one_lang_details[display_name]
-								<span class='count'>(" . $lang_count . ")</span>
-							</a> |</li>";
+                $lang_out  .= "
+                    <li>
+                        <a class='swiftypages_switch_lang $selected swiftypages_switch_language_code_{$one_lang["language_code"]}' href='#'>
+                            $one_lang_details[display_name]
+                            <span class='count'>(" . $lang_count . ")</span>
+                        </a> |</li>";
             }
-            $lang_out = preg_replace( '/ \|<\/li>$/', "</li>", $lang_out );
+
+            $lang_out  = preg_replace( '/ \|<\/li>$/', "</li>", $lang_out );
             $lang_out .= "</ul>";
+
             echo $lang_out;
         }
-
     }
 
-    if (true) {
-
-    // start the party!
-
+    if ( true ) {
     ?>
     <ul class="swiftypages-subsubsub swiftypages-subsubsub-select-view">
         <li class="swiftypages_view_is_status_view">
@@ -153,17 +153,17 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                 <span class="count">(<?php echo $post_count_publish ?>)</span>
             </a> |
         </li>
-
         <li><a href="#" class="swiftypages_open_all"><?php _e( "Expand", 'swiftypages' ) ?></a> |</li>
         <li><a href="#" class="swiftypages_close_all"><?php _e( "Collapse", 'swiftypages' ) ?></a></li>
-
     </ul>
 
     <div class="swiftypages_working">
         <?php _e( "Loading...", 'swiftypages' ) ?>
     </div>
 
-    <div class="swiftypages_message updated below-h2 hidden"><p>Message goes here.</p></div>
+    <div class="swiftypages_message updated below-h2 hidden">
+        <p>Message goes here.</p>
+    </div>
 
     <div class="swiftypages_container tree-default">
         <?php _e( "Loading tree", 'swiftypages' ) ?>
@@ -394,6 +394,5 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
     </span>
 <?php
     }
-
 ?>
 </div>
