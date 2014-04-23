@@ -47,6 +47,33 @@ class SwiftyPages
         add_action( 'wp_ajax_swiftypages_delete_page',   array( $this, 'ajax_delete_page' ) );
         add_action( 'wp_ajax_swiftypages_publish_page',  array( $this, 'ajax_publish_page' ) );
         add_action( 'wp_ajax_swiftypages_post_settings', array( $this, 'ajax_post_settings' ) );
+
+        add_action( 'parse_request', array( $this, 'parse_request' ) );
+        add_filter( 'page_link', array( $this, 'page_link' ), 10, 3 );
+    }
+
+    /**
+     * @param wp $wp
+     */
+    public function parse_request( $wp ) {
+        /** @var wpdb $wpdb */
+        global $wpdb;
+        if ( !empty($wp->request) ) {
+            $query = $wpdb->prepare( "SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key='ss_url' AND meta_value='%s'",
+                                      $wp->request );
+            $post_id = $wpdb->get_var( $query );
+            if ( $post_id ) {
+                $wp->query_vars = array( 'p' => $post_id, 'post_type' => 'page' );
+            }
+        }
+    }
+
+    public function page_link( $link, $post_id=false, $sample=false ) {
+        $ss_url = get_post_meta( $post_id, 'ss_url', true );
+        if ( $ss_url ) {
+            $link = get_site_url( null, $ss_url );
+        }
+        return $link;
     }
 
     public function admin_head() {
