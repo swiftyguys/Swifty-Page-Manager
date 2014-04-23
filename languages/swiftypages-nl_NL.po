@@ -1,0 +1,289 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Swifty Page Manager v0.0.2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2014-04-23 12:44:36+0000\n"
+"Last-Translator: jh-dev <jeroen.hoekstra@longtermresults.nl>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: CSL v1.x\n"
+"X-Poedit-Language: Dutch\n"
+"X-Poedit-Country: NETHERLANDS\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
+"X-Poedit-Basepath: \n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Textdomain-Support: yes"
+
+#: swiftypages.php:63
+#: swiftypages.php:64
+#: swiftypages.php:230
+#@ swiftypages
+msgid "SwiftyPages"
+msgstr "SwiftyPages"
+
+#: swiftypages.php:79
+#@ default
+msgid "You do not have sufficient permissions to access this page."
+msgstr ""
+
+#: view/page_tree.php:180
+#@ swiftypages
+msgid "Edit page"
+msgstr "Bewerk pagina"
+
+#: view/page_tree.php:189
+#@ swiftypages
+msgid "View page"
+msgstr "Bekijk pagina"
+
+#: view/page_tree.php:177
+#: view/page_tree.php:392
+#@ swiftypages
+msgid "Add page"
+msgstr "Voeg pagina toe"
+
+#: swiftypages.php:93
+#@ swiftypages
+msgid "draft"
+msgstr "concept"
+
+#: swiftypages.php:94
+#@ swiftypages
+msgid "future"
+msgstr "toekomstig"
+
+#: swiftypages.php:95
+#@ swiftypages
+msgid "protected"
+msgstr "beschermd"
+
+#: swiftypages.php:96
+#@ swiftypages
+msgid "pending"
+msgstr "wacht"
+
+#: swiftypages.php:97
+#@ swiftypages
+msgid "private"
+msgstr "privé"
+
+#: swiftypages.php:98
+#@ swiftypages
+msgid "trash"
+msgstr "Verwijderd"
+
+#: swiftypages.php:99
+#@ swiftypages
+msgid "Password protected page"
+msgstr "Wachtwoord beschermde pagina"
+
+#: view/page_tree.php:238
+#@ swiftypages
+msgid "Menu button text"
+msgstr "Tekst menuknop"
+
+#: view/page_tree.php:278
+#@ swiftypages
+msgid "Customize page url"
+msgstr "Bewerk pagina URL"
+
+#: view/page_tree.php:286
+#@ swiftypages
+msgid "Show in menu"
+msgstr "Zichtbaar in menu"
+
+#: view/page_tree.php:330
+#@ swiftypages
+msgid "Show"
+msgstr "Tonen"
+
+#: view/page_tree.php:336
+#: view/page_tree.php:361
+#@ swiftypages
+msgid "Hide"
+msgstr "Verbergen"
+
+#: view/page_tree.php:260
+#@ swiftypages
+msgid "Next"
+msgstr "Na huidige pagina"
+
+#: view/page_tree.php:266
+#@ swiftypages
+msgid "Sub"
+msgstr "Als subpagina van de huidige pagina"
+
+#: view/page_tree.php:305
+#@ swiftypages
+msgid "Draft or live"
+msgstr "Concept of publiceren"
+
+#: view/page_tree.php:311
+#@ swiftypages
+msgid "Draft"
+msgstr "Concept"
+
+#: view/page_tree.php:317
+#@ swiftypages
+msgid "Live"
+msgstr "Publiceren"
+
+#: view/page_tree.php:186
+#@ swiftypages
+msgid "Edit page content"
+msgstr "Bewerk paginainhoud"
+
+#: view/page_tree.php:183
+#@ swiftypages
+msgid "Delete page"
+msgstr "Verwijder pagina"
+
+#: view/page_tree.php:217
+#@ swiftypages
+msgid "Delete"
+msgstr "Verwijder"
+
+#: view/page_tree.php:272
+#@ swiftypages
+msgid "More"
+msgstr "Meer"
+
+#: view/page_tree.php:367
+#@ swiftypages
+msgid "Less"
+msgstr "Minder"
+
+#: swiftypages.php:121
+#@ default
+msgid "Cheatin&#8217; uh?"
+msgstr ""
+
+#: swiftypages.php:240
+#@ default
+msgid "List View"
+msgstr ""
+
+#: swiftypages.php:451
+#@ swiftypages
+msgid "New page"
+msgstr "Nieuwe pagina"
+
+#: swiftypages.php:854
+#@ swiftypages
+msgid "Unknown user"
+msgstr "Onbekende gebruiker"
+
+#: swiftypages.php:860
+#@ swiftypages
+msgid "<Untitled page>"
+msgstr "<pagina zonder titel>"
+
+#: view/page_tree.php:12
+#@ swiftypages
+msgctxt "headline of page with tree"
+msgid "SwiftyPages"
+msgstr "SwiftyPages"
+
+#: view/page_tree.php:145
+#@ swiftypages
+msgid "All"
+msgstr "Alle"
+
+#: view/page_tree.php:152
+#@ swiftypages
+msgid "Public"
+msgstr "Openbare"
+
+#: view/page_tree.php:156
+#@ swiftypages
+msgid "Expand"
+msgstr "Uitklappen"
+
+#: view/page_tree.php:157
+#@ swiftypages
+msgid "Collapse"
+msgstr "Inklappen"
+
+#: view/page_tree.php:161
+#@ swiftypages
+msgid "Loading..."
+msgstr "Laden..."
+
+#: view/page_tree.php:169
+#@ swiftypages
+msgid "Loading tree"
+msgstr "Boom laden"
+
+#: view/page_tree.php:192
+#@ swiftypages
+msgid "Publish page"
+msgstr "Publiceer pagina"
+
+#: view/page_tree.php:208
+#@ swiftypages
+msgid "Are you sure you want to permanently delete this page with all it's content?"
+msgstr "Weet je zeker dat je deze pagina inclusief inhoud wilt verwijderen?"
+
+#: view/page_tree.php:215
+#: view/page_tree.php:373
+#@ swiftypages
+msgid "Cancel"
+msgstr "Annuleer"
+
+#: view/page_tree.php:246
+#@ swiftypages
+msgid "Page title for Google"
+msgstr "Paginatitel voor Google"
+
+#: view/page_tree.php:254
+#@ swiftypages
+msgid "Page position in tree"
+msgstr "Paginapositie in de boom"
+
+#: view/page_tree.php:324
+#@ swiftypages
+msgid "Show or hide header"
+msgstr "Toon of verberg header"
+
+#: view/page_tree.php:343
+#@ swiftypages
+msgid "Show or hide sidebar"
+msgstr "Toon of verberg zijbalk"
+
+#: view/page_tree.php:375
+#@ swiftypages
+msgid "Save"
+msgstr "Opslaan"
+
+#: swiftypages.php:100
+#: view/page_tree.php:390
+#@ swiftypages
+msgid "No pages found."
+msgstr "Geen pagina's gevonden."
+
+#: view/page_tree.php:349
+#@ swiftypages
+msgid "Show left"
+msgstr "Toon links"
+
+#: view/page_tree.php:355
+#@ swiftypages
+msgid "Show right"
+msgstr "Toon rechts"
+
+#: view/page_tree.php:292
+#@ swiftypages
+msgid "Visible"
+msgstr "Zichtbaar"
+
+#: view/page_tree.php:298
+#@ swiftypages
+msgid "Hidden"
+msgstr "Verborgen"
+

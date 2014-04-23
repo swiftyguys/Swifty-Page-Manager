@@ -426,7 +426,7 @@ var SwiftyPages = ( function ( $, document, undefined ) {
                     var aFirst = $li.find( 'a:first' );
                     var rel = $li.data( 'rel' );
                     var postStatus = $li.data( 'post_status' );
-                    var postStatusToShow = swiftypages_l10n[ 'Status_' + postStatus + '_ucase' ];
+                    var postStatusToShow = swiftypages_l10n[ 'status_' + postStatus + '_ucase' ];
 
                     // Check that we haven't added our stuff already
                     if ( $li.data( 'done_swiftypages_clean_node' ) ) {
@@ -438,7 +438,7 @@ var SwiftyPages = ( function ( $, document, undefined ) {
                     // Add protection type
                     if ( rel === 'password' ) {
                         aFirst.find( 'ins' ).after(
-                            '<span class="post_protected" title="' + swiftypages_l10n.Password_protected_page + '">&nbsp;</span>'
+                            '<span class="post_protected" title="' + swiftypages_l10n.password_protected_page + '">&nbsp;</span>'
                         );
                     }
 
@@ -517,7 +517,7 @@ jQuery( function ( $ ) {
                 'success': function ( data /*, status*/ ) {
                     // If data is null or empty = show message about no nodes
                     if ( data === null || !data ) {
-                        $swiftyPagesMessage.html( '<p>' + swiftypages_l10n[ 'No pages found' ] + '</p>' );
+                        $swiftyPagesMessage.html( '<p>' + swiftypages_l10n.no_pages_found + '</p>' );
                         $swiftyPagesMessage.show();
                     }
                 },

@@ -28,27 +28,30 @@ class SwiftyPages
         $this->plugin_file     = __FILE__ ;
         $this->plugin_dir      = dirname( $this->plugin_file );
         $this->plugin_basename = basename( $this->plugin_dir );
-        $this->plugin_dir_url  = plugins_url( basename($this->plugin_dir) );
-        if ( !empty($_GET[ "view" ]) ) {
+        $this->plugin_dir_url  = plugins_url( basename( $this->plugin_dir ) );
+
+        if ( !empty( $_GET[ "view" ] ) ) {
             $this->_view = $_GET[ "view" ];
         }
-        if ( !empty($_GET[ "post_type" ]) ) {
+
+        if ( !empty( $_GET[ "post_type" ] ) ) {
             $this->_post_type = $_GET[ "post_type" ];
         }
-        add_action( 'admin_head', array( $this, "admin_head" ) );
-        add_action( 'admin_menu', array($this,'admin_menu') );
+
+        add_action( 'init',       array( $this, 'swiftypages_load_textdomain' ) );
+        add_action( 'admin_head', array( $this, 'admin_head' ) );
+        add_action( 'admin_menu', array( $this, 'admin_menu') );
         add_action( 'wp_ajax_swiftypages_get_childs',    array( $this, 'ajax_get_childs' ) );
         add_action( 'wp_ajax_swiftypages_move_page',     array( $this, 'ajax_move_page' ) );
         add_action( 'wp_ajax_swiftypages_save_page',     array( $this, 'ajax_save_page' ) );
         add_action( 'wp_ajax_swiftypages_delete_page',   array( $this, 'ajax_delete_page' ) );
         add_action( 'wp_ajax_swiftypages_publish_page',  array( $this, 'ajax_publish_page' ) );
         add_action( 'wp_ajax_swiftypages_post_settings', array( $this, 'ajax_post_settings' ) );
-
     }
 
-    public function admin_head()
-    {
+    public function admin_head() {
         $currentScreen = get_current_screen();
+
         if ( 'pages_page_page-tree' == $currentScreen->base ) {
             add_filter( "views_" . $currentScreen->id, array( $this, "filter_views_edit_postsoverview" ) );
             require $this->plugin_dir . '/view/admin_head.php';
@@ -65,10 +68,17 @@ class SwiftyPages
                         );
     }
 
+    function swiftypages_load_textdomain() {
+        if ( is_admin() ) {
+            load_plugin_textdomain( 'swiftypages', false, '/swiftypages/languages' );
+        }
+    }
+
     public function view_page_tree() {
         if ( !current_user_can( 'edit_pages' ) )  {
             wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
         }
+
         // renamed from cookie to fix problems with mod_security
         wp_enqueue_script( "jquery-cookie", $this->plugin_dir_url . "/js/jquery.biscuit.js", array( "jquery" ) );
         wp_enqueue_script( "jquery-ui-sortable" );
@@ -78,58 +88,18 @@ class SwiftyPages
 
         wp_enqueue_style( "swiftypages",    $this->plugin_dir_url . "/css/styles.css",        false, $this->_plugin_version );
         wp_enqueue_style( "jquery-alerts",  $this->plugin_dir_url . "/css/jquery.alerts.css", false, $this->_plugin_version );
-        $oLocale = array(
-            "Enter_title_of_new_page"                     => __( "Enter title of new page", 'swiftypages' ),
-            "child_pages"                                 => __( "child pages", 'swiftypages' ),
-            "Edit_page"                                   => __( "Edit page", 'swiftypages' ),
-            "View_page"                                   => __( "View page", 'swiftypages' ),
-            "Edit"                                        => __( "Edit", 'swiftypages' ),
-            "View"                                        => __( "View", 'swiftypages' ),
-            "Add_page"                                    => __( "Add page", 'swiftypages' ),
-            "Add_new_page_after"                          => __( "Add new page after", 'swiftypages' ),
-            "after"                                       => __( "after", 'swiftypages' ),
-            "inside"                                      => __( "inside", 'swiftypages' ),
-            "Can_not_add_sub_page_when_status_is_draft"   => __( "Sorry, can't create a sub page to a page with status \"draft\".", 'swiftypages' ),
-            "Can_not_add_sub_page_when_status_is_trash"   => __( "Sorry, can't create a sub page to a page with status \"trash\".", 'swiftypages' ),
-            "Can_not_add_page_after_when_status_is_trash" => __( "Sorry, can't create a page after a page with status \"trash\".", 'swiftypages' ),
-            "Add_new_page_inside"                         => __( "Add new page inside", 'swiftypages' ),
-            "Status_draft"                                => __( "draft", 'swiftypages' ),
-            "Status_future"                               => __( "future", 'swiftypages' ),
-            "Status_password"                             => __( "protected", 'swiftypages' ), // is "protected" word better than "password" ?
-            "Status_pending"                              => __( "pending", 'swiftypages' ),
-            "Status_private"                              => __( "private", 'swiftypages' ),
-            "Status_trash"                                => __( "trash", 'swiftypages' ),
-            "Status_draft_ucase"                          => ucfirst( __( "draft", 'swiftypages' ) ),
-            "Status_future_ucase"                         => ucfirst( __( "future", 'swiftypages' ) ),
-            "Status_password_ucase"                       => ucfirst( __( "protected", 'swiftypages' ) ), // is "protected" word better than "password" ?
-            "Status_pending_ucase"                        => ucfirst( __( "pending", 'swiftypages' ) ),
-            "Status_private_ucase"                        => ucfirst( __( "private", 'swiftypages' ) ),
-            "Status_trash_ucase"                          => ucfirst( __( "trash", 'swiftypages' ) ),
-            "Password_protected_page"                     => __( "Password protected page", 'swiftypages' ),
-            "Adding_page"                                 => __( "Adding page...", 'swiftypages' ),
-            "Adding"                                      => __( "Adding ...", 'swiftypages' ),
-            "No posts found"                              => __( "No posts found.", 'swiftypages' ),
 
-            "Menu_button_text"                            => __( "Menu button text", 'swiftypages' ),
-            "Page_type"                                   => __( "Page type", 'swiftypages' ),
-            "Page_title_for_search_engines"               => __( "Page title for search engines", 'swiftypages' ),
-            "Customize_page_url"                          => __( "Customize page url", 'swiftypages' ),
-            "Show_in_menu"                                => __( "Show in menu", 'swiftypages' ),
-            "Show"                                        => __( "Show", 'swiftypages' ),
-            "Hide"                                        => __( "Hide", 'swiftypages' ),
-            "Position_of_page"                            => __( "Position of page", 'swiftypages' ),
-            "Next"                                        => __( "Next", 'swiftypages' ),
-            "Sub"                                         => __( "Sub", 'swiftypages' ),
-            "Draft_or_live"                               => __( "Draft or live", 'swiftypages' ),
-            "Draft"                                       => __( "Draft", 'swiftypages' ),
-            "Live"                                        => __( "Live", 'swiftypages' ),
-            "Edit_page_content"                           => __( "Edit page content", 'swiftypages' ),
-            "Delete page"                                 => __( "Delete page", 'swiftypages' ),
-            "Delete"                                      => __( "Delete", 'swiftypages' ),
-            "Delete_are_you_sure?"                        => __( " Are you sure you want to permanently delete this page with all it's content?", 'swiftypages' ),
-            "More"                                        => __( "More", 'swiftypages' ),
-            "Less"                                        => __( "Less", 'swiftypages' )
+        $oLocale = array(
+            "status_draft_ucase"      => ucfirst( __( "draft", 'swiftypages' ) ),
+            "status_future_ucase"     => ucfirst( __( "future", 'swiftypages' ) ),
+            "status_password_ucase"   => ucfirst( __( "protected", 'swiftypages' ) ),
+            "status_pending_ucase"    => ucfirst( __( "pending", 'swiftypages' ) ),
+            "status_private_ucase"    => ucfirst( __( "private", 'swiftypages' ) ),
+            "status_trash_ucase"      => ucfirst( __( "trash", 'swiftypages' ) ),
+            "password_protected_page" => __( "Password protected page", 'swiftypages' ),
+            "no_pages_found"          => __( "No pages found.", 'swiftypages' )
         );
+
         wp_localize_script( "swiftypages", 'swiftypages_l10n', $oLocale );
 
         require( $this->plugin_dir . '/view/page_tree.php' );
