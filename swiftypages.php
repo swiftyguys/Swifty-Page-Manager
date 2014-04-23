@@ -543,14 +543,14 @@ class SwiftyPages
                 $post_data[ "post_parent" ] = $ref_post->ID;
             }
 
-            $id_saved = wp_insert_post( $post_data );
+            $post_id = wp_insert_post( $post_data );
 
-            if ( $id_saved )
+            if ( $post_id )
             {
-                add_post_meta( $id_saved, 'ss_show_in_menu', $ss_show_in_menu, 1 );
-                add_post_meta( $id_saved, 'ss_page_title_seo', $ss_page_title_seo, 1 );
-                add_post_meta( $id_saved, 'ss_header_visibility', $ss_header_visibility, 1 );
-                add_post_meta( $id_saved, 'ss_sidebar_visibility', $ss_sidebar_visibility, 1 );
+                add_post_meta( $post_id, 'ss_show_in_menu', $ss_show_in_menu, 1 );
+                add_post_meta( $post_id, 'ss_page_title_seo', $ss_page_title_seo, 1 );
+                add_post_meta( $post_id, 'ss_header_visibility', $ss_header_visibility, 1 );
+                add_post_meta( $post_id, 'ss_sidebar_visibility', $ss_sidebar_visibility, 1 );
 
                 echo "1";
             }
@@ -561,30 +561,33 @@ class SwiftyPages
         }
 
         //  Update menu item
-        if ( $ss_show_in_menu ) {
+        if ( 'show' == $ss_show_in_menu ) {
             $post = get_post( $post_id );
-            $existingMenuItem = $this->_getPageMenuItem( $post_id );
+            $menuItem = $this->_getPageMenuItem( $post_id );
             $parentMenuItem = ( $post->post_parent ) ? $this->_getPageMenuItem( $post->post_parent ) : null;
-            $menuItem = new stdClass();
-            if ( empty( $existingMenuItem ) ) {
+            if ( empty( $menuItem ) ) {
                 $menuItem->db_id = 0;
                 $menuItem->menu_item_parent = 0;
                 $menuItem->menu_order = 0;
-//                if ( $parentMenuItem ) {
-//                    if ( "inside" == $_POST[ "add_mode" ] ) {
-//                    } elseif ( "after" == $_POST[ "add_mode" ] ) {
-//                        $menuItem->menu_order = $parentMenuItem->menu_order + 1;;
-//                        $menuItem->menu_item_parent = $parentMenuItem->post_parent;
-//                    }
-//                }
-            } else {
-                $menuItem->db_id = $existingMenuItem->db_id;
+                $menuItem->type = 'post_type';
+                $menuItem->post_status = 'publish';
+                $menuItem->post_name = $post_id;
+                $menuItem->object_id = $post_id;
+                $menuItem->object = 'page';
+                if ( $parentMenuItem ) {
+                    if ( "inside" == $_POST[ "add_mode" ] ) {
+                        $menuItem->menu_order = 0;
+                        $menuItem->menu_item_parent = $parentMenuItem->ID;
+                    } elseif ( "after" == $_POST[ "add_mode" ] ) {
+                        if ( $ref_post ) {
+                            $refMenuItem = $this->_getPageMenuItem( $ref_post->ID );
+                            if ( $refMenuItem ) {
+                                $menuItem->menu_order = $refMenuItem->menu_order + 1;
+                            }
+                        }
+                    }
+                }
             }
-            $menuItem->post_type = 'post_type';
-            $menuItem->post_status = 'publish';
-            $menuItem->post_name = $id_saved;
-            $menuItem->object_id = $id_saved;
-            $menuItem->object = 'page';
             $menuItem->menu_item_parent = $parentMenuItem->ID;
             wp_update_nav_menu_item( $this->_getMainMenuId(), $menuItem->db_id, $this->_getMenuItemDataForSave( $menuItem ) );
         }
@@ -987,7 +990,7 @@ li.find( '> a' ).contents().filter( function() {
         $menu_item_data['menu-item-status']      = $menuItem->post_status;
         $menu_item_data['menu-item-target']      = $menuItem->target;
         $menu_item_data['menu-item-title']       = $menuItem->title;
-        $menu_item_data['menu-item-type']        = $menuItem->post_type;
+        $menu_item_data['menu-item-type']        = $menuItem->type;
         $menu_item_data['menu-item-url']         = $menuItem->url;
         $menu_item_data['menu-item-xfn']         = $menuItem->xfn;
         return $menu_item_data;
