@@ -137,8 +137,6 @@ class SwiftyPages
         header( "Content-type: application/json" );
 
         $action    = $_GET[ "action" ];
-        $view      = $this->_view; // all | public | trash
-        $search    = ( isset( $_GET[ "search_string" ] ) ) ? trim( $_GET[ "search_string" ] ) : ""; // exits if we're doing a search
 
         // Check if user is allowed to get the list. For example subscribers should not be allowed to
         // Use same capability that is required to add the menu
@@ -150,85 +148,25 @@ class SwiftyPages
 
         if ( $action )
         {
+            // regular get
 
-            if ( $search )
+            $id = ( isset( $_GET[ "id" ] ) ) ? $_GET[ "id" ] : null;
+            $id = (int) str_replace( "swiftypages-id-", "", $id );
+
+            $jstree_open = array();
+            if ( isset( $_COOKIE[ "jstree_open" ] ) )
             {
-
-                // find all pages that contains $search
-                // collect all post_parent
-                // for each parent id traverse up until post_parent is 0, saving all ids on the way
-
-                // what to search: since all we see in the GUI is the title, just search that
-                global $wpdb;
-
-
-                $arrNodesToOpen = array();
-                // find all parents to the arrnodestopen
-                foreach ( $arrNodesToOpen as $oneNode )
+                $jstree_open = $_COOKIE[ "jstree_open" ]; // like this: [jstree_open] => swiftypages-id-1282,swiftypages-id-1284,swiftypages-id-3
+                $jstree_open = explode( ",", $jstree_open );
+                for ( $i = 0; $i < sizeof( $jstree_open ); $i++ )
                 {
-                    if ( $oneNode > 0 )
-                    {
-                        // not at top so check it out
-                        $parentNodeID = $oneNode;
-                        while ( $parentNodeID != 0 )
-                        {
-                            $hits               = $wpdb->get_results( $sql );
-                            $sql                = "SELECT id, post_parent FROM $wpdb->posts WHERE id = $parentNodeID";
-                            $row                = $wpdb->get_row( $sql );
-                            $parentNodeID       = $row->post_parent;
-                            $arrNodesToOpen2[ ] = $parentNodeID;
-                        }
-                    }
+                    $jstree_open[ $i ] = (int) str_replace( "#swiftypages-id-", "", $jstree_open[ $i ] );
                 }
-
-                $sReturn        = "";
-
-                foreach ( $arrNodesToOpen as $oneNodeID )
-                {
-                    $sReturn .= "\"#swiftypages-id-{$oneNodeID}\",";
-                }
-                $sReturn = preg_replace( '/,$/', "", $sReturn );
-                if ( $sReturn )
-                {
-                    $sReturn = "[" . $sReturn . "]";
-                }
-
-                if ( $sReturn )
-                {
-                    echo $sReturn;
-                }
-                else
-                {
-                    // if no hits
-                    echo "[]";
-                }
-
-                exit;
-
             }
-            else
-            {
-
-                // regular get
-
-                $id = ( isset( $_GET[ "id" ] ) ) ? $_GET[ "id" ] : null;
-                $id = (int) str_replace( "swiftypages-id-", "", $id );
-
-                $jstree_open = array();
-                if ( isset( $_COOKIE[ "jstree_open" ] ) )
-                {
-                    $jstree_open = $_COOKIE[ "jstree_open" ]; // like this: [jstree_open] => swiftypages-id-1282,swiftypages-id-1284,swiftypages-id-3
-                    $jstree_open = explode( ",", $jstree_open );
-                    for ( $i = 0; $i < sizeof( $jstree_open ); $i++ )
-                    {
-                        $jstree_open[ $i ] = (int) str_replace( "#swiftypages-id-", "", $jstree_open[ $i ] );
-                    }
-                }
-                $this->getTree();
-                $jsonData = $this->getJsonData( $this->_byPageId[$id], $jstree_open );
-                print json_encode( $jsonData );
-                exit;
-            }
+            $this->getTree();
+            $jsonData = $this->getJsonData( $this->_byPageId[$id], $jstree_open );
+            print json_encode( $jsonData );
+            exit;
         }
 
         exit;
@@ -346,18 +284,6 @@ class SwiftyPages
                     update_post_meta( $id_saved, 'ss_show_in_menu', 'hide' );
                 }
 
-                $treeNode = $this->_getByPageId( $post_node->ID );
-                $postRefNode = $this->_getByPageId( $post_ref_node->ID );
-                if ( $treeNode
-                     && isset( $treeNode->menuItem )
-                     && $postRefNode
-                     && isset( $postRefNode->menuItem ) ) {
-                    $menu_item_data = $this->_getMenuItemDataForSave( $treeNode->menuItem );
-                    $menu_item_data['menu-item-position']  = 0;
-                    $menu_item_data['menu-item-parent-id'] = $postRefNode->menuItem->ID;
-                    wp_update_nav_menu_item( $this->_getMainMenuId(), $treeNode->menuItem->ID, $menu_item_data );
-                }
-
                 echo "did inside";
 
             }
@@ -381,22 +307,6 @@ class SwiftyPages
                     "post_type"   => $post_ref_node->post_type
                 );
                 wp_update_post( $post_to_save );
-
-                $treeNode = $this->_getByPageId( $post_node->ID );
-                $postRefNode = $this->_getByPageId( $post_ref_node->ID );
-                if ( $treeNode
-                     && isset( $treeNode->menuItem )
-                     && $postRefNode
-                     && isset( $postRefNode->menuItem ) ) {
-                    $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+1 WHERE post_parent = %d",
-                                                  $postRefNode->menuItem->menu_item_parent ) );
-                    $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+1 WHERE menu_order >= %d AND post_type = %s",
-                                                  $postRefNode->menuItem->menu_order + 1, 'nav_menu_item' ) );
-                    $menu_item_data = $this->_getMenuItemDataForSave( $treeNode->menuItem );
-                    $menu_item_data['menu-item-position']  = $postRefNode->menuItem->menu_order;
-                    $menu_item_data['menu-item-parent-id'] = $postRefNode->menuItem->menu_item_parent;
-                    wp_update_nav_menu_item( $this->_getMainMenuId(), $treeNode->menuItem->ID, $menu_item_data );
-                }
 
                 echo "did before";
 
@@ -422,22 +332,6 @@ class SwiftyPages
                     "post_type"   => $post_ref_node->post_type
                 );
                 wp_update_post( $post_to_save );
-
-                $treeNode = $this->_getByPageId( $post_node->ID );
-                $postRefNode = $this->_getByPageId( $post_ref_node->ID );
-                if ( $treeNode
-                     && isset( $treeNode->menuItem )
-                     && $postRefNode
-                     && isset( $postRefNode->menuItem ) ) {
-                    $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+2 WHERE post_parent = %d AND menu_order >= %d AND id <> %d ",
-                                                  $postRefNode->menuItem->menu_item_parent,
-                                                  $postRefNode->menuItem->menu_order ,
-                                                  $postRefNode->menuItem->ID ) );
-                    $menu_item_data = $this->_getMenuItemDataForSave( $treeNode->menuItem );
-                    $menu_item_data['menu-item-position']  = $postRefNode->menuItem->menu_order + 1;
-                    $menu_item_data['menu-item-parent-id'] = $postRefNode->menuItem->menu_item_parent;
-                    wp_update_nav_menu_item( $this->_getMainMenuId(), $treeNode->menuItem->ID, $menu_item_data );
-                }
 
                 echo "did after";
             }
@@ -469,7 +363,6 @@ class SwiftyPages
         global $wpdb;
 
         $post_id    = intval( $_POST[ "post_ID" ] );
-        $wpml_lang  = isset( $_POST[ "wpml_lang" ] ) ? $_POST[ "wpml_lang" ] : false;
         $post_title = trim( $_POST[ "post_title" ] );
         $post_name  = trim( $_POST[ "post_name" ] );   // url
 
@@ -556,39 +449,6 @@ class SwiftyPages
                 echo "0";   // fail, tell js
             }
         }
-
-        //  Update menu item
-        if ( 'show' == $ss_show_in_menu ) {
-            $post = get_post( $post_id );
-            $menuItem = $this->_getPageMenuItem( $post_id );
-            $parentMenuItem = ( $post->post_parent ) ? $this->_getPageMenuItem( $post->post_parent ) : null;
-            if ( empty( $menuItem ) ) {
-                $menuItem->db_id = 0;
-                $menuItem->menu_item_parent = 0;
-                $menuItem->menu_order = 0;
-                $menuItem->type = 'post_type';
-                $menuItem->post_status = 'publish';
-                $menuItem->post_name = $post_id;
-                $menuItem->object_id = $post_id;
-                $menuItem->object = 'page';
-                if ( $parentMenuItem ) {
-                    if ( "inside" == $_POST[ "add_mode" ] ) {
-                        $menuItem->menu_order = 0;
-                        $menuItem->menu_item_parent = $parentMenuItem->ID;
-                    } elseif ( "after" == $_POST[ "add_mode" ] ) {
-                        if ( $ref_post ) {
-                            $refMenuItem = $this->_getPageMenuItem( $ref_post->ID );
-                            if ( $refMenuItem ) {
-                                $menuItem->menu_order = $refMenuItem->menu_order + 1;
-                            }
-                        }
-                    }
-                }
-            }
-            $menuItem->menu_item_parent = $parentMenuItem->ID;
-            wp_update_nav_menu_item( $this->_getMainMenuId(), $menuItem->db_id, $this->_getMenuItemDataForSave( $menuItem ) );
-        }
-        //  /Update menu item
 
         exit;
     }
@@ -702,10 +562,6 @@ li.find( '> a' ).contents().filter( function() {
             $this->_tree->children = array();
             $this->_byPageId = array();
             $this->_byPageId [ 0 ] = &$this->_tree;
-            $mainMenuId = $this->_getMainMenuId();
-            if ( $mainMenuId ) {
-                $this->_addMenuPages( $mainMenuId, $this->_tree );
-            }
             $this->_addAllPages();
         }
         return $this->_tree;
@@ -717,8 +573,7 @@ li.find( '> a' ).contents().filter( function() {
         foreach ( $childKeys as $childKey ) {
             $child = &$branch->children[$childKey];
             if ( isset( $child->page ) ) {
-                $menuItem = ( isset( $child->menuItem ) ) ? $child->menuItem : null;
-                $newBranch = $this->_get_pageJsonData( $child->page, $menuItem );
+                $newBranch = $this->_get_pageJsonData( $child->page );
                 /**
                  * if no children, output no state
                  * if viewing trash, don't get children. we watch them "flat" instead
@@ -742,32 +597,6 @@ li.find( '> a' ).contents().filter( function() {
         add_action( $hookName, $callable );
         global $_registered_pages;
         $_registered_pages[$hookName] = true;
-    }
-
-    /**
-     * @return WP_Post[]|null
-     */
-    protected function _getMainMenuItems() {
-        if ( is_null( $this->_mainMenuItems ) ) {
-            $this->_mainMenuItems = wp_get_nav_menu_items( $this->_getMainMenuId() );
-        }
-        return $this->_mainMenuItems;
-    }
-
-    protected function _addMenuPages( $menuId, &$parentBranch ) {
-        $menuItems = $this->_getMainMenuItems();
-        /** @var WP_Post $menuItem */
-        foreach ( $menuItems as $menuItem ) {
-            if ( $menuItem->menu_item_parent == $parentBranch->menuItem->ID ) {
-                $newBranch = new stdClass();
-                $newBranch->menuItem = $menuItem;
-                $newBranch->children = array();
-                $this->_byPageId[ $menuItem->object_id ] = &$newBranch;
-                $this->_addMenuPages( $menuId, $newBranch );
-                $parentBranch->children[] = &$newBranch;
-                unset( $newBranch );
-            }
-        }
     }
 
     protected function _addAllPages() {
@@ -818,34 +647,10 @@ li.find( '> a' ).contents().filter( function() {
     }
 
     /**
-     * @param integer $pageId
-     */
-    protected function &_getByPageId( $pageId ) {
-        $result = null;
-        if ( null == $this->_tree ) {
-            $this->getTree();
-        }
-        if ( isset( $this->_byPageId[ $pageId ] ) ) {
-            $result = &$this->_byPageId[ $pageId ];
-        }
-        return $result;
-    }
-
-    protected function _getMainMenuId() {
-        $result = false;
-        $menus = wp_get_nav_menus();
-        if ( !empty( $menus[0] ) ) {
-            $result = $menus[0]->term_id;
-        }
-        return $result;
-    }
-
-    /**
      * @param WP_Post $onePage
-     * @param WP_Post|null $oneMenu
      * @return array
      */
-    protected function _get_pageJsonData( $onePage, $oneMenu ) {
+    protected function _get_pageJsonData( $onePage ) {
         $pageJsonData = array();
 
         $post    = $onePage;
@@ -922,9 +727,6 @@ li.find( '> a' ).contents().filter( function() {
         $pageJsonData['metadata']["user_can_add_page_after"] = (int) $user_can_add_after;
         $pageJsonData['metadata']["post_title"] = $title;
         $pageJsonData['metadata']["delete_nonce"] = wp_create_nonce( "delete-page_".$onePage->ID, '_trash' );
-        if ( !empty( $oneMenu ) ) {
-            $pageJsonData['metadata']["menu_id"] = $oneMenu->ID;
-        }
 
         return $pageJsonData;
     }
@@ -971,42 +773,6 @@ li.find( '> a' ).contents().filter( function() {
             $arr_counts[ $post_status ] = $langs;
         }
         return $arr_counts;
-    }
-
-    protected function _getMenuItemDataForSave( $menuItem ) {
-        $menu_item_data = array();
-        $menu_item_data['menu-item-attr-title']  = $menuItem->post_excerpt;
-        $menu_item_data['menu-item-classes']     = implode( ' ', $menuItem->classes );
-        $menu_item_data['menu-item-db-id']       = $menuItem->db_id;
-        $menu_item_data['menu-item-description'] = $menuItem->post_content;
-        $menu_item_data['menu-item-name']        = $menuItem->post_name;
-        $menu_item_data['menu-item-object']      = $menuItem->object;
-        $menu_item_data['menu-item-object-id']   = $menuItem->object_id;
-        $menu_item_data['menu-item-parent-id']   = $menuItem->menu_item_parent;
-        $menu_item_data['menu-item-position']    = $menuItem->menu_order;
-        $menu_item_data['menu-item-status']      = $menuItem->post_status;
-        $menu_item_data['menu-item-target']      = $menuItem->target;
-        $menu_item_data['menu-item-title']       = $menuItem->title;
-        $menu_item_data['menu-item-type']        = $menuItem->type;
-        $menu_item_data['menu-item-url']         = $menuItem->url;
-        $menu_item_data['menu-item-xfn']         = $menuItem->xfn;
-        return $menu_item_data;
-    }
-
-    /**
-     * @param $post_id
-     * @return null|WP_Post
-     */
-    protected function _getPageMenuItem( $post_id ) {
-        $result = null;
-        $menuItems = $this->_getMainMenuItems();
-        foreach( $menuItems as $menuItem ) {
-            if ( 'page' == $menuItem->object && $post_id == $menuItem->object_id ) {
-                $result = $menuItem;
-                break;
-            }
-        }
-        return $result;
     }
 
 }
