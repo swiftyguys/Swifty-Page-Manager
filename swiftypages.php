@@ -775,6 +775,48 @@ li.find( '> a' ).contents().filter( function() {
         return $arr_counts;
     }
 
+    /**
+     * Usage: $seoVersion = $this->_getPluginVersion('wordpress-seo/*');
+     *
+     * @param  string $pluginMatch - For example "wordpress-seo/*"
+     * @return bool|string         - false if plugin not installed or not active
+     */
+    protected function _getPluginVersion( $pluginMatch )
+    {
+        $result = false;
+        $regexp = preg_quote( $pluginMatch, '#' );
+        $regexp = str_replace( array('\*','\?'), array('.*','.'), $regexp);
+        $regexp = '#^' . $regexp . '$#i';
+        if ( ! function_exists( 'get_plugin_data' ) ) {
+            require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+        }
+        $plugins = get_option( 'active_plugins', array() ); // returns only active plugins
+        foreach ( $plugins as $plugin ) {
+            if ( preg_match($regexp, $plugin) ) {
+                $data = get_plugin_data( WP_PLUGIN_DIR . '/' .$plugin );
+                $result = ( !empty($data['Version']) ) ? $data['Version'] : '0.0.1';
+                break;
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Usage: $haveSeo = $this->_isPluginMinimal('wordpress-seo/*', '1.0.0');
+     *
+     * @param $pluginMatch - For example "wordpress-seo/*"
+     * @param $requireVersion
+     * @return bool|mixed
+     */
+    protected function _isPluginMinimal( $pluginMatch, $requireVersion )
+    {
+        $result = false;
+        $pluginVersion = $this->_getPluginVersion( $pluginMatch );
+        if ( $pluginVersion ) {
+            $result = version_compare( $pluginVersion, $requireVersion, '>=' );
+        }
+        return $result;
+    }
 }
 
 $SwiftyPages = new SwiftyPages();
