@@ -139,20 +139,6 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
     if ( true ) {
     ?>
     <ul class="swiftypages-subsubsub swiftypages-subsubsub-select-view">
-        <li class="swiftypages_view_is_status_view">
-            <a class="swiftypages_view_all  <?php echo ( $this->_view == "all" ) ? "current" : "" ?>"
-               href="#" <?php echo $status_data_attributes[ "all" ] ?>>
-                <?php _e( 'All', 'swiftypages' ) ?>
-                <span class="count">(<?php echo $post_count_all ?>)</span>
-            </a> |
-        </li>
-        <li class="swiftypages_view_is_status_view">
-            <a class="swiftypages_view_public <?php echo ( $this->_view == "public" ) ? "current" : "" ?>"
-               href="#" <?php echo $status_data_attributes[ "publish" ] ?>>
-                <?php _e( 'Public', 'swiftypages' ) ?>
-                <span class="count">(<?php echo $post_count_publish ?>)</span>
-            </a> |
-        </li>
         <li><a href="#" class="swiftypages_open_all"><?php _e( 'Expand', 'swiftypages' ) ?></a> |</li>
         <li><a href="#" class="swiftypages_close_all"><?php _e( 'Collapse', 'swiftypages' ) ?></a></li>
     </ul>

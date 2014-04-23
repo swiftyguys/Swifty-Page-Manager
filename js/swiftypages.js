@@ -16,18 +16,6 @@ var SwiftyPages = ( function ( $, document, undefined ) {
     };
 
     ss.startListeners = function () {
-        $( document ).on( 'click', 'a.swiftypages_view_all', function ( /*ev*/ ) {
-            ss.setView( 'all', this );
-
-            return false;
-        } );
-
-        $( document ).on( 'click', 'a.swiftypages_view_public', function ( /*ev*/ ) {
-            ss.setView( 'public', this );
-
-            return false;
-        } );
-
         $( document ).on( 'click', 'a.swiftypages_open_all', function ( /*ev*/ ) {
             ss.getWrapper( this ).find( '.swiftypages_container' ).jstree( 'open_all' );
 
@@ -36,43 +24,6 @@ var SwiftyPages = ( function ( $, document, undefined ) {
 
         $( document ).on( 'click', 'a.swiftypages_close_all', function ( /*ev*/ ) {
             ss.getWrapper( this ).find( '.swiftypages_container' ).jstree( 'close_all' );
-
-            return false;
-        } );
-
-        $( document ).on( 'click', 'a.swiftypages_switch_lang', function ( /*ev*/ ) {
-            var $wrapper = ss.getWrapper( this );
-
-            // Mark clicked link as selected
-            $wrapper.find( 'ul.swiftypages_switch_langs a' ).removeClass( 'current' );
-            $( this ).addClass( 'current' );
-
-            // Determine selected language, based on classes on the link
-            var re = /swiftypages_switch_language_code_([\w-]+)/;
-            var matches = re.exec( $( this ).attr( 'class' ) );
-            var langCode = matches[1];
-
-            // Add selected lang to hidden input
-            $wrapper.find( '[name=swiftypages_meta_wpml_language]' ).val( langCode );
-
-            // Update post count
-            // Post counts are stored on the links for all | public | trash
-            var $ulSelectView = $wrapper.find( '.swiftypages-subsubsub-select-view' );
-
-            $ulSelectView.find( 'li.swiftypages_view_is_status_view a' ).each( function ( i, aTag ) {
-                // Check if this link has a data attr with count for the selected lang
-                var $a = $( aTag );
-                var linkCount = $a.data( 'post-count-' + langCode );
-
-                if ( 'undefined' === typeof( linkCount ) ) {
-                    linkCount = 0;
-                }
-
-                $a.find( '.count' ).text( '(' + linkCount + ')' );
-            } );
-
-            // Set the view = reload the tree
-            ss.setView( ss.getCurrentView( this ), this );
 
             return false;
         } );
@@ -266,50 +217,6 @@ var SwiftyPages = ( function ( $, document, undefined ) {
 
     ss.getWrapper = function ( el ) {
         return $( el ).closest( '.swiftypages_wrapper' );
-    };
-
-    ss.getCurrentView = function ( el ) {
-        var $wrapper = this.getWrapper( el );
-
-        if ( $wrapper.find( '.swiftypages_view_all' ).hasClass( 'current' ) ) {
-            return 'all';
-        } else if ( $wrapper.find( '.swiftypages_view_public' ).hasClass( 'current' ) ) {
-            return 'public';
-        } else {
-            return false; // like unknown
-        }
-    };
-
-    ss.setView = function( view, el ) {
-        var $wrapper = $( el ).closest( '.swiftypages_wrapper' );
-        var treeOptionsTmp = $.extend( true, {}, swiftyPagesTreeOptions );
-
-        $swiftyPagesMessage.hide();
-
-        $wrapper.find( '.swiftypages_view_all, .swiftypages_view_public, .swiftypages_view_trash' ).removeClass( 'current' );
-        $wrapper.find( '.swiftypages_container' ).jstree( 'destroy' ).html( '' );
-
-        SwiftyPages.bindCleanNodes();
-
-        // Mark selected link
-        if ( view === 'all' ) {
-            $wrapper.find( '.swiftypages_view_all' ).addClass( 'current' );
-        } else if ( view === 'public' ) {
-            $wrapper.find( '.swiftypages_view_public' ).addClass( 'current' );
-        } else if ( view === 'trash' ) {
-            $wrapper.find( '.swiftypages_view_trash' ).addClass( 'current' );
-        } else {
-
-        }
-
-        treeOptionsTmp.json_data.ajax.url = ajaxurl + '?action=swiftypages_get_childs'
-                                                    + '&view=' + view +
-                                                    + '&post_type=' + SwiftyPages.getPostType( el )
-                                                    + '&lang=' + SwiftyPages.getWPMLSelectedLang( el );
-
-        // Reload tree
-        $wrapper.find( '.swiftypages_container' ).bind( 'loaded.jstree open_node.jstree', SwiftyPages.pageTreeLoaded );
-        $wrapper.find( '.swiftypages_container' ).jstree( treeOptionsTmp );
     };
 
     ss.preparePageActionButtons = function ( $li ) {
