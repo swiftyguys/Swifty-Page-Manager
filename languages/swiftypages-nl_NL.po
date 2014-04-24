@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Swifty Page Manager v0.0.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-04-23 12:44:36+0000\n"
+"PO-Revision-Date: 2014-04-24 09:24:58+0000\n"
 "Last-Translator: jh-dev <jeroen.hoekstra@longtermresults.nl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -20,166 +20,158 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Textdomain-Support: yes"
 
-#: swiftypages.php:63
-#: swiftypages.php:64
-#: swiftypages.php:230
+#: swiftypages.php:99
+#: swiftypages.php:100
+#: swiftypages.php:205
 #@ swiftypages
 msgid "SwiftyPages"
 msgstr "SwiftyPages"
 
-#: swiftypages.php:79
+#: swiftypages.php:117
 #@ default
 msgid "You do not have sufficient permissions to access this page."
 msgstr ""
 
-#: view/page_tree.php:180
+#: view/page_tree.php:152
 #@ swiftypages
 msgid "Edit page"
 msgstr "Bewerk pagina"
 
-#: view/page_tree.php:189
+#: view/page_tree.php:161
 #@ swiftypages
 msgid "View page"
 msgstr "Bekijk pagina"
 
-#: view/page_tree.php:177
-#: view/page_tree.php:392
+#: view/page_tree.php:149
+#: view/page_tree.php:363
 #@ swiftypages
 msgid "Add page"
 msgstr "Voeg pagina toe"
 
-#: swiftypages.php:93
+#: swiftypages.php:131
 #@ swiftypages
 msgid "draft"
 msgstr "concept"
 
-#: swiftypages.php:94
+#: swiftypages.php:132
 #@ swiftypages
 msgid "future"
 msgstr "toekomstig"
 
-#: swiftypages.php:95
+#: swiftypages.php:133
 #@ swiftypages
 msgid "protected"
 msgstr "beschermd"
 
-#: swiftypages.php:96
+#: swiftypages.php:134
 #@ swiftypages
 msgid "pending"
 msgstr "wacht"
 
-#: swiftypages.php:97
+#: swiftypages.php:135
 #@ swiftypages
 msgid "private"
 msgstr "privé"
 
-#: swiftypages.php:98
+#: swiftypages.php:136
 #@ swiftypages
 msgid "trash"
 msgstr "Verwijderd"
 
-#: swiftypages.php:99
+#: swiftypages.php:137
 #@ swiftypages
 msgid "Password protected page"
 msgstr "Wachtwoord beschermde pagina"
 
-#: view/page_tree.php:238
+#: view/page_tree.php:210
 #@ swiftypages
 msgid "Menu button text"
 msgstr "Tekst menuknop"
 
-#: view/page_tree.php:278
+#: view/page_tree.php:250
 #@ swiftypages
 msgid "Customize page url"
 msgstr "Bewerk pagina URL"
 
-#: view/page_tree.php:286
+#: view/page_tree.php:258
 #@ swiftypages
 msgid "Show in menu"
-msgstr "Zichtbaar in menu"
+msgstr "Tonen in menu"
 
-#: view/page_tree.php:330
+#: view/page_tree.php:264
+#: view/page_tree.php:302
 #@ swiftypages
 msgid "Show"
 msgstr "Tonen"
 
-#: view/page_tree.php:336
-#: view/page_tree.php:361
+#: view/page_tree.php:270
+#: view/page_tree.php:308
+#: view/page_tree.php:333
 #@ swiftypages
 msgid "Hide"
 msgstr "Verbergen"
 
-#: view/page_tree.php:260
-#@ swiftypages
-msgid "Next"
-msgstr "Na huidige pagina"
-
-#: view/page_tree.php:266
-#@ swiftypages
-msgid "Sub"
-msgstr "Als subpagina van de huidige pagina"
-
-#: view/page_tree.php:305
+#: view/page_tree.php:277
 #@ swiftypages
 msgid "Draft or live"
 msgstr "Concept of publiceren"
 
-#: view/page_tree.php:311
+#: view/page_tree.php:283
 #@ swiftypages
 msgid "Draft"
 msgstr "Concept"
 
-#: view/page_tree.php:317
+#: view/page_tree.php:289
 #@ swiftypages
 msgid "Live"
 msgstr "Publiceren"
 
-#: view/page_tree.php:186
+#: view/page_tree.php:158
 #@ swiftypages
 msgid "Edit page content"
 msgstr "Bewerk paginainhoud"
 
-#: view/page_tree.php:183
+#: view/page_tree.php:155
 #@ swiftypages
 msgid "Delete page"
 msgstr "Verwijder pagina"
 
-#: view/page_tree.php:217
+#: view/page_tree.php:189
 #@ swiftypages
 msgid "Delete"
 msgstr "Verwijder"
 
-#: view/page_tree.php:272
+#: view/page_tree.php:244
 #@ swiftypages
 msgid "More"
 msgstr "Meer"
 
-#: view/page_tree.php:367
+#: view/page_tree.php:339
 #@ swiftypages
 msgid "Less"
 msgstr "Minder"
 
-#: swiftypages.php:121
+#: swiftypages.php:157
 #@ default
 msgid "Cheatin&#8217; uh?"
 msgstr ""
 
-#: swiftypages.php:240
+#: swiftypages.php:214
 #@ default
 msgid "List View"
 msgstr ""
 
-#: swiftypages.php:451
+#: swiftypages.php:356
 #@ swiftypages
 msgid "New page"
 msgstr "Nieuwe pagina"
 
-#: swiftypages.php:854
+#: swiftypages.php:671
 #@ swiftypages
 msgid "Unknown user"
 msgstr "Onbekende gebruiker"
 
-#: swiftypages.php:860
+#: swiftypages.php:677
 #@ swiftypages
 msgid "<Untitled page>"
 msgstr "<pagina zonder titel>"
@@ -190,100 +182,90 @@ msgctxt "headline of page with tree"
 msgid "SwiftyPages"
 msgstr "SwiftyPages"
 
-#: view/page_tree.php:145
-#@ swiftypages
-msgid "All"
-msgstr "Alle"
-
-#: view/page_tree.php:152
-#@ swiftypages
-msgid "Public"
-msgstr "Openbare"
-
-#: view/page_tree.php:156
+#: view/page_tree.php:128
 #@ swiftypages
 msgid "Expand"
 msgstr "Uitklappen"
 
-#: view/page_tree.php:157
+#: view/page_tree.php:129
 #@ swiftypages
 msgid "Collapse"
 msgstr "Inklappen"
 
-#: view/page_tree.php:161
+#: view/page_tree.php:133
 #@ swiftypages
 msgid "Loading..."
 msgstr "Laden..."
 
-#: view/page_tree.php:169
+#: view/page_tree.php:141
 #@ swiftypages
 msgid "Loading tree"
 msgstr "Boom laden"
 
-#: view/page_tree.php:192
+#: view/page_tree.php:164
 #@ swiftypages
 msgid "Publish page"
 msgstr "Publiceer pagina"
 
-#: view/page_tree.php:208
+#: view/page_tree.php:180
 #@ swiftypages
 msgid "Are you sure you want to permanently delete this page with all it's content?"
 msgstr "Weet je zeker dat je deze pagina inclusief inhoud wilt verwijderen?"
 
-#: view/page_tree.php:215
-#: view/page_tree.php:373
+#: view/page_tree.php:187
+#: view/page_tree.php:345
 #@ swiftypages
 msgid "Cancel"
 msgstr "Annuleer"
 
-#: view/page_tree.php:246
+#: view/page_tree.php:218
 #@ swiftypages
 msgid "Page title for Google"
 msgstr "Paginatitel voor Google"
 
-#: view/page_tree.php:254
+#: view/page_tree.php:226
 #@ swiftypages
 msgid "Page position in tree"
 msgstr "Paginapositie in de boom"
 
-#: view/page_tree.php:324
+#: view/page_tree.php:296
 #@ swiftypages
 msgid "Show or hide header"
 msgstr "Toon of verberg header"
 
-#: view/page_tree.php:343
+#: view/page_tree.php:315
 #@ swiftypages
 msgid "Show or hide sidebar"
 msgstr "Toon of verberg zijbalk"
 
-#: view/page_tree.php:375
+#: view/page_tree.php:347
 #@ swiftypages
 msgid "Save"
 msgstr "Opslaan"
 
-#: swiftypages.php:100
-#: view/page_tree.php:390
+#: swiftypages.php:138
+#: view/page_tree.php:361
 #@ swiftypages
 msgid "No pages found."
 msgstr "Geen pagina's gevonden."
 
-#: view/page_tree.php:349
+#: view/page_tree.php:321
 #@ swiftypages
 msgid "Show left"
 msgstr "Toon links"
 
-#: view/page_tree.php:355
+#: view/page_tree.php:327
 #@ swiftypages
 msgid "Show right"
 msgstr "Toon rechts"
 
-#: view/page_tree.php:292
+#: view/page_tree.php:232
 #@ swiftypages
-msgid "Visible"
-msgstr "Zichtbaar"
+msgid "After page"
+msgstr "Na pagina"
 
-#: view/page_tree.php:298
+#: view/page_tree.php:238
 #@ swiftypages
-msgid "Hidden"
-msgstr "Verborgen"
+msgid "As sub page of page"
+msgstr "Als subpagina van pagina"
 

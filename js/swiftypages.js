@@ -239,6 +239,7 @@ var SwiftyPages = ( function ( $, document, undefined ) {
     };
 
     ss.preparePageActions = function ( $li, action ) {
+        var self = this;
         var selector = {
             'add': 'ss-page-add-edit-tmpl',
             'settings': 'ss-page-add-edit-tmpl',
@@ -249,6 +250,12 @@ var SwiftyPages = ( function ( $, document, undefined ) {
 
         if ( action === 'add' ) {
             $tmpl.find( 'input[name=ss_show_in_menu][value=show]' ).prop( 'checked', true );
+
+            $tmpl.find( 'input[name=add_mode]' ).each( function() {
+                var labelText = $( this ).next().text();
+
+                $( this ).next().text( labelText + ' ' + self.getLiText( $li ) );
+            } );
         }
 
         if ( action === 'settings' ) {
@@ -261,6 +268,18 @@ var SwiftyPages = ( function ( $, document, undefined ) {
 
         $li.data( 'cur-action', action );
         $li.find( '> a' ).after( $tmpl.removeClass( 'ss-hidden' ) );
+    };
+
+    ss.getLiText = function ( $li ) {
+        var liText = '';
+
+        $li.find( '> a' ).contents().filter( function() {
+            if ( this.nodeType === 3 ) {
+                liText = this.nodeValue;
+            }
+        } );
+
+        return liText;
     };
 
     ss.getPageActionsTmpl = function ( selector ) {

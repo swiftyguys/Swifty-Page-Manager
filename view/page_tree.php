@@ -18,12 +18,10 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
     $wpml_current_lang    = "";
     $wmpl_active_for_post = false;
 
-    if ( defined( "ICL_SITEPRESS_VERSION" ) )
-    {
+    if ( defined( "ICL_SITEPRESS_VERSION" ) ) {
         $wpml_post_types = $sitepress->get_translatable_documents();
 
-        if ( array_key_exists( $post_type, $wpml_post_types ) )
-        {
+        if ( array_key_exists( $post_type, $wpml_post_types ) ) {
             $wmpl_active_for_post = true;
             $wpml_current_lang    = $sitepress->get_current_language();
         }
@@ -32,8 +30,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
     $status_data_attributes = array( "all" => "", "publish" => "", "trash" => "" );
 
     // Calculate post counts
-    if ( $wpml_current_lang )
-    {
+    if ( $wpml_current_lang ) {
         // Count code for WPML, mostly taken/inspired from  WPML Multilingual CMS, sitepress.class.php
         $langs = array();
 
@@ -43,10 +40,8 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
         $post_count_publish = (int) @$wpml_post_counts[ "publish" ][ $wpml_current_lang ];
         $post_count_trash   = (int) @$wpml_post_counts[ "trash"   ][ $wpml_current_lang ];
 
-        foreach ( $wpml_post_counts[ "publish" ] as $one_wpml_lang => $one_wpml_lang_count )
-        {
-            if ( "all" === $one_wpml_lang )
-            {
+        foreach ( $wpml_post_counts[ "publish" ] as $one_wpml_lang => $one_wpml_lang_count ) {
+            if ( "all" === $one_wpml_lang ) {
                 continue;
             }
 
@@ -57,28 +52,23 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
             $status_data_attributes[ "publish" ] .= " data-post-count-{$one_wpml_lang}='{$lang_post_count_publish}' ";
             $status_data_attributes[ "trash"   ] .= " data-post-count-{$one_wpml_lang}='{$lang_post_count_trash}' ";
         }
-    }
-    else
-    {
+    } else {
         $post_count         = wp_count_posts( $this->_post_type );
         $post_count_all     = $post_count->publish + $post_count->future + $post_count->draft + $post_count->pending + $post_count->private;
         $post_count_publish = $post_count->publish;
         $post_count_trash   = $post_count->trash;
     }
 
-
     // output js for the root/top level
     // function swiftypages_print_childs($pageID, $view = "all", $arrOpenChilds = null, $post_type) {
     // @todo: make into function since used at other places
     $jstree_open = array();
 
-    if ( isset( $_COOKIE[ "jstree_open" ] ) )
-    {
+    if ( isset( $_COOKIE[ "jstree_open" ] ) ) {
         $jstree_open = $_COOKIE[ "jstree_open" ]; // like this: [jstree_open] => swiftypages-id-1282,swiftypages-id-1284,swiftypages-id-3
         $jstree_open = explode( ",", $jstree_open );
 
-        for ( $i = 0; $i < sizeof( $jstree_open ); $i++ )
-        {
+        for ( $i = 0; $i < sizeof( $jstree_open ); $i++ ) {
             $jstree_open[ $i ] = (int) str_replace( "#swiftypages-id-", "", $jstree_open[ $i ] );
         }
     }
@@ -99,23 +89,19 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
     <?php
 
     // Check if WPML is activated and show a language-menu
-    if ( $wmpl_active_for_post )
-    {
+    if ( $wmpl_active_for_post ) {
         $wpml_langs       = icl_get_languages();
         $wpml_active_lang = null;
 
-        if ( sizeof( $wpml_langs ) >= 1 )
-        {
+        if ( sizeof( $wpml_langs ) >= 1 ) {
             $lang_out  = "";
             $lang_out .= "<ul class='swiftypages-subsubsub swiftypages_switch_langs'>";
 
-            foreach ( $wpml_langs as $one_lang )
-            {
+            foreach ( $wpml_langs as $one_lang ) {
                 $one_lang_details = $sitepress->get_language_details( $one_lang[ "language_code" ] ); // english_name | display_name
                 $selected         = "";
 
-                if ( $one_lang[ "active" ] )
-                {
+                if ( $one_lang[ "active" ] ) {
                     $wpml_active_lang = $one_lang;
                     $selected         = "current";
                 }
@@ -243,13 +229,13 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                         <label class="alignleft ss-radio-label">
                                             <input name="add_mode" type="radio" value="after" class="ss-input-radio" />
                                             <span class="radiobutton-title">
-                                                <?php _e( 'Next', 'swiftypages' ) ?>
+                                                <?php _e( 'After page', 'swiftypages' ) ?>
                                             </span>
                                         </label>
                                         <label class="alignleft ss-radio-label">
                                             <input name="add_mode" type="radio" value="inside" class="ss-input-radio" />
                                             <span class="radiobutton-title">
-                                                <?php _e( 'Sub', 'swiftypages' ) ?>
+                                                <?php _e( 'As sub page of page', 'swiftypages' ) ?>
                                             </span>
                                         </label>
                                     </span>
@@ -275,13 +261,13 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                         <label class="alignleft ss-radio-label">
                                             <input name="ss_show_in_menu" type="radio" value="show" class="ss-input-radio" />
                                             <span class="radiobutton-title">
-                                                <?php _e( 'Visible', 'swiftypages' ) ?>
+                                                <?php _e( 'Show', 'swiftypages' ) ?>
                                             </span>
                                         </label>
                                         <label class="alignleft ss-radio-label">
                                             <input name="ss_show_in_menu" type="radio" value="hide" class="ss-input-radio" />
                                             <span class="radiobutton-title">
-                                                <?php _e( 'Hidden', 'swiftypages' ) ?>
+                                                <?php _e( 'Hide', 'swiftypages' ) ?>
                                             </span>
                                         </label>
                                     </span>
@@ -371,8 +357,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
 <?php
     }
 
-    if ( empty( $jsonData ) )
-    {
+    if ( empty( $jsonData ) ) {
         echo '<div class="updated fade below-h2"><p>' . __( 'No pages found.', 'swiftypages' ) . '</p></div>';
 ?>
     <span class="button button-primary ss-button ss-page-button ss-noposts-add" data-ss-action="add" title="<?php _e( 'Add page', 'swiftypages' ) ?>">
