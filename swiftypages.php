@@ -221,11 +221,7 @@ class SwiftyPages
 
         // Output tree related stuff if that view/mode is selected
         if ( isset( $_GET[ "mode" ] ) && $_GET[ "mode" ] === "tree" ){
-            $out .= sprintf( '
-                <div class="swiftypages-postsoverview-wrap">
-                    %1$s
-                </div>
-            ', $tree_common_stuff );
+            $out .= sprintf( '<div class="swiftypages-postsoverview-wrap">%1$s</div>', $tree_common_stuff );
         }
 
         echo $out;
