@@ -24,7 +24,8 @@ class SwiftyPages
     /**
      * Constructor
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->plugin_file     = __FILE__ ;
         $this->plugin_dir      = dirname( $this->plugin_file );
         $this->plugin_basename = basename( $this->plugin_dir );
@@ -55,28 +56,35 @@ class SwiftyPages
     /**
      * @param wp $wp
      */
-    public function parse_request( $wp ) {
+    public function parse_request( $wp )
+    {
         /** @var wpdb $wpdb */
         global $wpdb;
+
         if ( !empty($wp->request) ) {
             $query = $wpdb->prepare( "SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key='ss_url' AND meta_value='%s'",
                                       $wp->request );
             $post_id = $wpdb->get_var( $query );
+
             if ( $post_id ) {
                 $wp->query_vars = array( 'p' => $post_id, 'post_type' => 'page' );
             }
         }
     }
 
-    public function page_link( $link, $post_id=false, $sample=false ) {
+    public function page_link( $link, $post_id=false, $sample=false )
+    {
         $ss_url = get_post_meta( $post_id, 'ss_url', true );
+
         if ( $ss_url ) {
             $link = get_site_url( null, $ss_url );
         }
+
         return $link;
     }
 
-    public function admin_head() {
+    public function admin_head()
+    {
         $currentScreen = get_current_screen();
 
         if ( 'pages_page_page-tree' == $currentScreen->base ) {
@@ -85,7 +93,8 @@ class SwiftyPages
         }
     }
 
-    public function admin_menu() {
+    public function admin_menu()
+    {
         add_submenu_page( 'edit.php?post_type='.$this->_post_type
                         , __( 'SwiftyPages', 'swiftypages' )
                         , __( 'SwiftyPages', 'swiftypages' )
@@ -95,14 +104,16 @@ class SwiftyPages
                         );
     }
 
-    function swiftypages_load_textdomain() {
+    function swiftypages_load_textdomain()
+    {
         if ( is_admin() ) {
             load_plugin_textdomain( 'swiftypages', false, '/swiftypages/languages' );
         }
     }
 
-    public function view_page_tree() {
-        if ( !current_user_can( 'edit_pages' ) )  {
+    public function view_page_tree()
+    {
+        if ( !current_user_can( 'edit_pages' ) ) {
             wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
         }
 
@@ -136,33 +147,31 @@ class SwiftyPages
     {
         header( "Content-type: application/json" );
 
-        $action    = $_GET[ "action" ];
+        $action = $_GET[ "action" ];
 
         // Check if user is allowed to get the list. For example subscribers should not be allowed to
         // Use same capability that is required to add the menu
         $post_type_object = get_post_type_object( $this->_post_type );
-        if ( !current_user_can( $post_type_object->cap->edit_posts ) )
-        {
+
+        if ( !current_user_can( $post_type_object->cap->edit_posts ) ) {
             die( __( 'Cheatin&#8217; uh?' ) );
         }
 
-        if ( $action )
-        {
-            // regular get
-
+        if ( $action ) {   // regular get
             $id = ( isset( $_GET[ "id" ] ) ) ? $_GET[ "id" ] : null;
             $id = (int) str_replace( "swiftypages-id-", "", $id );
 
             $jstree_open = array();
-            if ( isset( $_COOKIE[ "jstree_open" ] ) )
-            {
+
+            if ( isset( $_COOKIE[ "jstree_open" ] ) ) {
                 $jstree_open = $_COOKIE[ "jstree_open" ]; // like this: [jstree_open] => swiftypages-id-1282,swiftypages-id-1284,swiftypages-id-3
                 $jstree_open = explode( ",", $jstree_open );
-                for ( $i = 0; $i < sizeof( $jstree_open ); $i++ )
-                {
+
+                for ( $i = 0; $i < sizeof( $jstree_open ); $i++ ) {
                     $jstree_open[ $i ] = (int) str_replace( "#swiftypages-id-", "", $jstree_open[ $i ] );
                 }
             }
+
             $this->getTree();
             $jsonData = $this->getJsonData( $this->_byPageId[$id], $jstree_open );
             print json_encode( $jsonData );
@@ -180,6 +189,7 @@ class SwiftyPages
         ob_start();
         $this->view_page_tree();
         $tree_common_stuff = ob_get_clean();
+
         /*
         on non hierarcical post types this one exists:
         tablenav-pages one-page
@@ -188,8 +198,8 @@ class SwiftyPages
 
         if view-switch exists: add item to it
         if view-switch not exists: add it + item to it
-
         */
+
         $mode   = "tree";
         $class  = isset( $_GET[ "mode" ] ) && $_GET[ "mode" ] == $mode ? " class='current' " : "";
         $title  = __( "SwiftyPages", 'swiftypages' );
@@ -197,36 +207,30 @@ class SwiftyPages
 
         // Copy of wordpress own, if it does not exist
         $wp_list_a = "";
-        if ( is_post_type_hierarchical( $this->_post_type ) )
-        {
 
+        if ( is_post_type_hierarchical( $this->_post_type ) ) {
             $mode      = "list";
             $class     = isset( $_GET[ "mode" ] ) && $_GET[ "mode" ] != $mode ? " class='swiftypages_add_list_view' " : " class='swiftypages_add_list_view current' ";
             $title     = __( "List View" ); /* translation not missing - exists in wp */
             $wp_list_a = "<a href='" . esc_url( add_query_arg( 'mode', $mode, $_SERVER[ 'REQUEST_URI' ] ) ) . "' $class><img id='view-switch-$mode' src='" . esc_url( includes_url( 'images/blank.gif' ) ) . "' width='20' height='20' title='$title' alt='$title' /></a>\n";
-
         }
 
-        $out = "";
+        $out  = "";
         $out .= $tree_a;
         $out .= $wp_list_a;
 
         // Output tree related stuff if that view/mode is selected
-        if ( isset( $_GET[ "mode" ] ) && $_GET[ "mode" ] === "tree" )
-        {
-
+        if ( isset( $_GET[ "mode" ] ) && $_GET[ "mode" ] === "tree" ){
             $out .= sprintf( '
-			<div class="swiftypages-postsoverview-wrap">
-				%1$s
-			</div>
-		', $tree_common_stuff );
-
+                <div class="swiftypages-postsoverview-wrap">
+                    %1$s
+                </div>
+            ', $tree_common_stuff );
         }
 
         echo $out;
 
         return $filter_var;
-
     }
 
     public function ajax_move_page()
@@ -237,7 +241,6 @@ class SwiftyPages
          the new position relative to the reference node (one of "before", "after" or "inside"),
              inside = man placerar den under en sida som inte har några barn?
         */
-
         global $wpdb;
 
         $node_id     = $_POST[ "node_id" ]; // the node that was moved
@@ -249,8 +252,7 @@ class SwiftyPages
 
         $_POST[ "skip_sitepress_actions" ] = true; // sitepress.class.php->save_post_actions
 
-        if ( $node_id && $ref_node_id )
-        {
+        if ( $node_id && $ref_node_id ) {
             #echo "\nnode_id: $node_id";
             #echo "\ntype: $type";
 
@@ -260,13 +262,11 @@ class SwiftyPages
             $show_ref_page_in_menu = get_post_meta( $ref_node_id, 'ss_show_in_menu', true );
 
             // first check that post_node (moved post) is not in trash. we do not move them
-            if ( $post_node->post_status == "trash" )
-            {
+            if ( $post_node->post_status == "trash" ) {
                 exit;
             }
 
-            if ( "inside" == $type )
-            {
+            if ( "inside" == $type ) {
                 // post_node is moved inside ref_post_node
                 // add ref_post_node as parent to post_node and set post_nodes menu_order to 0
                 // @todo: shouldn't menu order of existing items be changed?
@@ -279,17 +279,12 @@ class SwiftyPages
 
                 $id_saved = wp_update_post( $post_to_save );
 
-                if ( $id_saved && $show_ref_page_in_menu != 'show' )
-                {
+                if ( $id_saved && $show_ref_page_in_menu != 'show' ) {
                     update_post_meta( $id_saved, 'ss_show_in_menu', 'hide' );
                 }
 
                 echo "did inside";
-
-            }
-            elseif ( "before" == $type )
-            {
-
+            } elseif ( "before" == $type ) {
                 // post_node is placed before ref_post_node
                 // update menu_order of all pages with a menu order more than or equal ref_node_post and with the same parent as ref_node_post
                 // we do this so there will be room for our page if it's the first page
@@ -306,22 +301,19 @@ class SwiftyPages
                     "post_parent" => $post_ref_node->post_parent,
                     "post_type"   => $post_ref_node->post_type
                 );
+
                 wp_update_post( $post_to_save );
 
                 echo "did before";
-
-            }
-            elseif ( "after" == $type )
-            {
-
+            } elseif ( "after" == $type ) {
                 // post_node is placed after ref_post_node
-
                 // update menu_order of all posts with the same parent ref_post_node and with a menu_order of the same as ref_post_node, but do not include ref_post_node
                 // +2 since multiple can have same menu order and we want our moved post to have a unique "spot"
                 $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+2 WHERE post_parent = %d AND menu_order >= %d AND id <> %d ",
                                               $post_ref_node->post_parent,
                                               $post_ref_node->menu_order,
                                               $post_ref_node->ID ) );
+
                 // update menu_order of post_node to the same that ref_post_node_had+1
                 #$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = %d, post_parent = %d WHERE ID = %d", $post_ref_node->menu_order+1, $post_ref_node->post_parent, $post_node->ID ) );
 
@@ -331,16 +323,14 @@ class SwiftyPages
                     "post_parent" => $post_ref_node->post_parent,
                     "post_type"   => $post_ref_node->post_type
                 );
+
                 wp_update_post( $post_to_save );
 
                 echo "did after";
             }
 
             #echo "ok"; // I'm done here!
-
-        }
-        else
-        {
+        } else {
             // error
         }
 
@@ -366,8 +356,7 @@ class SwiftyPages
         $post_title = trim( $_POST[ "post_title" ] );
         $post_name  = trim( $_POST[ "post_name" ] );   // url
 
-        if ( !$post_title )
-        {
+        if ( !$post_title ) {
             $post_title = __( "New page", 'swiftypages' );
         }
 
@@ -383,35 +372,29 @@ class SwiftyPages
         $post_data[ "post_type" ]   = $_POST[ "post_type" ];
         $post_data[ "post_status" ] = $_POST[ "post_status" ];
 
-        if ( isset( $post_id ) && !empty( $post_id ) )  // We're in edit mode
-        {
+        if ( isset( $post_id ) && !empty( $post_id ) ) {  // We're in edit mode
             $post_data[ "ID" ] = $post_id;
             $id_saved = wp_update_post( $post_data );
 
-            if ( $id_saved )
-            {
+            if ( $id_saved ) {
                 update_post_meta( $id_saved, 'ss_show_in_menu', $ss_show_in_menu );
                 update_post_meta( $id_saved, 'ss_page_title_seo', $ss_page_title_seo );
                 update_post_meta( $id_saved, 'ss_header_visibility', $ss_header_visibility );
                 update_post_meta( $id_saved, 'ss_sidebar_visibility', $ss_sidebar_visibility );
 
                 echo "1";
-            }
-            else
-            {
+            } else {
                 echo "0";   // fail, tell js
             }
         }
-        else   // We're in create mode
-        {
+        else {   // We're in create mode
             $post_data[ "post_content" ] = "";
 
             $parent_id = $_POST[ "parent_id" ];
             $parent_id = intval( str_replace( "swiftypages-id-", "", $parent_id ) );
             $ref_post  = get_post( $parent_id );
 
-            if ( "after" == $_POST[ "add_mode" ] )
-            {
+            if ( "after" == $_POST[ "add_mode" ] ) {
                 // update menu_order of all pages below our page
                 $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+2 WHERE post_parent = %d AND menu_order >= %d AND id <> %d "
                                             , $ref_post->post_parent
@@ -423,9 +406,7 @@ class SwiftyPages
                 // create a new page and then goto it
                 $post_data[ "menu_order" ]  = $ref_post->menu_order + 1;
                 $post_data[ "post_parent" ] = $ref_post->post_parent;
-            }
-            elseif ( "inside" == $_POST[ "add_mode" ] )
-            {
+            } elseif ( "inside" == $_POST[ "add_mode" ] ) {
                 // update menu_order, so our new post is the only one with order 0
                 $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+1 WHERE post_parent = %d", $ref_post->ID ) );
 
@@ -435,17 +416,14 @@ class SwiftyPages
 
             $post_id = wp_insert_post( $post_data );
 
-            if ( $post_id )
-            {
+            if ( $post_id ) {
                 add_post_meta( $post_id, 'ss_show_in_menu', $ss_show_in_menu, 1 );
                 add_post_meta( $post_id, 'ss_page_title_seo', $ss_page_title_seo, 1 );
                 add_post_meta( $post_id, 'ss_header_visibility', $ss_header_visibility, 1 );
                 add_post_meta( $post_id, 'ss_sidebar_visibility', $ss_sidebar_visibility, 1 );
 
                 echo "1";
-            }
-            else
-            {
+            } else {
                 echo "0";   // fail, tell js
             }
         }
@@ -457,30 +435,26 @@ class SwiftyPages
     {
         $post_id = intval( $_POST[ "post_ID" ] );
 
-        if ( isset( $post_id ) && !empty( $post_id ) )
-        {
+        if ( isset( $post_id ) && !empty( $post_id ) ) {
             $menuItems = wp_get_associated_nav_menu_items( $post_id, 'post_type', 'page' );
+
             foreach ( $menuItems as $menuItemId ) {
                 wp_delete_post( $menuItemId, true );
             }
+
             $post_data = wp_delete_post( $post_id, true );
 
-            if ( is_object( $post_data ) )
-            {
+            if ( is_object( $post_data ) ) {
                 delete_post_meta( $post_id, 'ss_show_in_menu' );
                 delete_post_meta( $post_id, 'ss_page_title_seo' );
                 delete_post_meta( $post_id, 'ss_header_visibility' );
                 delete_post_meta( $post_id, 'ss_sidebar_visibility' );
 
                 echo "1";
-            }
-            else
-            {
+            } else {
                 echo "0";   // fail, tell js
             }
-        }
-        else
-        {
+        } else {
             echo "0";   // fail, tell js
         }
 
@@ -491,22 +465,19 @@ class SwiftyPages
     {
         $post_id = intval( $_POST[ "post_ID" ] );
 
-        if ( isset( $post_id ) && !empty( $post_id ) )
-        {
+        if ( isset( $post_id ) && !empty( $post_id ) ) {
             wp_publish_post( $post_id );
 
             echo "1";
-        }
-        else
-        {
+        } else {
             echo "0";   // fail, tell js
         }
 
         exit;
     }
 
-    public function ajax_post_settings() {
-        $post_id = intval( $_REQUEST['post_ID'] );
+    public function ajax_post_settings()
+    {
         header( 'Content-Type: text/javascript' );
 
         $post_id   = intval( $_REQUEST[ 'post_ID' ] );
@@ -554,7 +525,8 @@ li.find( '> a' ).contents().filter( function() {
         exit;
     }
 
-    public function getTree() {
+    public function getTree()
+    {
         if ( is_null( $this->_tree ) ) {
             $this->_tree = new StdClass();
             $this->_tree->menuItem = new StdClass();
@@ -564,42 +536,52 @@ li.find( '> a' ).contents().filter( function() {
             $this->_byPageId [ 0 ] = &$this->_tree;
             $this->_addAllPages();
         }
+
         return $this->_tree;
     }
 
-    public function getJsonData( &$branch ) {
-        $result = array();
+    public function getJsonData( &$branch )
+    {
+        $result    = array();
         $childKeys = array_keys( $branch->children );
+
         foreach ( $childKeys as $childKey ) {
             $child = &$branch->children[$childKey];
+
             if ( isset( $child->page ) ) {
                 $newBranch = $this->_get_pageJsonData( $child->page );
+
                 /**
                  * if no children, output no state
                  * if viewing trash, don't get children. we watch them "flat" instead
                  */
                 if ( $this->_view != "trash" ) {
                     $newBranch[ 'children' ] = $this->getJsonData( $child );
+
                     if ( count($newBranch[ 'children' ]) ) {
                         $newBranch[ 'state' ] = 'closed';
                     }
                 }
+
                 $result[] = $newBranch;
             }
         }
+
         return $result;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////
 
-    protected function _addRoute( $route, $callable ) {
+    protected function _addRoute( $route, $callable )
+    {
         $hookName = get_plugin_page_hookname( $route, '' );
         add_action( $hookName, $callable );
         global $_registered_pages;
         $_registered_pages[$hookName] = true;
     }
 
-    protected function _addAllPages() {
+    protected function _addAllPages()
+    {
         $args = array();
         $args['post_type'] = 'page';
         $args['post_status'] = 'any';
@@ -609,19 +591,21 @@ li.find( '> a' ).contents().filter( function() {
         $args['order'] = 'ASC';
         $pages = get_posts( $args );
         $added = true;
+
         while ( !empty($pages) && $added ) {
             $added = false;
-            $keys = array_keys( $pages );
+            $keys  = array_keys( $pages );
+
             foreach ( $keys as $key ) {
                 $page = $pages[$key];
+
                 if ( isset( $this->_byPageId[$page->ID] ) ) {
                     $branch = &$this->_byPageId[$page->ID];
                     $branch->page = $page;
                     unset( $branch );
                     unset( $pages[$key] );
                     $added = true;
-                }
-                else if ( isset( $this->_byPageId[ $page->post_parent ] ) ) {
+                } else if ( isset( $this->_byPageId[ $page->post_parent ] ) ) {
                     $parentBranch = &$this->_byPageId[$page->post_parent];
                     $newBranch = new stdClass();
                     $newBranch->page = $page;
@@ -634,8 +618,10 @@ li.find( '> a' ).contents().filter( function() {
                 }
             }
         }
+
         // Add rest to root
         $parentBranch = &$this->_tree;
+
         foreach ( $pages as $page ) {
             $newBranch = new stdClass();
             $newBranch->page = $page;
@@ -650,21 +636,21 @@ li.find( '> a' ).contents().filter( function() {
      * @param WP_Post $onePage
      * @return array
      */
-    protected function _get_pageJsonData( $onePage ) {
+    protected function _get_pageJsonData( $onePage )
+    {
         $pageJsonData = array();
 
         $post    = $onePage;
         $page_id = $onePage->ID;
 
-        $post_statuses = get_post_statuses();
+        $post_statuses    = get_post_statuses();
         $post_type_object = get_post_type_object( $this->_post_type );
-
-        $editLink    = get_edit_post_link( $onePage->ID, 'notDisplay' );
+        $editLink         = get_edit_post_link( $onePage->ID, 'notDisplay' );
 
         // type of node
         $rel = $onePage->post_status;
-        if ( $onePage->post_password )
-        {
+
+        if ( $onePage->post_password ) {
             $rel = "password";
         }
 
@@ -675,22 +661,21 @@ li.find( '> a' ).contents().filter( function() {
         // last edited by
         setup_postdata( $post );
 
-        if ( $last_id = get_post_meta( $post->ID, '_edit_last', true ) )
-        {
+        if ( $last_id = get_post_meta( $post->ID, '_edit_last', true ) ) {
             $last_user = get_userdata( $last_id );
-            if ( $last_user !== false )
-            {
+
+            if ( $last_user !== false ) {
                 $post_author = apply_filters( 'the_modified_author', $last_user->display_name );
             }
         }
-        if ( empty( $post_author ) )
-        {
+
+        if ( empty( $post_author ) ) {
             $post_author = __( "Unknown user", 'swiftypages' );
         }
 
         $title = get_the_title( $onePage->ID ); // so hooks and stuff will do their work
-        if ( empty( $title ) )
-        {
+
+        if ( empty( $title ) ) {
             $title = __( "<Untitled page>", 'swiftypages' );
         }
 
@@ -698,7 +683,8 @@ li.find( '> a' ).contents().filter( function() {
         $user_can_edit_page  = apply_filters( "cms_tree_page_view_post_can_edit", current_user_can( $post_type_object->cap->edit_post, $page_id ), $page_id );
         $user_can_add_inside = apply_filters( "cms_tree_page_view_post_user_can_add_inside", current_user_can( $post_type_object->cap->create_posts, $page_id ), $page_id );
         $user_can_add_after  = apply_filters( "cms_tree_page_view_post_user_can_add_after", current_user_can( $post_type_object->cap->create_posts, $page_id ), $page_id );
-        $arr_page_css_styles = array();
+
+        $arr_page_css_styles   = array();
         $arr_page_css_styles[] = "swiftypages_user_can_edit_page_" . ( $user_can_edit_page ? 'yes' : 'no' );
         $arr_page_css_styles[] = "swiftypages_user_can_add_page_inside_" . ( $user_can_add_inside ? 'yes' : 'no' );
         $arr_page_css_styles[] = "swiftypages_user_can_add_page_after_" . ( $user_can_add_after ? 'yes' : 'no' );
@@ -741,37 +727,39 @@ li.find( '> a' ).contents().filter( function() {
         $arr_statuses = array( "publish", "draft", "trash", "future", "private" );
         $arr_counts   = array();
 
-        foreach ( $arr_statuses as $post_status )
-        {
+        foreach ( $arr_statuses as $post_status ) {
             $extra_cond = "";
-            if ( $post_status )
-            {
+
+            if ( $post_status ) {
                 $extra_cond .= " AND post_status = '" . $post_status . "'";
             }
-            if ( $post_status != 'trash' )
-            {
+
+            if ( $post_status != 'trash' ) {
                 $extra_cond .= " AND post_status <> 'trash'";
             }
+
             $extra_cond .= " AND post_status <> 'auto-draft'";
             $sql = "
-			SELECT language_code, COUNT(p.ID) AS c FROM {$wpdb->prefix}icl_translations t
-			JOIN {$wpdb->posts} p ON t.element_id=p.ID
-			JOIN {$wpdb->prefix}icl_languages l ON t.language_code=l.code AND l.active = 1
-			WHERE p.post_type='{$post_type}' AND t.element_type='post_{$post_type}' {$extra_cond}
-			GROUP BY language_code
-		";
+                SELECT language_code, COUNT(p.ID) AS c FROM {$wpdb->prefix}icl_translations t
+                JOIN {$wpdb->posts} p ON t.element_id=p.ID
+                JOIN {$wpdb->prefix}icl_languages l ON t.language_code=l.code AND l.active = 1
+                WHERE p.post_type='{$post_type}' AND t.element_type='post_{$post_type}' {$extra_cond}
+                GROUP BY language_code
+            ";
 
             $res = $wpdb->get_results( $sql );
 
             $langs          = array();
             $langs[ 'all' ] = 0;
-            foreach ( $res as $r )
-            {
+
+            foreach ( $res as $r ) {
                 $langs[ $r->language_code ] = $r->c;
                 $langs[ 'all' ] += $r->c;
             }
+
             $arr_counts[ $post_status ] = $langs;
         }
+
         return $arr_counts;
     }
 
@@ -787,10 +775,13 @@ li.find( '> a' ).contents().filter( function() {
         $regexp = preg_quote( $pluginMatch, '#' );
         $regexp = str_replace( array('\*','\?'), array('.*','.'), $regexp);
         $regexp = '#^' . $regexp . '$#i';
+
         if ( ! function_exists( 'get_plugin_data' ) ) {
             require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
         }
+
         $plugins = get_option( 'active_plugins', array() ); // returns only active plugins
+
         foreach ( $plugins as $plugin ) {
             if ( preg_match($regexp, $plugin) ) {
                 $data = get_plugin_data( WP_PLUGIN_DIR . '/' .$plugin );
@@ -798,6 +789,7 @@ li.find( '> a' ).contents().filter( function() {
                 break;
             }
         }
+
         return $result;
     }
 
@@ -812,9 +804,11 @@ li.find( '> a' ).contents().filter( function() {
     {
         $result = false;
         $pluginVersion = $this->_getPluginVersion( $pluginMatch );
+
         if ( $pluginVersion ) {
             $result = version_compare( $pluginVersion, $requireVersion, '>=' );
         }
+
         return $result;
     }
 }
