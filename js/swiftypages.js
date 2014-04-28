@@ -105,6 +105,7 @@ var SwiftyPages = ( function ( $, document, undefined ) {
                 'post_name': $li.find( 'input[name=post_name]' ).val(),
                 'add_mode': $li.find( 'input[name=add_mode]:checked' ).val(),   // after | inside
                 'post_status': $li.find( 'input[name=post_status]:checked' ).val(),   // draft | publish
+                'page_template': $li.find( 'select[name=page_template]' ).val(),
                 'ss_show_in_menu': $li.find( 'input[name=ss_show_in_menu]:checked' ).val() || 'show',   // show | hide
                 'ss_page_title_seo': $li.find( 'input[name=ss_page_title_seo]' ).val(),
                 'ss_header_visibility': $li.find( 'input[name=ss_header_visibility]:checked' ).val(),   // show | hide
@@ -308,24 +309,30 @@ var SwiftyPages = ( function ( $, document, undefined ) {
         );
     };
 
+    ss.setLabel = function( $li, label ) {
+        var aFirst = $li.find( 'a:first' );
+
+        aFirst.find( 'ins' ).first().after( label );
+    };
+
     ss.bindCleanNodes = function () {
         $swiftyPagesTree.bind( 'move_node.jstree', function ( ev, data ) {
-            var nodeBeingMoved = $( data.rslt.o );
-            var nodeR = $( data.rslt.r );
-            var nodeRef = $( data.rslt.or );
+            var $nodeBeingMoved = $( data.rslt.o );
+            var $nodeR = $( data.rslt.r );
+            var $nodeRef = $( data.rslt.or );
             var nodePosition = data.rslt.p;
-            var selectedLang = ss.getWPMLSelectedLang( nodeBeingMoved );
+            var selectedLang = ss.getWPMLSelectedLang( $nodeBeingMoved );
             var nodeId, refNodeId;
 
             if ( nodePosition === 'before' ) {
-                nodeId = nodeBeingMoved.attr( 'id' );
-                refNodeId = nodeRef.attr( 'id' );
+                nodeId = $nodeBeingMoved.attr( 'id' );
+                refNodeId = $nodeRef.attr( 'id' );
             } else if ( nodePosition === 'after' ) {
-                nodeId = nodeBeingMoved.attr( 'id' );
-                refNodeId = nodeR.attr( 'id' );
+                nodeId = $nodeBeingMoved.attr( 'id' );
+                refNodeId = $nodeR.attr( 'id' );
             } else if ( nodePosition === 'inside' ) {
-                nodeId = nodeBeingMoved.attr( 'id' );
-                refNodeId = nodeR.attr( 'id' );
+                nodeId = $nodeBeingMoved.attr( 'id' );
+                refNodeId = $nodeR.attr( 'id' );
             }
 
             // Update parent or menu order
@@ -336,9 +343,13 @@ var SwiftyPages = ( function ( $, document, undefined ) {
                 'type': nodePosition,
                 'icl_post_language': selectedLang
             }, function ( /*data, textStatus*/ ) {
-                if ( nodePosition === 'inside' && nodeR.hasClass( 'swiftypages_show_page_in_menu_no' ) ) {
-                    nodeBeingMoved.removeClass( 'swiftypages_show_page_in_menu_yes' )
+                if ( nodePosition === 'inside' && $nodeR.hasClass( 'swiftypages_show_page_in_menu_no' ) ) {
+                    $nodeBeingMoved.removeClass( 'swiftypages_show_page_in_menu_yes' )
                                   .addClass( 'swiftypages_show_page_in_menu_no' );
+
+                    $nodeBeingMoved.find( 'a:first' ).find( 'ins' ).first().after(
+                        '<span class="page-in-menu">' + swiftypages_l10n.hidden_page + '</span>'
+                    );
                 }
             } );
         } );
@@ -349,7 +360,6 @@ var SwiftyPages = ( function ( $, document, undefined ) {
             if ( obj && obj !== -1 ) {
                 obj.each( function ( i, el ) {
                     var $li = $( el );
-                    var aFirst = $li.find( 'a:first' );
                     var rel = $li.data( 'rel' );
                     var postStatus = $li.data( 'post_status' );
                     var postStatusToShow = swiftypages_l10n[ 'status_' + postStatus + '_ucase' ];
@@ -363,7 +373,8 @@ var SwiftyPages = ( function ( $, document, undefined ) {
 
                     // Add protection type
                     if ( rel === 'password' ) {
-                        aFirst.find( 'ins' ).after(
+                        ss.setLabel(
+                            $li,
                             '<span class="post_protected" title="' + swiftypages_l10n.password_protected_page + '">&nbsp;</span>'
                         );
                     }
@@ -375,8 +386,16 @@ var SwiftyPages = ( function ( $, document, undefined ) {
                     }
 
                     if ( postStatus !== 'publish' ) {
-                        aFirst.find( 'ins' ).first().after(
+                        ss.setLabel(
+                            $li,
                             '<span class="post_type post_type_' + postStatus + '">' + postStatusToShow + '</span>'
+                        );
+                    }
+
+                    if ( $li.hasClass( 'swiftypages_show_page_in_menu_no' ) ) {
+                        ss.setLabel(
+                            $li,
+                            '<span class="page-in-menu">' + swiftypages_l10n.hidden_page + '</span>'
                         );
                     }
                 } );

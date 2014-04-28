@@ -630,3 +630,35 @@ li.swiftypages_show_page_in_menu_no > a.ss-page-tree-element > ins {
     opacity: 0.4;
     filter: alpha(opacity=40);
 }
+
+.left-inner-addon {
+    position: relative;
+}
+
+.left-inner-addon input {
+    padding-left: 15px;
+}
+
+.left-inner-addon i {
+    position: absolute;
+    padding: 10px 6px;
+    pointer-events: none;
+}
+
+.ss-icon-slash {
+    line-height: 10px;
+    font-size: 20px;
+}
+
+.tree-default span.page-in-menu {
+    background-color: #777;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    padding: 1px 4px 2px 4px;
+    color: white;
+    border: none;
+    font-size: .8em;
+    display: inline;
+    margin-right: .75ex;
+}

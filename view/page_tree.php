@@ -213,6 +213,9 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                         <input name="post_title" type="text" class="ss-input ss-input-small ss-input-text" />
                                     </span>
                                 </label>
+                                <?php
+                                    if ( $this->is_swifty ) {
+                                ?>
                                 <label class="ss-label">
                                     <span class="title">
                                         <?php _e( 'Page title for Google', 'swiftypages' ) ?>
@@ -221,6 +224,9 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                         <input name="ss_page_title_seo" type="text" class="ss-input ss-input-text" />
                                     </span>
                                 </label>
+                                <?php
+                                    }
+                                ?>
                                 <label class="ss-label">
                                     <span class="title">
                                         <?php _e( 'Page position in tree', 'swiftypages' ) ?>
@@ -249,10 +255,14 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                     <span class="title">
                                         <?php _e( 'Customize page url', 'swiftypages' ) ?>
                                     </span>
-                                    <span class="input-text-wrap">
+                                    <span class="input-text-wrap left-inner-addon">
+                                        <i class="ss-icon-slash">/</i>
                                         <input name="post_name" type="text" class="ss-input ss-input-text" />
                                     </span>
                                 </label>
+                                <?php
+                                    if ( $this->is_swifty ) {
+                                ?>
                                 <label class="ss-label">
                                     <span class="title">
                                         <?php _e( 'Show in menu', 'swiftypages' ) ?>
@@ -272,6 +282,9 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                         </label>
                                     </span>
                                 </label>
+                                <?php
+                                    }
+                                ?>
                                 <label class="ss-label">
                                     <span class="title">
                                         <?php _e( 'Draft or live', 'swiftypages' ) ?>
@@ -291,6 +304,26 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                         </label>
                                     </span>
                                 </label>
+                                <label class="ss-label">
+                                    <span class="title">
+                                        <?php _e( 'Template', 'swiftypages' ) ?>
+                                    </span>
+                                    <span class="input-text-wrap left-inner-addon">
+                                        <select name="page_template" class="ss-input ss-input-text" />
+                                            <option value="default"><?php _e( 'Default template', 'swiftypages' ) ?></option>
+                                             <?php
+                                                $templates = wp_get_theme()->get_page_templates();
+
+                                                foreach ( $templates as $template_name => $template_filename ) {
+                                                    echo '<option value="' . $template_name .'">' . $template_filename . '</option>';
+                                                }
+                                             ?>
+                                        </select>
+                                    </span>
+                                </label>
+                                <?php
+                                    if ( $this->is_swifty ) {
+                                ?>
                                 <label class="ss-label">
                                     <span class="title">
                                         <?php _e( 'Show or hide header', 'swiftypages' ) ?>
@@ -335,6 +368,9 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                         </label>
                                     </span>
                                 </label>
+                                <?php
+                                    }
+                                ?>
                                 <label class="ss-label ss-less">
                                     <input type="button" class="button-secondary alignright ss-button less" value="<?php _e( 'Less', 'swiftypages' ) ?>" />
                                 </label>

@@ -20,16 +20,24 @@ class SwiftyPages
     protected $_tree = null;
     protected $_byPageId = null;
     protected $_mainMenuItems = null;
+    protected $has_swifty_themes;
+    protected $has_swifty_editor;
+    protected $is_swifty;   // TEMP!!!
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->plugin_file     = __FILE__ ;
-        $this->plugin_dir      = dirname( $this->plugin_file );
-        $this->plugin_basename = basename( $this->plugin_dir );
-        $this->plugin_dir_url  = plugins_url( basename( $this->plugin_dir ) );
+        $this->plugin_file        = __FILE__ ;
+        $this->plugin_dir         = dirname( $this->plugin_file );
+        $this->plugin_basename    = basename( $this->plugin_dir );
+        $this->plugin_dir_url     = plugins_url( basename( $this->plugin_dir ) );
+//        $this->has_swifty_themes       = $this->_isPluginMinimal( 'swifty-themes/*', '1.0.0' );
+//        $this->has_swifty_editor       = $this->_isPluginMinimal( 'swifty-editor/*', '1.0.0' );
+        $this->has_swifty_themes  = false;
+        $this->has_swifty_editor  = false;
+        $this->is_swifty          = true;   // TEMP!!!
 
         if ( !empty( $_GET[ "view" ] ) ) {
             $this->_view = $_GET[ "view" ];
@@ -49,8 +57,10 @@ class SwiftyPages
         add_action( 'wp_ajax_swiftypages_publish_page',  array( $this, 'ajax_publish_page' ) );
         add_action( 'wp_ajax_swiftypages_post_settings', array( $this, 'ajax_post_settings' ) );
 
-        add_action( 'parse_request', array( $this, 'parse_request' ) );
-        add_filter( 'page_link', array( $this, 'page_link' ), 10, 3 );
+        if ( $this->is_swifty ) {
+            add_action( 'parse_request', array( $this, 'parse_request' ) );
+            add_filter( 'page_link', array( $this, 'page_link' ), 10, 3 );
+        }
     }
 
     /**
@@ -135,7 +145,8 @@ class SwiftyPages
             "status_private_ucase"    => ucfirst( __( "private", 'swiftypages' ) ),
             "status_trash_ucase"      => ucfirst( __( "trash", 'swiftypages' ) ),
             "password_protected_page" => __( "Password protected page", 'swiftypages' ),
-            "no_pages_found"          => __( "No pages found.", 'swiftypages' )
+            "no_pages_found"          => __( "No pages found.", 'swiftypages' ),
+            "hidden_page"             => __( "Hidden", 'swiftypages' )
         );
 
         wp_localize_script( "swiftypages", 'swiftypages_l10n', $oLocale );
@@ -348,14 +359,16 @@ class SwiftyPages
     {
         global $wpdb;
 
-        $post_id    = intval( $_POST[ "post_ID" ] );
-        $post_title = trim( $_POST[ "post_title" ] );
-        $post_name  = trim( $_POST[ "post_name" ] );   // url
+        $post_id     = intval( $_POST[ "post_ID" ] );
+        $post_title  = trim( $_POST[ "post_title" ] );
+        $post_status = $_POST[ "post_status" ];
+        $tmp_status  = '__TMP__';
 
         if ( !$post_title ) {
             $post_title = __( "New page", 'swiftypages' );
         }
 
+        $ss_url                = trim( $_POST[ "post_name" ] );
         $ss_page_title_seo     = trim( $_POST[ "ss_page_title_seo" ] );
         $ss_show_in_menu       = $_POST[ "ss_show_in_menu" ];
         $ss_header_visibility  = $_POST[ "ss_header_visibility" ];
@@ -363,20 +376,40 @@ class SwiftyPages
 
         $post_data = array();
 
-        $post_data[ "post_title" ]  = $post_title;
-        $post_data[ "post_name" ]   = $post_name;
-        $post_data[ "post_type" ]   = $_POST[ "post_type" ];
-        $post_data[ "post_status" ] = $_POST[ "post_status" ];
+        $post_data[ "post_title" ]    = $post_title;
+        $post_data[ "post_status" ]   = $tmp_status;
+        $post_data[ "post_type" ]     = $_POST[ "post_type" ];
+        $post_data[ "page_template" ] = $_POST[ "page_template" ];
 
         if ( isset( $post_id ) && !empty( $post_id ) ) {  // We're in edit mode
             $post_data[ "ID" ] = $post_id;
-            $id_saved = wp_update_post( $post_data );
 
-            if ( $id_saved ) {
-                update_post_meta( $id_saved, 'ss_show_in_menu', $ss_show_in_menu );
-                update_post_meta( $id_saved, 'ss_page_title_seo', $ss_page_title_seo );
-                update_post_meta( $id_saved, 'ss_header_visibility', $ss_header_visibility );
-                update_post_meta( $id_saved, 'ss_sidebar_visibility', $ss_sidebar_visibility );
+            // Workaround, when post_status is draft, pending or auto-draft, it doesn't update the url
+            wp_update_post( array(
+                'ID'          => $post_id,
+                'post_status' => $tmp_status   // temporary status
+            ) );
+
+            if ( !empty( $ss_url ) ) {
+                $post_data[ "post_name" ] = $ss_url;
+            }
+
+            $post_id = wp_update_post( $post_data );
+
+            // Workaround, when post_status is draft, pending or auto-draft, it doesn't update the url
+            wp_update_post( array(
+                'ID'          => $post_id,
+                'post_status' => $post_status   // original status
+            ) );
+
+            if ( $post_id ) {
+                if ( $this->is_swifty ) {
+                    update_post_meta( $post_id, 'ss_url', get_post_field( 'post_name', $post_id ) );
+                    update_post_meta( $post_id, 'ss_show_in_menu', $ss_show_in_menu );
+                    update_post_meta( $post_id, 'ss_page_title_seo', $ss_page_title_seo );
+                    update_post_meta( $post_id, 'ss_header_visibility', $ss_header_visibility );
+                    update_post_meta( $post_id, 'ss_sidebar_visibility', $ss_sidebar_visibility );
+                }
 
                 echo "1";
             } else {
@@ -410,13 +443,26 @@ class SwiftyPages
                 $post_data[ "post_parent" ] = $ref_post->ID;
             }
 
+            if ( !empty( $ss_url ) ) {
+                $post_data[ "post_name" ] = $ss_url;
+            }
+
             $post_id = wp_insert_post( $post_data );
 
             if ( $post_id ) {
-                add_post_meta( $post_id, 'ss_show_in_menu', $ss_show_in_menu, 1 );
-                add_post_meta( $post_id, 'ss_page_title_seo', $ss_page_title_seo, 1 );
-                add_post_meta( $post_id, 'ss_header_visibility', $ss_header_visibility, 1 );
-                add_post_meta( $post_id, 'ss_sidebar_visibility', $ss_sidebar_visibility, 1 );
+                // Workaround, when post_status is draft, pending or auto-draft, it doesn't update the url
+                wp_update_post( array(
+                    'ID'          => $post_id,
+                    'post_status' => $post_status   // original status
+                ) );
+
+                if ( $this->is_swifty ) {
+                    add_post_meta( $post_id, 'ss_url', get_post_field( 'post_name', $post_id ), 1 );
+                    add_post_meta( $post_id, 'ss_show_in_menu', $ss_show_in_menu, 1 );
+                    add_post_meta( $post_id, 'ss_page_title_seo', $ss_page_title_seo, 1 );
+                    add_post_meta( $post_id, 'ss_header_visibility', $ss_header_visibility, 1 );
+                    add_post_meta( $post_id, 'ss_sidebar_visibility', $ss_sidebar_visibility, 1 );
+                }
 
                 echo "1";
             } else {
@@ -441,6 +487,7 @@ class SwiftyPages
             $post_data = wp_delete_post( $post_id, true );
 
             if ( is_object( $post_data ) ) {
+                delete_post_meta( $post_id, 'ss_url' );
                 delete_post_meta( $post_id, 'ss_show_in_menu' );
                 delete_post_meta( $post_id, 'ss_page_title_seo' );
                 delete_post_meta( $post_id, 'ss_header_visibility' );
@@ -476,11 +523,13 @@ class SwiftyPages
     {
         header( 'Content-Type: text/javascript' );
 
-        $post_id   = intval( $_REQUEST[ 'post_ID' ] );
-        $post      = get_post( $post_id );
-        $post_meta = get_post_meta( $post_id );
+        $post_id         = intval( $_REQUEST[ 'post_ID' ] );
+        $post            = get_post( $post_id );
+        $post_meta       = get_post_meta( $post_id );
         $post_status     = ( $post->post_status == 'private' ) ? 'publish' : $post->post_status; // _status
+        $page_template   = $post->page_template || 'default';
         $ss_show_in_menu = ( $post->post_status == 'private' ) ? 'hide' : 'show';
+        $ss_url          = '';
 
         $defaults = array( 'ss_show_in_menu'       => 'show'
                          , 'ss_page_title_seo'     => $post->post_title
@@ -494,6 +543,17 @@ class SwiftyPages
             }
         }
 
+        if ( $this->is_swifty ) {
+            if ( is_array( $post_meta[ 'ss_url' ] ) && !empty( $post_meta[ 'ss_url' ][0] ) ) {
+                $ss_url = $post_meta[ 'ss_url' ][0];
+            } else {
+                add_post_meta( $post_id, 'ss_url', $post->post_name, 1 );
+                $ss_url = $post->post_name;
+            }
+        } else {
+            $ss_url = $post->post_name;
+        }
+
         if ( $post_meta[ 'ss_show_in_menu' ] == 'show' ) {
             // post_status can be private, so then the page must not be visible in the menu.
             $post_meta[ 'ss_show_in_menu' ] = $ss_show_in_menu;
@@ -502,17 +562,15 @@ class SwiftyPages
         ?>
         var li = jQuery( 'li#cms-tpv-<?php echo $post_id; ?>' );
 
-li.find( '> a' ).contents().filter( function() {
-    if ( this.nodeType === 3 ) {
-        this.nodeValue: <?php echo json_encode($post->post_title); ?>
-    }
+        var li = jQuery( '#swiftypages-id-<?php echo $post_id; ?>' );
 
-        li.find( 'input[name="post_title"]'  ).val(   <?php echo json_encode( $post->post_title ); ?>   );
-        li.find( 'input[name="post_name"]'   ).val(   <?php echo json_encode( $post->post_name  ); ?>   );
-        li.find( 'input[name="post_status"]' ).val( [ <?php echo json_encode( $post_status      ); ?> ] );
-        li.find( 'input[name="ss_show_in_menu"]'       ).val( [ <?php echo json_encode( $post_meta[ 'ss_show_in_menu'       ] ); ?> ] );
-        li.find( 'input[name="ss_page_title_seo"]'     ).val( [ <?php echo json_encode( $post_meta[ 'ss_page_title_seo'     ] ); ?> ] );
-        li.find( 'input[name="ss_header_visibility"]'  ).val( [ <?php echo json_encode( $post_meta[ 'ss_header_visibility'  ] ); ?> ] );
+        li.find( 'input[name="post_title"]' ).val( <?php echo json_encode( $post->post_title ); ?> );
+        li.find( 'input[name="post_name"]' ).val( <?php echo json_encode( $ss_url ); ?> );
+        li.find( 'input[name="post_status"]' ).val( [ <?php echo json_encode( $post_status ); ?> ] );
+        li.find( 'select[name="page_template"]' ).val( [ <?php echo json_encode( $post->page_template ); ?> ] );
+        li.find( 'input[name="ss_show_in_menu"]' ).val( [ <?php echo json_encode( $post_meta[ 'ss_show_in_menu' ] ); ?> ] );
+        li.find( 'input[name="ss_page_title_seo"]' ).val( [ <?php echo json_encode( $post_meta[ 'ss_page_title_seo' ] ); ?> ] );
+        li.find( 'input[name="ss_header_visibility"]' ).val( [ <?php echo json_encode( $post_meta[ 'ss_header_visibility' ] ); ?> ] );
         li.find( 'input[name="ss_sidebar_visibility"]' ).val( [ <?php echo json_encode( $post_meta[ 'ss_sidebar_visibility' ] ); ?> ] );
 
         li.find( 'input[name="post_title"]' ).val( <?php echo json_encode($post->post_title); ?> );
