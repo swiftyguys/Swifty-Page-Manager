@@ -260,7 +260,7 @@ var SwiftyPages = ( function ( $, document, undefined ) {
         }
 
         if ( action === 'settings' ) {
-            $tmpl.find( '.ss-label:eq(2)' ).hide();
+            $tmpl.find( 'input[name=add_mode]' ).closest( '.ss-label' ).hide();
         }
 
         $tmpl.find( '.ss-advanced-container' ).hide();
