@@ -61,6 +61,7 @@ class SwiftyPages
             add_action( 'parse_request',                 array( $this, 'parse_request' ) );
             add_filter( 'page_link',                     array( $this, 'page_link' ), 10, 2 );
             add_filter( 'wp_list_pages',                 array( $this, 'wp_list_pages' ) );
+            add_filter( 'status_header',                 array( $this, 'status_header' ) );
         }
     }
 
@@ -71,7 +72,7 @@ class SwiftyPages
      */
     public function parse_request( &$wp )
     {
-        /** @var wpdb $wpdb */
+        /** @var wpdb $wpdb - Wordpress Database */
         global $wpdb;
 
         if ( !empty($wp->request) ) {
@@ -110,8 +111,43 @@ class SwiftyPages
      */
     public function wp_list_pages( $output )
     {
-        $output = preg_replace_callback( '/\bpage-item-(\d+)\b/', array($this, 'wp_list_pages_replace_callback'), $output );
+        $output = preg_replace_callback( '/\bpage-item-(\d+)\b/', array($this, '_wp_list_pages_replace_callback'), $output );
         return $output;
+    }
+
+    /**
+     * Status header filter function.
+     * When a 404 error occurs check if we can find the URL in a post's ss_old_url_XXX field.
+     * If found, 301 redirect to the post.
+     *
+     * @param $code
+     * @return mixed
+     */
+    public function status_header( $code )
+    {
+        /** @var wpdb $wpdb */
+        global $wpdb;
+        global $wp;
+
+        if ( preg_match( '|\b404\b|', $code ) ) {
+
+            if ( !empty($wp->request) ) {
+                $query = $wpdb->prepare( "SELECT post_id
+                                          FROM {$wpdb->postmeta}
+                                          WHERE meta_key LIKE 'ss_old_url_%%' AND meta_value='%s'",
+                                         $wp->request );
+                $post_id = $wpdb->get_var( $query );
+
+                if ( $post_id ) {
+                    $link = get_page_link( $post_id );
+                    if ( $link ) {
+                        header( 'Location: '.$link, true, 301 );
+                        exit();
+                    }
+                }
+            }
+        }
+        return $code;
     }
 
     public function admin_head()
@@ -645,6 +681,38 @@ class SwiftyPages
         return $result;
     }
 
+    /**
+     * USAGE:  $this->save_old_url( 469, 'old/url/path' );
+     *
+     * @param $post_id
+     * @param $old_url
+     */
+    function save_old_url( $post_id, $old_url ) {
+        /** @var wpdb $wpdb */
+        global $wpdb;
+        $old_url = preg_replace( '|^'.preg_quote(get_site_url(),'|').'|', '', $old_url ); // Remove root URL
+        $old_url = trim( $old_url, " \t\n\r\0\x0B/" ); // Remove leading and trailing slashes or whitespaces
+
+        $existQuery = $wpdb->prepare( "SELECT COUNT(*)
+                                       FROM {$wpdb->postmeta}
+                                       WHERE post_id = %d
+                                       AND meta_key LIKE 'ss_old_url_%%' AND meta_value='%s'",
+                                      $post_id,
+                                  $old_url );
+        $exists = intval( $wpdb->get_var( $existQuery ) );
+        if ( !$exists ) {
+            $lastkeyQuery = $wpdb->prepare( "SELECT REPLACE( meta_key, 'ss_old_url_', '' )
+                                             FROM {$wpdb->postmeta}
+                                             WHERE post_id = %d
+                                             AND meta_key LIKE 'ss_old_url_%%'
+                                             ORDER BY meta_key DESC",
+                                            $post_id );
+            $lastKey = $wpdb->get_var( $lastkeyQuery );
+            $number = intval( $lastKey ) + 1;
+            add_post_meta( $post_id, 'ss_old_url_'.$number, $old_url );
+        }
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////
 
     protected function _addRoute( $route, $callable )
@@ -893,7 +961,7 @@ class SwiftyPages
      * @param $match  - matches from preg_replace_callback
      * @return string - replacement, $match[0] is replaced by this
      */
-    protected function wp_list_pages_replace_callback( $match ) {
+    protected function _wp_list_pages_replace_callback( $match ) {
         $result = $match[0];
         $post_id = $match[1];
         $show = get_post_meta( $post_id, 'ss_show_in_menu', true );
@@ -903,6 +971,7 @@ class SwiftyPages
         };
         return $result;
     }
+
 }
 
 $SwiftyPages = new SwiftyPages();
