@@ -58,21 +58,26 @@ class SwiftyPages
         add_action( 'wp_ajax_swiftypages_post_settings', array( $this, 'ajax_post_settings' ) );
 
         if ( $this->is_swifty ) {
-            add_action( 'parse_request', array( $this, 'parse_request' ) );
-            add_filter( 'page_link', array( $this, 'page_link' ), 10, 3 );
+            add_action( 'parse_request',                 array( $this, 'parse_request' ) );
+            add_filter( 'page_link',                     array( $this, 'page_link' ), 10, 2 );
+            add_filter( 'wp_list_pages',                 array( $this, 'wp_list_pages' ) );
         }
     }
 
     /**
-     * @param wp $wp
+     * Action function to make our overridden URLs work by changing the query params.
+     *
+     * @param wp $wp - WordPress object
      */
-    public function parse_request( $wp )
+    public function parse_request( &$wp )
     {
         /** @var wpdb $wpdb */
         global $wpdb;
 
         if ( !empty($wp->request) ) {
-            $query = $wpdb->prepare( "SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key='ss_url' AND meta_value='%s'",
+            $query = $wpdb->prepare( "SELECT post_id
+                                      FROM {$wpdb->postmeta}
+                                      WHERE meta_key='ss_url' AND meta_value='%s'",
                                       $wp->request );
             $post_id = $wpdb->get_var( $query );
 
@@ -82,7 +87,11 @@ class SwiftyPages
         }
     }
 
-    public function page_link( $link, $post_id=false, $sample=false )
+    /**
+     * Filter function called when the link to a page is needed.
+     * We return our custom URL if it has been set.
+     */
+    public function page_link( $link, $post_id=false )
     {
         $ss_url = get_post_meta( $post_id, 'ss_url', true );
 
@@ -91,6 +100,18 @@ class SwiftyPages
         }
 
         return $link;
+    }
+
+    /**
+     * Filter function to add "ss_hidden" class to hidden menu items in <li> tree.
+     *
+     * @param $output
+     * @return string
+     */
+    public function wp_list_pages( $output )
+    {
+        $output = preg_replace_callback( '/\bpage-item-(\d+)\b/', array($this, 'wp_list_pages_replace_callback'), $output );
+        return $output;
     }
 
     public function admin_head()
@@ -863,6 +884,23 @@ class SwiftyPages
             $result = version_compare( $pluginVersion, $requireVersion, '>=' );
         }
 
+        return $result;
+    }
+
+    /**
+     * Callback function for the wp_list_pages() filter function.
+     *
+     * @param $match  - matches from preg_replace_callback
+     * @return string - replacement, $match[0] is replaced by this
+     */
+    protected function wp_list_pages_replace_callback( $match ) {
+        $result = $match[0];
+        $post_id = $match[1];
+        $show = get_post_meta( $post_id, 'ss_show_in_menu', true );
+        if ( !empty($show) && 'hide' == $show )
+        {
+            $result .= ' ss_hidden';
+        };
         return $result;
     }
 }
