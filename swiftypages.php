@@ -58,10 +58,9 @@ class SwiftyPages
         add_action( 'wp_ajax_swiftypages_post_settings', array( $this, 'ajax_post_settings' ) );
 
         if ( $this->is_swifty ) {
-            add_action( 'parse_request',                 array( $this, 'parse_request' ) );
-            add_filter( 'page_link',                     array( $this, 'page_link' ), 10, 2 );
-            add_filter( 'wp_list_pages',                 array( $this, 'wp_list_pages' ) );
-            add_filter( 'status_header',                 array( $this, 'status_header' ) );
+            add_action( 'wp_ajax_swiftypages_sanitize_url', array( $this, 'ajax_sanitize_url' ) );
+            add_action( 'parse_request', array( $this, 'parse_request' ) );
+            add_filter( 'page_link', array( $this, 'page_link' ), 10, 3 );
         }
     }
 
@@ -418,6 +417,7 @@ class SwiftyPages
 
         $post_id     = intval( $_POST[ "post_ID" ] );
         $post_title  = trim( $_POST[ "post_title" ] );
+        $post_name   = trim( $_POST[ "post_name" ] );
         $post_status = $_POST[ "post_status" ];
         $tmp_status  = '__TMP__';
 
@@ -425,7 +425,7 @@ class SwiftyPages
             $post_title = __( "New page", 'swiftypages' );
         }
 
-        $ss_url                = trim( $_POST[ "post_name" ] );
+        $ss_is_custom_url      = intval( $_POST[ "ss_is_custom_url" ] );
         $ss_page_title_seo     = trim( $_POST[ "ss_page_title_seo" ] );
         $ss_show_in_menu       = $_POST[ "ss_show_in_menu" ];
         $ss_header_visibility  = $_POST[ "ss_header_visibility" ];
@@ -434,34 +434,24 @@ class SwiftyPages
         $post_data = array();
 
         $post_data[ "post_title" ]    = $post_title;
-        $post_data[ "post_status" ]   = $tmp_status;
+        $post_data[ "post_status" ]   = ( $this->is_swifty ) ? $tmp_status : $post_status;
         $post_data[ "post_type" ]     = $_POST[ "post_type" ];
         $post_data[ "page_template" ] = $_POST[ "page_template" ];
 
         if ( isset( $post_id ) && !empty( $post_id ) ) {  // We're in edit mode
             $post_data[ "ID" ] = $post_id;
 
-            // Workaround, when post_status is draft, pending or auto-draft, it doesn't update the url
-            wp_update_post( array(
-                'ID'          => $post_id,
-                'post_status' => $tmp_status   // temporary status
-            ) );
-
-            if ( !empty( $ss_url ) ) {
-                $post_data[ "post_name" ] = $ss_url;
-            }
+            // Workaround, when post_status is draft, pending or auto-draft, it doesn't set the url
+            $this->_update_post_status( $post_id, $tmp_status );
 
             $post_id = wp_update_post( $post_data );
 
-            // Workaround, when post_status is draft, pending or auto-draft, it doesn't update the url
-            wp_update_post( array(
-                'ID'          => $post_id,
-                'post_status' => $post_status   // original status
-            ) );
+            // Workaround, when post_status is draft, pending or auto-draft, it doesn't set the url
+            $this->_update_post_status( $post_id, $post_status );
 
             if ( $post_id ) {
                 if ( $this->is_swifty ) {
-                    update_post_meta( $post_id, 'ss_url', get_post_field( 'post_name', $post_id ) );
+                    update_post_meta( $post_id, 'ss_url', $ss_is_custom_url ? $post_name : '' );
                     update_post_meta( $post_id, 'ss_show_in_menu', $ss_show_in_menu );
                     update_post_meta( $post_id, 'ss_page_title_seo', $ss_page_title_seo );
                     update_post_meta( $post_id, 'ss_header_visibility', $ss_header_visibility );
@@ -500,21 +490,14 @@ class SwiftyPages
                 $post_data[ "post_parent" ] = $ref_post->ID;
             }
 
-            if ( !empty( $ss_url ) ) {
-                $post_data[ "post_name" ] = $ss_url;
-            }
-
             $post_id = wp_insert_post( $post_data );
 
             if ( $post_id ) {
-                // Workaround, when post_status is draft, pending or auto-draft, it doesn't update the url
-                wp_update_post( array(
-                    'ID'          => $post_id,
-                    'post_status' => $post_status   // original status
-                ) );
+                // Workaround, when post_status is draft, pending or auto-draft, it doesn't set the url
+                $this->_update_post_status( $post_id, $post_status );
 
                 if ( $this->is_swifty ) {
-                    add_post_meta( $post_id, 'ss_url', get_post_field( 'post_name', $post_id ), 1 );
+                    add_post_meta( $post_id, 'ss_url', $ss_is_custom_url ? $post_name : '', 1 );
                     add_post_meta( $post_id, 'ss_show_in_menu', $ss_show_in_menu, 1 );
                     add_post_meta( $post_id, 'ss_page_title_seo', $ss_page_title_seo, 1 );
                     add_post_meta( $post_id, 'ss_header_visibility', $ss_header_visibility, 1 );
@@ -580,13 +563,14 @@ class SwiftyPages
     {
         header( 'Content-Type: text/javascript' );
 
-        $post_id         = intval( $_REQUEST[ 'post_ID' ] );
-        $post            = get_post( $post_id );
-        $post_meta       = get_post_meta( $post_id );
-        $post_status     = ( $post->post_status == 'private' ) ? 'publish' : $post->post_status; // _status
-        $page_template   = $post->page_template || 'default';
-        $ss_show_in_menu = ( $post->post_status == 'private' ) ? 'hide' : 'show';
-        $ss_url          = '';
+        $post_id          = intval( $_REQUEST[ 'post_ID' ] );
+        $post             = get_post( $post_id );
+        $post_meta        = get_post_meta( $post_id );
+        $post_status      = ( $post->post_status == 'private' ) ? 'publish' : $post->post_status; // _status
+        $page_template    = $post->page_template || 'default';
+        $ss_show_in_menu  = ( $post->post_status == 'private' ) ? 'hide' : 'show';
+        $ss_page_url      = '';
+        $ss_is_custom_url = 0;
 
         $defaults = array( 'ss_show_in_menu'       => 'show'
                          , 'ss_page_title_seo'     => $post->post_title
@@ -602,13 +586,19 @@ class SwiftyPages
 
         if ( $this->is_swifty ) {
             if ( is_array( $post_meta[ 'ss_url' ] ) && !empty( $post_meta[ 'ss_url' ][0] ) ) {
-                $ss_url = $post_meta[ 'ss_url' ][0];
+                $ss_page_url = $post_meta[ 'ss_url' ][0];
+                $ss_is_custom_url = 1;
             } else {
-                add_post_meta( $post_id, 'ss_url', $post->post_name, 1 );
-                $ss_url = $post->post_name;
+                // Workaround, when post_status is draft, pending or auto-draft, it doesn't set the url
+                $this->_update_post_status( $post_id, '__TMP__' );
+
+                $ss_page_url = wp_make_link_relative( get_page_link( $post_id ) );
+
+                // Workaround, when post_status is draft, pending or auto-draft, it doesn't set the url
+                $this->_update_post_status( $post_id, $post_status );
             }
         } else {
-            $ss_url = $post->post_name;
+            $ss_page_url = $post->post_name;
         }
 
         if ( $post_meta[ 'ss_show_in_menu' ] == 'show' ) {
@@ -622,17 +612,24 @@ class SwiftyPages
         var li = jQuery( '#swiftypages-id-<?php echo $post_id; ?>' );
 
         li.find( 'input[name="post_title"]' ).val( <?php echo json_encode( $post->post_title ); ?> );
-        li.find( 'input[name="post_name"]' ).val( <?php echo json_encode( $ss_url ); ?> );
         li.find( 'input[name="post_status"]' ).val( [ <?php echo json_encode( $post_status ); ?> ] );
         li.find( 'select[name="page_template"]' ).val( [ <?php echo json_encode( $post->page_template ); ?> ] );
+        li.find( 'input[name="post_name"]' ).val( <?php echo json_encode( $ss_page_url ); ?> );
+        li.find( 'input[name="ss_is_custom_url"]' ).val( <?php echo json_encode( $ss_is_custom_url ); ?> );
         li.find( 'input[name="ss_show_in_menu"]' ).val( [ <?php echo json_encode( $post_meta[ 'ss_show_in_menu' ] ); ?> ] );
-        li.find( 'input[name="ss_page_title_seo"]' ).val( [ <?php echo json_encode( $post_meta[ 'ss_page_title_seo' ] ); ?> ] );
+        li.find( 'input[name="ss_page_title_seo"]' ).val( <?php echo json_encode( $post_meta[ 'ss_page_title_seo' ] ); ?> );
         li.find( 'input[name="ss_header_visibility"]' ).val( [ <?php echo json_encode( $post_meta[ 'ss_header_visibility' ] ); ?> ] );
         li.find( 'input[name="ss_sidebar_visibility"]' ).val( [ <?php echo json_encode( $post_meta[ 'ss_sidebar_visibility' ] ); ?> ] );
 
         li.find( 'input[name="post_title"]' ).val( <?php echo json_encode($post->post_title); ?> );
         li.find( 'input[name="post_name"]' ).val( <?php echo json_encode($post->post_name); ?> );
         <?php
+        exit;
+    }
+
+    public function ajax_sanitize_url()
+    {
+        echo sanitize_title_with_dashes( $_POST[ "url" ] );
         exit;
     }
 
@@ -714,6 +711,14 @@ class SwiftyPages
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////
+
+    protected function _update_post_status( $post_id, $post_status )
+    {
+        wp_update_post( array(
+            'ID'          => $post_id,
+            'post_status' => $post_status
+        ) );
+    }
 
     protected function _addRoute( $route, $callable )
     {
@@ -822,7 +827,6 @@ class SwiftyPages
             $title = __( "<Untitled page>", 'swiftypages' );
         }
 
-        $show_page_in_menu   = get_post_meta( $page_id, 'ss_show_in_menu', true );
         $user_can_edit_page  = apply_filters( "cms_tree_page_view_post_can_edit", current_user_can( $post_type_object->cap->edit_post, $page_id ), $page_id );
         $user_can_add_inside = apply_filters( "cms_tree_page_view_post_user_can_add_inside", current_user_can( $post_type_object->cap->create_posts, $page_id ), $page_id );
         $user_can_add_after  = apply_filters( "cms_tree_page_view_post_user_can_add_after", current_user_can( $post_type_object->cap->create_posts, $page_id ), $page_id );
@@ -831,7 +835,11 @@ class SwiftyPages
         $arr_page_css_styles[] = "swiftypages_user_can_edit_page_" . ( $user_can_edit_page ? 'yes' : 'no' );
         $arr_page_css_styles[] = "swiftypages_user_can_add_page_inside_" . ( $user_can_add_inside ? 'yes' : 'no' );
         $arr_page_css_styles[] = "swiftypages_user_can_add_page_after_" . ( $user_can_add_after ? 'yes' : 'no' );
-        $arr_page_css_styles[] = "swiftypages_show_page_in_menu_" . ( $show_page_in_menu == 'show' ? 'yes' : 'no' );
+
+        if ( $this->is_swifty ) {
+            $show_page_in_menu     = get_post_meta( $page_id, 'ss_show_in_menu', true );
+            $arr_page_css_styles[] = "swiftypages_show_page_in_menu_" . ( $show_page_in_menu == 'show' ? 'yes' : 'no' );
+        }
 
         $pageJsonData['data'] = array();
         $pageJsonData['data']['title'] = $title;
@@ -856,6 +864,18 @@ class SwiftyPages
         $pageJsonData['metadata']["user_can_add_page_after"] = (int) $user_can_add_after;
         $pageJsonData['metadata']["post_title"] = $title;
         $pageJsonData['metadata']["delete_nonce"] = wp_create_nonce( "delete-page_".$onePage->ID, '_trash' );
+
+        if ( $this->is_swifty ) {
+            // Workaround, when post_status is draft, pending or auto-draft, it doesn't set the url
+            $this->_update_post_status( $onePage->ID, '__TMP__' );
+
+            $pageJsonData['metadata']["ss_page_url"] = htmlspecialchars_decode( get_permalink( $onePage->ID ) );
+
+            // Workaround, when post_status is draft, pending or auto-draft, it doesn't set the url
+            $this->_update_post_status( $onePage->ID, $onePage->post_status );
+        } else {
+            $pageJsonData['metadata']["ss_page_url"] = $pageJsonData['metadata']["permalink"];
+        }
 
         return $pageJsonData;
     }

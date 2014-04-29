@@ -37,6 +37,58 @@ var SwiftyPages = ( function ( $, document, undefined ) {
             return false;
         } );
 
+        $( document ).on( 'keyup', 'input[name=post_title].ss_new_page', function ( ev ) {
+            var $li = $( this ).closest( 'li' );
+            var isCustomUrl = $li.find( 'input[name=ss_is_custom_url]' ).val();
+            var path;
+
+            if ( isCustomUrl && isCustomUrl == '0' ) {
+                path = ss.generatePathToPage( $li );
+
+                setTimeout( function () {
+                    $.post(
+                        ajaxurl,
+                        {
+                            'action': 'swiftypages_sanitize_url',
+                            'url': ev.currentTarget.value
+                        }
+                    ).done( function ( url ) {
+                        $( 'input[name=post_name]' ).val( path + url );
+                    } );
+                }, 100 );
+            }
+
+            return false;
+        } );
+
+        $( document ).on( 'keyup', 'input[name=post_name]', function ( /*ev*/ ) {
+            var $li = $( this ).closest( 'li' );
+            var isCustomUrl = $li.find( 'input[name=ss_is_custom_url]' ).val();
+
+            if ( isCustomUrl && isCustomUrl == '0' ) {
+                $li.find( 'input[name=ss_is_custom_url]' ).val( '1' );
+            }
+
+            return false;
+        } );
+
+        $( document ).on( 'change', 'input[name=add_mode].ss_new_page', function ( /*ev*/ ) {
+            var $li = $( this ).closest( 'li' );
+            var isCustomUrl = $li.find( 'input[name=ss_is_custom_url]' ).val();
+            var path, url;
+
+            if ( isCustomUrl && isCustomUrl == '0' ) {
+                path = ss.generatePathToPage( $li );
+                url = $li.find( 'input[name=post_title]' ).val() !== ''
+                    ? $li.find( 'input[name=post_name]' ).val().replace( /.*\/(.+)$/g, '$1' )
+                    : '';
+
+                $( 'input[name=post_name]' ).val( path + url );
+            }
+
+            return false;
+        } );
+
         $( document ).on( 'click', '.ss-page-button', function ( /*ev*/ ) {
             var $button = $( this );
             var $li = $button.closest( 'li' );
@@ -70,7 +122,7 @@ var SwiftyPages = ( function ( $, document, undefined ) {
 
                     break;
                 case 'view':
-                    document.location = $li.data( 'permalink' );
+                    document.location = $li.data( 'ss_page_url' );
 
                     break;
                 case 'publish':
@@ -102,10 +154,11 @@ var SwiftyPages = ( function ( $, document, undefined ) {
                 'action': 'swiftypages_save_page',
                 'post_type': 'page',
                 'post_title': $li.find( 'input[name=post_title]' ).val(),
-                'post_name': $li.find( 'input[name=post_name]' ).val(),
                 'add_mode': $li.find( 'input[name=add_mode]:checked' ).val(),   // after | inside
                 'post_status': $li.find( 'input[name=post_status]:checked' ).val(),   // draft | publish
                 'page_template': $li.find( 'select[name=page_template]' ).val(),
+                'post_name': $li.find( 'input[name=post_name]' ).val() || $li.find( 'input[name=ss_url]' ).val(),
+                'ss_is_custom_url': $li.find( 'input[name=ss_is_custom_url]' ).val(),
                 'ss_show_in_menu': $li.find( 'input[name=ss_show_in_menu]:checked' ).val() || 'show',   // show | hide
                 'ss_page_title_seo': $li.find( 'input[name=ss_page_title_seo]' ).val(),
                 'ss_header_visibility': $li.find( 'input[name=ss_header_visibility]:checked' ).val(),   // show | hide
@@ -191,6 +244,28 @@ var SwiftyPages = ( function ( $, document, undefined ) {
         } );
     };
 
+    ss.generatePathToPage = function ( $li ) {
+        var addMode = $li.find( 'input[name=add_mode]:checked' ).val();
+        var path = $li.data( 'ss_page_url' ).replace( document.location.origin, '' );
+        var $parentLi = '';
+
+        if ( addMode === 'after' ) {
+            $parentLi = $li.parent( 'ul' ). closest( 'li' );
+
+            if ( $parentLi.length ) {
+                path = $parentLi.data( 'ss_page_url' ).replace( document.location.origin, '' );
+            } else {
+                path = '/';
+            }
+        }
+
+        if ( ! /\/$/.test( path ) ) {
+            path += '/';
+        }
+
+        return path;
+    };
+
     ss.adaptTreeLinkElements = function ( a ) {
         $( a ).css( {
             width: '100%'
@@ -257,6 +332,13 @@ var SwiftyPages = ( function ( $, document, undefined ) {
 
                 $( this ).next().text( labelText + ' ' + self.getLiText( $li ) );
             } );
+
+            $tmpl.find( 'input[name=add_mode]' ).val( [ 'after' ] );
+            $tmpl.find( 'input[name=post_status]' ).val( [ 'draft' ] );
+            $tmpl.find( 'input[name=post_name]' ).val( '' );
+
+            $tmpl.find( 'input[name=add_mode]' ).addClass( 'ss_new_page' );
+            $tmpl.find( 'input[name=post_title]' ).addClass( 'ss_new_page' );
         }
 
         if ( action === 'settings' ) {

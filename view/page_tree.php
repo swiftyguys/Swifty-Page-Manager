@@ -251,18 +251,18 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                 </label>
                             </div>
                             <div class="inline-edit-col ss-advanced-container">
+                                <?php
+                                    if ( $this->is_swifty ) {
+                                ?>
                                 <label class="ss-label">
                                     <span class="title">
                                         <?php _e( 'Customize page url', 'swiftypages' ) ?>
                                     </span>
-                                    <span class="input-text-wrap left-inner-addon">
-                                        <i class="ss-icon-slash">/</i>
+                                    <span class="input-text-wrap">
                                         <input name="post_name" type="text" class="ss-input ss-input-text" />
+                                        <input name="ss_is_custom_url" type="hidden" value="0" />
                                     </span>
                                 </label>
-                                <?php
-                                    if ( $this->is_swifty ) {
-                                ?>
                                 <label class="ss-label">
                                     <span class="title">
                                         <?php _e( 'Show in menu', 'swiftypages' ) ?>
