@@ -325,11 +325,11 @@ class SwiftyPages
             $show_ref_page_in_menu = get_post_meta( $ref_node_id, 'ss_show_in_menu', true );
 
             // first check that post_node (moved post) is not in trash. we do not move them
-            if ( $post_node->post_status == "trash" ) {
+            if ( $post_node->post_status === "trash" ) {
                 exit;
             }
 
-            if ( "inside" == $type ) {
+            if ( "inside" === $type ) {
                 // post_node is moved inside ref_post_node
                 // add ref_post_node as parent to post_node and set post_nodes menu_order to 0
                 // @todo: shouldn't menu order of existing items be changed?
@@ -347,7 +347,7 @@ class SwiftyPages
                 }
 
                 echo "did inside";
-            } elseif ( "before" == $type ) {
+            } elseif ( "before" === $type ) {
                 // post_node is placed before ref_post_node
                 // update menu_order of all pages with a menu order more than or equal ref_node_post and with the same parent as ref_node_post
                 // we do this so there will be room for our page if it's the first page
@@ -368,7 +368,7 @@ class SwiftyPages
                 wp_update_post( $post_to_save );
 
                 echo "did before";
-            } elseif ( "after" == $type ) {
+            } elseif ( "after" === $type ) {
                 // post_node is placed after ref_post_node
                 // update menu_order of all posts with the same parent ref_post_node and with a menu_order of the same as ref_post_node, but do not include ref_post_node
                 // +2 since multiple can have same menu order and we want our moved post to have a unique "spot"
@@ -451,6 +451,16 @@ class SwiftyPages
 
             if ( $post_id ) {
                 if ( $this->is_swifty ) {
+                    $post_meta = get_post_meta( $post_id );
+
+                    if ( is_array( $post_meta[ 'ss_url' ] ) && !empty( $post_meta[ 'ss_url' ][0] ) ) {
+                        $cur_ss_url = $post_meta[ 'ss_url' ][0];
+
+                        if ( $cur_ss_url !== $post_name ) {
+                            $this->save_old_url( $post_id, $cur_ss_url );
+                        }
+                    }
+
                     update_post_meta( $post_id, 'ss_url', $ss_is_custom_url ? $post_name : '' );
                     update_post_meta( $post_id, 'ss_show_in_menu', $ss_show_in_menu );
                     update_post_meta( $post_id, 'ss_page_title_seo', $ss_page_title_seo );
@@ -470,7 +480,7 @@ class SwiftyPages
             $parent_id = intval( str_replace( "swiftypages-id-", "", $parent_id ) );
             $ref_post  = get_post( $parent_id );
 
-            if ( "after" == $_POST[ "add_mode" ] ) {
+            if ( "after" === $_POST[ "add_mode" ] ) {
                 // update menu_order of all pages below our page
                 $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+2 WHERE post_parent = %d AND menu_order >= %d AND id <> %d "
                                             , $ref_post->post_parent
@@ -482,7 +492,7 @@ class SwiftyPages
                 // create a new page and then goto it
                 $post_data[ "menu_order" ]  = $ref_post->menu_order + 1;
                 $post_data[ "post_parent" ] = $ref_post->post_parent;
-            } elseif ( "inside" == $_POST[ "add_mode" ] ) {
+            } elseif ( "inside" === $_POST[ "add_mode" ] ) {
                 // update menu_order, so our new post is the only one with order 0
                 $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+1 WHERE post_parent = %d", $ref_post->ID ) );
 
@@ -566,9 +576,9 @@ class SwiftyPages
         $post_id          = intval( $_REQUEST[ 'post_ID' ] );
         $post             = get_post( $post_id );
         $post_meta        = get_post_meta( $post_id );
-        $post_status      = ( $post->post_status == 'private' ) ? 'publish' : $post->post_status; // _status
+        $post_status      = ( $post->post_status === 'private' ) ? 'publish' : $post->post_status; // _status
         $page_template    = $post->page_template || 'default';
-        $ss_show_in_menu  = ( $post->post_status == 'private' ) ? 'hide' : 'show';
+        $ss_show_in_menu  = ( $post->post_status === 'private' ) ? 'hide' : 'show';
         $ss_page_url      = '';
         $ss_is_custom_url = 0;
 
@@ -601,7 +611,7 @@ class SwiftyPages
             $ss_page_url = $post->post_name;
         }
 
-        if ( $post_meta[ 'ss_show_in_menu' ] == 'show' ) {
+        if ( $post_meta[ 'ss_show_in_menu' ] === 'show' ) {
             // post_status can be private, so then the page must not be visible in the menu.
             $post_meta[ 'ss_show_in_menu' ] = $ss_show_in_menu;
         }
@@ -838,7 +848,7 @@ class SwiftyPages
 
         if ( $this->is_swifty ) {
             $show_page_in_menu     = get_post_meta( $page_id, 'ss_show_in_menu', true );
-            $arr_page_css_styles[] = "swiftypages_show_page_in_menu_" . ( $show_page_in_menu == 'show' ? 'yes' : 'no' );
+            $arr_page_css_styles[] = "swiftypages_show_page_in_menu_" . ( $show_page_in_menu === 'show' ? 'yes' : 'no' );
         }
 
         $pageJsonData['data'] = array();
@@ -985,7 +995,7 @@ class SwiftyPages
         $result = $match[0];
         $post_id = $match[1];
         $show = get_post_meta( $post_id, 'ss_show_in_menu', true );
-        if ( !empty($show) && 'hide' == $show )
+        if ( !empty($show) && 'hide' === $show )
         {
             $result .= ' ss_hidden';
         };

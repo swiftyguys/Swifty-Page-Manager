@@ -232,6 +232,7 @@ var SwiftyPages = ( function ( $, document, undefined ) {
                     'action': 'swiftypages_save_page',
                     'post_type': 'page',
                     'post_title': 'Home',
+                    'post_status': 'draft',
                     'add_mode': 'after',
                     '_inline_edit': $( 'input#_inline_edit' ).val()
                 },
