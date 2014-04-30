@@ -208,7 +208,8 @@ class SwiftyPages
             "status_trash_ucase"      => ucfirst( __( "trash", 'swiftypages' ) ),
             "password_protected_page" => __( "Password protected page", 'swiftypages' ),
             "no_pages_found"          => __( "No pages found.", 'swiftypages' ),
-            "hidden_page"             => __( "Hidden", 'swiftypages' )
+            "hidden_page"             => __( "Hidden", 'swiftypages' ),
+            "no_sub_page_when_draft"  => __( "Sorry, can't create a sub page to a page with status \"draft\".", 'swiftypages' ),
         );
 
         wp_localize_script( "swiftypages", 'swiftypages_l10n', $oLocale );
@@ -465,6 +466,16 @@ class SwiftyPages
                         if ( $cur_ss_url !== $post_name ) {
                             $this->save_old_url( $post_id, $cur_ss_url );
                         }
+                    } else {
+                        if ( $ss_is_custom_url ) {
+                            // Workaround, when post_status is draft, pending or auto-draft, it doesn't set the url
+                            $this->_update_post_status( $post_id, $tmp_status );
+
+                            $this->save_old_url( $post_id, wp_make_link_relative( get_page_link( $post_id ) ) );
+
+                            // Workaround, when post_status is draft, pending or auto-draft, it doesn't set the url
+                            $this->_update_post_status( $post_id, $post_status );
+                        }
                     }
 
                     update_post_meta( $post_id, 'ss_url', $ss_is_custom_url ? $post_name : '' );
@@ -565,7 +576,7 @@ class SwiftyPages
         $post_id = intval( $_POST[ "post_ID" ] );
 
         if ( isset( $post_id ) && !empty( $post_id ) ) {
-            wp_publish_post( $post_id );
+            $this->_update_post_status( $post_id, 'publish' );
 
             echo "1";
         } else {
@@ -843,9 +854,9 @@ class SwiftyPages
             $title = __( "<Untitled page>", 'swiftypages' );
         }
 
-        $user_can_edit_page  = apply_filters( "cms_tree_page_view_post_can_edit", current_user_can( $post_type_object->cap->edit_post, $page_id ), $page_id );
-        $user_can_add_inside = apply_filters( "cms_tree_page_view_post_user_can_add_inside", current_user_can( $post_type_object->cap->create_posts, $page_id ), $page_id );
-        $user_can_add_after  = apply_filters( "cms_tree_page_view_post_user_can_add_after", current_user_can( $post_type_object->cap->create_posts, $page_id ), $page_id );
+        $user_can_edit_page  = current_user_can( $post_type_object->cap->edit_post, $page_id );
+        $user_can_add_inside = current_user_can( $post_type_object->cap->create_posts, $page_id );
+        $user_can_add_after  = current_user_can( $post_type_object->cap->create_posts, $page_id );
 
         $arr_page_css_styles   = array();
         $arr_page_css_styles[] = "swiftypages_user_can_edit_page_" . ( $user_can_edit_page ? 'yes' : 'no' );

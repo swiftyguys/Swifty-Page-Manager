@@ -77,6 +77,10 @@ var SwiftyPages = ( function ( $, document, undefined ) {
             var isCustomUrl = $li.find( 'input[name=ss_is_custom_url]' ).val();
             var path, url;
 
+            if ( !ss.validateSettings( $li ) ) {
+                return false;
+            }
+
             if ( isCustomUrl && isCustomUrl == '0' ) {
                 path = ss.generatePathToPage( $li );
                 url = $li.find( 'input[name=post_title]' ).val() !== ''
@@ -150,7 +154,13 @@ var SwiftyPages = ( function ( $, document, undefined ) {
         $( document ).on( 'click', '.save.ss-button', function ( /*ev*/ ) {
             var $li = $( this ).closest( 'li' );
             var action = $li.data( 'cur-action' );
-            var settings = {
+            var settings;
+
+            if ( !ss.validateSettings( $li ) ) {
+                return false;
+            }
+
+            settings = {
                 'action': 'swiftypages_save_page',
                 'post_type': 'page',
                 'post_title': $li.find( 'input[name=post_title]' ).val(),
@@ -234,6 +244,8 @@ var SwiftyPages = ( function ( $, document, undefined ) {
                     'post_title': 'Home',
                     'post_status': 'draft',
                     'add_mode': 'after',
+                    'page_template': 'default',
+                    'ss_show_in_menu': 'show',
                     '_inline_edit': $( 'input#_inline_edit' ).val()
                 },
                 function () {
@@ -282,6 +294,23 @@ var SwiftyPages = ( function ( $, document, undefined ) {
         $tree.find( 'li' ).data( 'cur-action', '' );
         $tree.find( '.ss-container' ).remove();
         $tree.find( 'a.jstree-clicked' ).removeClass( 'jstree-clicked' );
+    };
+
+    ss.validateSettings = function ( $li ) {
+        var postStatusParent = $li.data( 'post_status' );
+        var addMode = $li.find( 'input[name=add_mode]:checked' ).val();
+        var isOk = 1;
+
+        // If status is draft then it's not possible to add sub pages
+        if ( postStatusParent === "draft" && addMode === "inside" ) {
+            jAlert( swiftypages_l10n.no_sub_page_when_draft );
+
+            $li.find( 'input[name=add_mode]' ).val( [ 'after' ] );
+
+            isOk = 0;
+        }
+
+        return isOk;
     };
 
     ss.getPostType = function ( el ) {
@@ -413,7 +442,8 @@ var SwiftyPages = ( function ( $, document, undefined ) {
             } else if ( nodePosition === 'after' ) {
                 nodeId = $nodeBeingMoved.attr( 'id' );
                 refNodeId = $nodeR.attr( 'id' );
-            } else if ( nodePosition === 'inside' ) {
+            } else if ( nodePosition === 'inside' || nodePosition === 'last' ) {
+                nodePosition = 'inside';
                 nodeId = $nodeBeingMoved.attr( 'id' );
                 refNodeId = $nodeR.attr( 'id' );
             }
@@ -525,7 +555,7 @@ jQuery( function ( $ ) {
     } );
 
     swiftyPagesTreeOptions = {
-        plugins: [ 'themes', 'json_data', 'cookies', 'dnd', 'types', 'ui' ],
+        plugins: [ 'themes', 'json_data', 'cookies', 'dnd', 'crrm', 'types', 'ui' ],
         core: {
             'html_titles': true
         },
@@ -558,7 +588,36 @@ jQuery( function ( $ ) {
             'dots': true,
             'icons': true
         },
-        'dnd': {
+        "crrm" : {
+            "move" : {
+                "check_move" : function ( m ) {
+                    var p = this._get_parent( m.o );
+
+                    if ( !p ) {
+                        return false;
+                    }
+
+                    p = p == -1 ? this.get_container() : p;
+
+                    if ( p === m.np ) {
+                        return true;
+                    }
+
+                    if ( m.p === "inside" || m.p === "last" ) {
+                        return !$( m.cr[0] ).find( '.post_type_draft' ).length;
+                    }
+
+                    if ( m.p === "before" || m.p === "after" ) {
+                        return true;
+                    }
+
+                    if ( p[0] && m.np[0] && p[0] === m.np[0] ) {
+                        return true;
+                    }
+
+                    return false;
+                }
+            }
         }
     };
 

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Swifty Page Manager v0.0.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-04-25 07:48:31+0000\n"
+"PO-Revision-Date: 2014-04-30 10:01:03+0000\n"
 "Last-Translator: jh-dev <jeroen.hoekstra@longtermresults.nl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -20,14 +20,14 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Textdomain-Support: yes"
 
-#: swiftypages.php:109
-#: swiftypages.php:110
-#: swiftypages.php:216
+#: swiftypages.php:173
+#: swiftypages.php:174
+#: swiftypages.php:281
 #@ swiftypages
 msgid "SwiftyPages"
 msgstr "SwiftyPages"
 
-#: swiftypages.php:127
+#: swiftypages.php:191
 #@ default
 msgid "You do not have sufficient permissions to access this page."
 msgstr ""
@@ -48,37 +48,37 @@ msgstr "Bekijk pagina"
 msgid "Add page"
 msgstr "Voeg pagina toe"
 
-#: swiftypages.php:141
+#: swiftypages.php:205
 #@ swiftypages
 msgid "draft"
 msgstr "concept"
 
-#: swiftypages.php:142
+#: swiftypages.php:206
 #@ swiftypages
 msgid "future"
 msgstr "toekomstig"
 
-#: swiftypages.php:143
+#: swiftypages.php:207
 #@ swiftypages
 msgid "protected"
 msgstr "beschermd"
 
-#: swiftypages.php:144
+#: swiftypages.php:208
 #@ swiftypages
 msgid "pending"
 msgstr "wacht"
 
-#: swiftypages.php:145
+#: swiftypages.php:209
 #@ swiftypages
 msgid "private"
 msgstr "privé"
 
-#: swiftypages.php:146
+#: swiftypages.php:210
 #@ swiftypages
 msgid "trash"
 msgstr "Verwijderd"
 
-#: swiftypages.php:147
+#: swiftypages.php:211
 #@ swiftypages
 msgid "Password protected page"
 msgstr "Wachtwoord beschermde pagina"
@@ -88,7 +88,7 @@ msgstr "Wachtwoord beschermde pagina"
 msgid "Menu button text"
 msgstr "Tekst menuknop"
 
-#: view/page_tree.php:256
+#: view/page_tree.php:259
 #@ swiftypages
 msgid "Customize page url"
 msgstr "Bewerk pagina URL"
@@ -151,27 +151,27 @@ msgstr "Meer"
 msgid "Less"
 msgstr "Minder"
 
-#: swiftypages.php:168
+#: swiftypages.php:233
 #@ default
 msgid "Cheatin&#8217; uh?"
 msgstr ""
 
-#: swiftypages.php:225
+#: swiftypages.php:290
 #@ default
 msgid "List View"
 msgstr ""
 
-#: swiftypages.php:366
+#: swiftypages.php:434
 #@ swiftypages
 msgid "New page"
 msgstr "Nieuwe pagina"
 
-#: swiftypages.php:709
+#: swiftypages.php:837
 #@ swiftypages
 msgid "Unknown user"
 msgstr "Onbekende gebruiker"
 
-#: swiftypages.php:715
+#: swiftypages.php:843
 #@ swiftypages
 msgid "<Untitled page>"
 msgstr "<pagina zonder titel>"
@@ -243,7 +243,7 @@ msgstr "Toon of verberg zijbalk"
 msgid "Save"
 msgstr "Opslaan"
 
-#: swiftypages.php:148
+#: swiftypages.php:212
 #: view/page_tree.php:397
 #@ swiftypages
 msgid "No pages found."
@@ -269,7 +269,7 @@ msgstr "Na pagina"
 msgid "As sub page of page"
 msgstr "Als subpagina van pagina"
 
-#: swiftypages.php:149
+#: swiftypages.php:213
 #@ swiftypages
 msgid "Hidden"
 msgstr "Verborgen"
@@ -283,4 +283,9 @@ msgstr "Sjabloon"
 #@ swiftypages
 msgid "Default template"
 msgstr "Standaard sjabloon"
+
+#: swiftypages.php:214
+#@ swiftypages
+msgid "Sorry, can't create a sub page to a page with status \"draft\"."
+msgstr "Helaas is het niet mogelijk om een pagina als subpagina aan te maken waarvan de bovenliggende pagina de status \\\"Concept\\\" heeft."
 
