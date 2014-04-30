@@ -110,7 +110,12 @@ class SwiftyPages
      */
     public function wp_list_pages( $output )
     {
-        $output = preg_replace_callback( '/\bpage-item-(\d+)\b/', array($this, '_wp_list_pages_replace_callback'), $output );
+        $output = preg_replace_callback(
+            '/\bpage-item-(\d+)\b/',
+            array( $this, '_wp_list_pages_replace_callback' ),
+            $output
+        );
+
         return $output;
     }
 
@@ -129,23 +134,24 @@ class SwiftyPages
         global $wp;
 
         if ( preg_match( '|\b404\b|', $code ) ) {
-
             if ( !empty($wp->request) ) {
                 $query = $wpdb->prepare( "SELECT post_id
                                           FROM {$wpdb->postmeta}
                                           WHERE meta_key LIKE 'ss_old_url_%%' AND meta_value='%s'",
-                                         $wp->request );
+                                          $wp->request );
                 $post_id = $wpdb->get_var( $query );
 
                 if ( $post_id ) {
                     $link = get_page_link( $post_id );
+
                     if ( $link ) {
-                        header( 'Location: '.$link, true, 301 );
+                        header( 'Location: ' . $link, true, 301 );
                         exit();
                     }
                 }
             }
         }
+
         return $code;
     }
 
@@ -153,8 +159,8 @@ class SwiftyPages
     {
         $currentScreen = get_current_screen();
 
-        if ( 'pages_page_page-tree' == $currentScreen->base ) {
-            add_filter( "views_" . $currentScreen->id, array( $this, "filter_views_edit_postsoverview" ) );
+        if ( 'pages_page_page-tree' === $currentScreen->base ) {
+            add_filter( "views_" . $currentScreen->id, array( $this, 'filter_views_edit_postsoverview' ) );
             require $this->plugin_dir . '/view/admin_head.php';
         }
     }
@@ -991,14 +997,16 @@ class SwiftyPages
      * @param $match  - matches from preg_replace_callback
      * @return string - replacement, $match[0] is replaced by this
      */
-    protected function _wp_list_pages_replace_callback( $match ) {
-        $result = $match[0];
+    protected function _wp_list_pages_replace_callback( $match )
+    {
+        $result  = $match[0];
         $post_id = $match[1];
-        $show = get_post_meta( $post_id, 'ss_show_in_menu', true );
-        if ( !empty($show) && 'hide' === $show )
-        {
+        $show    = get_post_meta( $post_id, 'ss_show_in_menu', true );
+
+        if ( !empty( $show ) && 'hide' === $show ) {
             $result .= ' ss_hidden';
         };
+
         return $result;
     }
 
