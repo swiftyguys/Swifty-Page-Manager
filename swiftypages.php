@@ -753,7 +753,7 @@ class SwiftyPages
                                        WHERE post_id = %d
                                        AND meta_key LIKE 'ss_old_url_%%' AND meta_value='%s'",
                                       $post_id,
-                                  $old_url );
+                                      $old_url );
         $exists = intval( $wpdb->get_var( $existQuery ) );
         if ( !$exists ) {
             $lastkeyQuery = $wpdb->prepare( "SELECT REPLACE( meta_key, 'ss_old_url_', '' )
