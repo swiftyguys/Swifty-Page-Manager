@@ -53,7 +53,7 @@ var SwiftyPages = ( function ( $, document ) {
                             'url': ev.currentTarget.value
                         }
                     ).done( function ( url ) {
-                        $( 'input[name=post_name]' ).val( path + url );
+                        $( 'input[name=post_name]' ).val( ss.stripUrl( path + url ) );
                     } );
                 }, 100 );
             }
@@ -87,7 +87,7 @@ var SwiftyPages = ( function ( $, document ) {
                     ? $li.find( 'input[name=post_name]' ).val().replace( /.*\/(.+)$/g, '$1' )
                     : '';
 
-                $( 'input[name=post_name]' ).val( path + url );
+                $( 'input[name=post_name]' ).val( ss.stripUrl( path + url ) );
             }
 
             return false;
@@ -268,15 +268,15 @@ var SwiftyPages = ( function ( $, document ) {
             if ( $parentLi.length ) {
                 path = $parentLi.data( 'permalink' ).replace( document.location.origin, '' );
             } else {
-                path = '/';
+                path = '';
             }
         }
 
-        if ( ! /\/$/.test( path ) ) {
-            path += '/';
-        }
-
         return path;
+    };
+
+    ss.stripUrl = function ( url ) {
+        return url.replace( /^\/|\/$/, '' );
     };
 
     ss.adaptTreeLinkElements = function ( a ) {

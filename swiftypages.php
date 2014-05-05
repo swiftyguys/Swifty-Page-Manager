@@ -659,6 +659,8 @@ class SwiftyPages
             $ss_page_url = $post->post_name;
         }
 
+        $ss_page_url = trim( $ss_page_url, '/' );
+
         if ( $post_meta[ 'ss_show_in_menu' ] === 'show' ) {
             // post_status can be private, so then the page must not be visible in the menu.
             $post_meta[ 'ss_show_in_menu' ] = $ss_show_in_menu;
