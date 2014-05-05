@@ -8,7 +8,7 @@ var $swiftyPagesTree,
     swiftyPagesTreeOptions,
     $swiftyPagesMessage;
 
-var SwiftyPages = ( function ( $, document, undefined ) {
+var SwiftyPages = ( function ( $, document ) {
     var ss = {};
 
     ss.init = function () {
@@ -126,7 +126,7 @@ var SwiftyPages = ( function ( $, document, undefined ) {
 
                     break;
                 case 'view':
-                    document.location = $li.data( 'ss_page_url' );
+                    document.location = $li.data( 'permalink' );
 
                     break;
                 case 'publish':
@@ -259,14 +259,14 @@ var SwiftyPages = ( function ( $, document, undefined ) {
 
     ss.generatePathToPage = function ( $li ) {
         var addMode = $li.find( 'input[name=add_mode]:checked' ).val();
-        var path = $li.data( 'ss_page_url' ).replace( document.location.origin, '' );
+        var path = $li.data( 'permalink' ).replace( document.location.origin, '' );
         var $parentLi = '';
 
         if ( addMode === 'after' ) {
             $parentLi = $li.parent( 'ul' ). closest( 'li' );
 
             if ( $parentLi.length ) {
-                path = $parentLi.data( 'ss_page_url' ).replace( document.location.origin, '' );
+                path = $parentLi.data( 'permalink' ).replace( document.location.origin, '' );
             } else {
                 path = '/';
             }

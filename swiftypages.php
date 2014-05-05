@@ -59,8 +59,45 @@ class SwiftyPages
 
         if ( $this->is_swifty ) {
             add_action( 'wp_ajax_swiftypages_sanitize_url', array( $this, 'ajax_sanitize_url' ) );
-            add_action( 'parse_request', array( $this, 'parse_request' ) );
-            add_filter( 'page_link', array( $this, 'page_link' ), 10, 3 );
+            add_action( 'parse_request',       array( $this, 'parse_request' ) );
+            add_action( 'save_post',           array( $this, 'restore_page_status' ), 10, 3 );
+            add_filter( 'wp_insert_post_data', array( $this, 'set_tmp_page_status' ), 10, 2 );
+            add_filter( 'page_link',           array( $this, 'page_link' ), 10, 2 );
+            add_filter( 'wp_list_pages',       array( $this, 'wp_list_pages' ) );
+            add_filter( 'status_header',       array( $this, 'status_header' ) );
+        }
+    }
+
+    public function set_tmp_page_status( $data, $postarr )
+    {
+        // Only do this when creating a page.
+        if ( $data['post_type']   === 'page'  &&
+             $data['post_status'] === 'draft' &&
+             empty( $postarr['ID'] )
+        ) {
+            $data['post_status'] = '__TMP__';
+        }
+
+        return $data;
+    }
+
+    public function restore_page_status( $post_id, $post, $update ) {
+        global $wpdb;
+
+        // Check it's not an auto save routine
+        if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+            return;
+        }
+
+        if ( !wp_is_post_revision( $post_id ) &&
+              $post->post_type   === 'page'   &&
+              $post->post_status === '__TMP__'
+        ) {
+            $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET post_status = '%s' WHERE id = %d"
+                                        , $_POST[ "post_status" ]
+                                        , $post_id
+                                        )
+                        );
         }
     }
 
@@ -97,6 +134,22 @@ class SwiftyPages
 
         if ( $ss_url ) {
             $link = get_site_url( null, $ss_url );
+        } else {
+            $post = get_post( $post_id );
+
+            // Hack: get_page_link() would return ugly permalink for drafts, so we will fake that our post is published.
+            if ( in_array( $post->post_status, array( 'draft', 'pending' ) ) ) {
+                $post->post_status = 'publish';
+                $post->post_name = sanitize_title( $post->post_name ? $post->post_name : $post->post_title, $post->ID );
+            }
+
+            // If calling get_page_link inside page_link action, unhook this function so it doesn't loop infinitely
+            remove_filter( 'page_link', array( $this, 'page_link' ) );
+
+            $link = get_page_link( $post );
+
+            // Re-hook this function
+            add_filter( 'page_link', array( $this, 'page_link' ), 10, 2 );
         }
 
         return $link;
@@ -422,39 +475,32 @@ class SwiftyPages
     {
         global $wpdb;
 
-        $post_id     = intval( $_POST[ "post_ID" ] );
-        $post_title  = trim( $_POST[ "post_title" ] );
-        $post_name   = trim( $_POST[ "post_name" ] );
+        $post_id     = !empty( $_POST[ "post_ID" ] ) ? intval( $_POST[ "post_ID" ] ) : null;
+        $post_title  = !empty( $_POST[ "post_title" ] ) ? trim( $_POST[ "post_title" ] ) : '';
+        $post_name   = !empty( $_POST[ "post_name" ] ) ? trim( $_POST[ "post_name" ] ) : '';
         $post_status = $_POST[ "post_status" ];
-        $tmp_status  = '__TMP__';
 
         if ( !$post_title ) {
             $post_title = __( "New page", 'swiftypages' );
         }
 
-        $ss_is_custom_url      = intval( $_POST[ "ss_is_custom_url" ] );
-        $ss_page_title_seo     = trim( $_POST[ "ss_page_title_seo" ] );
-        $ss_show_in_menu       = $_POST[ "ss_show_in_menu" ];
-        $ss_header_visibility  = $_POST[ "ss_header_visibility" ];
-        $ss_sidebar_visibility = $_POST[ "ss_sidebar_visibility" ];
+        $ss_is_custom_url      = !empty( $_POST[ "ss_is_custom_url" ] ) ? intval( $_POST[ "ss_is_custom_url" ] ) : null;
+        $ss_page_title_seo     = !empty( $_POST[ "ss_page_title_seo" ] ) ? trim( $_POST[ "ss_page_title_seo" ] ) : '';
+        $ss_show_in_menu       = !empty( $_POST[ "ss_show_in_menu" ] ) ? $_POST[ "ss_show_in_menu" ] : null;
+        $ss_header_visibility  = !empty( $_POST[ "ss_header_visibility" ] ) ? $_POST[ "ss_header_visibility" ]  : null;
+        $ss_sidebar_visibility = !empty( $_POST[ "ss_sidebar_visibility" ] ) ? $_POST[ "ss_sidebar_visibility" ] : null;
 
         $post_data = array();
 
         $post_data[ "post_title" ]    = $post_title;
-        $post_data[ "post_status" ]   = ( $this->is_swifty ) ? $tmp_status : $post_status;
+        $post_data[ "post_status" ]   = $post_status;
         $post_data[ "post_type" ]     = $_POST[ "post_type" ];
         $post_data[ "page_template" ] = $_POST[ "page_template" ];
 
         if ( isset( $post_id ) && !empty( $post_id ) ) {  // We're in edit mode
             $post_data[ "ID" ] = $post_id;
 
-            // Workaround, when post_status is draft, pending or auto-draft, it doesn't set the url
-            $this->_update_post_status( $post_id, $tmp_status );
-
             $post_id = wp_update_post( $post_data );
-
-            // Workaround, when post_status is draft, pending or auto-draft, it doesn't set the url
-            $this->_update_post_status( $post_id, $post_status );
 
             if ( $post_id ) {
                 if ( $this->is_swifty ) {
@@ -468,13 +514,7 @@ class SwiftyPages
                         }
                     } else {
                         if ( $ss_is_custom_url ) {
-                            // Workaround, when post_status is draft, pending or auto-draft, it doesn't set the url
-                            $this->_update_post_status( $post_id, $tmp_status );
-
                             $this->save_old_url( $post_id, wp_make_link_relative( get_page_link( $post_id ) ) );
-
-                            // Workaround, when post_status is draft, pending or auto-draft, it doesn't set the url
-                            $this->_update_post_status( $post_id, $post_status );
                         }
                     }
 
@@ -520,9 +560,6 @@ class SwiftyPages
             $post_id = wp_insert_post( $post_data );
 
             if ( $post_id ) {
-                // Workaround, when post_status is draft, pending or auto-draft, it doesn't set the url
-                $this->_update_post_status( $post_id, $post_status );
-
                 if ( $this->is_swifty ) {
                     add_post_meta( $post_id, 'ss_url', $ss_is_custom_url ? $post_name : '', 1 );
                     add_post_meta( $post_id, 'ss_show_in_menu', $ss_show_in_menu, 1 );
@@ -616,13 +653,7 @@ class SwiftyPages
                 $ss_page_url = $post_meta[ 'ss_url' ][0];
                 $ss_is_custom_url = 1;
             } else {
-                // Workaround, when post_status is draft, pending or auto-draft, it doesn't set the url
-                $this->_update_post_status( $post_id, '__TMP__' );
-
                 $ss_page_url = wp_make_link_relative( get_page_link( $post_id ) );
-
-                // Workaround, when post_status is draft, pending or auto-draft, it doesn't set the url
-                $this->_update_post_status( $post_id, $post_status );
             }
         } else {
             $ss_page_url = $post->post_name;
@@ -891,18 +922,6 @@ class SwiftyPages
         $pageJsonData['metadata']["user_can_add_page_after"] = (int) $user_can_add_after;
         $pageJsonData['metadata']["post_title"] = $title;
         $pageJsonData['metadata']["delete_nonce"] = wp_create_nonce( "delete-page_".$onePage->ID, '_trash' );
-
-        if ( $this->is_swifty ) {
-            // Workaround, when post_status is draft, pending or auto-draft, it doesn't set the url
-            $this->_update_post_status( $onePage->ID, '__TMP__' );
-
-            $pageJsonData['metadata']["ss_page_url"] = htmlspecialchars_decode( get_permalink( $onePage->ID ) );
-
-            // Workaround, when post_status is draft, pending or auto-draft, it doesn't set the url
-            $this->_update_post_status( $onePage->ID, $onePage->post_status );
-        } else {
-            $pageJsonData['metadata']["ss_page_url"] = $pageJsonData['metadata']["permalink"];
-        }
 
         return $pageJsonData;
     }
