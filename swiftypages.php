@@ -37,7 +37,7 @@ class SwiftyPages
 //        $this->has_swifty_editor       = $this->_isPluginMinimal( 'swifty-editor/*', '1.0.0' );
         $this->has_swifty_themes  = false;
         $this->has_swifty_editor  = false;
-        $this->is_swifty          = true;   // TEMP!!!
+        $this->is_swifty          = false;   // TEMP!!!
 
         if ( !empty( $_GET[ "view" ] ) ) {
             $this->_view = $_GET[ "view" ];
