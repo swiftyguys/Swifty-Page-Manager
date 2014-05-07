@@ -65,7 +65,23 @@ class SwiftyPages
             add_filter( 'page_link',           array( $this, 'page_link' ), 10, 2 );
             add_filter( 'wp_list_pages',       array( $this, 'wp_list_pages' ) );
             add_filter( 'status_header',       array( $this, 'status_header' ) );
+            add_filter( 'wp_title',            array( $this, 'seo_wp_title' ), 10, 2 );
         }
+    }
+
+    function seo_wp_title( $title, $sep )
+    {
+        if ( is_feed() ) {
+            return $title;
+        }
+
+        $seoTitle = get_post_meta( get_the_ID(), 'ss_page_title_seo', true );
+
+        if ( !empty( $seoTitle ) ) {
+            return "$seoTitle $sep ";
+        }
+
+        return $title;
     }
 
     public function set_tmp_page_status( $data, $postarr )
@@ -504,11 +520,9 @@ class SwiftyPages
 
             if ( $post_id ) {
                 if ( $this->is_swifty ) {
-                    $post_meta = get_post_meta( $post_id );
+                    $cur_ss_url = get_post_meta( $post_id, 'ss_url', true );
 
-                    if ( is_array( $post_meta[ 'ss_url' ] ) && !empty( $post_meta[ 'ss_url' ][0] ) ) {
-                        $cur_ss_url = $post_meta[ 'ss_url' ][0];
-
+                    if ( !empty( $cur_ss_url ) ) {
                         if ( $cur_ss_url !== $post_name ) {
                             $this->save_old_url( $post_id, $cur_ss_url );
                         }

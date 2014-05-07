@@ -456,14 +456,7 @@ var SwiftyPages = ( function ( $, document ) {
                 'type': nodePosition,
                 'icl_post_language': selectedLang
             }, function ( /*data, textStatus*/ ) {
-                if ( nodePosition === 'inside' && $nodeR.hasClass( 'swiftypages_show_page_in_menu_no' ) ) {
-                    $nodeBeingMoved.removeClass( 'swiftypages_show_page_in_menu_yes' )
-                                  .addClass( 'swiftypages_show_page_in_menu_no' );
-
-                    $nodeBeingMoved.find( 'a:first' ).find( 'ins' ).first().after(
-                        '<span class="page-in-menu">' + swiftypages_l10n.hidden_page + '</span>'
-                    );
-                }
+                location.reload();
             } );
         } );
 
