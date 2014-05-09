@@ -1,7 +1,7 @@
 <?php
 /**
  * Variables that need to be set:
- * @var SwiftyPages $this
+ * @var SwiftyPageManager $this
  */
 $post_type_object = get_post_type_object( $this->_post_type );
 $post_new_file = "post-new.php?post_type=".$this->_post_type;
@@ -9,7 +9,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
 ?>
 <div class="wrap">
     <?php echo get_screen_icon(); ?>
-    <h2><?php echo _x( 'SwiftyPages', 'headline of page with tree', 'swiftypages' ); ?></h2>
+    <h2><?php echo _x( 'Swifty Page Manager', 'headline of page with tree', 'swifty-page-manager' ); ?></h2>
     <?php
 
     $get_pages_args = array( "post_type" => $this->_post_type );
@@ -60,16 +60,16 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
     }
 
     // output js for the root/top level
-    // function swiftypages_print_childs($pageID, $view = "all", $arrOpenChilds = null, $post_type) {
+    // function spm_print_childs($pageID, $view = "all", $arrOpenChilds = null, $post_type) {
     // @todo: make into function since used at other places
     $jstree_open = array();
 
     if ( isset( $_COOKIE[ "jstree_open" ] ) ) {
-        $jstree_open = $_COOKIE[ "jstree_open" ]; // like this: [jstree_open] => swiftypages-id-1282,swiftypages-id-1284,swiftypages-id-3
+        $jstree_open = $_COOKIE[ "jstree_open" ]; // like this: [jstree_open] => spm-id-1282,spm-id-1284,spm-id-3
         $jstree_open = explode( ",", $jstree_open );
 
         for ( $i = 0; $i < sizeof( $jstree_open ); $i++ ) {
-            $jstree_open[ $i ] = (int) str_replace( "#swiftypages-id-", "", $jstree_open[ $i ] );
+            $jstree_open[ $i ] = (int) str_replace( "#spm-id-", "", $jstree_open[ $i ] );
         }
     }
 
@@ -78,14 +78,14 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
     ?>
     <script type="text/javascript">
         jQuery( function ( $ ) {
-            var swiftypages_jsondata = $.data( document, 'swiftypages_jsondata' );
-            swiftypages_jsondata[ "<?php echo $this->_post_type ?>" ] = <?php echo json_encode( $jsonData ); ?>;
+            var spmJsonData = $.data( document, 'spm_json_data' );
+            spmJsonData[ "<?php echo $this->_post_type ?>" ] = <?php echo json_encode( $jsonData ); ?>;
         } );
     </script>
 
-    <div class="swiftypages_wrapper">
-        <input type="hidden" name="swiftypages_meta_post_type" value="<?php echo $this->_post_type ?>" />
-        <input type="hidden" name="swiftypages_meta_wpml_language" value="<?php echo $wpml_current_lang ?>" />
+    <div class="spm_wrapper">
+        <input type="hidden" name="spm_meta_post_type" value="<?php echo $this->_post_type ?>" />
+        <input type="hidden" name="spm_meta_wpml_language" value="<?php echo $wpml_current_lang ?>" />
     <?php
 
     // Check if WPML is activated and show a language-menu
@@ -95,7 +95,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
 
         if ( sizeof( $wpml_langs ) >= 1 ) {
             $lang_out  = "";
-            $lang_out .= "<ul class='swiftypages-subsubsub swiftypages_switch_langs'>";
+            $lang_out .= "<ul class='spm-subsubsub spm-switch-langs'>";
 
             foreach ( $wpml_langs as $one_lang ) {
                 $one_lang_details = $sitepress->get_language_details( $one_lang[ "language_code" ] ); // english_name | display_name
@@ -109,7 +109,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                 $lang_count = (int) @$wpml_post_counts[ "publish" ][ $one_lang[ "language_code" ] ] + (int) @$wpml_post_counts[ "draft" ][ $one_lang[ "language_code" ] ];
                 $lang_out  .= "
                     <li>
-                        <a class='swiftypages_switch_lang $selected swiftypages_switch_language_code_{$one_lang["language_code"]}' href='#'>
+                        <a class='spm_switch_lang $selected spm_switch_language_code_{$one_lang["language_code"]}' href='#'>
                             $one_lang_details[display_name]
                             <span class='count'>(" . $lang_count . ")</span>
                         </a> |</li>";
@@ -123,53 +123,70 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
     }
 
     if ( true ) {
+    $count_posts = wp_count_posts( 'page' );
+    $trashed = $count_posts->trash;
+
     ?>
-    <ul class="swiftypages-subsubsub swiftypages-subsubsub-select-view">
-        <li><a href="#" class="swiftypages_open_all"><?php _e( 'Expand', 'swiftypages' ) ?></a> |</li>
-        <li><a href="#" class="swiftypages_close_all"><?php _e( 'Collapse', 'swiftypages' ) ?></a></li>
+    <ul class="spm-subsubsub spm-subsubsub-select-view">
+        <li><a href="#" class="spm_open_all"><?php _e( 'Expand', 'swifty-page-manager' ) ?></a> |</li>
+        <li><a href="#" class="spm_close_all"><?php _e( 'Collapse', 'swifty-page-manager' ) ?></a></li>
+        <?php
+            if ( $count_posts->trash ) {
+        ?>
+        | <li>
+            <a class="spm_view_trash" href="<?php echo admin_url() . 'edit.php?post_status=trash&post_type=page'; ?>">
+                <?php _e( "Trash", 'swifty-page-manager' ) ?>
+                <span class="count">(<?php echo $count_posts->trash; ?>)</span>
+            </a>
+        </li>
+        <?php
+            }
+        ?>
+
     </ul>
 
-    <div class="swiftypages_working">
-        <?php _e( 'Loading...', 'swiftypages' ) ?>
+    <div class="spm_working">
+        <?php _e( 'Loading...', 'swifty-page-manager' ) ?>
     </div>
 
-    <div class="swiftypages_message updated below-h2 hidden">
+    <div class="spm-message updated below-h2 hidden">
         <p>Message goes here.</p>
     </div>
 
-    <div class="swiftypages_container tree-default">
-        <?php _e( 'Loading tree', 'swiftypages' ) ?>
+    <div class="spm-tree-container tree-default">
+        <?php _e( 'Loading tree', 'swifty-page-manager' ) ?>
     </div>
 
     <div style="clear: both;"></div>
 </div>
 
 <!-- SwiftySite template page buttons-->
-<span class="ss-page-actions-tmpl __TMPL__ ss-hidden">
-    <span class="button button-primary ss-button ss-page-button" data-ss-action="add" title="<?php _e( 'Add page', 'swiftypages' ) ?>">
-        <span class="dashicons ss-icon dashicons-plus"></span>
+<span class="spm-page-actions-tmpl __TMPL__ spm-hidden">
+    <span class="button button-primary spm-button spm-page-button" data-spm-action="add" title="<?php _e( 'Add page', 'swifty-page-manager' ) ?>">
+        <span class="dashicons spm-icon dashicons-plus"></span>
     </span>
-    <span class="button button-primary ss-button ss-page-button" data-ss-action="settings" title="<?php _e( 'Edit page', 'swiftypages' ) ?>">
-        <span class="dashicons ss-icon dashicons-admin-generic"></span>
+    <span class="button button-primary spm-button spm-page-button" data-spm-action="settings" title="<?php _e( 'Edit page', 'swifty-page-manager' ) ?>">
+        <span class="dashicons spm-icon dashicons-admin-generic"></span>
     </span>
-    <span class="button button-primary ss-button ss-page-button" data-ss-action="delete" title="<?php _e( 'Delete page', 'swiftypages' ) ?>">
-        <span class="dashicons ss-icon dashicons-no"></span>
+    <span class="button button-primary spm-button spm-page-button" data-spm-action="delete" title="<?php _e( 'Delete page', 'swifty-page-manager' ) ?>">
+        <span class="dashicons spm-icon dashicons-trash"></span>
     </span>
-    <span class="button button-primary ss-button ss-page-button" data-ss-action="edit" title="<?php _e( 'Edit page content', 'swiftypages' ) ?>">
-        <span class="dashicons ss-icon dashicons-admin-tools"></span>
+    <span class="button button-primary spm-button spm-page-button" data-spm-action="edit" title="<?php _e( 'Edit page content', 'swifty-page-manager' ) ?>">
+        <span class="dashicons spm-icon dashicons-edit"></span>
     </span>
-    <span class="button button-primary ss-button ss-page-button" data-ss-action="view" title="<?php _e( 'View page', 'swiftypages' ) ?>">
-        <span class="dashicons ss-icon dashicons-visibility"></span>
+    <span class="button button-primary spm-button spm-page-button" data-spm-action="view" title="<?php _e( 'View page', 'swifty-page-manager' ) ?>">
+        <span class="dashicons spm-icon dashicons-visibility"></span>
     </span>
-    <span class="button button-primary ss-button ss-page-button" data-ss-action="publish" title="<?php _e( 'Publish page', 'swiftypages' ) ?>">
-        <span class="dashicons ss-icon dashicons-upload"></span>
+    <span class="button button-primary spm-button spm-page-button" data-spm-action="publish" title="<?php _e( 'Publish page', 'swifty-page-manager' ) ?>">
+        <span class="dashicons spm-icon dashicons-upload"></span>
     </span>
 </span>
 
 <!-- SwiftySite template Delete -->
-<span class="ss-container ss-page-delete-tmpl __TMPL__ ss-hidden">
-    <form method="post" class="ss-form ss-page-delete-form">
-        <table class="ss-table wp-list-table widefat fixed pages">
+<span class="spm-container spm-page-delete-tmpl __TMPL__ spm-hidden">
+    <form method="post" class="spm-form spm-page-delete-form">
+        <input type="hidden" name="is_swifty" value="<?php echo ( $this->is_swifty ) ? '1' : '0' ?>" >
+        <table class="spm-table wp-list-table widefat fixed pages">
             <tbody>
                 <tr class="inline-edit-row inline-edit-row-page inline-edit-page quick-edit-row quick-edit-row-page inline-edit-page inline-editor">
                     <td colspan="5" class="colspanchange">
@@ -177,16 +194,16 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                             <div class="inline-edit-col">
                                 <div class="inline-edit-group">
                                     <span class="title">
-                                        <?php _e( "Are you sure you want to permanently delete this page with all it's content?", 'swiftypages' ) ?>
+                                        <?php _e( "Are you sure you want to delete this page with all it's content?", 'swifty-page-manager' ) ?>
                                     </span>
                                 </div>
                             </div>
                         </fieldset>
                         <fieldset class="inline-edit-col-right">
-                            <div class="inline-edit-group ss-buttons-confirm">
-                                <input type="button" class="button-secondary alignright ss-button cancel" value="<?php _e( 'Cancel', 'swiftypages' ) ?>" />
+                            <div class="inline-edit-group spm-buttons-confirm">
+                                <input type="button" class="button-secondary alignright spm-button cancel" value="<?php _e( 'Cancel', 'swifty-page-manager' ) ?>" />
                                 <br class="clear">
-                                <input type="button" class="button-primary alignright ss-button delete" value="<?php _e( 'Delete', 'swiftypages' ) ?>" />
+                                <input type="button" class="button-primary alignright spm-button delete" value="<?php _e( 'Delete', 'swifty-page-manager' ) ?>" />
                             </div>
                         </fieldset>
                     </td>
@@ -197,190 +214,200 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
 </span>
 
 <!-- SwiftySite template Add/Edit -->
-<span class="ss-container ss-page-add-edit-tmpl __TMPL__ ss-hidden">
-    <form method="post" class="ss-form ss-page-add-edit-form">
-        <table class="ss-table wp-list-table widefat fixed pages">
+<span class="spm-container spm-page-add-edit-tmpl __TMPL__ spm-hidden">
+    <form method="post" class="spm-form spm-page-add-edit-form">
+        <input type="hidden" name="is_swifty" value="<?php echo ( $this->is_swifty ) ? '1' : '0' ?>" >
+        <table class="spm-table wp-list-table widefat fixed pages">
             <tbody>
                 <tr class="inline-edit-row inline-edit-row-page inline-edit-page quick-edit-row quick-edit-row-page inline-edit-page inline-editor">
                     <td colspan="5" class="colspanchange">
                         <fieldset class="inline-edit-col-left">
-                            <div class="inline-edit-col ss-basic-container">
-                                <label class="ss-label">
-                                    <span class="title">
-                                        <?php _e( 'Menu button text', 'swiftypages' ) ?>
+                            <div class="inline-edit-col">
+                                <label class="spm-basic-feature">
+                                    <span class="title spm-label-title">
+                                    <?php
+                                        if ( $this->is_swifty ) {
+                                    ?>
+                                        <?php _e( 'Text in menu', 'swifty-page-manager' ) ?>
+                                    <?php
+                                        } else {
+                                    ?>
+                                        <?php _e( 'Title', 'swifty-page-manager' ) ?>
+                                    <?php
+                                        }
+                                    ?>
                                     </span>
                                     <span class="input-text-wrap">
-                                        <input name="post_title" type="text" class="ss-input ss-input-small ss-input-text" />
+                                        <input name="post_title" type="text" class="spm-input spm-input-small spm-input-text" />
                                     </span>
                                 </label>
                                 <?php
                                     if ( $this->is_swifty ) {
                                 ?>
-                                <label class="ss-label">
-                                    <span class="title">
-                                        <?php _e( 'Page title for Google', 'swiftypages' ) ?>
+                                <label class="spm-basic-feature">
+                                    <span class="title spm-label-title">
+                                        <?php _e( 'Title', 'swifty-page-manager' ) ?>
                                     </span>
                                     <span class="input-text-wrap">
-                                        <input name="ss_page_title_seo" type="text" class="ss-input ss-input-text" />
+                                        <input name="spm_page_title_seo" type="text" class="spm-input spm-input-text" />
                                     </span>
                                 </label>
                                 <?php
                                     }
                                 ?>
-                                <label class="ss-label">
-                                    <span class="title">
-                                        <?php _e( 'Page position in tree', 'swiftypages' ) ?>
-                                    </span>
-                                    <span class="input-text-wrap">
-                                        <label class="alignleft ss-radio-label">
-                                            <input name="add_mode" type="radio" value="after" class="ss-input-radio" />
-                                            <span class="radiobutton-title">
-                                                <?php _e( 'After page', 'swiftypages' ) ?>
-                                            </span>
-                                        </label>
-                                        <label class="alignleft ss-radio-label">
-                                            <input name="add_mode" type="radio" value="inside" class="ss-input-radio" />
-                                            <span class="radiobutton-title">
-                                                <?php _e( 'As sub page of page', 'swiftypages' ) ?>
-                                            </span>
-                                        </label>
-                                    </span>
-                                </label>
-                                <label class="ss-label ss-more">
-                                    <input type="button" class="button-secondary alignright ss-button more" value="<?php _e( 'More', 'swiftypages' ) ?>" />
-                                </label>
-                            </div>
-                            <div class="inline-edit-col ss-advanced-container">
+                                <div class="inline-edit-group spm-basic-feature">
+                                    <label class="alignleft">
+                                        <span class="title spm-label-title">
+                                            <?php _e( 'Position', 'swifty-page-manager' ) ?>
+                                        </span>
+                                    </label>
+                                    <label class="alignleft">
+                                        <input name="add_mode" type="radio" value="after" class="spm-input-radio" />
+                                        <span class="checkbox-title">
+                                            <?php _e( 'After', 'swifty-page-manager' ) ?>
+                                        </span>
+                                    </label>
+                                    <label class="alignleft">
+                                        <input name="add_mode" type="radio" value="inside" class="spm-input-radio" />
+                                        <span class="checkbox-title">
+                                            <?php _e( 'As sub page of', 'swifty-page-manager' ) ?>
+                                        </span>
+                                    </label>
+                                </div>
                                 <?php
                                     if ( $this->is_swifty ) {
                                 ?>
-                                <label class="ss-label">
-                                    <span class="title">
-                                        <?php _e( 'Customize page url', 'swiftypages' ) ?>
+                                <div class="inline-edit-group spm-more">
+                                    <input type="button" class="button-secondary alignright spm-button more" value="<?php _e( 'More', 'swifty-page-manager' ) ?>" />
+                                </div>
+                                <label class="spm-advanced-feature">
+                                    <span class="title spm-label-title">
+                                        <?php _e( 'Url', 'swifty-page-manager' ) ?>
                                     </span>
                                     <span class="input-text-wrap">
-                                        <input name="post_name" type="text" class="ss-input ss-input-text" />
-                                        <input name="ss_is_custom_url" type="hidden" value="0" />
+                                        <input name="post_name" type="text" class="spm-input spm-input-text" />
+                                        <input name="spm_is_custom_url" type="hidden" value="0" />
                                     </span>
                                 </label>
-                                <label class="ss-label">
-                                    <span class="title">
-                                        <?php _e( 'Show in menu', 'swiftypages' ) ?>
-                                    </span>
-                                    <span class="input-text-wrap">
-                                        <label class="alignleft ss-radio-label">
-                                            <input name="ss_show_in_menu" type="radio" value="show" class="ss-input-radio" />
-                                            <span class="radiobutton-title">
-                                                <?php _e( 'Show', 'swiftypages' ) ?>
-                                            </span>
-                                        </label>
-                                        <label class="alignleft ss-radio-label">
-                                            <input name="ss_show_in_menu" type="radio" value="hide" class="ss-input-radio" />
-                                            <span class="radiobutton-title">
-                                                <?php _e( 'Hide', 'swiftypages' ) ?>
-                                            </span>
-                                        </label>
-                                    </span>
-                                </label>
+                                <div class="inline-edit-group spm-advanced-feature">
+                                    <label class="alignleft">
+                                        <span class="title spm-label-title">
+                                            <?php _e( 'In menu', 'swifty-page-manager' ) ?>
+                                        </span>
+                                    </label>
+                                    <label class="alignleft">
+                                        <input name="spm_show_in_menu" type="radio" value="show" class="spm-input-radio" />
+                                        <span class="checkbox-title">
+                                            <?php _e( 'Show', 'swifty-page-manager' ) ?>
+                                        </span>
+                                    </label>
+                                    <label class="alignleft">
+                                        <input name="spm_show_in_menu" type="radio" value="hide" class="spm-input-radio" />
+                                        <span class="checkbox-title">
+                                            <?php _e( 'Hide', 'swifty-page-manager' ) ?>
+                                        </span>
+                                    </label>
+                                </div>
                                 <?php
                                     }
                                 ?>
-                                <label class="ss-label">
-                                    <span class="title">
-                                        <?php _e( 'Draft or live', 'swiftypages' ) ?>
+                                <div class="inline-edit-group spm-advanced-feature">
+                                    <label class="alignleft">
+                                        <span class="title spm-label-title">
+                                            <?php _e( 'Status', 'swifty-page-manager' ) ?>
+                                        </span>
+                                    </label>
+                                    <label class="alignleft">
+                                        <input name="post_status" type="radio" value="draft" class="spm-input-radio" />
+                                        <span class="checkbox-title">
+                                            <?php _e( 'Draft', 'swifty-page-manager' ) ?>
+                                        </span>
+                                    </label>
+                                    <label class="alignleft">
+                                        <input name="post_status" type="radio" value="publish" class="spm-input-radio" />
+                                        <span class="checkbox-title">
+                                            <?php _e( 'Live', 'swifty-page-manager' ) ?>
+                                        </span>
+                                    </label>
+                                </div>
+                                <label class="spm-advanced-feature">
+                                    <span class="title spm-label-title">
+                                        <?php _e( 'Template', 'swifty-page-manager' ) ?>
                                     </span>
-                                    <span class="input-text-wrap">
-                                        <label class="alignleft ss-radio-label">
-                                            <input name="post_status" type="radio" value="draft" class="ss-input-radio" />
-                                            <span class="radiobutton-title">
-                                                <?php _e( 'Draft', 'swiftypages' ) ?>
-                                            </span>
-                                        </label>
-                                        <label class="alignleft ss-radio-label">
-                                            <input name="post_status" type="radio" value="publish" class="ss-input-radio" />
-                                            <span class="radiobutton-title">
-                                                <?php _e( 'Live', 'swiftypages' ) ?>
-                                            </span>
-                                        </label>
-                                    </span>
-                                </label>
-                                <label class="ss-label">
-                                    <span class="title">
-                                        <?php _e( 'Template', 'swiftypages' ) ?>
-                                    </span>
-                                    <span class="input-text-wrap left-inner-addon">
-                                        <select name="page_template" class="ss-input ss-input-text" />
-                                            <option value="default"><?php _e( 'Default template', 'swiftypages' ) ?></option>
-                                             <?php
-                                                $templates = wp_get_theme()->get_page_templates();
+                                    <select name="page_template" />
+                                        <option value="default"><?php _e( 'Default template', 'swifty-page-manager' ) ?></option>
+                                         <?php
+                                            $templates = wp_get_theme()->get_page_templates();
 
-                                                foreach ( $templates as $template_name => $template_filename ) {
-                                                    echo '<option value="' . $template_name .'">' . $template_filename . '</option>';
-                                                }
-                                             ?>
-                                        </select>
-                                    </span>
+                                            foreach ( $templates as $template_name => $template_filename ) {
+                                                echo '<option value="' . $template_name .'">' . $template_filename . '</option>';
+                                            }
+                                         ?>
+                                    </select>
                                 </label>
                                 <?php
                                     if ( $this->is_swifty ) {
                                 ?>
-                                <label class="ss-label">
-                                    <span class="title">
-                                        <?php _e( 'Show or hide header', 'swiftypages' ) ?>
+                                <div class="inline-edit-group spm-advanced-feature">
+                                    <label class="alignleft">
+                                        <span class="title spm-label-title">
+                                            <?php _e( 'Header', 'swifty-page-manager' ) ?>
+                                        </span>
+                                    </label>
+                                    <label class="alignleft">
+                                        <input name="spm_header_visibility" type="radio" value="show" class="spm-input-radio" />
+                                        <span class="checkbox-title">
+                                            <?php _e( 'Show', 'swifty-page-manager' ) ?>
+                                        </span>
+                                    </label>
+                                    <label class="alignleft">
+                                        <input name="spm_header_visibility" type="radio" value="hide" class="spm-input-radio" />
+                                        <span class="checkbox-title">
+                                            <?php _e( 'Hide', 'swifty-page-manager' ) ?>
+                                        </span>
+                                    </label>
+                                </div>
+                                <div class="inline-edit-group spm-advanced-feature">
+                                    <label class="alignleft">
+                                        <span class="title spm-label-title">
+                                            <?php _e( 'Sidebar', 'swifty-page-manager' ) ?>
+                                        </span>
+                                    </label>
+                                    <label class="alignleft">
+                                        <input name="spm_sidebar_visibility" type="radio" value="left" class="spm-input-radio" />
+                                        <span class="checkbox-title">
+                                            <?php _e( 'Left', 'swifty-page-manager' ) ?>
+                                        </span>
+                                    </label>
+                                    <label class="alignleft">
+                                        <input name="spm_sidebar_visibility" type="radio" value="right" class="spm-input-radio" />
+                                        <span class="checkbox-title">
+                                            <?php _e( 'Right', 'swifty-page-manager' ) ?>
+                                        </span>
+                                    </label>
+                                    <label class="alignleft">
+                                        <input name="spm_sidebar_visibility" type="radio" value="hide" class="spm-input-radio" />
+                                        <span class="checkbox-title">
+                                            <?php _e( 'Hide', 'swifty-page-manager' ) ?>
+                                        </span>
+                                    </label>
                                     </span>
-                                    <span class="input-text-wrap">
-                                        <label class="alignleft ss-radio-label">
-                                            <input name="ss_header_visibility" type="radio" value="show" class="ss-input-radio" />
-                                            <span class="radiobutton-title">
-                                                <?php _e( 'Show', 'swiftypages' ) ?>
-                                            </span>
-                                        </label>
-                                        <label class="alignleft ss-radio-label">
-                                            <input name="ss_header_visibility" type="radio" value="hide" class="ss-input-radio" />
-                                            <span class="radiobutton-title">
-                                                <?php _e( 'Hide', 'swiftypages' ) ?>
-                                            </span>
-                                        </label>
-                                    </span>
-                                </label>
-                                <label class="ss-label">
-                                    <span class="title">
-                                        <?php _e( 'Show or hide sidebar', 'swiftypages' ) ?>
-                                    </span>
-                                    <span class="input-text-wrap">
-                                        <label class="alignleft ss-radio-label">
-                                            <input name="ss_sidebar_visibility" type="radio" value="left" class="ss-input-radio" />
-                                            <span class="radiobutton-title">
-                                                <?php _e( 'Show left', 'swiftypages' ) ?>
-                                            </span>
-                                        </label>
-                                        <label class="alignleft ss-radio-label">
-                                            <input name="ss_sidebar_visibility" type="radio" value="right" class="ss-input-radio" />
-                                            <span class="radiobutton-title">
-                                                <?php _e( 'Show right', 'swiftypages' ) ?>
-                                            </span>
-                                        </label>
-                                        <label class="alignleft ss-radio-label">
-                                            <input name="ss_sidebar_visibility" type="radio" value="hide" class="ss-input-radio" />
-                                            <span class="radiobutton-title">
-                                                <?php _e( 'Hide', 'swiftypages' ) ?>
-                                            </span>
-                                        </label>
-                                    </span>
-                                </label>
+                                </div>
+                                <div class="inline-edit-group spm-less">
+                                    <input type="button" class="button-secondary alignright spm-button less" value="<?php _e( 'Less', 'swifty-page-manager' ) ?>" />
+                                </div>
                                 <?php
                                     }
                                 ?>
-                                <label class="ss-label ss-less">
-                                    <input type="button" class="button-secondary alignright ss-button less" value="<?php _e( 'Less', 'swiftypages' ) ?>" />
-                                </label>
                             </div>
                         </fieldset>
                         <fieldset class="inline-edit-col-right">
-                            <div class="inline-edit-group ss-buttons-confirm">
-                                <input type="button" class="button-secondary alignright ss-button cancel" value="<?php _e( 'Cancel', 'swiftypages' ) ?>" />
-                                <br class="clear">
-                                <input type="button" class="button-primary alignright ss-button save" value="<?php _e( 'Save', 'swiftypages' ) ?>" />
+                            <div class="inline-edit-col">
+                                <div class="inline-edit-group spm-buttons-confirm">
+                                    <input type="button" class="button-secondary alignright spm-button cancel alignright" value="<?php _e( 'Cancel', 'swifty-page-manager' ) ?>" />
+                                    <br class="clear">
+                                    <input type="button" class="button-primary alignright spm-button save alignright" value="<?php _e( 'Save', 'swifty-page-manager' ) ?>" />
+                                </div>
                             </div>
                         </fieldset>
                     </td>
@@ -394,10 +421,10 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
     }
 
     if ( empty( $jsonData ) ) {
-        echo '<div class="updated fade below-h2"><p>' . __( 'No pages found.', 'swiftypages' ) . '</p></div>';
+        echo '<div class="updated fade below-h2"><p>' . __( 'No pages found.', 'swifty-page-manager' ) . '</p></div>';
 ?>
-    <span class="button button-primary ss-button ss-page-button ss-noposts-add" data-ss-action="add" title="<?php _e( 'Add page', 'swiftypages' ) ?>">
-        <span class="dashicons ss-icon dashicons-plus"></span>
+    <span class="button button-primary spm-button spm-page-button spm-noposts-add" data-spm-action="add" title="<?php _e( 'Add page', 'swifty-page-manager' ) ?>">
+        <span class="dashicons spm-icon dashicons-plus"></span>
     </span>
 <?php
     }

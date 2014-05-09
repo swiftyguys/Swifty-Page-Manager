@@ -5,10 +5,10 @@ Description: Swifty Page Manager
 Author: SwiftyGuys
 Version: 0.0.2
 Author URI: http://swiftysite.com/
-Plugin URI: https://bitbucket.org/swiftyguys/SwiftyPages
+Plugin URI: https://bitbucket.org/swiftyguys/SwiftyPageManager
 */
 
-class SwiftyPages
+class SwiftyPageManager
 {
     protected $plugin_file;
     protected $plugin_dir;
@@ -20,8 +20,6 @@ class SwiftyPages
     protected $_tree = null;
     protected $_byPageId = null;
     protected $_mainMenuItems = null;
-    protected $has_swifty_themes;
-    protected $has_swifty_editor;
     protected $is_swifty;   // TEMP!!!
 
     /**
@@ -29,15 +27,11 @@ class SwiftyPages
      */
     public function __construct()
     {
-        $this->plugin_file        = __FILE__ ;
-        $this->plugin_dir         = dirname( $this->plugin_file );
-        $this->plugin_basename    = basename( $this->plugin_dir );
-        $this->plugin_dir_url     = plugins_url( basename( $this->plugin_dir ) );
-//        $this->has_swifty_themes       = $this->_isPluginMinimal( 'swifty-themes/*', '1.0.0' );
-//        $this->has_swifty_editor       = $this->_isPluginMinimal( 'swifty-editor/*', '1.0.0' );
-        $this->has_swifty_themes  = false;
-        $this->has_swifty_editor  = false;
-        $this->is_swifty          = false;   // TEMP!!!
+        $this->plugin_file     = __FILE__ ;
+        $this->plugin_dir      = dirname( $this->plugin_file );
+        $this->plugin_basename = basename( $this->plugin_dir );
+        $this->plugin_dir_url  = plugins_url( basename( $this->plugin_dir ) );
+        $this->is_swifty       = true;   // TEMP!!!
 
         if ( !empty( $_GET[ "view" ] ) ) {
             $this->_view = $_GET[ "view" ];
@@ -47,18 +41,18 @@ class SwiftyPages
             $this->_post_type = $_GET[ "post_type" ];
         }
 
-        add_action( 'init',       array( $this, 'swiftypages_load_textdomain' ) );
+        add_action( 'init',       array( $this, 'spm_load_textdomain' ) );
         add_action( 'admin_head', array( $this, 'admin_head' ) );
         add_action( 'admin_menu', array( $this, 'admin_menu') );
-        add_action( 'wp_ajax_swiftypages_get_childs',    array( $this, 'ajax_get_childs' ) );
-        add_action( 'wp_ajax_swiftypages_move_page',     array( $this, 'ajax_move_page' ) );
-        add_action( 'wp_ajax_swiftypages_save_page',     array( $this, 'ajax_save_page' ) );
-        add_action( 'wp_ajax_swiftypages_delete_page',   array( $this, 'ajax_delete_page' ) );
-        add_action( 'wp_ajax_swiftypages_publish_page',  array( $this, 'ajax_publish_page' ) );
-        add_action( 'wp_ajax_swiftypages_post_settings', array( $this, 'ajax_post_settings' ) );
+        add_action( 'wp_ajax_spm_get_childs',    array( $this, 'ajax_get_childs' ) );
+        add_action( 'wp_ajax_spm_move_page',     array( $this, 'ajax_move_page' ) );
+        add_action( 'wp_ajax_spm_save_page',     array( $this, 'ajax_save_page' ) );
+        add_action( 'wp_ajax_spm_delete_page',   array( $this, 'ajax_delete_page' ) );
+        add_action( 'wp_ajax_spm_publish_page',  array( $this, 'ajax_publish_page' ) );
+        add_action( 'wp_ajax_spm_post_settings', array( $this, 'ajax_post_settings' ) );
 
         if ( $this->is_swifty ) {
-            add_action( 'wp_ajax_swiftypages_sanitize_url', array( $this, 'ajax_sanitize_url' ) );
+            add_action( 'wp_ajax_spm_sanitize_url', array( $this, 'ajax_sanitize_url' ) );
             add_action( 'parse_request',       array( $this, 'parse_request' ) );
             add_action( 'save_post',           array( $this, 'restore_page_status' ), 10, 3 );
             add_filter( 'wp_insert_post_data', array( $this, 'set_tmp_page_status' ), 10, 2 );
@@ -75,7 +69,7 @@ class SwiftyPages
             return $title;
         }
 
-        $seoTitle = get_post_meta( get_the_ID(), 'ss_page_title_seo', true );
+        $seoTitle = get_post_meta( get_the_ID(), 'spm_page_title_seo', true );
 
         if ( !empty( $seoTitle ) ) {
             return "$seoTitle $sep ";
@@ -130,7 +124,7 @@ class SwiftyPages
         if ( !empty($wp->request) ) {
             $query = $wpdb->prepare( "SELECT post_id
                                       FROM {$wpdb->postmeta}
-                                      WHERE meta_key='ss_url' AND meta_value='%s'",
+                                      WHERE meta_key='spm_url' AND meta_value='%s'",
                                       $wp->request );
             $post_id = $wpdb->get_var( $query );
 
@@ -146,10 +140,10 @@ class SwiftyPages
      */
     public function page_link( $link, $post_id=false )
     {
-        $ss_url = get_post_meta( $post_id, 'ss_url', true );
+        $spm_url = get_post_meta( $post_id, 'spm_url', true );
 
-        if ( $ss_url ) {
-            $link = get_site_url( null, $ss_url );
+        if ( $spm_url ) {
+            $link = get_site_url( null, $spm_url );
         } else {
             $post = get_post( $post_id );
 
@@ -172,7 +166,7 @@ class SwiftyPages
     }
 
     /**
-     * Filter function to add "ss_hidden" class to hidden menu items in <li> tree.
+     * Filter function to add "spm_hidden" class to hidden menu items in <li> tree.
      *
      * @param $output
      * @return string
@@ -190,7 +184,7 @@ class SwiftyPages
 
     /**
      * Status header filter function.
-     * When a 404 error occurs check if we can find the URL in a post's ss_old_url_XXX field.
+     * When a 404 error occurs check if we can find the URL in a post's spm_old_url_XXX field.
      * If found, 301 redirect to the post.
      *
      * @param $code
@@ -206,7 +200,7 @@ class SwiftyPages
             if ( !empty($wp->request) ) {
                 $query = $wpdb->prepare( "SELECT post_id
                                           FROM {$wpdb->postmeta}
-                                          WHERE meta_key LIKE 'ss_old_url_%%' AND meta_value='%s'",
+                                          WHERE meta_key LIKE 'spm_old_url_%%' AND meta_value='%s'",
                                           $wp->request );
                 $post_id = $wpdb->get_var( $query );
 
@@ -237,18 +231,18 @@ class SwiftyPages
     public function admin_menu()
     {
         add_submenu_page( 'edit.php?post_type='.$this->_post_type
-                        , __( 'SwiftyPages', 'swiftypages' )
-                        , __( 'SwiftyPages', 'swiftypages' )
+                        , __( 'Swifty Page Manager', 'swifty-page-manager' )
+                        , __( 'Swifty Page Manager', 'swifty-page-manager' )
                         , 'manage_options'
                         , 'page-tree'
                         , array( $this, 'view_page_tree' )
                         );
     }
 
-    function swiftypages_load_textdomain()
+    function spm_load_textdomain()
     {
         if ( is_admin() ) {
-            load_plugin_textdomain( 'swiftypages', false, '/swiftypages/languages' );
+            load_plugin_textdomain( 'swifty-page-manager', false, '/swifty-page-manager/languages' );
         }
     }
 
@@ -263,25 +257,25 @@ class SwiftyPages
         wp_enqueue_script( "jquery-ui-sortable" );
         wp_enqueue_script( "jquery-jstree", $this->plugin_dir_url . "/js/jquery.jstree.js",   false, $this->_plugin_version );
         wp_enqueue_script( "jquery-alerts", $this->plugin_dir_url . "/js/jquery.alerts.js",   false, $this->_plugin_version );
-        wp_enqueue_script( 'swiftypages',   $this->plugin_dir_url . "/js/swiftypages.js",     false, $this->_plugin_version );
+        wp_enqueue_script( 'spm',   $this->plugin_dir_url . "/js/swifty-page-manager.js",     false, $this->_plugin_version );
 
-        wp_enqueue_style( "swiftypages",    $this->plugin_dir_url . "/css/styles.css",        false, $this->_plugin_version );
+        wp_enqueue_style( "spm",    $this->plugin_dir_url . "/css/styles.css",        false, $this->_plugin_version );
         wp_enqueue_style( "jquery-alerts",  $this->plugin_dir_url . "/css/jquery.alerts.css", false, $this->_plugin_version );
 
         $oLocale = array(
-            "status_draft_ucase"      => ucfirst( __( "draft", 'swiftypages' ) ),
-            "status_future_ucase"     => ucfirst( __( "future", 'swiftypages' ) ),
-            "status_password_ucase"   => ucfirst( __( "protected", 'swiftypages' ) ),
-            "status_pending_ucase"    => ucfirst( __( "pending", 'swiftypages' ) ),
-            "status_private_ucase"    => ucfirst( __( "private", 'swiftypages' ) ),
-            "status_trash_ucase"      => ucfirst( __( "trash", 'swiftypages' ) ),
-            "password_protected_page" => __( "Password protected page", 'swiftypages' ),
-            "no_pages_found"          => __( "No pages found.", 'swiftypages' ),
-            "hidden_page"             => __( "Hidden", 'swiftypages' ),
-            "no_sub_page_when_draft"  => __( "Sorry, can't create a sub page to a page with status \"draft\".", 'swiftypages' ),
+            "status_draft_ucase"      => ucfirst( __( "draft", 'swifty-page-manager' ) ),
+            "status_future_ucase"     => ucfirst( __( "future", 'swifty-page-manager' ) ),
+            "status_password_ucase"   => ucfirst( __( "protected", 'swifty-page-manager' ) ),
+            "status_pending_ucase"    => ucfirst( __( "pending", 'swifty-page-manager' ) ),
+            "status_private_ucase"    => ucfirst( __( "private", 'swifty-page-manager' ) ),
+            "status_trash_ucase"      => ucfirst( __( "trash", 'swifty-page-manager' ) ),
+            "password_protected_page" => __( "Password protected page", 'swifty-page-manager' ),
+            "no_pages_found"          => __( "No pages found.", 'swifty-page-manager' ),
+            "hidden_page"             => __( "Hidden", 'swifty-page-manager' ),
+            "no_sub_page_when_draft"  => __( "Sorry, can't create a sub page to a page with status \"draft\".", 'swifty-page-manager' ),
         );
 
-        wp_localize_script( "swiftypages", 'swiftypages_l10n', $oLocale );
+        wp_localize_script( "spm", 'spm_l10n', $oLocale );
 
         require( $this->plugin_dir . '/view/page_tree.php' );
     }
@@ -302,16 +296,16 @@ class SwiftyPages
 
         if ( $action ) {   // regular get
             $id = ( isset( $_GET[ "id" ] ) ) ? $_GET[ "id" ] : null;
-            $id = (int) str_replace( "swiftypages-id-", "", $id );
+            $id = (int) str_replace( "spm-id-", "", $id );
 
             $jstree_open = array();
 
             if ( isset( $_COOKIE[ "jstree_open" ] ) ) {
-                $jstree_open = $_COOKIE[ "jstree_open" ]; // like this: [jstree_open] => swiftypages-id-1282,swiftypages-id-1284,swiftypages-id-3
+                $jstree_open = $_COOKIE[ "jstree_open" ]; // like this: [jstree_open] => spm-id-1282,spm-id-1284,spm-id-3
                 $jstree_open = explode( ",", $jstree_open );
 
                 for ( $i = 0; $i < sizeof( $jstree_open ); $i++ ) {
-                    $jstree_open[ $i ] = (int) str_replace( "#swiftypages-id-", "", $jstree_open[ $i ] );
+                    $jstree_open[ $i ] = (int) str_replace( "#spm-id-", "", $jstree_open[ $i ] );
                 }
             }
 
@@ -345,7 +339,7 @@ class SwiftyPages
 
         $mode   = "tree";
         $class  = isset( $_GET[ "mode" ] ) && $_GET[ "mode" ] == $mode ? " class='current' " : "";
-        $title  = __( "SwiftyPages", 'swiftypages' );
+        $title  = __( "Swifty Page Manager", 'swifty-page-manager' );
         $tree_a = "<a href='" . esc_url( add_query_arg( 'mode', $mode, $_SERVER[ 'REQUEST_URI' ] ) ) . "' $class> <img id='view-switch-$mode' src='" . esc_url( includes_url( 'images/blank.gif' ) ) . "' width='20' height='20' title='$title' alt='$title' /></a>\n";
 
         // Copy of wordpress own, if it does not exist
@@ -353,7 +347,7 @@ class SwiftyPages
 
         if ( is_post_type_hierarchical( $this->_post_type ) ) {
             $mode      = "list";
-            $class     = isset( $_GET[ "mode" ] ) && $_GET[ "mode" ] != $mode ? " class='swiftypages_add_list_view' " : " class='swiftypages_add_list_view current' ";
+            $class     = isset( $_GET[ "mode" ] ) && $_GET[ "mode" ] != $mode ? " class='spm_add_list_view' " : " class='spm_add_list_view current' ";
             $title     = __( "List View" ); /* translation not missing - exists in wp */
             $wp_list_a = "<a href='" . esc_url( add_query_arg( 'mode', $mode, $_SERVER[ 'REQUEST_URI' ] ) ) . "' $class><img id='view-switch-$mode' src='" . esc_url( includes_url( 'images/blank.gif' ) ) . "' width='20' height='20' title='$title' alt='$title' /></a>\n";
         }
@@ -364,7 +358,7 @@ class SwiftyPages
 
         // Output tree related stuff if that view/mode is selected
         if ( isset( $_GET[ "mode" ] ) && $_GET[ "mode" ] === "tree" ){
-            $out .= sprintf( '<div class="swiftypages-postsoverview-wrap">%1$s</div>', $tree_common_stuff );
+            $out .= sprintf( '<div class="spm-postsoverview-wrap">%1$s</div>', $tree_common_stuff );
         }
 
         echo $out;
@@ -377,8 +371,7 @@ class SwiftyPages
         /*
          the node that was moved,
          the reference node in the move,
-         the new position relative to the reference node (one of "before", "after" or "inside"),
-             inside = man placerar den under en sida som inte har några barn?
+         the new position relative to the reference node (one of "before", "after" or "inside")
         */
         global $wpdb;
 
@@ -386,8 +379,8 @@ class SwiftyPages
         $ref_node_id = $_POST[ "ref_node_id" ];
         $type        = $_POST[ "type" ];
 
-        $node_id     = str_replace( "swiftypages-id-", "", $node_id );
-        $ref_node_id = str_replace( "swiftypages-id-", "", $ref_node_id );
+        $node_id     = str_replace( "spm-id-", "", $node_id );
+        $ref_node_id = str_replace( "spm-id-", "", $ref_node_id );
 
         $_POST[ "skip_sitepress_actions" ] = true; // sitepress.class.php->save_post_actions
 
@@ -398,7 +391,7 @@ class SwiftyPages
             $post_node     = get_post( $node_id );
             $post_ref_node = get_post( $ref_node_id );
 
-            $show_ref_page_in_menu = get_post_meta( $ref_node_id, 'ss_show_in_menu', true );
+            $show_ref_page_in_menu = get_post_meta( $ref_node_id, 'spm_show_in_menu', true );
 
             // first check that post_node (moved post) is not in trash. we do not move them
             if ( $post_node->post_status === "trash" ) {
@@ -419,7 +412,7 @@ class SwiftyPages
                 $id_saved = wp_update_post( $post_to_save );
 
                 if ( $id_saved && $show_ref_page_in_menu != 'show' ) {
-                    update_post_meta( $id_saved, 'ss_show_in_menu', 'hide' );
+                    update_post_meta( $id_saved, 'spm_show_in_menu', 'hide' );
                 }
 
                 echo "did inside";
@@ -468,6 +461,9 @@ class SwiftyPages
                 echo "did after";
             }
 
+            // Store the moved page id in the jstree_select cookie
+            setcookie( "jstree_select", "spm-id-" . $post_node->ID );
+
             #echo "ok"; // I'm done here!
         } else {
             // error
@@ -480,9 +476,9 @@ class SwiftyPages
         // fire for the page that was moved? can not fire for all.. would be crazy, right?
         #wp_update_post(array("ID" => $node_id));
         #wp_update_post(array("ID" => $post_ref_node));
-        #clean_page_cache($node_id); clean_page_cache($post_ref_node); // hmpf.. db cache reloaded don't care
+        #clean_post_cache($node_id); clean_post_cache($post_ref_node); // hmpf.. db cache reloaded don't care
 
-        do_action( "cms_tree_page_view_node_move_finish" );
+        do_action( "spm_node_move_finish" );
 
         exit;
     }
@@ -497,14 +493,14 @@ class SwiftyPages
         $post_status = $_POST[ "post_status" ];
 
         if ( !$post_title ) {
-            $post_title = __( "New page", 'swiftypages' );
+            $post_title = __( "New page", 'swifty-page-manager' );
         }
 
-        $ss_is_custom_url      = !empty( $_POST[ "ss_is_custom_url" ] ) ? intval( $_POST[ "ss_is_custom_url" ] ) : null;
-        $ss_page_title_seo     = !empty( $_POST[ "ss_page_title_seo" ] ) ? trim( $_POST[ "ss_page_title_seo" ] ) : '';
-        $ss_show_in_menu       = !empty( $_POST[ "ss_show_in_menu" ] ) ? $_POST[ "ss_show_in_menu" ] : null;
-        $ss_header_visibility  = !empty( $_POST[ "ss_header_visibility" ] ) ? $_POST[ "ss_header_visibility" ]  : null;
-        $ss_sidebar_visibility = !empty( $_POST[ "ss_sidebar_visibility" ] ) ? $_POST[ "ss_sidebar_visibility" ] : null;
+        $spm_is_custom_url      = !empty( $_POST[ "spm_is_custom_url" ] ) ? intval( $_POST[ "spm_is_custom_url" ] ) : null;
+        $spm_page_title_seo     = !empty( $_POST[ "spm_page_title_seo" ] ) ? trim( $_POST[ "spm_page_title_seo" ] ) : '';
+        $spm_show_in_menu       = !empty( $_POST[ "spm_show_in_menu" ] ) ? $_POST[ "spm_show_in_menu" ] : null;
+        $spm_header_visibility  = !empty( $_POST[ "spm_header_visibility" ] ) ? $_POST[ "spm_header_visibility" ]  : null;
+        $spm_sidebar_visibility = !empty( $_POST[ "spm_sidebar_visibility" ] ) ? $_POST[ "spm_sidebar_visibility" ] : null;
 
         $post_data = array();
 
@@ -520,23 +516,23 @@ class SwiftyPages
 
             if ( $post_id ) {
                 if ( $this->is_swifty ) {
-                    $cur_ss_url = get_post_meta( $post_id, 'ss_url', true );
+                    $cur_spm_url = get_post_meta( $post_id, 'spm_url', true );
 
-                    if ( !empty( $cur_ss_url ) ) {
-                        if ( $cur_ss_url !== $post_name ) {
-                            $this->save_old_url( $post_id, $cur_ss_url );
+                    if ( !empty( $cur_spm_url ) ) {
+                        if ( $cur_spm_url !== $post_name ) {
+                            $this->save_old_url( $post_id, $cur_spm_url );
                         }
                     } else {
-                        if ( $ss_is_custom_url ) {
+                        if ( $spm_is_custom_url ) {
                             $this->save_old_url( $post_id, wp_make_link_relative( get_page_link( $post_id ) ) );
                         }
                     }
 
-                    update_post_meta( $post_id, 'ss_url', $ss_is_custom_url ? $post_name : '' );
-                    update_post_meta( $post_id, 'ss_show_in_menu', $ss_show_in_menu );
-                    update_post_meta( $post_id, 'ss_page_title_seo', $ss_page_title_seo );
-                    update_post_meta( $post_id, 'ss_header_visibility', $ss_header_visibility );
-                    update_post_meta( $post_id, 'ss_sidebar_visibility', $ss_sidebar_visibility );
+                    update_post_meta( $post_id, 'spm_url', $spm_is_custom_url ? $post_name : '' );
+                    update_post_meta( $post_id, 'spm_show_in_menu', $spm_show_in_menu );
+                    update_post_meta( $post_id, 'spm_page_title_seo', $spm_page_title_seo );
+                    update_post_meta( $post_id, 'spm_header_visibility', $spm_header_visibility );
+                    update_post_meta( $post_id, 'spm_sidebar_visibility', $spm_sidebar_visibility );
                 }
 
                 echo "1";
@@ -548,7 +544,7 @@ class SwiftyPages
             $post_data[ "post_content" ] = "";
 
             $parent_id = $_POST[ "parent_id" ];
-            $parent_id = intval( str_replace( "swiftypages-id-", "", $parent_id ) );
+            $parent_id = intval( str_replace( "spm-id-", "", $parent_id ) );
             $ref_post  = get_post( $parent_id );
 
             if ( "after" === $_POST[ "add_mode" ] ) {
@@ -575,12 +571,15 @@ class SwiftyPages
 
             if ( $post_id ) {
                 if ( $this->is_swifty ) {
-                    add_post_meta( $post_id, 'ss_url', $ss_is_custom_url ? $post_name : '', 1 );
-                    add_post_meta( $post_id, 'ss_show_in_menu', $ss_show_in_menu, 1 );
-                    add_post_meta( $post_id, 'ss_page_title_seo', $ss_page_title_seo, 1 );
-                    add_post_meta( $post_id, 'ss_header_visibility', $ss_header_visibility, 1 );
-                    add_post_meta( $post_id, 'ss_sidebar_visibility', $ss_sidebar_visibility, 1 );
+                    add_post_meta( $post_id, 'spm_url', $spm_is_custom_url ? $post_name : '', 1 );
+                    add_post_meta( $post_id, 'spm_show_in_menu', $spm_show_in_menu, 1 );
+                    add_post_meta( $post_id, 'spm_page_title_seo', $spm_page_title_seo, 1 );
+                    add_post_meta( $post_id, 'spm_header_visibility', $spm_header_visibility, 1 );
+                    add_post_meta( $post_id, 'spm_sidebar_visibility', $spm_sidebar_visibility, 1 );
                 }
+
+                // Store the new page id in the jstree_select cookie
+                setcookie( "jstree_select", "spm-id-" . $post_id );
 
                 echo "1";
             } else {
@@ -602,14 +601,14 @@ class SwiftyPages
                 wp_delete_post( $menuItemId, true );
             }
 
-            $post_data = wp_delete_post( $post_id, true );
+            $post_data = wp_delete_post( $post_id, false );
 
             if ( is_object( $post_data ) ) {
-                delete_post_meta( $post_id, 'ss_url' );
-                delete_post_meta( $post_id, 'ss_show_in_menu' );
-                delete_post_meta( $post_id, 'ss_page_title_seo' );
-                delete_post_meta( $post_id, 'ss_header_visibility' );
-                delete_post_meta( $post_id, 'ss_sidebar_visibility' );
+//                delete_post_meta( $post_id, 'spm_url' );
+//                delete_post_meta( $post_id, 'spm_show_in_menu' );
+//                delete_post_meta( $post_id, 'spm_page_title_seo' );
+//                delete_post_meta( $post_id, 'spm_header_visibility' );
+//                delete_post_meta( $post_id, 'spm_sidebar_visibility' );
 
                 echo "1";
             } else {
@@ -646,14 +645,14 @@ class SwiftyPages
         $post_meta        = get_post_meta( $post_id );
         $post_status      = ( $post->post_status === 'private' ) ? 'publish' : $post->post_status; // _status
         $page_template    = $post->page_template || 'default';
-        $ss_show_in_menu  = ( $post->post_status === 'private' ) ? 'hide' : 'show';
-        $ss_page_url      = '';
-        $ss_is_custom_url = 0;
+        $spm_show_in_menu  = ( $post->post_status === 'private' ) ? 'hide' : 'show';
+        $spm_page_url      = '';
+        $spm_is_custom_url = 0;
 
-        $defaults = array( 'ss_show_in_menu'       => 'show'
-                         , 'ss_page_title_seo'     => $post->post_title
-                         , 'ss_header_visibility'  => 'hide'
-                         , 'ss_sidebar_visibility' => 'hide'
+        $defaults = array( 'spm_show_in_menu'       => 'show'
+                         , 'spm_page_title_seo'     => $post->post_title
+                         , 'spm_header_visibility'  => 'hide'
+                         , 'spm_sidebar_visibility' => 'hide'
                          );
 
         foreach ( $defaults as $key => $val ) {
@@ -663,37 +662,37 @@ class SwiftyPages
         }
 
         if ( $this->is_swifty ) {
-            if ( is_array( $post_meta[ 'ss_url' ] ) && !empty( $post_meta[ 'ss_url' ][0] ) ) {
-                $ss_page_url = $post_meta[ 'ss_url' ][0];
-                $ss_is_custom_url = 1;
+            if ( is_array( $post_meta[ 'spm_url' ] ) && !empty( $post_meta[ 'spm_url' ][0] ) ) {
+                $spm_page_url = $post_meta[ 'spm_url' ][0];
+                $spm_is_custom_url = 1;
             } else {
-                $ss_page_url = wp_make_link_relative( get_page_link( $post_id ) );
+                $spm_page_url = wp_make_link_relative( get_page_link( $post_id ) );
             }
         } else {
-            $ss_page_url = $post->post_name;
+            $spm_page_url = $post->post_name;
         }
 
-        $ss_page_url = trim( $ss_page_url, '/' );
+        $spm_page_url = trim( $spm_page_url, '/' );
 
-        if ( $post_meta[ 'ss_show_in_menu' ] === 'show' ) {
+        if ( $post_meta[ 'spm_show_in_menu' ] === 'show' ) {
             // post_status can be private, so then the page must not be visible in the menu.
-            $post_meta[ 'ss_show_in_menu' ] = $ss_show_in_menu;
+            $post_meta[ 'spm_show_in_menu' ] = $spm_show_in_menu;
         }
 
         ?>
         var li = jQuery( 'li#cms-tpv-<?php echo $post_id; ?>' );
 
-        var li = jQuery( '#swiftypages-id-<?php echo $post_id; ?>' );
+        var li = jQuery( '#spm-id-<?php echo $post_id; ?>' );
 
         li.find( 'input[name="post_title"]' ).val( <?php echo json_encode( $post->post_title ); ?> );
         li.find( 'input[name="post_status"]' ).val( [ <?php echo json_encode( $post_status ); ?> ] );
         li.find( 'select[name="page_template"]' ).val( [ <?php echo json_encode( $post->page_template ); ?> ] );
-        li.find( 'input[name="post_name"]' ).val( <?php echo json_encode( $ss_page_url ); ?> );
-        li.find( 'input[name="ss_is_custom_url"]' ).val( <?php echo json_encode( $ss_is_custom_url ); ?> );
-        li.find( 'input[name="ss_show_in_menu"]' ).val( [ <?php echo json_encode( $post_meta[ 'ss_show_in_menu' ] ); ?> ] );
-        li.find( 'input[name="ss_page_title_seo"]' ).val( <?php echo json_encode( $post_meta[ 'ss_page_title_seo' ] ); ?> );
-        li.find( 'input[name="ss_header_visibility"]' ).val( [ <?php echo json_encode( $post_meta[ 'ss_header_visibility' ] ); ?> ] );
-        li.find( 'input[name="ss_sidebar_visibility"]' ).val( [ <?php echo json_encode( $post_meta[ 'ss_sidebar_visibility' ] ); ?> ] );
+        li.find( 'input[name="post_name"]' ).val( <?php echo json_encode( $spm_page_url ); ?> );
+        li.find( 'input[name="spm_is_custom_url"]' ).val( <?php echo json_encode( $spm_is_custom_url ); ?> );
+        li.find( 'input[name="spm_show_in_menu"]' ).val( [ <?php echo json_encode( $post_meta[ 'spm_show_in_menu' ] ); ?> ] );
+        li.find( 'input[name="spm_page_title_seo"]' ).val( <?php echo json_encode( $post_meta[ 'spm_page_title_seo' ] ); ?> );
+        li.find( 'input[name="spm_header_visibility"]' ).val( [ <?php echo json_encode( $post_meta[ 'spm_header_visibility' ] ); ?> ] );
+        li.find( 'input[name="spm_sidebar_visibility"]' ).val( [ <?php echo json_encode( $post_meta[ 'spm_sidebar_visibility' ] ); ?> ] );
 
         li.find( 'input[name="post_title"]' ).val( <?php echo json_encode($post->post_title); ?> );
         li.find( 'input[name="post_name"]' ).val( <?php echo json_encode($post->post_name); ?> );
@@ -767,20 +766,20 @@ class SwiftyPages
         $existQuery = $wpdb->prepare( "SELECT COUNT(*)
                                        FROM {$wpdb->postmeta}
                                        WHERE post_id = %d
-                                       AND meta_key LIKE 'ss_old_url_%%' AND meta_value='%s'",
+                                       AND meta_key LIKE 'spm_old_url_%%' AND meta_value='%s'",
                                       $post_id,
                                       $old_url );
         $exists = intval( $wpdb->get_var( $existQuery ) );
         if ( !$exists ) {
-            $lastkeyQuery = $wpdb->prepare( "SELECT REPLACE( meta_key, 'ss_old_url_', '' )
+            $lastkeyQuery = $wpdb->prepare( "SELECT REPLACE( meta_key, 'spm_old_url_', '' )
                                              FROM {$wpdb->postmeta}
                                              WHERE post_id = %d
-                                             AND meta_key LIKE 'ss_old_url_%%'
+                                             AND meta_key LIKE 'spm_old_url_%%'
                                              ORDER BY meta_key DESC",
                                             $post_id );
             $lastKey = $wpdb->get_var( $lastkeyQuery );
             $number = intval( $lastKey ) + 1;
-            add_post_meta( $post_id, 'ss_old_url_'.$number, $old_url );
+            add_post_meta( $post_id, 'spm_old_url_'.$number, $old_url );
         }
     }
 
@@ -892,13 +891,13 @@ class SwiftyPages
         }
 
         if ( empty( $post_author ) ) {
-            $post_author = __( "Unknown user", 'swiftypages' );
+            $post_author = __( "Unknown user", 'swifty-page-manager' );
         }
 
         $title = get_the_title( $onePage->ID ); // so hooks and stuff will do their work
 
         if ( empty( $title ) ) {
-            $title = __( "<Untitled page>", 'swiftypages' );
+            $title = __( "<Untitled page>", 'swifty-page-manager' );
         }
 
         $user_can_edit_page  = current_user_can( $post_type_object->cap->edit_post, $page_id );
@@ -906,24 +905,24 @@ class SwiftyPages
         $user_can_add_after  = current_user_can( $post_type_object->cap->create_posts, $page_id );
 
         $arr_page_css_styles   = array();
-        $arr_page_css_styles[] = "swiftypages_user_can_edit_page_" . ( $user_can_edit_page ? 'yes' : 'no' );
-        $arr_page_css_styles[] = "swiftypages_user_can_add_page_inside_" . ( $user_can_add_inside ? 'yes' : 'no' );
-        $arr_page_css_styles[] = "swiftypages_user_can_add_page_after_" . ( $user_can_add_after ? 'yes' : 'no' );
+        $arr_page_css_styles[] = "spm_user_can_edit_page_" . ( $user_can_edit_page ? 'yes' : 'no' );
+        $arr_page_css_styles[] = "spm_user_can_add_page_inside_" . ( $user_can_add_inside ? 'yes' : 'no' );
+        $arr_page_css_styles[] = "spm_user_can_add_page_after_" . ( $user_can_add_after ? 'yes' : 'no' );
 
         if ( $this->is_swifty ) {
-            $show_page_in_menu     = get_post_meta( $page_id, 'ss_show_in_menu', true );
-            $arr_page_css_styles[] = "swiftypages_show_page_in_menu_" . ( $show_page_in_menu === 'show' ? 'yes' : 'no' );
+            $show_page_in_menu     = get_post_meta( $page_id, 'spm_show_in_menu', true );
+            $arr_page_css_styles[] = "spm-show-page-in-menu-" . ( $show_page_in_menu === 'show' ? 'yes' : 'no' );
         }
 
         $pageJsonData['data'] = array();
         $pageJsonData['data']['title'] = $title;
 
         $pageJsonData['attr'] = array();
-        $pageJsonData['attr']['id'] = "swiftypages-id-" . $onePage->ID;
+        $pageJsonData['attr']['id'] = "spm-id-" . $onePage->ID;
         $pageJsonData['attr']['class'] = join( ' ', $arr_page_css_styles );
 
         $pageJsonData['metadata'] = array();
-        $pageJsonData['metadata']["id"] = "swiftypages-id-".$onePage->ID;
+        $pageJsonData['metadata']["id"] = "spm-id-".$onePage->ID;
         $pageJsonData['metadata']["post_id"] = $onePage->ID;
         $pageJsonData['metadata']["post_type"] = $onePage->post_type;
         $pageJsonData['metadata']["post_status"] = $onePage->post_status;
@@ -1047,10 +1046,10 @@ class SwiftyPages
     {
         $result  = $match[0];
         $post_id = $match[1];
-        $show    = get_post_meta( $post_id, 'ss_show_in_menu', true );
+        $show    = get_post_meta( $post_id, 'spm_show_in_menu', true );
 
         if ( !empty( $show ) && 'hide' === $show ) {
-            $result .= ' ss_hidden';
+            $result .= ' spm_hidden';
         };
 
         return $result;
@@ -1058,4 +1057,4 @@ class SwiftyPages
 
 }
 
-$SwiftyPages = new SwiftyPages();
+$SwiftyPageManager = new SwiftyPageManager();

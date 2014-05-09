@@ -1,7 +1,7 @@
 <?php
 /**
  * Variables that need to be set:
- * @var SwiftyPages $this
+ * @var Swifty Page Manager $this
  */
 ?>
 <style>
@@ -17,7 +17,7 @@
 
 <script type="text/javascript">
     jQuery( function ( $ ) {
-        $.data( document, 'swiftypages_jsondata', {} );
-        $.data( document, 'swiftypages_view', '<?php echo $this->_view; ?>' );
+        $.data( document, 'spm_json_data', {} );
+        $.data( document, 'spm_view', '<?php echo $this->_view; ?>' );
     } );
 </script>

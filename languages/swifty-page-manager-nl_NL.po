@@ -1,0 +1,297 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Swifty Page Manager v0.0.2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2014-05-09 11:21:39+0000\n"
+"Last-Translator: jh-dev <jeroen.hoekstra@longtermresults.nl>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: CSL v1.x\n"
+"X-Poedit-Language: Dutch\n"
+"X-Poedit-Country: NETHERLANDS\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
+"X-Poedit-Basepath: \n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Textdomain-Support: yes"
+
+#: swifty-page-manager.php:252
+#@ default
+msgid "You do not have sufficient permissions to access this page."
+msgstr ""
+
+#: view/page_tree.php:168
+#@ swifty-page-manager
+msgid "Edit page"
+msgstr "Bewerk pagina"
+
+#: view/page_tree.php:177
+#@ swifty-page-manager
+msgid "View page"
+msgstr "Bekijk pagina"
+
+#: view/page_tree.php:165
+#: view/page_tree.php:426
+#@ swifty-page-manager
+msgid "Add page"
+msgstr "Voeg pagina toe"
+
+#: swifty-page-manager.php:266
+#@ swifty-page-manager
+msgid "draft"
+msgstr "concept"
+
+#: swifty-page-manager.php:267
+#@ swifty-page-manager
+msgid "future"
+msgstr "toekomstig"
+
+#: swifty-page-manager.php:268
+#@ swifty-page-manager
+msgid "protected"
+msgstr "beschermd"
+
+#: swifty-page-manager.php:269
+#@ swifty-page-manager
+msgid "pending"
+msgstr "wacht"
+
+#: swifty-page-manager.php:270
+#@ swifty-page-manager
+msgid "private"
+msgstr "privé"
+
+#: swifty-page-manager.php:271
+#@ swifty-page-manager
+msgid "trash"
+msgstr "Verwijderd"
+
+#: swifty-page-manager.php:272
+#@ swifty-page-manager
+msgid "Password protected page"
+msgstr "Wachtwoord beschermde pagina"
+
+#: view/page_tree.php:301
+#: view/page_tree.php:360
+#@ swifty-page-manager
+msgid "Show"
+msgstr "Tonen"
+
+#: view/page_tree.php:307
+#: view/page_tree.php:366
+#: view/page_tree.php:391
+#@ swifty-page-manager
+msgid "Hide"
+msgstr "Verbergen"
+
+#: view/page_tree.php:323
+#@ swifty-page-manager
+msgid "Draft"
+msgstr "Klad"
+
+#: view/page_tree.php:329
+#@ swifty-page-manager
+msgid "Live"
+msgstr "Publiceren"
+
+#: view/page_tree.php:174
+#@ swifty-page-manager
+msgid "Edit page content"
+msgstr "Bewerk paginainhoud"
+
+#: view/page_tree.php:171
+#@ swifty-page-manager
+msgid "Delete page"
+msgstr "Verwijder pagina"
+
+#: view/page_tree.php:206
+#@ swifty-page-manager
+msgid "Delete"
+msgstr "Verwijder"
+
+#: view/page_tree.php:281
+#@ swifty-page-manager
+msgid "More"
+msgstr "Meer"
+
+#: view/page_tree.php:397
+#@ swifty-page-manager
+msgid "Less"
+msgstr "Minder"
+
+#: swifty-page-manager.php:294
+#@ default
+msgid "Cheatin&#8217; uh?"
+msgstr ""
+
+#: swifty-page-manager.php:351
+#@ default
+msgid "List View"
+msgstr ""
+
+#: swifty-page-manager.php:493
+#@ swifty-page-manager
+msgid "New page"
+msgstr "Nieuwe pagina"
+
+#: swifty-page-manager.php:885
+#@ swifty-page-manager
+msgid "Unknown user"
+msgstr "Onbekende gebruiker"
+
+#: swifty-page-manager.php:891
+#@ swifty-page-manager
+msgid "<Untitled page>"
+msgstr "<pagina zonder titel>"
+
+#: view/page_tree.php:131
+#@ swifty-page-manager
+msgid "Expand"
+msgstr "Uitklappen"
+
+#: view/page_tree.php:132
+#@ swifty-page-manager
+msgid "Collapse"
+msgstr "Inklappen"
+
+#: view/page_tree.php:149
+#@ swifty-page-manager
+msgid "Loading..."
+msgstr "Laden..."
+
+#: view/page_tree.php:157
+#@ swifty-page-manager
+msgid "Loading tree"
+msgstr "Boom laden"
+
+#: view/page_tree.php:180
+#@ swifty-page-manager
+msgid "Publish page"
+msgstr "Publiceer pagina"
+
+#: view/page_tree.php:204
+#: view/page_tree.php:407
+#@ swifty-page-manager
+msgid "Cancel"
+msgstr "Annuleer"
+
+#: view/page_tree.php:409
+#@ swifty-page-manager
+msgid "Save"
+msgstr "Opslaan"
+
+#: swifty-page-manager.php:273
+#: view/page_tree.php:424
+#@ swifty-page-manager
+msgid "No pages found."
+msgstr "Geen pagina's gevonden."
+
+#: swifty-page-manager.php:274
+#@ swifty-page-manager
+msgid "Hidden"
+msgstr "Verborgen"
+
+#: view/page_tree.php:335
+#@ swifty-page-manager
+msgid "Template"
+msgstr "Sjabloon"
+
+#: view/page_tree.php:338
+#@ swifty-page-manager
+msgid "Default template"
+msgstr "Standaard sjabloon"
+
+#: swifty-page-manager.php:275
+#@ swifty-page-manager
+msgid "Sorry, can't create a sub page to a page with status \"draft\"."
+msgstr "Helaas is het niet mogelijk om een pagina als subpagina aan te maken waarvan de bovenliggende pagina de status \\\"Klad\\\" heeft."
+
+#: view/page_tree.php:138
+#@ swifty-page-manager
+msgid "Trash"
+msgstr "Prullenbak"
+
+#: view/page_tree.php:197
+#@ swifty-page-manager
+msgid "Are you sure you want to delete this page with all it's content?"
+msgstr "Weet je zeker dat je deze pagina inclusief inhoud wilt verwijderen?"
+
+#: swifty-page-manager.php:234
+#: swifty-page-manager.php:235
+#: swifty-page-manager.php:342
+#@ swifty-page-manager
+msgid "Swifty Page Manager"
+msgstr "Swifty Pagina Beheer"
+
+#: view/page_tree.php:12
+#@ swifty-page-manager
+msgctxt "headline of page with tree"
+msgid "Swifty Page Manager"
+msgstr "Swifty Pagina Beheer"
+
+#: view/page_tree.php:373
+#@ swifty-page-manager
+msgid "Sidebar"
+msgstr "Zijbalk"
+
+#: view/page_tree.php:231
+#@ swifty-page-manager
+msgid "Text in menu"
+msgstr "Tekst in menu"
+
+#: view/page_tree.php:235
+#: view/page_tree.php:249
+#@ swifty-page-manager
+msgid "Title"
+msgstr "Titel"
+
+#: view/page_tree.php:261
+#@ swifty-page-manager
+msgid "Position"
+msgstr "Positie"
+
+#: view/page_tree.php:267
+#@ swifty-page-manager
+msgid "After"
+msgstr "Na"
+
+#: view/page_tree.php:273
+#@ swifty-page-manager
+msgid "As sub page of"
+msgstr "Als subpagina van"
+
+#: view/page_tree.php:285
+#@ swifty-page-manager
+msgid "Url"
+msgstr "Url"
+
+#: view/page_tree.php:295
+#@ swifty-page-manager
+msgid "In menu"
+msgstr "In menu"
+
+#: view/page_tree.php:317
+#@ swifty-page-manager
+msgid "Status"
+msgstr "Status"
+
+#: view/page_tree.php:354
+#@ swifty-page-manager
+msgid "Header"
+msgstr "Header"
+
+#: view/page_tree.php:379
+#@ swifty-page-manager
+msgid "Left"
+msgstr "Links"
+
+#: view/page_tree.php:385
+#@ swifty-page-manager
+msgid "Right"
+msgstr "Rechts"
+

@@ -1,6 +1,6 @@
 {
-    "name": "swiftyguys/swiftypages",
-    "description": "Swifty Pages",
+    "name": "swiftyguys/swifty-page-manager",
+    "description": "Swifty Page Manager",
     "type": "wordpress-plugin",
     "license": "GPL2",
     "authors": [
@@ -14,6 +14,6 @@
         "wordpress": "3.*"
     },
     "extra": {
-        "installer-name": "swiftypages"
+        "installer-name": "Swifty Page Manager"
     }
 }

@@ -1,5 +1,5 @@
 /*
-#swiftypages_dashboard_widget {
+#spm-dashboard-widget {
 	z-index: 10;
 }
 */
@@ -9,79 +9,79 @@ Don't use this anymore since it's against the repository guidelines
 @import url("htt ps://secure.wordpress.com/i/noticons/noticons.css");
 */
 
-.swiftypages_wrapper {
+.spm_wrapper {
     z-index: 10;
     /*margin-right: 250px;*/
 }
 
-.postbox .swiftypages_wrapper {
+.postbox .spm_wrapper {
     width: auto;
 }
 
-.swiftypages_container {
+.spm-tree-container {
     /* clear: both; */
     overflow: visible;
     margin-top: 1.5em;
     font-size: 13px;
 }
 
-#wpbody-content .swiftypages_container {
+#wpbody-content .spm-tree-container {
     /*margin-right: 250px;*/
 }
 
-#dashboard-widgets-wrap .swiftypages_container {
+#dashboard-widgets-wrap .spm-tree-container {
     margin-right: 0;
 }
 
-.pages_page_swiftypages-pages-page .updated {
+.pages-page-spm-pages-page .updated {
     clear: both;
 }
 
-.swiftypages-subsubsub {
+.spm-subsubsub {
     margin-top: 8px;
     color: #666;
     margin-bottom: 0;
 }
 
-.swiftypages_switch_langs + .swiftypages-subsubsub {
+.spm-switch-langs + .spm-subsubsub {
     margin-top: 0;
 }
 
-.swiftypages-subsubsub li {
+.spm-subsubsub li {
     display: inline-block;
     /*margin-left: 2px;*/
 }
 
-.swiftypages-subsubsub li:first-child {
+.spm-subsubsub li:first-child {
     margin-left: 0;
     margin-right: 1px;
 }
 
-.swiftypages-subsubsub li a {
+.spm-subsubsub li a {
     text-decoration: none;
     line-height: 2;
     padding: .2em;
 }
 
-.swiftypages-subsubsub li a.current {
+.spm-subsubsub li a.current {
     font-weight: bold;
     color: black;
 }
 
-.swiftypages-subsubsub li a .count {
+.spm-subsubsub li a .count {
     font-weight: normal;
     color: #999;
 }
 
-.pages_page_swiftypages-pages-page .swiftypages-subsubsub li {
+.pages_page_spm-pages-page .spm-subsubsub li {
     zoom: 1; /* weird ie-problems otherwise, like li-items that disappear on search. */
 }
 
-.swiftypages_search_no_hits {
+.spm_search_no_hits {
     clear: both;
 }
 
-.cms-tree-view-search {
+.spm-search {
     background-color: #ffefba;
     font-weight: bold;
     font-family: "Lucida Grande", Verdana, Arial, "Bitstream Vera Sans", sans-serif;
@@ -152,20 +152,20 @@ Don't use this anymore since it's against the repository guidelines
     opacity: .9;
 }
 
-.cms_tree_view_search_form {
+.spm-search-form {
     display: inline;
     position: relative;
     margin-left: 1em;
     white-space: nowrap;
 }
 
-#swiftypages_dashboard_widget .cms_tree_view_search_form {
+#spm-dashboard-widget .spm-search-form {
     display: block;
     margin-left: 0;
     margin-top: .5em;
 }
 
-#swiftypages_dashboard_widget .swiftypages-subsubsub {
+#spm-dashboard-widget .spm-subsubsub {
     margin-top: -6px;
     position: relative;
     right: auto;
@@ -192,13 +192,13 @@ Don't use this anymore since it's against the repository guidelines
     font-weight: bold;
 }
 
-.swiftypages_working {
+.spm_working {
     position: absolute;
     line-height: 1;
     display: none;
 }
 
-.cms_tree_view_search_form_reset {
+.spm-search-form-reset {
     display: none;
     position: absolute;
     top: 2px;
@@ -210,15 +210,15 @@ Don't use this anymore since it's against the repository guidelines
     text-indent: -9999px;
 }
 
-#swiftypages_dashboard_widget .cms_tree_view_search_form_reset {
+#spm-dashboard-widget .spm-search-form-reset {
     top: 8px;
 }
 
-.cms_tree_view_search_form_reset:hover {
+.spm-search-form-reset:hover {
     background: transparent url(images/ui-icons_222222_256x240.png) no-repeat -32px -194px;
 }
 
-.swiftypages_page_actions {
+.spm-page-actions {
     /*transition: all .25s ease-in-out; -webkit-transition: all .25s ease-in-out; -moz-transition: all .25s ease-in-out; -o-transition: all .25s ease-in-out; -ms-transition: all .25s ease-in-out;*/
     width: auto;
     width: 200px;
@@ -244,7 +244,7 @@ Don't use this anymore since it's against the repository guidelines
     font-family: sans-serif !important;
 }
 
-.swiftypages_page_actions:before {
+.spm-page-actions:before {
     color: white;
     position: absolute;
     left: -16px;
@@ -258,23 +258,23 @@ Don't use this anymore since it's against the repository guidelines
     overflow: hidden;
 }
 
-.swiftypages_page_actions_visible_from_bottom:before {
+.spm-page-actions-visible-from-bottom:before {
     top: auto;
     bottom: 10px;
 }
 
-.swiftypages_page_actions.swiftypages_page_actions_visible {
+.spm-page-actions.spm-page-actions-visible {
     /*display: block;*/
     visibility: visible;
     opacity: 1;
 }
 
 /*
-div.swiftypages_container.has-visible-actions li {
+div.spm-tree-container.has-visible-actions li {
 	opacity: .5
 }
 
-div.swiftypages_container.has-visible-actions li.has-visible-actions {
+div.spm-tree-container.has-visible-actions li.has-visible-actions {
 	opacity: 1;
 }
 */
@@ -287,17 +287,17 @@ li.has-visible-actions > a:first-of-type {
 
 }
 
-.swiftypages_page_actions p {
+.spm-page-actions p {
     margin: .5em 0 .5em 0;
     line-height: 1.2;
 }
 
-p.swiftypages_action_add_and_edit_page,
-p.swiftypages_action_edit_and_view {
+p.spm_action_add_and_edit_page,
+p.spm_action_edit_and_view {
     margin-top: 0em;
 }
 
-.swiftypages_wrapper .swiftypages_page_actions a {
+.spm_wrapper .spm-page-actions a {
     background: transparent;
     text-decoration: underline;
     color: #21759B;
@@ -306,52 +306,52 @@ p.swiftypages_action_edit_and_view {
     margin-right: .2em;
 }
 
-.swiftypages_wrapper .swiftypages_page_actions .swiftypages_action_edit_and_view a {
+.spm_wrapper .spm-page-actions .spm_action_edit_and_view a {
     border-right: 1px solid #aaa;
 }
 
-.swiftypages_wrapper .swiftypages_page_actions .swiftypages_action_edit_and_view a:not(.hidden):last-of-type {
+.spm_wrapper .spm-page-actions .spm_action_edit_and_view a:not(.hidden):last-of-type {
     border-right: none;
 }
 
-.swiftypages_wrapper .swiftypages_page_actions a:hover {
+.spm_wrapper .spm-page-actions a:hover {
     color: #d54e21;
     background-color: transparent;
 }
 
 /* applied to all (aka "first") */
-.swiftypages_wrapper .swiftypages_page_actions .swiftypages_action_add_and_edit_page a:not(.hidden) {
+.spm_wrapper .spm-page-actions .spm_action_add_and_edit_page a:not(.hidden) {
     /*background: red;*/
     padding: 0;
     margin: 0;
 }
 
 /* tricky way to get non first not hidden */
-.swiftypages_wrapper .swiftypages_page_actions .swiftypages_action_add_and_edit_page a:not(.hidden) ~ a:not(.hidden) {
+.spm_wrapper .spm-page-actions .spm_action_add_and_edit_page a:not(.hidden) ~ a:not(.hidden) {
     /*background: yellow;*/
     border-left: 1px solid #aaa;
     padding-left: .5em;
     margin-left: .2em;
 }
 
-.swiftypages_page_actions ul {
+.spm-page-actions ul {
     display: block;
     overflow: auto;
     margin: 0 0 1em 0;
 }
 
-.swiftypages_page_actions li {
+.spm-page-actions li {
     padding: 0;
     margin: 0;
     background: none;
     display: inline;
 }
 
-.swiftypages_action_add_page {
+.spm_action_add_page {
     display: block;
 }
 
-.swiftypages_page_actions dl {
+.spm-page-actions dl {
     margin-top: 1em;
     margin-bottom: 1em;
     color: #333;
@@ -359,25 +359,25 @@ p.swiftypages_action_edit_and_view {
     line-height: 1.2;
 }
 
-.swiftypages_page_actions dl dd {
+.spm-page-actions dl dd {
     margin: 0;
 }
 
-.swiftypages_page_actions dl dt {
+.spm-page-actions dl dt {
     color: #999;
     margin: .5em 0 0 0;
 }
 
-.swiftypages_page_actions_arrow {
+.spm-page-actions-arrow {
     display: none;
 }
 
-li.swiftypages_user_can_edit_page_no a {
+li.spm_user_can_edit_page_no a {
     opacity: .6; /* Standard: FF gt 1.5, Opera, Safari */
     -ms-filter: "alpha(opacity=60)"; /* IE 8 */
 }
 
-h4.swiftypages_page_actions_headline {
+h4.spm-page-actions-headline {
     margin: 0 0 0 0;
     font-weight: bold !important;
     font-family: sans-serif !important;
@@ -392,97 +392,25 @@ h4.swiftypages_page_actions_headline {
     border-left: 1px solid #E3E3E3;
 }
 
-.swiftypages_action_add_doit {
-    /*background-color: lightyellow;*/
-    display: none;
-}
-
-.swiftypages_action_add_doit fieldset {
-    border: 1px solid #ddd;
-    border-left-width: 0;
-    border-right-width: 0;
-    padding: .75em .25em .75em 0;
-}
-
-.swiftypages_action_add_doit h4,
-.swiftypages_action_add_doit legend {
-    margin: 0;
-}
-
-.swiftypages_action_add_doit form > div {
-    margin-top: .75em;
-}
-
-.swiftypages_action_add_doit form > div:first-of-type {
-    margin-top: 0;
-}
-
-.swiftypages_action_add_doit label {
-    margin-right: .5em;
-}
-
-ul.swiftypages_action_add_doit_pages .ui-state-highlight {
-    display: block;
-}
-
-ul.swiftypages_action_add_doit_pages {
-    position: relative;
-    margin: 0 0 0 -10px;
-    padding: 0;
-    overflow: auto;
-}
-
-.swiftypages_action_add_doit_pages li {
-    display: block;
-    position: relative;
-    float: left;
-    padding: 0 0 0 0;
-    margin: 1px 0 1px 0;
-}
-
-.swiftypages_action_add_doit_pages input {
-    float: left;
-    width: 90%;
-    transition: all .25s ease-in-out;
-    -webkit-transition: all .25s ease-in-out;
-    -moz-transition: all .25s ease-in-out;
-    -o-transition: all .25s ease-in-out;
-    -ms-transition: all .25s ease-in-out;
-}
-
-.swiftypages_action_add_doit_pages span:first-child {
-    background: transparent url(images/ui-icons_222222_256x240.png) no-repeat -2px -228px;
-    margin-top: 7px;
-    margin-right: 3px;
-    float: left;
-    width: 8px;
-    height: 10px;
-    cursor: move;
-}
-
-.swiftypages_action_add_doit_pages li:last-child span:first-child {
-    visibility: hidden;
-}
-
 /*
 for posts overview enabled mode
 */
-.swiftypages-postsoverview-wrap {
+.spm-postsoverview-wrap {
     position: relative;
 }
 
-.swiftypages-postsoverview-wrap .view-switch {
+.spm-postsoverview-wrap .view-switch {
     position: absolute;
     visibility: visible;
     top: 0;
     right: 0;
 }
 
-.view-switch.view-switch-swiftypages-icon-added {
+.view-switch.view-switch-spm-icon-added {
     padding-right: 0;
 }
 
-.view-switch-swiftypages-icon-added a {
+.view-switch-spm-icon-added a {
     display: inline-block !important;
 }
 
@@ -495,138 +423,85 @@ for posts overview enabled mode
     background-position: -20px 0;
 }
 
-.swiftypages_add_list_view {
+.spm_add_list_view {
     display: none;
 }
 
 .view-switch #view-switch-tree,
-.view-switch .swiftypages_add_list_view {
+.view-switch .spm_add_list_view {
     display: inline;
 }
 
 /* options screen */
-.swiftypages_options_form {
+.spm_options_form {
     float: left;
 }
 
-.ss-container {
+.spm-container {
     position: relative;
 }
 
-.ss-page-actions-tmpl {
+.spm-page-actions-tmpl {
     right: 0;
     position: absolute;
     margin: 3px 3px 0 0;
 }
 
-.ss-page-add-edit-tmpl,
-.ss-page-delete-tmpl {
+.spm-page-add-edit-tmpl,
+.spm-page-delete-tmpl {
     display: list-item;
     margin-left: 36px;
 }
 
-.ss-page-form {
+.spm-page-form {
     padding: 9px;
 }
 
-.ss-page-delete-tmpl .inline-edit-row fieldset span.title {
+.spm-page-delete-tmpl .inline-edit-row fieldset span.title {
     line-height: 7em;
 }
 
-.ss-form .inline-edit-row fieldset label span.title {
-    width: 15em;
-}
-
-.ss-form .inline-edit-row fieldset label span.input-text-wrap {
-    margin-left: 15em;
-}
-
-.ss-form .inline-edit-row fieldset .inline-edit-group {
+.spm-form .inline-edit-row fieldset .inline-edit-group {
     line-height: 30px;
 }
 
-.ss-buttons-confirm {
-    position: absolute;
+.spm-buttons-confirm {
     bottom: 0;
-    right: 0;
-    padding-right: 10px;
 }
 
-.ss-buttons-confirm .ss-button {
+.spm-buttons-confirm .spm-button {
     width: 100px;
     text-align: center;
-    margin-bottom: 10px;
+    margin-bottom: 1em;
+    position: absolute;
+    right: 1em;
 }
 
-.ss-label {
-    clear: both;
-    height: 30px;
+.spm-buttons-confirm .spm-button.cancel {
+    bottom: 35px;
 }
 
-label.ss-label span.title {
-    height: 30px;
-    line-height: 30px;
+.spm-buttons-confirm .spm-button.save {
+    bottom: 0;
 }
 
-.ss-radio-label {
-    line-height: 29px;
-}
-
-.alignleft.ss-radio-label {
-    padding: 0 20px 0 0;
-}
-
-#wpbody-content .swiftypages_container {
+#wpbody-content .spm-container {
     margin-right: 0px;
 }
 
-#wpbody-content .quick-edit-row-page .inline-edit-col-left {
-    width: 60%;
-}
-
-#wpbody-content .quick-edit-row-page .inline-edit-col-center {
-    width: 20%;
-}
-
-#wpbody-content .quick-edit-row-page .inline-edit-col-right {
-    width: 19%;
-}
-
-.ss-hidden {
-    display: none;
-}
-
-.button.button-primary.ss-button.ss-page-button {
-    /*background: transparent;*/
-    /*border: none;*/
-    /*-webkit-box-shadow: none;*/
-    /*box-shadow: none;*/
-    /*color: #333;*/
-    /*text-decoration: none;*/
-}
-
-.ss-button .ss-icon {
-    padding-top: 3px;
-}
-
-.ss-label.ss-more,
-.ss-label.ss-less {
-    float: right;
-}
-
-.inline-edit-row .input-text-wrap input[type=text].ss-input-small {
+.inline-edit-row .input-text-wrap input[type=text].spm-input-small {
     width: 50%;
 }
 
-li a.ss-page-tree-element {
+li a.spm-page-tree-element {
     font-size: larger;
 }
 
-li.swiftypages_show_page_in_menu_no > a.ss-page-tree-element {
+li.spm-show-page-in-menu-no > a.spm-page-tree-element {
     color: #bbb;
 }
 
-li.swiftypages_show_page_in_menu_no > a.ss-page-tree-element > ins {
+li.spm-show-page-in-menu-no > a.spm-page-tree-element > ins {
     opacity: 0.4;
     filter: alpha(opacity=40);
 }
@@ -642,4 +517,67 @@ li.swiftypages_show_page_in_menu_no > a.ss-page-tree-element > ins {
     font-size: .8em;
     display: inline;
     margin-right: .75ex;
+}
+
+.spm-container .spm-table {
+    padding: 1em 0;
+}
+
+.spm-container .inline-edit-row fieldset label span.title {
+    width: 10em;
+}
+
+.spm-container .inline-edit-row fieldset label span.input-text-wrap {
+    margin-left: 10em;
+}
+
+.spm-container .inline-edit-col-left {
+    width: 55%;
+}
+
+.spm-container .inline-edit-col-right {
+    width: 45%;
+}
+
+.spm-container fieldset.inline-edit-col-right .inline-edit-col {
+    border: none;
+}
+
+.spm-container .inline-edit-group .spm-radio-label {
+    padding-right: 15px;
+}
+
+.spm-container .inline-edit-group label.alignleft {
+    margin-right: 1em;
+}
+
+.spm-container .spm-label.spm-more,
+.spm-container .spm-label.spm-less {
+    float: right;
+}
+
+.spm-button .spm-icon {
+    padding-top: 3px;
+}
+
+.spm-button .spm-icon.dashicons-plus {
+    padding-top: 5px;
+}
+
+.spm-hidden {
+    display: none;
+}
+
+@media screen and (max-width: 782px) {
+    .spm-container .inline-edit-row fieldset label span.input-text-wrap {
+        margin-left: 0;
+    }
+
+    #wpbody-content .spm-container fieldset .inline-edit-col, tr.inline-edit-row td {
+        margin-bottom: .5em;
+    }
+}
+
+#wpbody-content .spm-container fieldset.inline-edit-col-right .inline-edit-col {
+    border: none;
 }
