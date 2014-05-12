@@ -295,10 +295,6 @@ var SPM = ( function ( $, document ) {
         return this.getWrapper( el ).find( '[name=spm_meta_post_type]' ).val();
     };
 
-    spm.getWPMLSelectedLang = function ( el ) {
-        return this.getWrapper( el ).find( '[name=spm_meta_wpml_language]' ).val();
-    };
-
     spm.getWrapper = function ( el ) {
         return $( el ).closest( '.spm_wrapper' );
     };
@@ -615,7 +611,7 @@ jQuery( function ( $ ) {
         var postType = SPM.getPostType( el );
         var spmJsonData = $.data( document, 'spm_json_data' );
 
-        treeOptionsTmp.json_data.ajax.url = treeOptionsTmp.json_data.ajax.url + '&post_type=' + postType + '&lang=' + SPM.getWPMLSelectedLang( el );
+        treeOptionsTmp.json_data.ajax.url = treeOptionsTmp.json_data.ajax.url + '&post_type=' + postType;
         treeOptionsTmp.json_data.data = spmJsonData[ postType ];
 
         $el.bind( 'loaded.jstree', SPM.pageTreeLoaded );

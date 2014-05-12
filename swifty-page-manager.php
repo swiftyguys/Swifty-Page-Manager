@@ -108,6 +108,7 @@ class SwiftyPageManager
      * @param WP_Post $post
      */
     public function restore_page_status( $post_id, $post ) {
+        /** @var wpdb $wpdb - Wordpress Database */
         global $wpdb;
 
         // Check it's not an auto save routine
@@ -132,8 +133,7 @@ class SwiftyPageManager
      *
      * @param wp $wp - WordPress object
      */
-    public function parse_request( &$wp )
-    {
+    public function parse_request( &$wp ) {
         /** @var wpdb $wpdb - Wordpress Database */
         global $wpdb;
 
@@ -158,8 +158,7 @@ class SwiftyPageManager
      * @param bool|integer $post_id
      * @return string
      */
-    public function page_link( /** @noinspection PhpUnusedParameterInspection */ $link, $post_id=false )
-    {
+    public function page_link( /** @noinspection PhpUnusedParameterInspection */ $link, $post_id=false ) {
         $spm_url = get_post_meta( $post_id, 'spm_url', true );
 
         if ( $spm_url ) {
@@ -461,11 +460,17 @@ class SwiftyPageManager
                 // update menu_order of all pages with a menu order more than or equal ref_node_post and with the same parent as ref_node_post
                 // we do this so there will be room for our page if it's the first page
                 // so: no move of individial posts yet
-                $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+1 WHERE post_parent = %d", $post_ref_node->post_parent ) );
+                $wpdb->query(
+                     $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+1
+                                      WHERE post_parent = %d",
+                                     $post_ref_node->post_parent ) );
 
                 // update menu order with +1 for all pages below ref_node, this should fix the problem with "unmovable" pages because of
                 // multiple pages with the same menu order (...which is not the fault of this plugin!)
-                $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+1 WHERE menu_order >= %d AND post_type = %s", $post_ref_node->menu_order + 1, 'page' ) );
+                $wpdb->query(
+                     $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+1
+                                      WHERE menu_order >= %d AND post_type = %s",
+                                     $post_ref_node->menu_order + 1, 'page' ) );
 
                 $post_to_save = array(
                     "ID"          => $post_node->ID,
@@ -479,15 +484,14 @@ class SwiftyPageManager
                 echo "did before";
             } elseif ( "after" === $type ) {
                 // post_node is placed after ref_post_node
-                // update menu_order of all posts with the same parent ref_post_node and with a menu_order of the same as ref_post_node, but do not include ref_post_node
-                // +2 since multiple can have same menu order and we want our moved post to have a unique "spot"
-                $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+2 WHERE post_parent = %d AND menu_order >= %d AND id <> %d ",
+                // update menu_order of all posts with the same parent ref_post_node and with a menu_order of the same
+                // as ref_post_node, but do not include ref_post_node +2 since multiple can have same menu order and we
+                // want our moved post to have a unique "spot"
+                $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+2
+                                               WHERE post_parent = %d AND menu_order >= %d AND id <> %d ",
                                               $post_ref_node->post_parent,
                                               $post_ref_node->menu_order,
                                               $post_ref_node->ID ) );
-
-                // update menu_order of post_node to the same that ref_post_node_had+1
-                #$wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = %d, post_parent = %d WHERE ID = %d", $post_ref_node->menu_order+1, $post_ref_node->post_parent, $post_node->ID ) );
 
                 $post_to_save = array(
                     "ID"          => $post_node->ID,
@@ -504,19 +508,9 @@ class SwiftyPageManager
             // Store the moved page id in the jstree_select cookie
             setcookie( "jstree_select", "spm-id-" . $post_node->ID );
 
-            #echo "ok"; // I'm done here!
         } else {
             // error
         }
-
-        // ok, we have updated the order of the pages
-        // but we must tell wordpress that we have done something
-        // other plugins (cache plugins) will not know to clear the cache otherwise
-        // edit_post seems like the most appropriate action to fire
-        // fire for the page that was moved? can not fire for all.. would be crazy, right?
-        #wp_update_post(array("ID" => $node_id));
-        #wp_update_post(array("ID" => $post_ref_node));
-        #clean_post_cache($node_id); clean_post_cache($post_ref_node); // hmpf.. db cache reloaded don't care
 
         do_action( "spm_node_move_finish" );
 
@@ -713,7 +707,7 @@ class SwiftyPageManager
         }
 
         if ( $this->is_swifty ) {
-            if ( is_array( $post_meta[ 'spm_url' ] ) && !empty( $post_meta[ 'spm_url' ][0] ) ) {
+            if ( !empty( $post_meta[ 'spm_url' ][0] ) ) {
                 $spm_page_url = $post_meta[ 'spm_url' ][0];
                 $spm_is_custom_url = 1;
             } else {
@@ -1041,52 +1035,6 @@ class SwiftyPageManager
         $pageJsonData['metadata']["delete_nonce"] = wp_create_nonce( "delete-page_".$onePage->ID, '_trash' );
 
         return $pageJsonData;
-    }
-
-    /**
-     * Get number of posts from WPML
-     */
-    protected function _get_wpml_post_counts( $post_type )
-    {
-        global $wpdb;
-
-        $arr_statuses = array( "publish", "draft", "trash", "future", "private" );
-        $arr_counts   = array();
-
-        foreach ( $arr_statuses as $post_status ) {
-            $extra_cond = "";
-
-            if ( $post_status ) {
-                $extra_cond .= " AND post_status = '" . $post_status . "'";
-            }
-
-            if ( $post_status != 'trash' ) {
-                $extra_cond .= " AND post_status <> 'trash'";
-            }
-
-            $extra_cond .= " AND post_status <> 'auto-draft'";
-            $sql = "
-                SELECT language_code, COUNT(p.ID) AS c FROM {$wpdb->prefix}icl_translations t
-                JOIN {$wpdb->posts} p ON t.element_id=p.ID
-                JOIN {$wpdb->prefix}icl_languages l ON t.language_code=l.code AND l.active = 1
-                WHERE p.post_type='{$post_type}' AND t.element_type='post_{$post_type}' {$extra_cond}
-                GROUP BY language_code
-            ";
-
-            $res = $wpdb->get_results( $sql );
-
-            $langs          = array();
-            $langs[ 'all' ] = 0;
-
-            foreach ( $res as $r ) {
-                $langs[ $r->language_code ] = $r->c;
-                $langs[ 'all' ] += $r->c;
-            }
-
-            $arr_counts[ $post_status ] = $langs;
-        }
-
-        return $arr_counts;
     }
 
     /**
