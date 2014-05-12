@@ -564,7 +564,7 @@ jQuery( function ( $ ) {
         },
         'json_data': {
             'ajax': {
-                'url': ajaxurl + '?action=spm_get_childs&view=' + $.data( document, 'spm_view' ),
+                'url': ajaxurl + '?action=spm_get_childs&status=' + $.data( document, 'spm_status' ),
                 // this function is executed in the instance's scope (this refers to the tree instance)
                 // the parameter is the node being loaded (may be -1, 0, or undefined when loading the root nodes)
                 'data': function ( n ) {

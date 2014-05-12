@@ -18,6 +18,6 @@
 <script type="text/javascript">
     jQuery( function ( $ ) {
         $.data( document, 'spm_json_data', {} );
-        $.data( document, 'spm_view', '<?php echo $this->_view; ?>' );
+        $.data( document, 'spm_status', '<?php echo $this->getPostStatus(); ?>' );
     } );
 </script>

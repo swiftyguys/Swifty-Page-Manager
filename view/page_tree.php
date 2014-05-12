@@ -128,20 +128,31 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
 
     ?>
     <ul class="spm-subsubsub spm-subsubsub-select-view">
-        <li><a href="#" class="spm_open_all"><?php _e( 'Expand', 'swifty-page-manager' ) ?></a> |</li>
-        <li><a href="#" class="spm_close_all"><?php _e( 'Collapse', 'swifty-page-manager' ) ?></a></li>
-        <?php
-            if ( $count_posts->trash ) {
-        ?>
-        | <li>
-            <a class="spm_view_trash" href="<?php echo admin_url() . 'edit.php?post_status=trash&post_type=page'; ?>">
-                <?php _e( "Trash", 'swifty-page-manager' ) ?>
-                <span class="count">(<?php echo $count_posts->trash; ?>)</span>
+        <li>
+            <a class="cms_spm_status_any  <?php echo ($this->getPostStatus()=="any") ? "current" : "" ?>" href="<?php echo add_query_arg( 'status', 'any', $this->getPluginUrl() ); ?>" <?php echo $status_data_attributes["all"] ?>>
+                <?php _e("All", 'swifty-page-manager') ?>
+                <span class="count">(<?php echo $post_count_all ?>)</span>
+            </a> |
+        </li>
+        <li>
+            <a class="cms_spm_status_publish <?php echo ($this->getPostStatus()=="publish") ? "current" : "" ?>" href="<?php echo add_query_arg( 'status', 'publish', $this->getPluginUrl() ); ?>" <?php echo $status_data_attributes["publish"] ?>>
+                <?php _e("Public", 'swifty-page-manager') ?>
+                <span class="count">(<?php echo $post_count_publish ?>)</span>
             </a>
         </li>
-        <?php
-            }
-        ?>
+
+        <?php if ( $post_count_trash ): ?>
+        <li>
+            <a class="cms_spm_status_trash <?php echo ($this->getPostStatus()=="trash") ? "current" : "" ?>" href="<?php echo add_query_arg( 'status', 'trash', $this->getPluginUrl() ); ?>" <?php echo $status_data_attributes["trash"] ?>>
+                <?php _e("Trash", 'swifty-page-manager') ?>
+                <span class="count">(<?php echo $post_count_trash ?>)</span>
+            </a>
+        </li>
+        <?php endif; ?>
+
+        <li><a href="#" class="spm_open_all"><?php _e( 'Expand', 'swifty-page-manager' ) ?></a> |</li>
+        <li><a href="#" class="spm_close_all"><?php _e( 'Collapse', 'swifty-page-manager' ) ?></a></li>
+
 
     </ul>
 

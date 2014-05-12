@@ -14,8 +14,9 @@ class SwiftyPageManager
     protected $plugin_dir;
     protected $plugin_basename;
     protected $plugin_dir_url;
+    protected $plugin_url;
     protected $_plugin_version = '0.0.2';
-    protected $_view = 'all';
+    protected $_post_status = 'any';
     protected $_post_type = 'page';
     protected $_tree = null;
     protected $_byPageId = null;
@@ -31,10 +32,11 @@ class SwiftyPageManager
         $this->plugin_dir      = dirname( $this->plugin_file );
         $this->plugin_basename = basename( $this->plugin_dir );
         $this->plugin_dir_url  = plugins_url( basename( $this->plugin_dir ) );
+        $this->plugin_url      = $_SERVER[ 'REQUEST_URI' ];
         $this->is_swifty       = true;   // TEMP!!!
 
-        if ( !empty( $_GET[ "view" ] ) ) {
-            $this->_view = $_GET[ "view" ];
+        if ( !empty( $_GET[ "status" ] ) ) {
+            $this->_post_status = $_GET[ "status" ];
         }
 
         if ( !empty( $_GET[ "post_type" ] ) ) {
@@ -54,7 +56,7 @@ class SwiftyPageManager
         if ( $this->is_swifty ) {
             add_action( 'wp_ajax_spm_sanitize_url', array( $this, 'ajax_sanitize_url' ) );
             add_action( 'parse_request',       array( $this, 'parse_request' ) );
-            add_action( 'save_post',           array( $this, 'restore_page_status' ), 10, 3 );
+            add_action( 'save_post',           array( $this, 'restore_page_status' ), 10, 2 );
             add_filter( 'wp_insert_post_data', array( $this, 'set_tmp_page_status' ), 10, 2 );
             add_filter( 'page_link',           array( $this, 'page_link' ), 10, 2 );
             add_filter( 'wp_list_pages',       array( $this, 'wp_list_pages' ) );
@@ -63,6 +65,11 @@ class SwiftyPageManager
         }
     }
 
+    /**
+     * @param string $title
+     * @param string $sep
+     * @return string
+     */
     function seo_wp_title( $title, $sep )
     {
         if ( is_feed() ) {
@@ -78,6 +85,11 @@ class SwiftyPageManager
         return $title;
     }
 
+    /**
+     * @param array $data
+     * @param array $postarr
+     * @return array
+     */
     public function set_tmp_page_status( $data, $postarr )
     {
         // Only do this when creating a page.
@@ -91,7 +103,11 @@ class SwiftyPageManager
         return $data;
     }
 
-    public function restore_page_status( $post_id, $post, $update ) {
+    /**
+     * @param integer $post_id
+     * @param WP_Post $post
+     */
+    public function restore_page_status( $post_id, $post ) {
         global $wpdb;
 
         // Check it's not an auto save routine
@@ -137,8 +153,12 @@ class SwiftyPageManager
     /**
      * Filter function called when the link to a page is needed.
      * We return our custom URL if it has been set.
+     *
+     * @param string $link
+     * @param bool|integer $post_id
+     * @return string
      */
-    public function page_link( $link, $post_id=false )
+    public function page_link( /** @noinspection PhpUnusedParameterInspection */ $link, $post_id=false )
     {
         $spm_url = get_post_meta( $post_id, 'spm_url', true );
 
@@ -218,16 +238,23 @@ class SwiftyPageManager
         return $code;
     }
 
+    /**
+     * Output header for admin page
+     */
     public function admin_head()
     {
         $currentScreen = get_current_screen();
 
         if ( 'pages_page_page-tree' === $currentScreen->base ) {
             add_filter( "views_" . $currentScreen->id, array( $this, 'filter_views_edit_postsoverview' ) );
+            /** @noinspection PhpIncludeInspection */
             require $this->plugin_dir . '/view/admin_head.php';
         }
     }
 
+    /**
+     * Add submenu to admin left menu
+     */
     public function admin_menu()
     {
         add_submenu_page( 'edit.php?post_type='.$this->_post_type
@@ -239,6 +266,9 @@ class SwiftyPageManager
                         );
     }
 
+    /**
+     * Load translations
+     */
     function spm_load_textdomain()
     {
         if ( is_admin() ) {
@@ -246,6 +276,9 @@ class SwiftyPageManager
         }
     }
 
+    /**
+     * Show page tree
+     */
     public function view_page_tree()
     {
         if ( !current_user_can( 'edit_pages' ) ) {
@@ -277,9 +310,13 @@ class SwiftyPageManager
 
         wp_localize_script( "spm", 'spm_l10n', $oLocale );
 
+        /** @noinspection PhpIncludeInspection */
         require( $this->plugin_dir . '/view/page_tree.php' );
     }
 
+    /**
+     * Return JSON with tree children, called from Ajax
+     */
     public function ajax_get_childs()
     {
         header( "Content-type: application/json" );
@@ -340,7 +377,7 @@ class SwiftyPageManager
         $mode   = "tree";
         $class  = isset( $_GET[ "mode" ] ) && $_GET[ "mode" ] == $mode ? " class='current' " : "";
         $title  = __( "Swifty Page Manager", 'swifty-page-manager' );
-        $tree_a = "<a href='" . esc_url( add_query_arg( 'mode', $mode, $_SERVER[ 'REQUEST_URI' ] ) ) . "' $class> <img id='view-switch-$mode' src='" . esc_url( includes_url( 'images/blank.gif' ) ) . "' width='20' height='20' title='$title' alt='$title' /></a>\n";
+        $tree_a = "<a href='" . esc_url( add_query_arg( 'mode', $mode, $this->getPluginUrl() ) ) . "' $class> <img id='view-switch-$mode' src='" . esc_url( includes_url( 'images/blank.gif' ) ) . "' width='20' height='20' title='$title' alt='$title' /></a>\n";
 
         // Copy of wordpress own, if it does not exist
         $wp_list_a = "";
@@ -349,7 +386,7 @@ class SwiftyPageManager
             $mode      = "list";
             $class     = isset( $_GET[ "mode" ] ) && $_GET[ "mode" ] != $mode ? " class='spm_add_list_view' " : " class='spm_add_list_view current' ";
             $title     = __( "List View" ); /* translation not missing - exists in wp */
-            $wp_list_a = "<a href='" . esc_url( add_query_arg( 'mode', $mode, $_SERVER[ 'REQUEST_URI' ] ) ) . "' $class><img id='view-switch-$mode' src='" . esc_url( includes_url( 'images/blank.gif' ) ) . "' width='20' height='20' title='$title' alt='$title' /></a>\n";
+            $wp_list_a = "<a href='" . esc_url( add_query_arg( 'mode', $mode, $this->getPluginUrl() ) ) . "' $class><img id='view-switch-$mode' src='" . esc_url( includes_url( 'images/blank.gif' ) ) . "' width='20' height='20' title='$title' alt='$title' /></a>\n";
         }
 
         $out  = "";
@@ -366,6 +403,9 @@ class SwiftyPageManager
         return $filter_var;
     }
 
+    /**
+     * Ajax function to move a page
+     */
     public function ajax_move_page()
     {
         /*
@@ -483,7 +523,10 @@ class SwiftyPageManager
         exit;
     }
 
-    public function ajax_add_page()
+    /**
+     * Ajax funtion to save a page
+     */
+    public function ajax_save_page()
     {
         global $wpdb;
 
@@ -568,6 +611,7 @@ class SwiftyPageManager
             }
 
             $post_id = wp_insert_post( $post_data );
+            $post_id = intval( $post_id );
 
             if ( $post_id ) {
                 if ( $this->is_swifty ) {
@@ -590,6 +634,9 @@ class SwiftyPageManager
         exit;
     }
 
+    /**
+     * Ajax function to delete a page
+     */
     public function ajax_delete_page()
     {
         $post_id = intval( $_POST[ "post_ID" ] );
@@ -621,6 +668,9 @@ class SwiftyPageManager
         exit;
     }
 
+    /**
+     * Ajax function to publish a page
+     */
     public function ajax_publish_page()
     {
         $post_id = intval( $_POST[ "post_ID" ] );
@@ -636,6 +686,9 @@ class SwiftyPageManager
         exit;
     }
 
+    /**
+     * Ajax function to set the settings of a post
+     */
     public function ajax_post_settings()
     {
         header( 'Content-Type: text/javascript' );
@@ -644,9 +697,7 @@ class SwiftyPageManager
         $post             = get_post( $post_id );
         $post_meta        = get_post_meta( $post_id );
         $post_status      = ( $post->post_status === 'private' ) ? 'publish' : $post->post_status; // _status
-        $page_template    = $post->page_template || 'default';
-        $spm_show_in_menu  = ( $post->post_status === 'private' ) ? 'hide' : 'show';
-        $spm_page_url      = '';
+        $spm_show_in_menu = ( $post->post_status === 'private' ) ? 'hide' : 'show';
         $spm_is_custom_url = 0;
 
         $defaults = array( 'spm_show_in_menu'       => 'show'
@@ -704,12 +755,18 @@ class SwiftyPageManager
         exit;
     }
 
+    /**
+     * Ajax function to use Wordpress' sanitize_title_with_dashes function to prepare an URL string
+     */
     public function ajax_sanitize_url()
     {
         echo sanitize_title_with_dashes( $_POST[ "url" ] );
         exit;
     }
 
+    /**
+     * @return StdClass
+     */
     public function getTree()
     {
         if ( is_null( $this->_tree ) ) {
@@ -725,6 +782,10 @@ class SwiftyPageManager
         return $this->_tree;
     }
 
+    /**
+     * @param $branch
+     * @return array
+     */
     public function getJsonData( &$branch )
     {
         $result    = array();
@@ -740,7 +801,7 @@ class SwiftyPageManager
                  * if no children, output no state
                  * if viewing trash, don't get children. we watch them "flat" instead
                  */
-                if ( $this->_view != "trash" ) {
+                if ( $this->getPostStatus() != "trash" ) {
                     $newBranch[ 'children' ] = $this->getJsonData( $child );
 
                     if ( count($newBranch[ 'children' ]) ) {
@@ -787,8 +848,34 @@ class SwiftyPageManager
         }
     }
 
+    /**
+     * Get filter on post status. The user can choose this.
+     * - any
+     * - publish
+     * - trash
+     *
+     * @return string
+     */
+    public function getPostStatus() {
+        return $this->_post_status;
+    }
+
+    /**
+     * Get the URL of this plugin, for example:
+     * http://domain.com/wp-admin/edit.php?post_type=page&page=page-tree
+     *
+     * @return string
+     */
+    public function getPluginUrl() {
+        return $this->plugin_url;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * @param integer $post_id
+     * @param string $post_status
+     */
     protected function _update_post_status( $post_id, $post_status )
     {
         wp_update_post( array(
@@ -797,6 +884,10 @@ class SwiftyPageManager
         ) );
     }
 
+    /**
+     * @param string $route
+     * @param callable $callable
+     */
     protected function _addRoute( $route, $callable )
     {
         $hookName = get_plugin_page_hookname( $route, '' );
@@ -805,12 +896,14 @@ class SwiftyPageManager
         $_registered_pages[$hookName] = true;
     }
 
+    /**
+     *
+     */
     protected function _addAllPages()
     {
         $args = array();
         $args['post_type'] = 'page';
-        $args['post_status'] = 'any';
-        $args['view'] = 'all';
+        $args['post_status'] = $this->getPostStatus();
         $args['numberposts'] = -1;
         $args['orderby'] = 'menu_order';
         $args['order'] = 'ASC';
@@ -1064,6 +1157,7 @@ class SwiftyPageManager
         return $result;
     }
 
-}
+} // End of class SwiftyPageManager
 
+// Start the plugin
 $SwiftyPageManager = new SwiftyPageManager();
