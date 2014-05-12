@@ -448,7 +448,8 @@ for posts overview enabled mode
 }
 
 .spm-page-add-edit-tmpl,
-.spm-page-delete-tmpl {
+.spm-page-delete-tmpl,
+.spm-page-publish-tmpl {
     display: list-item;
     margin-left: 36px;
 }
@@ -457,7 +458,8 @@ for posts overview enabled mode
     padding: 9px;
 }
 
-.spm-page-delete-tmpl .inline-edit-row fieldset span.title {
+.spm-page-delete-tmpl .inline-edit-row fieldset span.title,
+.spm-page-publish-tmpl .inline-edit-row fieldset span.title {
     line-height: 7em;
 }
 
@@ -477,11 +479,12 @@ for posts overview enabled mode
     right: 1em;
 }
 
-.spm-buttons-confirm .spm-button.cancel {
+.spm-buttons-confirm .spm-button[data-spm-action="cancel"] {
     bottom: 35px;
 }
 
-.spm-buttons-confirm .spm-button.save {
+.spm-buttons-confirm .spm-button[data-spm-action="save"],
+.spm-buttons-confirm .spm-button[data-spm-action="publish"] {
     bottom: 0;
 }
 

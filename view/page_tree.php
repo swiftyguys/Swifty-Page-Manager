@@ -212,9 +212,40 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                         </fieldset>
                         <fieldset class="inline-edit-col-right">
                             <div class="inline-edit-group spm-buttons-confirm">
-                                <input type="button" class="button-secondary alignright spm-button cancel" value="<?php _e( 'Cancel', 'swifty-page-manager' ) ?>" />
+                                <input type="button" class="button-secondary alignright spm-button spm-do-button" data-spm-action="cancel" value="<?php _e( 'Cancel', 'swifty-page-manager' ) ?>" />
                                 <br class="clear">
-                                <input type="button" class="button-primary alignright spm-button delete" value="<?php _e( 'Delete', 'swifty-page-manager' ) ?>" />
+                                <input type="button" class="button-primary alignright spm-button spm-do-button" data-spm-action="delete" value="<?php _e( 'Delete', 'swifty-page-manager' ) ?>" />
+                            </div>
+                        </fieldset>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</span>
+
+<!-- SwiftySite template Publish -->
+<span class="spm-container spm-page-publish-tmpl __TMPL__ spm-hidden">
+    <form method="post" class="spm-form spm-page-publish-form">
+        <input type="hidden" name="is_swifty" value="<?php echo ( $this->is_swifty ) ? '1' : '0' ?>" >
+        <table class="spm-table wp-list-table widefat fixed pages">
+            <tbody>
+                <tr class="inline-edit-row inline-edit-row-page inline-edit-page quick-edit-row quick-edit-row-page inline-edit-page inline-editor">
+                    <td colspan="5" class="colspanchange">
+                        <fieldset class="inline-edit-col-left">
+                            <div class="inline-edit-col">
+                                <div class="inline-edit-group">
+                                    <span class="title">
+                                        <?php _e( "Are you sure you want to publish this page so it becomes visible to your visitors?", 'swifty-page-manager' ) ?>
+                                    </span>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="inline-edit-col-right">
+                            <div class="inline-edit-group spm-buttons-confirm">
+                                <input type="button" class="button-secondary alignright spm-button spm-do-button" data-spm-action="cancel" value="<?php _e( 'Cancel', 'swifty-page-manager' ) ?>" />
+                                <br class="clear">
+                                <input type="button" class="button-primary alignright spm-button spm-do-button" data-spm-action="publish" value="<?php _e( 'Publish', 'swifty-page-manager' ) ?>" />
                             </div>
                         </fieldset>
                     </td>
@@ -289,7 +320,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                     if ( $this->is_swifty ) {
                                 ?>
                                 <div class="inline-edit-group spm-more">
-                                    <input type="button" class="button-secondary alignright spm-button more" value="<?php _e( 'More', 'swifty-page-manager' ) ?>" />
+                                    <input type="button" class="button-secondary alignright spm-button spm-do-button" data-spm-action="more" value="<?php _e( 'More', 'swifty-page-manager' ) ?>" />
                                 </div>
                                 <label class="spm-advanced-feature">
                                     <span class="title spm-label-title">
@@ -405,7 +436,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                     </span>
                                 </div>
                                 <div class="inline-edit-group spm-less">
-                                    <input type="button" class="button-secondary alignright spm-button less" value="<?php _e( 'Less', 'swifty-page-manager' ) ?>" />
+                                    <input type="button" class="button-secondary alignright spm-button spm-do-button" data-spm-action="less" value="<?php _e( 'Less', 'swifty-page-manager' ) ?>" />
                                 </div>
                                 <?php
                                     }
@@ -415,9 +446,9 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                         <fieldset class="inline-edit-col-right">
                             <div class="inline-edit-col">
                                 <div class="inline-edit-group spm-buttons-confirm">
-                                    <input type="button" class="button-secondary alignright spm-button cancel alignright" value="<?php _e( 'Cancel', 'swifty-page-manager' ) ?>" />
+                                    <input type="button" class="button-secondary alignright spm-button spm-do-button alignright" data-spm-action="cancel" value="<?php _e( 'Cancel', 'swifty-page-manager' ) ?>" />
                                     <br class="clear">
-                                    <input type="button" class="button-primary alignright spm-button save alignright" value="<?php _e( 'Save', 'swifty-page-manager' ) ?>" />
+                                    <input type="button" class="button-primary alignright spm-button spm-do-button alignright" data-spm-action="save" value="<?php _e( 'Save', 'swifty-page-manager' ) ?>" />
                                 </div>
                             </div>
                         </fieldset>
@@ -434,7 +465,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
     if ( empty( $jsonData ) ) {
         echo '<div class="updated fade below-h2"><p>' . __( 'No pages found.', 'swifty-page-manager' ) . '</p></div>';
 ?>
-    <span class="button button-primary spm-button spm-page-button spm-noposts-add" data-spm-action="add" title="<?php _e( 'Add page', 'swifty-page-manager' ) ?>">
+    <span class="button button-primary spm-button spm-do-button spm-no-posts-add" data-spm-action="add" title="<?php _e( 'Add page', 'swifty-page-manager' ) ?>">
         <span class="dashicons spm-icon dashicons-plus"></span>
     </span>
 <?php

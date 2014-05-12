@@ -105,6 +105,7 @@ var SPM = ( function ( $, document ) {
                 case 'add':
                 case 'settings':
                 case 'delete':
+                case 'publish':
                     if ( $li.data( 'cur-action' ) && $li.data( 'cur-action' ) === action ) {
                         spm.resetPageTree();
                     } else {
@@ -126,19 +127,6 @@ var SPM = ( function ( $, document ) {
                     document.location = $li.data( 'permalink' );
 
                     break;
-                case 'publish':
-                    $.post(
-                        ajaxurl,
-                        {
-                            'action': 'spm_publish_page',
-                            'post_ID': $li.data( 'post_id' ),
-                            '_inline_edit': $( 'input#_inline_edit' ).val()
-                        }
-                    ).done( function() {
-                        location.reload();
-                    } );
-
-                    break;
                 default:
                     $( '.spm-container:visible' ).remove();
 
@@ -148,107 +136,100 @@ var SPM = ( function ( $, document ) {
             return false;
         } );
 
-        $( document ).on( 'click', '.save.spm-button', function ( /*ev*/ ) {
-            var $li = $( this ).closest( 'li' );
-            var action = $li.data( 'cur-action' );
-            var settings;
+        $( document ).on( 'click', '.spm-do-button', function ( /*ev*/ ) {
+            var $button = $( this );
+            var $li = $button.closest( 'li' );
+            var spmAction = $button.data( 'spm-action' );
+            var $inlineEdit = $( 'input#_inline_edit' );
 
-            if ( !spm.validateSettings( $li ) ) {
-                return false;
+            switch ( spmAction ) {
+                case 'save':
+                    var curAction = $li.data( 'cur-action' );
+                    var settings;
+
+                    if ( !spm.validateSettings( $li ) ) {
+                        return false;
+                    }
+
+                    settings = {
+                        'action': 'spm_save_page',
+                        'post_type': 'page',
+                        'post_title': $li.find( 'input[name=post_title]' ).val(),
+                        'add_mode': $li.find( 'input[name=add_mode]:checked' ).val(),   // after | inside
+                        'post_status': $li.find( 'input[name=post_status]:checked' ).val(),   // draft | publish
+                        'page_template': $li.find( 'select[name=page_template]' ).val(),
+                        'post_name': $li.find( 'input[name=post_name]' ).val() || $li.find( 'input[name=spm_url]' ).val(),
+                        'spm_is_custom_url': $li.find( 'input[name=spm_is_custom_url]' ).val(),
+                        'spm_show_in_menu': $li.find( 'input[name=spm_show_in_menu]:checked' ).val() || 'show',   // show | hide
+                        'spm_page_title_seo': $li.find( 'input[name=spm_page_title_seo]' ).val(),
+                        'spm_header_visibility': $li.find( 'input[name=spm_header_visibility]:checked' ).val(),   // show | hide
+                        'spm_sidebar_visibility': $li.find( 'input[name=spm_sidebar_visibility]:checked' ).val(),   // left | right | hide
+                        '_inline_edit': $inlineEdit.val()
+                    };
+
+                    if ( curAction === 'add' ) {   // Page creation
+                        $.extend( true, settings, {
+                            'parent_id': $li.attr( 'id' )
+                        } );
+                    } else if ( curAction === 'settings' ) {   // Page editing
+                        $.extend( true, settings, {
+                            'post_ID': $li.data( 'post_id' )
+                        } );
+                    }
+
+                    $.post(
+                        ajaxurl,
+                        settings
+                    ).done( function() {
+                        window.location.reload();
+                    } );
+
+                    break;
+                case 'delete':
+                case 'publish':
+                    $.post(
+                        ajaxurl,
+                        {
+                            'action': 'spm_' + spmAction + '_page',
+                            'post_ID': $li.data( 'post_id' ),
+                            '_inline_edit': $inlineEdit.val()
+                        }
+                    ).done( function() {
+                        window.location.reload();
+                    } );
+
+                    break;
+                case 'cancel':
+                    $( '.spm-container:visible' ).remove();
+
+                    break;
+                case 'less':
+                case 'more':
+                    $( '.spm-advanced-feature' )[ spmAction === 'less' ? 'hide' : 'show' ]();
+                    $( '.spm-less' )[ spmAction === 'less' ? 'hide' : 'show' ]();
+                    $( '.spm-more' )[ spmAction === 'less' ? 'show' : 'hide' ]();
+
+                    break;
+                case 'add':
+                    $.post(
+                        ajaxurl,
+                        {
+                            'action': 'spm_save_page',
+                            'post_type': 'page',
+                            'post_title': 'Home',
+                            'post_status': 'draft',
+                            'add_mode': 'after',
+                            'page_template': 'default',
+                            'spm_show_in_menu': 'show',
+                            '_inline_edit': $inlineEdit.val()
+                        },
+                        function () {
+                            window.location.reload();
+                        }
+                    );
+
+                    break;
             }
-
-            settings = {
-                'action': 'spm_save_page',
-                'post_type': 'page',
-                'post_title': $li.find( 'input[name=post_title]' ).val(),
-                'add_mode': $li.find( 'input[name=add_mode]:checked' ).val(),   // after | inside
-                'post_status': $li.find( 'input[name=post_status]:checked' ).val(),   // draft | publish
-                'page_template': $li.find( 'select[name=page_template]' ).val(),
-                'post_name': $li.find( 'input[name=post_name]' ).val() || $li.find( 'input[name=spm_url]' ).val(),
-                'spm_is_custom_url': $li.find( 'input[name=spm_is_custom_url]' ).val(),
-                'spm_show_in_menu': $li.find( 'input[name=spm_show_in_menu]:checked' ).val() || 'show',   // show | hide
-                'spm_page_title_seo': $li.find( 'input[name=spm_page_title_seo]' ).val(),
-                'spm_header_visibility': $li.find( 'input[name=spm_header_visibility]:checked' ).val(),   // show | hide
-                'spm_sidebar_visibility': $li.find( 'input[name=spm_sidebar_visibility]:checked' ).val(),   // left | right | hide
-                '_inline_edit': $( 'input#_inline_edit' ).val()
-            };
-
-            if ( action === 'add' ) {   // Page creation
-                $.extend( true, settings, {
-                    'parent_id': $li.attr( 'id' )
-                } );
-            } else if ( action === 'settings' ) {   // Page editing
-                $.extend( true, settings, {
-                    'post_ID': $li.data( 'post_id' )
-                } );
-            }
-
-            $.post(
-                ajaxurl,
-                settings
-            ).done( function() {
-                location.reload();
-            } );
-
-            return false;
-        } );
-
-        $( document ).on( 'click', '.delete.spm-button', function ( /*ev*/ ) {
-            var $li = $( this ).closest( 'li' );
-
-            $.post(
-                ajaxurl,
-                {
-                    'action': 'spm_delete_page',
-                    'post_ID': $li.data( 'post_id' ),
-                    '_inline_edit': $( 'input#_inline_edit' ).val()
-                }
-            ).done( function() {
-                location.reload();
-            } );
-
-            return false;
-        } );
-
-        $( document ).on( 'click', '.cancel.spm-button', function ( /*ev*/ ) {
-            $( '.spm-container:visible' ).remove();
-
-            return false;
-        } );
-
-        $( document ).on( 'click', '.more.spm-button', function ( /*ev*/ ) {
-            $( '.spm-advanced-feature' ).show();
-            $( '.spm-less' ).show();
-            $( '.spm-more' ).hide();
-
-            return false;
-        } );
-
-        $( document ).on( 'click', '.less.spm-button', function ( /*ev*/ ) {
-            $( '.spm-advanced-feature' ).hide();
-            $( '.spm-less' ).hide();
-            $( '.spm-more' ).show();
-
-            return false;
-        } );
-
-        $( document ).on( 'click', '.spm-noposts-add', function( /*ev*/ ) {
-            $.post(
-                ajaxurl,
-                {
-                    'action': 'spm_save_page',
-                    'post_type': 'page',
-                    'post_title': 'Home',
-                    'post_status': 'draft',
-                    'add_mode': 'after',
-                    'page_template': 'default',
-                    'spm_show_in_menu': 'show',
-                    '_inline_edit': $( 'input#_inline_edit' ).val()
-                },
-                function () {
-                    window.location.reload();
-                }
-            );
 
             return false;
         } );
@@ -347,7 +328,7 @@ var SPM = ( function ( $, document ) {
             'add': 'spm-page-add-edit-tmpl',
             'settings': 'spm-page-add-edit-tmpl',
             'delete': 'spm-page-delete-tmpl',
-            'edit': 'spm-page-edit-tmpl'
+            'publish': 'spm-page-publish-tmpl'
         }[ action ];
         var $tmpl = this.getPageActionsTmpl( selector );
         var isSwifty = $tmpl.find( 'input[name=is_swifty]' ).val();
