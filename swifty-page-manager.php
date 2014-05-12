@@ -679,6 +679,10 @@ class SwiftyPageManager
             $post_meta[ 'spm_show_in_menu' ] = $spm_show_in_menu;
         }
 
+        if ( !$post_meta[ 'spm_show_in_menu' ] ) {
+            $post_meta[ 'spm_show_in_menu' ] = 'show';
+        }
+
         ?>
         var li = jQuery( 'li#cms-tpv-<?php echo $post_id; ?>' );
 
@@ -910,7 +914,12 @@ class SwiftyPageManager
         $arr_page_css_styles[] = "spm_user_can_add_page_after_" . ( $user_can_add_after ? 'yes' : 'no' );
 
         if ( $this->is_swifty ) {
-            $show_page_in_menu     = get_post_meta( $page_id, 'spm_show_in_menu', true );
+            $show_page_in_menu = get_post_meta( $page_id, 'spm_show_in_menu', true );
+
+            if ( !$show_page_in_menu ) {
+                $show_page_in_menu = 'show';
+            }
+
             $arr_page_css_styles[] = "spm-show-page-in-menu-" . ( $show_page_in_menu === 'show' ? 'yes' : 'no' );
         }
 
