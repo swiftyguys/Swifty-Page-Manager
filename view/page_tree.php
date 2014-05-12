@@ -123,9 +123,6 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
     }
 
     if ( true ) {
-    $count_posts = wp_count_posts( 'page' );
-    $trashed = $count_posts->trash;
-
     ?>
     <ul class="spm-subsubsub spm-subsubsub-select-view">
         <li>
@@ -136,17 +133,17 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
         </li>
         <li>
             <a class="cms_spm_status_publish <?php echo ($this->getPostStatus()=="publish") ? "current" : "" ?>" href="<?php echo add_query_arg( 'status', 'publish', $this->getPluginUrl() ); ?>" <?php echo $status_data_attributes["publish"] ?>>
-                <?php _e("Public", 'swifty-page-manager') ?>
+                <?php _e("Published", 'swifty-page-manager') ?>
                 <span class="count">(<?php echo $post_count_publish ?>)</span>
-            </a>
+            </a> |
         </li>
 
         <?php if ( $post_count_trash ): ?>
         <li>
-            <a class="cms_spm_status_trash <?php echo ($this->getPostStatus()=="trash") ? "current" : "" ?>" href="<?php echo add_query_arg( 'status', 'trash', $this->getPluginUrl() ); ?>" <?php echo $status_data_attributes["trash"] ?>>
+            <a class="cms_spm_status_trash" href="<?php echo admin_url() . 'edit.php?post_status=trash&post_type=page'; ?>">
                 <?php _e("Trash", 'swifty-page-manager') ?>
                 <span class="count">(<?php echo $post_count_trash ?>)</span>
-            </a>
+            </a> |
         </li>
         <?php endif; ?>
 
