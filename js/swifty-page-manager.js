@@ -482,7 +482,6 @@ var SPM = ( function ( $, document ) {
             var $nodeR = $( data.rslt.r );
             var $nodeRef = $( data.rslt.or );
             var nodePosition = data.rslt.p;
-            var selectedLang = spm.getWPMLSelectedLang( $nodeBeingMoved );
             var nodeId, refNodeId;
 
             if ( nodePosition === 'before' ) {
@@ -502,8 +501,7 @@ var SPM = ( function ( $, document ) {
                 'action': 'spm_move_page',
                 'node_id': nodeId,
                 'ref_node_id': refNodeId,
-                'type': nodePosition,
-                'icl_post_language': selectedLang
+                'type': nodePosition
             }, function ( /*data, textStatus*/ ) {
                 window.location.reload();
             } );
