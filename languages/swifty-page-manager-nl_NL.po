@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Swifty Page Manager v0.0.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-05-12 11:28:11+0000\n"
+"PO-Revision-Date: 2014-05-13 13:25:58+0000\n"
 "Last-Translator: jh-dev <jeroen.hoekstra@longtermresults.nl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -20,23 +20,23 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Textdomain-Support: yes"
 
-#: swifty-page-manager.php:285
+#: swifty-page-manager.php:284
 #@ default
 msgid "You do not have sufficient permissions to access this page."
 msgstr ""
 
-#: view/page_tree.php:176
+#: view/page_tree.php:109
 #@ swifty-page-manager
 msgid "Edit page"
 msgstr "Bewerk pagina"
 
-#: view/page_tree.php:185
+#: view/page_tree.php:121
 #@ swifty-page-manager
 msgid "View page"
 msgstr "Bekijk pagina"
 
-#: view/page_tree.php:173
-#: view/page_tree.php:465
+#: view/page_tree.php:105
+#: view/page_tree.php:449
 #@ swifty-page-manager
 msgid "Add page"
 msgstr "Voeg pagina toe"
@@ -76,50 +76,50 @@ msgstr "Verwijderd"
 msgid "Password protected page"
 msgstr "Wachtwoord beschermde pagina"
 
-#: view/page_tree.php:340
-#: view/page_tree.php:399
+#: view/page_tree.php:316
+#: view/page_tree.php:376
 #@ swifty-page-manager
 msgid "Show"
 msgstr "Tonen"
 
-#: view/page_tree.php:346
-#: view/page_tree.php:405
-#: view/page_tree.php:430
+#: view/page_tree.php:323
+#: view/page_tree.php:383
+#: view/page_tree.php:411
 #@ swifty-page-manager
 msgid "Hide"
 msgstr "Verbergen"
 
-#: view/page_tree.php:362
+#: view/page_tree.php:338
 #@ swifty-page-manager
 msgid "Draft"
 msgstr "Klad"
 
-#: view/page_tree.php:368
+#: view/page_tree.php:345
 #@ swifty-page-manager
 msgid "Live"
 msgstr "Publiceren"
 
-#: view/page_tree.php:182
+#: view/page_tree.php:117
 #@ swifty-page-manager
 msgid "Edit page content"
 msgstr "Bewerk paginainhoud"
 
-#: view/page_tree.php:179
+#: view/page_tree.php:113
 #@ swifty-page-manager
 msgid "Delete page"
 msgstr "Verwijder pagina"
 
-#: view/page_tree.php:214
+#: view/page_tree.php:155
 #@ swifty-page-manager
 msgid "Delete"
 msgstr "Verwijder"
 
-#: view/page_tree.php:320
+#: view/page_tree.php:295
 #@ swifty-page-manager
 msgid "More"
 msgstr "Meer"
 
-#: view/page_tree.php:436
+#: view/page_tree.php:418
 #@ swifty-page-manager
 msgid "Less"
 msgstr "Minder"
@@ -134,60 +134,60 @@ msgstr ""
 msgid "List View"
 msgstr ""
 
-#: swifty-page-manager.php:539
+#: swifty-page-manager.php:534
 #@ swifty-page-manager
 msgid "New page"
 msgstr "Nieuwe pagina"
 
-#: swifty-page-manager.php:988
+#: swifty-page-manager.php:983
 #@ swifty-page-manager
 msgid "Unknown user"
 msgstr "Onbekende gebruiker"
 
-#: swifty-page-manager.php:994
+#: swifty-page-manager.php:989
 #@ swifty-page-manager
 msgid "<Untitled page>"
 msgstr "<pagina zonder titel>"
 
-#: view/page_tree.php:150
+#: view/page_tree.php:82
 #@ swifty-page-manager
 msgid "Expand"
 msgstr "Uitklappen"
 
-#: view/page_tree.php:151
+#: view/page_tree.php:83
 #@ swifty-page-manager
 msgid "Collapse"
 msgstr "Inklappen"
 
-#: view/page_tree.php:157
+#: view/page_tree.php:88
 #@ swifty-page-manager
 msgid "Loading..."
 msgstr "Laden..."
 
-#: view/page_tree.php:165
+#: view/page_tree.php:96
 #@ swifty-page-manager
 msgid "Loading tree"
 msgstr "Boom laden"
 
-#: view/page_tree.php:188
+#: view/page_tree.php:125
 #@ swifty-page-manager
 msgid "Publish page"
 msgstr "Publiceer pagina"
 
-#: view/page_tree.php:212
-#: view/page_tree.php:243
-#: view/page_tree.php:446
+#: view/page_tree.php:152
+#: view/page_tree.php:188
+#: view/page_tree.php:428
 #@ swifty-page-manager
 msgid "Cancel"
 msgstr "Annuleer"
 
-#: view/page_tree.php:448
+#: view/page_tree.php:432
 #@ swifty-page-manager
 msgid "Save"
 msgstr "Opslaan"
 
 #: swifty-page-manager.php:306
-#: view/page_tree.php:463
+#: view/page_tree.php:446
 #@ swifty-page-manager
 msgid "No pages found."
 msgstr "Geen pagina's gevonden."
@@ -197,12 +197,12 @@ msgstr "Geen pagina's gevonden."
 msgid "Hidden"
 msgstr "Verborgen"
 
-#: view/page_tree.php:374
+#: view/page_tree.php:351
 #@ swifty-page-manager
 msgid "Template"
 msgstr "Sjabloon"
 
-#: view/page_tree.php:377
+#: view/page_tree.php:355
 #@ swifty-page-manager
 msgid "Default template"
 msgstr "Standaard sjabloon"
@@ -212,106 +212,106 @@ msgstr "Standaard sjabloon"
 msgid "Sorry, can't create a sub page to a page with status \"draft\"."
 msgstr "Helaas is het niet mogelijk om een pagina als subpagina aan te maken waarvan de bovenliggende pagina de status \\\"Klad\\\" heeft."
 
-#: view/page_tree.php:144
+#: view/page_tree.php:76
 #@ swifty-page-manager
 msgid "Trash"
 msgstr "Prullenbak"
 
-#: view/page_tree.php:205
+#: view/page_tree.php:143
 #@ swifty-page-manager
 msgid "Are you sure you want to delete this page with all it's content?"
 msgstr "Weet je zeker dat je deze pagina inclusief inhoud wilt verwijderen?"
 
+#: swifty-page-manager.php:260
 #: swifty-page-manager.php:261
-#: swifty-page-manager.php:262
 #: swifty-page-manager.php:379
 #@ swifty-page-manager
 msgid "Swifty Page Manager"
-msgstr "Swifty Pagina Beheer"
+msgstr "Swifty Page Manager"
 
-#: view/page_tree.php:12
+#: view/page_tree.php:11
 #@ swifty-page-manager
 msgctxt "headline of page with tree"
 msgid "Swifty Page Manager"
-msgstr "Swifty Pagina Beheer"
+msgstr "Swifty Page Manager"
 
-#: view/page_tree.php:412
+#: view/page_tree.php:390
 #@ swifty-page-manager
 msgid "Sidebar"
 msgstr "Zijbalk"
 
-#: view/page_tree.php:270
+#: view/page_tree.php:244
 #@ swifty-page-manager
 msgid "Text in menu"
 msgstr "Tekst in menu"
 
-#: view/page_tree.php:274
-#: view/page_tree.php:288
+#: view/page_tree.php:248
+#: view/page_tree.php:263
 #@ swifty-page-manager
 msgid "Title"
 msgstr "Titel"
 
-#: view/page_tree.php:300
+#: view/page_tree.php:275
 #@ swifty-page-manager
 msgid "Position"
 msgstr "Positie"
 
-#: view/page_tree.php:306
+#: view/page_tree.php:281
 #@ swifty-page-manager
 msgid "After"
 msgstr "Na"
 
-#: view/page_tree.php:312
+#: view/page_tree.php:287
 #@ swifty-page-manager
 msgid "As sub page of"
 msgstr "Als subpagina van"
 
-#: view/page_tree.php:324
+#: view/page_tree.php:299
 #@ swifty-page-manager
 msgid "Url"
 msgstr "Url"
 
-#: view/page_tree.php:334
+#: view/page_tree.php:309
 #@ swifty-page-manager
 msgid "In menu"
 msgstr "In menu"
 
-#: view/page_tree.php:356
+#: view/page_tree.php:331
 #@ swifty-page-manager
 msgid "Status"
 msgstr "Status"
 
-#: view/page_tree.php:393
+#: view/page_tree.php:369
 #@ swifty-page-manager
 msgid "Header"
 msgstr "Header"
 
-#: view/page_tree.php:418
+#: view/page_tree.php:397
 #@ swifty-page-manager
 msgid "Left"
 msgstr "Links"
 
-#: view/page_tree.php:424
+#: view/page_tree.php:404
 #@ swifty-page-manager
 msgid "Right"
 msgstr "Rechts"
 
-#: view/page_tree.php:130
+#: view/page_tree.php:58
 #@ swifty-page-manager
 msgid "All"
 msgstr "Alles"
 
-#: view/page_tree.php:136
+#: view/page_tree.php:67
 #@ swifty-page-manager
 msgid "Published"
 msgstr "Gepubliceerd"
 
-#: view/page_tree.php:236
+#: view/page_tree.php:178
 #@ swifty-page-manager
 msgid "Are you sure you want to publish this page so it becomes visible to your visitors?"
 msgstr "Weet je zeker dat je deze pagina wilt publiceren, zodat deze zichtbaar wordt voor je bezoekers?"
 
-#: view/page_tree.php:245
+#: view/page_tree.php:192
 #@ swifty-page-manager
 msgid "Publish"
 msgstr "Publiceren"
