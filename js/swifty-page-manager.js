@@ -70,7 +70,7 @@ var SPM = ( function ( $, document ) {
                             'url': ev.currentTarget.value
                         }
                     ).done( function ( url ) {
-                        $( 'input[name=post_name]' ).val( spm.stripUrl( path + url ) );
+                        $( 'input[name=post_name]' ).val( spm.generatePageUrl( path, url ) );
                     } );
                 }, 100 );
             }
@@ -104,7 +104,7 @@ var SPM = ( function ( $, document ) {
                     ? $li.find( 'input[name=post_name]' ).val().replace( /.*\/(.+)$/g, '$1' )
                     : '';
 
-                $( 'input[name=post_name]' ).val( spm.stripUrl( path + url ) );
+                $( 'input[name=post_name]' ).val( spm.generatePageUrl( path, url ) );
             }
 
             return false;
@@ -287,35 +287,35 @@ var SPM = ( function ( $, document ) {
         $SPMTips.tooltip( 'close' );
     };
 
-    spm.getLocationOrigin = function () {
-        if ( !window.location.origin ) {
-            return window.location.protocol + "//" +
-                   window.location.hostname + ( window.location.port ? ':' + window.location.port : '' );
+    spm.generatePageUrl = function ( path, url ) {
+        if ( url !== '' ) {
+            if ( !/\/$/.test( path ) ) {
+                path += '/';
+            }
         }
 
-        return window.location.origin;
+        url = path + url;
+
+        return url.replace( /^\/|\/$/g, '' );
     };
 
     spm.generatePathToPage = function ( $li ) {
         var addMode = $li.find( 'input[name=add_mode]:checked' ).val();
-        var path = $li.data( 'permalink' ).replace( this.getLocationOrigin(), '' );
+        var siteUrl = $li.find( 'input[name=wp_site_url]' ).val();
+        var path = $li.data( 'permalink' ).replace( siteUrl, '' );
         var $parentLi = '';
 
         if ( addMode === 'after' ) {
             $parentLi = $li.parent( 'ul' ). closest( 'li' );
 
             if ( $parentLi.length ) {
-                path = $parentLi.data( 'permalink' ).replace( this.getLocationOrigin(), '' );
+                path = $parentLi.data( 'permalink' ).replace( siteUrl, '' );
             } else {
                 path = '';
             }
         }
 
         return path;
-    };
-
-    spm.stripUrl = function ( url ) {
-        return url.replace( /^\/|\/$/g, '' );
     };
 
     spm.adaptTreeLinkElements = function ( a ) {
