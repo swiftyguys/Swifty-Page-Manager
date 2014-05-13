@@ -199,6 +199,32 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
     </form>
 </span>
 
+<span class="spm-tooltip spm-title-tooltip spm-hidden">
+The title of the page is the text that is shown in the tabs of the browser.<br>
+It is also the short text that is shown in blue in the search engines such as Google.<br>
+Therefore it is important that it contains the most important keywords of what this page is about.<br>
+Put these at the beginning of the text.<br>
+That is one of many things you can easily do to get a higher search engine ranking.<br>
+The text should ideally be no longer than 70 characters.<br><br>
+Example:<br><br>
+Swifty Page Manager - easily create a page tree in Wordpress<br>
+
+</span>
+
+<span class="spm-tooltip spm-url-tooltip spm-hidden">
+This is the link to your page. It is important that the name of the page is the main keyword of that page<br>
+or the name of the product or service that you offer on that page. Preferably right behind the domain name.<br><br>
+Example:<br><br>
+
+<?php echo home_url(); ?>/<b>keyword</b><br>
+<?php echo home_url(); ?>/<b>product-or-service</b><br>
+</span>
+
+<span class="spm-tooltip spm-status-tooltip spm-hidden">
+Status <b>Live</b> means that everyone in the world can see that page and that it is shown in your site menu.<br>
+Status <b>Draft</b> means that only you can see that page when you are logged in and it is not shown in the site menu.<br>
+</span>
+
 <!-- SwiftySite template Add/Edit -->
 <span class="spm-container spm-page-add-edit-tmpl __TMPL__ spm-hidden">
     <form method="post" class="spm-form spm-page-add-edit-form">
@@ -234,7 +260,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                 ?>
                                 <label class="spm-basic-feature">
                                     <span class="title spm-label-title">
-                                        <?php esc_html_e( 'Title', 'swifty-page-manager' ) ?>
+                                        <?php _e( 'Title', 'swifty-page-manager' ) ?>  <span class="button-secondary spm-tooltip-button" rel="spm-title-tooltip"><i class="fa fa-question"></i></span>
                                     </span>
                                     <span class="input-text-wrap">
                                         <input name="spm_page_title_seo" type="text" class="spm-input spm-input-text" />
@@ -270,7 +296,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                 </div>
                                 <label class="spm-advanced-feature">
                                     <span class="title spm-label-title">
-                                        <?php esc_html_e( 'Url', 'swifty-page-manager' ) ?>
+                                        <?php _e( 'Url', 'swifty-page-manager' ) ?> <span class="button-secondary spm-tooltip-button" rel="spm-url-tooltip"><i class="fa fa-question"></i></span>
                                     </span>
                                     <span class="input-text-wrap">
                                         <input name="post_name" type="text" class="spm-input spm-input-text" />
@@ -302,7 +328,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                 <div class="inline-edit-group spm-advanced-feature">
                                     <label class="alignleft">
                                         <span class="title spm-label-title">
-                                            <?php esc_html_e( 'Status', 'swifty-page-manager' ) ?>
+                                            <?php _e( 'Status', 'swifty-page-manager' ) ?> <?php if ( $this->is_swifty ) { ?><span class="button-secondary spm-tooltip-button" rel="spm-status-tooltip"><i class="fa fa-question"></i></span><?php } ?>
                                         </span>
                                     </label>
                                     <label class="alignleft">

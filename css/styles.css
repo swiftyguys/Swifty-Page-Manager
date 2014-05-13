@@ -528,6 +528,7 @@ li.spm-show-page-in-menu-no > a.spm-page-tree-element > ins {
 
 .spm-container .inline-edit-row fieldset label span.title {
     width: 10em;
+    line-height: 30px;
 }
 
 .spm-container .inline-edit-row fieldset label span.input-text-wrap {
@@ -544,6 +545,10 @@ li.spm-show-page-in-menu-no > a.spm-page-tree-element > ins {
 
 .spm-container fieldset.inline-edit-col-right .inline-edit-col {
     border: none;
+}
+
+.spm-container .spm-label-title {
+    position: relative;
 }
 
 .spm-container .inline-edit-group .spm-radio-label {
@@ -583,4 +588,36 @@ li.spm-show-page-in-menu-no > a.spm-page-tree-element > ins {
 
 #wpbody-content .spm-container fieldset.inline-edit-col-right .inline-edit-col {
     border: none;
+}
+
+.ui-tooltip {
+    background: white;
+    position: absolute;
+    border: 2px solid #999;
+    padding: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    font-size: 11px;
+}
+
+.button-secondary.spm-tooltip-button {
+    width: 16px;
+    height: 16px;
+    padding: 0 0 0 3px;
+    margin: 6px 5px 0 0;
+    line-height: 11px;
+    color: #555555;
+    background-color: #eeeeee;
+    position: absolute;
+    right: 0;
+}
+
+.button-secondary.spm-tooltip-button i {
+    color: #999;
+    vertical-align: middle;
+}
+
+.button-secondary.spm-tooltip-button:hover i {
+    color: #777;
 }

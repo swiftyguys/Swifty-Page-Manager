@@ -10,19 +10,31 @@ var $SPMTree,
 
 var SPM = ( function ( $, document ) {
     var spm = {};
+    var $SPMTips;
 
     spm.init = function () {
+        $SPMTips = $( '.spm-tooltip' ).clone().tooltip();
+
         this.startListeners();
     };
 
     spm.startListeners = function () {
+        $( document ).on( 'mouseenter', '.spm-tooltip-button', spm.openTooltipHandler );
+        $( document ).on( 'mouseleave', '.spm-tooltip-button', spm.closeTooltipHandler );
+        $( document ).on( 'click', '.spm-tooltip-button', spm.openTooltipHandler );
+        $( document ).on( 'click', spm.closeTooltipHandler );
+
         $( document ).on( 'click', 'a.spm_open_all', function ( /*ev*/ ) {
+            $SPMTips.tooltip( 'close' );
+
             spm.getWrapper( this ).find( '.spm-tree-container' ).jstree( 'open_all' );
 
             return false;
         } );
 
         $( document ).on( 'click', 'a.spm_close_all', function ( /*ev*/ ) {
+            $SPMTips.tooltip( 'close' );
+
             spm.getWrapper( this ).find( '.spm-tree-container' ).jstree( 'close_all' );
 
             return false;
@@ -31,6 +43,8 @@ var SPM = ( function ( $, document ) {
         $( document ).on( 'click', '.spm-page-tree-element', function ( /*ev*/ ) {
             var $li = $( this ).closest( 'li' );
             var id = $li.attr( 'id' ).replace( '#', '' );
+
+            $SPMTips.tooltip( 'close' );
 
             spm.resetPageTree();
             spm.preparePageActionButtons( $li );
@@ -101,6 +115,8 @@ var SPM = ( function ( $, document ) {
             var $li = $button.closest( 'li' );
             var action = $button.data( 'spm-action' );
 
+            $SPMTips.tooltip( 'close' );
+
             switch ( action ) {
                 case 'add':
                 case 'settings':
@@ -120,11 +136,11 @@ var SPM = ( function ( $, document ) {
 
                     break;
                 case 'edit':
-                    document.location = $li.data( 'editlink' );
+                    window.location = $li.data( 'editlink' );
 
                     break;
                 case 'view':
-                    document.location = $li.data( 'permalink' );
+                    window.location = $li.data( 'permalink' );
 
                     break;
                 default:
@@ -141,6 +157,8 @@ var SPM = ( function ( $, document ) {
             var $li = $button.closest( 'li' );
             var spmAction = $button.data( 'spm-action' );
             var $inlineEdit = $( 'input#_inline_edit' );
+
+            $SPMTips.tooltip( 'close' );
 
             switch ( spmAction ) {
                 case 'save':
@@ -235,16 +253,59 @@ var SPM = ( function ( $, document ) {
         } );
     };
 
+    spm.openTooltipHandler = function ( ev ) {
+        var $toolTipBtn = $( this ).hasClass( 'spm-tooltip-button' )
+                        ? $( this )
+                        : $( this ).closest( '.spm-tooltip-button' );
+        var $toolTipClass = '.' + $toolTipBtn.attr( 'rel' );
+        var $toolTip = $SPMTips.filter( $toolTipClass );
+
+        if ( ev.type === 'click' && /(spm-tooltip-button|fa)/.test( ev.target.className ) ) {
+            $( document ).off( 'mouseenter', '.spm-tooltip-button' );
+            $( document ).off( 'mouseleave', '.spm-tooltip-button' );
+        }
+
+        $SPMTips.tooltip( 'close' );
+
+        $toolTip.tooltip( {
+            items: $toolTip[0],
+            content: $toolTip.html(),
+            position: { of: $toolTipBtn[0], my: "left bottom", at: "right top", collision: "flipfit" }
+        } ).tooltip( 'open' );
+
+        ev.stopImmediatePropagation();
+
+        return false;
+    };
+
+    spm.closeTooltipHandler = function ( ev ) {
+        if ( ev.type === 'click' && !/(spm-tooltip-button|fa)/.test( ev.target.className ) ) {
+            $( document ).on( 'mouseleave', '.spm-tooltip-button', spm.closeTooltipHandler );
+            $( document ).on( 'mouseenter', '.spm-tooltip-button', spm.openTooltipHandler );
+        }
+
+        $SPMTips.tooltip( 'close' );
+    };
+
+    spm.getLocationOrigin = function () {
+        if ( !window.location.origin ) {
+            return window.location.protocol + "//" +
+                   window.location.hostname + ( window.location.port ? ':' + window.location.port : '' );
+        }
+
+        return window.location.origin;
+    };
+
     spm.generatePathToPage = function ( $li ) {
         var addMode = $li.find( 'input[name=add_mode]:checked' ).val();
-        var path = $li.data( 'permalink' ).replace( document.location.origin, '' );
+        var path = $li.data( 'permalink' ).replace( this.getLocationOrigin(), '' );
         var $parentLi = '';
 
         if ( addMode === 'after' ) {
             $parentLi = $li.parent( 'ul' ). closest( 'li' );
 
             if ( $parentLi.length ) {
-                path = $parentLi.data( 'permalink' ).replace( document.location.origin, '' );
+                path = $parentLi.data( 'permalink' ).replace( this.getLocationOrigin(), '' );
             } else {
                 path = '';
             }
@@ -254,7 +315,7 @@ var SPM = ( function ( $, document ) {
     };
 
     spm.stripUrl = function ( url ) {
-        return url.replace( /^\/|\/$/, '' );
+        return url.replace( /^\/|\/$/g, '' );
     };
 
     spm.adaptTreeLinkElements = function ( a ) {
@@ -444,7 +505,7 @@ var SPM = ( function ( $, document ) {
                 'type': nodePosition,
                 'icl_post_language': selectedLang
             }, function ( /*data, textStatus*/ ) {
-                location.reload();
+                window.location.reload();
             } );
         } );
 

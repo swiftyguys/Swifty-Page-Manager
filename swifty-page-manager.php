@@ -286,13 +286,14 @@ class SwiftyPageManager
 
         // renamed from cookie to fix problems with mod_security
         wp_enqueue_script( "jquery-cookie", $this->plugin_dir_url . "/js/jquery.biscuit.js", array( "jquery" ) );
-        wp_enqueue_script( "jquery-ui-sortable" );
+        wp_enqueue_script( "jquery-ui-tooltip" );
         wp_enqueue_script( "jquery-jstree", $this->plugin_dir_url . "/js/jquery.jstree.js",   false, $this->_plugin_version );
         wp_enqueue_script( "jquery-alerts", $this->plugin_dir_url . "/js/jquery.alerts.js",   false, $this->_plugin_version );
         wp_enqueue_script( 'spm',   $this->plugin_dir_url . "/js/swifty-page-manager.js",     false, $this->_plugin_version );
 
         wp_enqueue_style( "spm",    $this->plugin_dir_url . "/css/styles.css",        false, $this->_plugin_version );
         wp_enqueue_style( "jquery-alerts",  $this->plugin_dir_url . "/css/jquery.alerts.css", false, $this->_plugin_version );
+        wp_enqueue_style( 'spm-font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css', false, $this->_plugin_version );
 
         $oLocale = array(
             "status_draft_ucase"      => ucfirst( __( "draft", 'swifty-page-manager' ) ),
