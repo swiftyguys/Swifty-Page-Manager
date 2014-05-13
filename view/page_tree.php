@@ -130,7 +130,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
 <!-- SwiftySite template Delete -->
 <span class="spm-container spm-page-delete-tmpl __TMPL__ spm-hidden">
     <form method="post" class="spm-form spm-page-delete-form">
-        <input type="hidden" name="is_swifty" value="<?php esc_attr_e( ( $this->is_swifty ) ? '1' : '0' ); ?>" >
+        <input type="hidden" name="is_swifty" value="<?php echo esc_attr( ( $this->is_swifty ) ? '1' : '0' ); ?>" >
         <table class="spm-table wp-list-table widefat fixed pages">
             <tbody>
                 <tr class="inline-edit-row inline-edit-row-page inline-edit-page quick-edit-row quick-edit-row-page
@@ -228,7 +228,7 @@ Status <b>Draft</b> means that only you can see that page when you are logged in
 <!-- SwiftySite template Add/Edit -->
 <span class="spm-container spm-page-add-edit-tmpl __TMPL__ spm-hidden">
     <form method="post" class="spm-form spm-page-add-edit-form">
-        <input type="hidden" name="is_swifty" value="<?php esc_attr( ( $this->is_swifty ) ? '1' : '0' ); ?>" >
+        <input type="hidden" name="is_swifty" value="<?php echo esc_attr( ( $this->is_swifty ) ? '1' : '0' ); ?>" >
         <table class="spm-table wp-list-table widefat fixed pages">
             <tbody>
                 <tr class="inline-edit-row inline-edit-row-page inline-edit-page quick-edit-row quick-edit-row-page
