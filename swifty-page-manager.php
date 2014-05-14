@@ -451,7 +451,7 @@ class SwiftyPageManager
 
                 $id_saved = wp_update_post( $post_to_save );
 
-                if ( $id_saved && $show_ref_page_in_menu != 'show' ) {
+                if ( $id_saved && !empty( $show_ref_page_in_menu ) && $show_ref_page_in_menu !== 'show' ) {
                     update_post_meta( $id_saved, 'spm_show_in_menu', 'hide' );
                 }
 
@@ -725,7 +725,7 @@ class SwiftyPageManager
             $post_meta[ 'spm_show_in_menu' ] = $spm_show_in_menu;
         }
 
-        if ( !$post_meta[ 'spm_show_in_menu' ] ) {
+        if ( empty( $post_meta[ 'spm_show_in_menu' ] )  ) {
             $post_meta[ 'spm_show_in_menu' ] = 'show';
         }
 
@@ -1004,7 +1004,7 @@ class SwiftyPageManager
         if ( $this->is_swifty ) {
             $show_page_in_menu = get_post_meta( $page_id, 'spm_show_in_menu', true );
 
-            if ( !$show_page_in_menu ) {
+            if ( empty( $show_page_in_menu ) ) {
                 $show_page_in_menu = 'show';
             }
 
