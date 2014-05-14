@@ -31,7 +31,7 @@ class SwiftyPageManager
         $this->plugin_file     = __FILE__ ;
         $this->plugin_dir      = dirname( $this->plugin_file );
         $this->plugin_basename = basename( $this->plugin_dir );
-        $this->plugin_dir_url  = plugins_url( basename( $this->plugin_dir ) );
+        $this->plugin_dir_url  = plugins_url( rawurlencode( basename( $this->plugin_dir ) ) );
         $this->plugin_url      = $_SERVER[ 'REQUEST_URI' ];
         $this->is_swifty       = true;   // TEMP!!!
 
@@ -120,11 +120,10 @@ class SwiftyPageManager
               $post->post_type   === 'page'   &&
               $post->post_status === '__TMP__'
         ) {
-            $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET post_status = '%s' WHERE id = %d"
-                                        , $_POST[ "post_status" ]
-                                        , $post_id
-                                        )
-                        );
+            $wpdb->query( $wpdb->prepare( "UPDATE %s SET post_status = '%s' WHERE id = %d",
+                                          $wpdb->posts,
+                                          $_POST[ "post_status" ],
+                                          $post_id ) );
         }
     }
 
@@ -138,10 +137,9 @@ class SwiftyPageManager
         global $wpdb;
 
         if ( !empty($wp->request) ) {
-            $query = $wpdb->prepare( "SELECT post_id
-                                      FROM {$wpdb->postmeta}
-                                      WHERE meta_key='spm_url' AND meta_value='%s'",
-                                      $wp->request );
+            $query = $wpdb->prepare( "SELECT post_id FROM %s WHERE meta_key='spm_url' AND meta_value='%s'",
+                                     $wpdb->postmeta,
+                                     $wp->request );
             $post_id = $wpdb->get_var( $query );
 
             if ( $post_id ) {
@@ -211,16 +209,16 @@ class SwiftyPageManager
      */
     public function status_header( $code )
     {
-        /** @var wpdb $wpdb */
+        /** @var wpdb $wpdb - Wordpress Database */
         global $wpdb;
         global $wp;
 
         if ( preg_match( '|\b404\b|', $code ) ) {
             if ( !empty($wp->request) ) {
-                $query = $wpdb->prepare( "SELECT post_id
-                                          FROM {$wpdb->postmeta}
+                $query = $wpdb->prepare( "SELECT post_id FROM %s
                                           WHERE meta_key LIKE 'spm_old_url_%%' AND meta_value='%s'",
-                                          $wp->request );
+                                         $wpdb->postmeta,
+                                         $wp->request );
                 $post_id = $wpdb->get_var( $query );
 
                 if ( $post_id ) {
@@ -287,13 +285,18 @@ class SwiftyPageManager
         // renamed from cookie to fix problems with mod_security
         wp_enqueue_script( "jquery-cookie", $this->plugin_dir_url . "/js/jquery.biscuit.js", array( "jquery" ) );
         wp_enqueue_script( "jquery-ui-tooltip" );
-        wp_enqueue_script( "jquery-jstree", $this->plugin_dir_url . "/js/jquery.jstree.js",   false, $this->_plugin_version );
-        wp_enqueue_script( "jquery-alerts", $this->plugin_dir_url . "/js/jquery.alerts.js",   false, $this->_plugin_version );
-        wp_enqueue_script( 'spm',   $this->plugin_dir_url . "/js/swifty-page-manager.js",     false, $this->_plugin_version );
+        wp_enqueue_script( "jquery-jstree", $this->plugin_dir_url . "/js/jquery.jstree.js", false,
+                           $this->_plugin_version );
+        wp_enqueue_script( "jquery-alerts", $this->plugin_dir_url . "/js/jquery.alerts.js", false,
+                           $this->_plugin_version );
+        wp_enqueue_script( 'spm',   $this->plugin_dir_url . "/js/swifty-page-manager.js", false,
+                           $this->_plugin_version );
 
-        wp_enqueue_style( "spm",    $this->plugin_dir_url . "/css/styles.css",        false, $this->_plugin_version );
-        wp_enqueue_style( "jquery-alerts",  $this->plugin_dir_url . "/css/jquery.alerts.css", false, $this->_plugin_version );
-        wp_enqueue_style( 'spm-font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css', false, $this->_plugin_version );
+        wp_enqueue_style( "spm",    $this->plugin_dir_url . "/css/styles.css", false, $this->_plugin_version );
+        wp_enqueue_style( "jquery-alerts",  $this->plugin_dir_url . "/css/jquery.alerts.css", false,
+                          $this->_plugin_version );
+        wp_enqueue_style( 'spm-font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css',
+                          false, $this->_plugin_version );
 
         $oLocale = array(
             "status_draft_ucase"      => ucfirst( __( "draft", 'swifty-page-manager' ) ),
@@ -377,16 +380,24 @@ class SwiftyPageManager
         $mode   = "tree";
         $class  = isset( $_GET[ "mode" ] ) && $_GET[ "mode" ] == $mode ? " class='current' " : "";
         $title  = __( "Swifty Page Manager", 'swifty-page-manager' );
-        $tree_a = "<a href='" . esc_url( add_query_arg( 'mode', $mode, $this->getPluginUrl() ) ) . "' $class> <img id='view-switch-$mode' src='" . esc_url( includes_url( 'images/blank.gif' ) ) . "' width='20' height='20' title='$title' alt='$title' /></a>\n";
+        $tree_a = "<a href='" . esc_url( add_query_arg( 'mode', $mode, $this->getPluginUrl() ) ) .
+                  "' $class> <img id='view-switch-$mode' src='" . esc_url( includes_url( 'images/blank.gif' ) ) .
+                  "' width='20' height='20' title='$title' alt='$title' /></a>\n";
 
         // Copy of wordpress own, if it does not exist
         $wp_list_a = "";
 
         if ( is_post_type_hierarchical( $this->_post_type ) ) {
             $mode      = "list";
-            $class     = isset( $_GET[ "mode" ] ) && $_GET[ "mode" ] != $mode ? " class='spm_add_list_view' " : " class='spm_add_list_view current' ";
+            if ( isset( $_GET[ "mode" ] ) && $_GET[ "mode" ] != $mode  ) {
+                $class = " class='spm_add_list_view' ";
+            } else {
+                $class = " class='spm_add_list_view current' ";
+            }
             $title     = __( "List View" ); /* translation not missing - exists in wp */
-            $wp_list_a = "<a href='" . esc_url( add_query_arg( 'mode', $mode, $this->getPluginUrl() ) ) . "' $class><img id='view-switch-$mode' src='" . esc_url( includes_url( 'images/blank.gif' ) ) . "' width='20' height='20' title='$title' alt='$title' /></a>\n";
+            $wp_list_a = "<a href='" . esc_url( add_query_arg( 'mode', $mode, $this->getPluginUrl() ) ) .
+                         "' $class><img id='view-switch-$mode' src='" . esc_url( includes_url( 'images/blank.gif' ) ) .
+                         "' width='20' height='20' title='$title' alt='$title' /></a>\n";
         }
 
         $out  = "";
@@ -413,6 +424,7 @@ class SwiftyPageManager
          the reference node in the move,
          the new position relative to the reference node (one of "before", "after" or "inside")
         */
+        /** @var wpdb $wpdb - Wordpress Database */
         global $wpdb;
 
         $node_id     = $_POST[ "node_id" ]; // the node that was moved
@@ -458,19 +470,21 @@ class SwiftyPageManager
                 echo "did inside";
             } elseif ( "before" === $type ) {
                 // post_node is placed before ref_post_node
-                // update menu_order of all pages with a menu order more than or equal ref_node_post and with the same parent as ref_node_post
-                // we do this so there will be room for our page if it's the first page
+                // update menu_order of all pages with a menu order more than or equal ref_node_post and with the same
+                // parent as ref_node_post we do this so there will be room for our page if it's the first page
                 // so: no move of individial posts yet
                 $wpdb->query(
-                     $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+1
+                     $wpdb->prepare( "UPDATE %s SET menu_order = menu_order+1
                                       WHERE post_parent = %d",
+                                     $wpdb->posts,
                                      $post_ref_node->post_parent ) );
 
-                // update menu order with +1 for all pages below ref_node, this should fix the problem with "unmovable" pages because of
-                // multiple pages with the same menu order (...which is not the fault of this plugin!)
+                // update menu order with +1 for all pages below ref_node, this should fix the problem with "unmovable"
+                // pages because of multiple pages with the same menu order (...which is not the fault of this plugin!)
                 $wpdb->query(
-                     $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+1
+                     $wpdb->prepare( "UPDATE %s SET menu_order = menu_order+1
                                       WHERE menu_order >= %d AND post_type = %s",
+                                     $wpdb->posts,
                                      $post_ref_node->menu_order + 1, 'page' ) );
 
                 $post_to_save = array(
@@ -488,8 +502,9 @@ class SwiftyPageManager
                 // update menu_order of all posts with the same parent ref_post_node and with a menu_order of the same
                 // as ref_post_node, but do not include ref_post_node +2 since multiple can have same menu order and we
                 // want our moved post to have a unique "spot"
-                $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+2
+                $wpdb->query( $wpdb->prepare( "UPDATE %s SET menu_order = menu_order+2
                                                WHERE post_parent = %d AND menu_order >= %d AND id <> %d ",
+                                              $wpdb->posts,
                                               $post_ref_node->post_parent,
                                               $post_ref_node->menu_order,
                                               $post_ref_node->ID ) );
@@ -523,6 +538,7 @@ class SwiftyPageManager
      */
     public function ajax_save_page()
     {
+        /** @var wpdb $wpdb - Wordpress Database */
         global $wpdb;
 
         $post_id     = !empty( $_POST[ "post_ID" ] ) ? intval( $_POST[ "post_ID" ] ) : null;
@@ -587,19 +603,21 @@ class SwiftyPageManager
 
             if ( "after" === $_POST[ "add_mode" ] ) {
                 // update menu_order of all pages below our page
-                $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+2 WHERE post_parent = %d AND menu_order >= %d AND id <> %d "
-                                            , $ref_post->post_parent
-                                            , $ref_post->menu_order
-                                            , $ref_post->ID
-                                            )
-                            );
+                $wpdb->query( $wpdb->prepare( "UPDATE %s SET menu_order = menu_order+2
+                                               WHERE post_parent = %d AND menu_order >= %d AND id <> %d ",
+                                              $wpdb->posts,
+                                              $ref_post->post_parent,
+                                              $ref_post->menu_order,
+                                              $ref_post->ID ) );
 
                 // create a new page and then goto it
                 $post_data[ "menu_order" ]  = $ref_post->menu_order + 1;
                 $post_data[ "post_parent" ] = $ref_post->post_parent;
             } elseif ( "inside" === $_POST[ "add_mode" ] ) {
                 // update menu_order, so our new post is the only one with order 0
-                $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+1 WHERE post_parent = %d", $ref_post->ID ) );
+                $wpdb->query( $wpdb->prepare( "UPDATE %s SET menu_order = menu_order+1 WHERE post_parent = %d",
+                                              $wpdb->posts,
+                                              $ref_post->ID ) );
 
                 $post_data[ "menu_order" ]  = 0;
                 $post_data[ "post_parent" ] = $ref_post->ID;
@@ -818,24 +836,26 @@ class SwiftyPageManager
      * @param $old_url
      */
     function save_old_url( $post_id, $old_url ) {
-        /** @var wpdb $wpdb */
+        /** @var wpdb $wpdb - Wordpress Database */
         global $wpdb;
         $old_url = preg_replace( '|^'.preg_quote(get_site_url(),'|').'|', '', $old_url ); // Remove root URL
         $old_url = trim( $old_url, " \t\n\r\0\x0B/" ); // Remove leading and trailing slashes or whitespaces
 
         $existQuery = $wpdb->prepare( "SELECT COUNT(*)
-                                       FROM {$wpdb->postmeta}
+                                       FROM %s
                                        WHERE post_id = %d
                                        AND meta_key LIKE 'spm_old_url_%%' AND meta_value='%s'",
+                                      $wpdb->postmeta,
                                       $post_id,
                                       $old_url );
         $exists = intval( $wpdb->get_var( $existQuery ) );
         if ( !$exists ) {
             $lastkeyQuery = $wpdb->prepare( "SELECT REPLACE( meta_key, 'spm_old_url_', '' )
-                                             FROM {$wpdb->postmeta}
+                                             FROM %s
                                              WHERE post_id = %d
                                              AND meta_key LIKE 'spm_old_url_%%'
                                              ORDER BY meta_key DESC",
+                                            $wpdb->postmeta,
                                             $post_id );
             $lastKey = $wpdb->get_var( $lastkeyQuery );
             $number = intval( $lastKey ) + 1;
@@ -1023,7 +1043,11 @@ class SwiftyPageManager
         $pageJsonData['metadata']["post_id"] = $onePage->ID;
         $pageJsonData['metadata']["post_type"] = $onePage->post_type;
         $pageJsonData['metadata']["post_status"] = $onePage->post_status;
-        $pageJsonData['metadata']["post_status_translated"] = isset( $post_statuses[ $onePage->post_status ] ) ? $post_statuses[ $onePage->post_status ] : $onePage->post_status;
+        if ( isset( $post_statuses[ $onePage->post_status ] )  ) {
+            $pageJsonData['metadata']["post_status_translated"] = $post_statuses[ $onePage->post_status ];
+        } else {
+            $pageJsonData['metadata']["post_status_translated"] = $onePage->post_status;
+        }
         $pageJsonData['metadata']["rel"] = $rel;
         $pageJsonData['metadata']["permalink"] = htmlspecialchars_decode( get_permalink( $onePage->ID ) );
         $pageJsonData['metadata']["editlink"] = htmlspecialchars_decode( $editLink );
