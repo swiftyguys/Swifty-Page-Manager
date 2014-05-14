@@ -129,8 +129,7 @@ class SwiftyPageManager
               $post->post_type   === 'page'   &&
               $post->post_status === '__TMP__'
         ) {
-            $wpdb->query( $wpdb->prepare( "UPDATE %s SET post_status = '%s' WHERE id = %d",
-                                          $wpdb->posts,
+            $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET post_status = '%s' WHERE id = %d",
                                           $_POST[ "post_status" ],
                                           $post_id ) );
         }
@@ -146,9 +145,9 @@ class SwiftyPageManager
         global $wpdb;
 
         if ( !empty($wp->request) ) {
-            $query = $wpdb->prepare( "SELECT post_id FROM %s WHERE meta_key='spm_url' AND meta_value='%s'",
-                                     $wpdb->postmeta,
+            $query = $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key='spm_url' AND meta_value='%s'",
                                      $wp->request );
+
             $post_id = $wpdb->get_var( $query );
 
             if ( $post_id ) {
@@ -224,10 +223,10 @@ class SwiftyPageManager
 
         if ( preg_match( '|\b404\b|', $code ) ) {
             if ( !empty($wp->request) ) {
-                $query = $wpdb->prepare( "SELECT post_id FROM %s
-                                          WHERE meta_key LIKE 'spm_old_url_%%' AND meta_value='%s'",
-                                         $wpdb->postmeta,
-                                         $wp->request );
+                $query = $wpdb->prepare(
+                         "SELECT post_id FROM $wpdb->postmeta WHERE meta_key LIKE 'spm_old_url_%%' AND meta_value='%s'",
+                              $wp->request );
+
                 $post_id = $wpdb->get_var( $query );
 
                 if ( $post_id ) {
@@ -482,18 +481,16 @@ class SwiftyPageManager
                 // parent as ref_node_post we do this so there will be room for our page if it's the first page
                 // so: no move of individial posts yet
                 $wpdb->query(
-                     $wpdb->prepare( "UPDATE %s SET menu_order = menu_order+1
-                                      WHERE post_parent = %d",
-                                     $wpdb->posts,
+                     $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+1 WHERE post_parent = %d",
                                      $post_ref_node->post_parent ) );
 
                 // update menu order with +1 for all pages below ref_node, this should fix the problem with "unmovable"
                 // pages because of multiple pages with the same menu order (...which is not the fault of this plugin!)
                 $wpdb->query(
-                     $wpdb->prepare( "UPDATE %s SET menu_order = menu_order+1
-                                      WHERE menu_order >= %d AND post_type = %s",
-                                     $wpdb->posts,
-                                     $post_ref_node->menu_order + 1, 'page' ) );
+                     $wpdb->prepare(
+                        "UPDATE $wpdb->posts SET menu_order = menu_order+1 WHERE menu_order >= %d AND post_type = %s",
+                            $post_ref_node->menu_order + 1,
+                            'page' ) );
 
                 $post_to_save = array(
                     "ID"          => $post_node->ID,
@@ -510,12 +507,12 @@ class SwiftyPageManager
                 // update menu_order of all posts with the same parent ref_post_node and with a menu_order of the same
                 // as ref_post_node, but do not include ref_post_node +2 since multiple can have same menu order and we
                 // want our moved post to have a unique "spot"
-                $wpdb->query( $wpdb->prepare( "UPDATE %s SET menu_order = menu_order+2
-                                               WHERE post_parent = %d AND menu_order >= %d AND id <> %d ",
-                                              $wpdb->posts,
-                                              $post_ref_node->post_parent,
-                                              $post_ref_node->menu_order,
-                                              $post_ref_node->ID ) );
+                $wpdb->query(
+                    $wpdb->prepare(
+                        "UPDATE $wpdb->posts SET menu_order = menu_order+2 WHERE post_parent = %d AND menu_order >= %d AND id <> %d ",
+                            $post_ref_node->post_parent,
+                            $post_ref_node->menu_order,
+                            $post_ref_node->ID ) );
 
                 $post_to_save = array(
                     "ID"          => $post_node->ID,
@@ -611,21 +608,21 @@ class SwiftyPageManager
 
             if ( "after" === $_POST[ "add_mode" ] ) {
                 // update menu_order of all pages below our page
-                $wpdb->query( $wpdb->prepare( "UPDATE %s SET menu_order = menu_order+2
-                                               WHERE post_parent = %d AND menu_order >= %d AND id <> %d ",
-                                              $wpdb->posts,
-                                              $ref_post->post_parent,
-                                              $ref_post->menu_order,
-                                              $ref_post->ID ) );
+                $wpdb->query(
+                    $wpdb->prepare(
+                        "UPDATE $wpdb->posts SET menu_order = menu_order+2 WHERE post_parent = %d AND menu_order >= %d AND id <> %d ",
+                            $ref_post->post_parent,
+                            $ref_post->menu_order,
+                            $ref_post->ID ) );
 
                 // create a new page and then goto it
                 $post_data[ "menu_order" ]  = $ref_post->menu_order + 1;
                 $post_data[ "post_parent" ] = $ref_post->post_parent;
             } elseif ( "inside" === $_POST[ "add_mode" ] ) {
                 // update menu_order, so our new post is the only one with order 0
-                $wpdb->query( $wpdb->prepare( "UPDATE %s SET menu_order = menu_order+1 WHERE post_parent = %d",
-                                              $wpdb->posts,
-                                              $ref_post->ID ) );
+                $wpdb->query(
+                    $wpdb->prepare( "UPDATE $wpdb->posts SET menu_order = menu_order+1 WHERE post_parent = %d",
+                        $ref_post->ID ) );
 
                 $post_data[ "menu_order" ]  = 0;
                 $post_data[ "post_parent" ] = $ref_post->ID;
@@ -846,27 +843,25 @@ class SwiftyPageManager
     function save_old_url( $post_id, $old_url ) {
         /** @var wpdb $wpdb - Wordpress Database */
         global $wpdb;
+
         $old_url = preg_replace( '|^'.preg_quote(get_site_url(),'|').'|', '', $old_url ); // Remove root URL
         $old_url = trim( $old_url, " \t\n\r\0\x0B/" ); // Remove leading and trailing slashes or whitespaces
 
-        $existQuery = $wpdb->prepare( "SELECT COUNT(*)
-                                       FROM %s
-                                       WHERE post_id = %d
-                                       AND meta_key LIKE 'spm_old_url_%%' AND meta_value='%s'",
-                                      $wpdb->postmeta,
-                                      $post_id,
-                                      $old_url );
+        $existQuery = $wpdb->prepare(
+            "SELECT COUNT(*) FROM $wpdb->postmeta WHERE post_id = %d AND meta_key LIKE 'spm_old_url_%%' AND meta_value='%s'",
+                $post_id,
+                $old_url );
+
         $exists = intval( $wpdb->get_var( $existQuery ) );
+
         if ( !$exists ) {
-            $lastkeyQuery = $wpdb->prepare( "SELECT REPLACE( meta_key, 'spm_old_url_', '' )
-                                             FROM %s
-                                             WHERE post_id = %d
-                                             AND meta_key LIKE 'spm_old_url_%%'
-                                             ORDER BY meta_key DESC",
-                                            $wpdb->postmeta,
-                                            $post_id );
+            $lastkeyQuery = $wpdb->prepare(
+                "SELECT REPLACE( meta_key, 'spm_old_url_', '' ) FROM $wpdb->postmeta WHERE post_id = %d AND meta_key LIKE 'spm_old_url_%%' ORDER BY meta_key DESC",
+                    $post_id );
+
             $lastKey = $wpdb->get_var( $lastkeyQuery );
             $number = intval( $lastKey ) + 1;
+
             add_post_meta( $post_id, 'spm_old_url_'.$number, $old_url );
         }
     }
