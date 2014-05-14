@@ -31,7 +31,7 @@ class SwiftyPageManager
         $this->plugin_file     = __FILE__ ;
         $this->plugin_dir      = dirname( $this->plugin_file );
         $this->plugin_basename = basename( $this->plugin_dir );
-        $this->plugin_dir_url  = plugins_url( basename( $this->plugin_dir ) );
+        $this->plugin_dir_url  = plugins_url( rawurlencode( basename( $this->plugin_dir ) ) );
         $this->plugin_url      = $_SERVER[ 'REQUEST_URI' ];
         $this->is_swifty       = true;   // TEMP!!!
 
