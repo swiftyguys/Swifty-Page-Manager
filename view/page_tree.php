@@ -100,7 +100,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
     </div>
 
 <!-- SwiftySite template page buttons-->
-<span class="spm-page-actions-tmpl __TMPL__ spm-hidden">
+<span class="spm-page-actions-tmpl __TMPL__" style="display:none;">
     <span class="button button-primary spm-button spm-page-button" data-spm-action="add"
           title="<?php esc_attr_e( 'Add page', 'swifty-page-manager' ); ?>">
         <span class="dashicons spm-icon dashicons-plus"></span>
@@ -128,7 +128,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
 </span>
 
 <!-- SwiftySite template Delete -->
-<span class="spm-container spm-page-delete-tmpl __TMPL__ spm-hidden">
+<span class="spm-container spm-page-delete-tmpl __TMPL__" style="display:none;">
     <form method="post" class="spm-form spm-page-delete-form">
         <input type="hidden" name="is_swifty" value="<?php echo esc_attr( ( $this->is_swifty ) ? '1' : '0' ); ?>" >
         <input type="hidden" name="wp_site_url" value="<?php echo get_site_url(); ?>" >
@@ -164,7 +164,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
 </span>
 
 <!-- SwiftySite template Publish -->
-<span class="spm-container spm-page-publish-tmpl __TMPL__ spm-hidden">
+<span class="spm-container spm-page-publish-tmpl __TMPL__" style="display:none;">
     <form method="post" class="spm-form spm-page-publish-form">
         <input type="hidden" name="is_swifty" value="<?php echo esc_attr( ( $this->is_swifty ) ? '1' : '0' ); ?>" >
         <input type="hidden" name="wp_site_url" value="<?php echo get_site_url(); ?>" >
@@ -201,7 +201,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
     </form>
 </span>
 
-<span class="spm-tooltip spm-title-tooltip spm-hidden">
+<span class="spm-tooltip spm-title-tooltip" style="display:none;">
 The title of the page is the text that is shown in the tabs of the browser.<br>
 It is also the short text that is shown in blue in the search engines such as Google.<br>
 Therefore it is important that it contains the most important keywords of what this page is about.<br>
@@ -213,7 +213,7 @@ Swifty Page Manager - easily create a page tree in Wordpress<br>
 
 </span>
 
-<span class="spm-tooltip spm-url-tooltip spm-hidden">
+<span class="spm-tooltip spm-url-tooltip" style="display:none;">
 This is the link to your page. It is important that the name of the page is the main keyword of that page<br>
 or the name of the product or service that you offer on that page. Preferably right behind the domain name.<br><br>
 Example:<br><br>
@@ -222,13 +222,13 @@ Example:<br><br>
 <?php echo home_url(); ?>/<b>product-or-service</b><br>
 </span>
 
-<span class="spm-tooltip spm-status-tooltip spm-hidden">
+<span class="spm-tooltip spm-status-tooltip" style="display:none;">
 Status <b>Live</b> means that everyone in the world can see that page and that it is shown in your site menu.<br>
 Status <b>Draft</b> means that only you can see that page when you are logged in and it is not shown in the site menu.<br>
 </span>
 
 <!-- SwiftySite template Add/Edit -->
-<span class="spm-container spm-page-add-edit-tmpl __TMPL__ spm-hidden">
+<span class="spm-container spm-page-add-edit-tmpl __TMPL__" style="display:none;">
     <form method="post" class="spm-form spm-page-add-edit-form">
         <input type="hidden" name="is_swifty" value="<?php echo esc_attr( ( $this->is_swifty ) ? '1' : '0' ); ?>" >
         <input type="hidden" name="wp_site_url" value="<?php echo get_site_url(); ?>" >

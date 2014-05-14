@@ -372,11 +372,11 @@ var SPM = ( function ( $, document ) {
             $tmpl.find( '[data-spm-action=publish]' ).hide();
         }
 
-        $a.addClass( 'jstree-clicked' ).append( $tmpl );
+        $a.addClass( 'jstree-clicked' ).append( $tmpl.show() );
     };
 
     spm.getPageActionButtonsTmpl = function () {
-        return $( '.spm-page-actions-tmpl.__TMPL__' ).clone( true ).removeClass( '__TMPL__ spm-hidden' );
+        return $( '.spm-page-actions-tmpl.__TMPL__' ).clone( true ).removeClass( '__TMPL__' );
     };
 
     spm.preparePageActions = function ( $li, action ) {
@@ -420,7 +420,7 @@ var SPM = ( function ( $, document ) {
         $tmpl.find( '.spm-more' ).show();
 
         $li.data( 'cur-action', action );
-        $li.find( '> a' ).after( $tmpl.removeClass( 'spm-hidden' ) );
+        $li.find( '> a' ).after( $tmpl.css( 'display', 'block' ).show() );
     };
 
     spm.getLiText = function ( $li ) {
