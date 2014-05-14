@@ -52,6 +52,7 @@ class SwiftyPageManager
         add_action( 'wp_ajax_spm_delete_page',   array( $this, 'ajax_delete_page' ) );
         add_action( 'wp_ajax_spm_publish_page',  array( $this, 'ajax_publish_page' ) );
         add_action( 'wp_ajax_spm_post_settings', array( $this, 'ajax_post_settings' ) );
+        add_action( 'admin_enqueue_scripts',     array( $this, 'add_plugin_css' ) );
 
         if ( $this->is_swifty ) {
             add_action( 'wp_ajax_spm_sanitize_url', array( $this, 'ajax_sanitize_url' ) );
@@ -63,6 +64,14 @@ class SwiftyPageManager
             add_filter( 'status_header',       array( $this, 'status_header' ) );
             add_filter( 'wp_title',            array( $this, 'seo_wp_title' ), 10, 2 );
         }
+    }
+
+    /**
+     * Adds the plugin css to the head tag.
+     */
+    function add_plugin_css()
+    {
+        wp_enqueue_style( "spm", $this->plugin_dir_url . "/css/styles.css", false, $this->_plugin_version );
     }
 
     /**
@@ -292,7 +301,6 @@ class SwiftyPageManager
         wp_enqueue_script( 'spm',   $this->plugin_dir_url . "/js/swifty-page-manager.js", false,
                            $this->_plugin_version );
 
-        wp_enqueue_style( "spm",    $this->plugin_dir_url . "/css/styles.css", false, $this->_plugin_version );
         wp_enqueue_style( "jquery-alerts",  $this->plugin_dir_url . "/css/jquery.alerts.css", false,
                           $this->_plugin_version );
         wp_enqueue_style( 'spm-font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css',

@@ -372,7 +372,7 @@ var SPM = ( function ( $, document ) {
             $tmpl.find( '[data-spm-action=publish]' ).hide();
         }
 
-        $a.addClass( 'jstree-clicked' ).append( $tmpl.show() );
+        $a.addClass( 'jstree-clicked' ).append( $tmpl.removeAttr( 'style' ) );
     };
 
     spm.getPageActionButtonsTmpl = function () {
@@ -420,7 +420,7 @@ var SPM = ( function ( $, document ) {
         $tmpl.find( '.spm-more' ).show();
 
         $li.data( 'cur-action', action );
-        $li.find( '> a' ).after( $tmpl.css( 'display', 'block' ).show() );
+        $li.find( '> a' ).after( $tmpl.removeAttr( 'style' ) );
     };
 
     spm.getLiText = function ( $li ) {
