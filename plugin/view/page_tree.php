@@ -210,7 +210,6 @@ That is one of many things you can easily do to get a higher search engine ranki
 The text should ideally be no longer than 70 characters.<br><br>
 Example:<br><br>
 Swifty Page Manager - easily create a page tree in Wordpress<br>
-
 </span>
 
 <span class="spm-tooltip spm-url-tooltip" style="display:none;">
