@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Swifty Page Manager v0.0.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-05-15 08:53:15+0000\n"
+"PO-Revision-Date: 2014-05-15 12:26:23+0000\n"
 "Last-Translator: jh-dev <jeroen.hoekstra@longtermresults.nl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -36,7 +36,7 @@ msgid "View page"
 msgstr "Bekijk pagina"
 
 #: view/page_tree.php:105
-#: view/page_tree.php:451
+#: view/page_tree.php:459
 #@ swifty-page-manager
 msgid "Add page"
 msgstr "Voeg pagina toe"
@@ -76,25 +76,25 @@ msgstr "Verwijderd"
 msgid "Password protected page"
 msgstr "Wachtwoord beschermde pagina"
 
-#: view/page_tree.php:318
-#: view/page_tree.php:378
+#: view/page_tree.php:326
+#: view/page_tree.php:386
 #@ swifty-page-manager
 msgid "Show"
 msgstr "Tonen"
 
-#: view/page_tree.php:325
-#: view/page_tree.php:385
-#: view/page_tree.php:413
+#: view/page_tree.php:333
+#: view/page_tree.php:393
+#: view/page_tree.php:421
 #@ swifty-page-manager
 msgid "Hide"
 msgstr "Verbergen"
 
-#: view/page_tree.php:340
+#: view/page_tree.php:348
 #@ swifty-page-manager
 msgid "Draft"
 msgstr "Klad"
 
-#: view/page_tree.php:347
+#: view/page_tree.php:355
 #@ swifty-page-manager
 msgid "Live"
 msgstr "Publiceren"
@@ -114,12 +114,12 @@ msgstr "Verwijder pagina"
 msgid "Delete"
 msgstr "Verwijder"
 
-#: view/page_tree.php:297
+#: view/page_tree.php:305
 #@ swifty-page-manager
 msgid "More"
 msgstr "Meer"
 
-#: view/page_tree.php:420
+#: view/page_tree.php:428
 #@ swifty-page-manager
 msgid "Less"
 msgstr "Minder"
@@ -176,18 +176,18 @@ msgstr "Publiceer pagina"
 
 #: view/page_tree.php:153
 #: view/page_tree.php:190
-#: view/page_tree.php:430
+#: view/page_tree.php:438
 #@ swifty-page-manager
 msgid "Cancel"
 msgstr "Annuleer"
 
-#: view/page_tree.php:434
+#: view/page_tree.php:442
 #@ swifty-page-manager
 msgid "Save"
 msgstr "Opslaan"
 
 #: swifty-page-manager.php:316
-#: view/page_tree.php:448
+#: view/page_tree.php:456
 #@ swifty-page-manager
 msgid "No pages found."
 msgstr "Geen pagina's gevonden."
@@ -197,12 +197,12 @@ msgstr "Geen pagina's gevonden."
 msgid "Hidden"
 msgstr "Verborgen"
 
-#: view/page_tree.php:353
+#: view/page_tree.php:361
 #@ swifty-page-manager
 msgid "Template"
 msgstr "Sjabloon"
 
-#: view/page_tree.php:357
+#: view/page_tree.php:365
 #@ swifty-page-manager
 msgid "Default template"
 msgstr "Standaard sjabloon"
@@ -235,63 +235,63 @@ msgctxt "headline of page with tree"
 msgid "Swifty Page Manager"
 msgstr "Swifty Page Manager"
 
-#: view/page_tree.php:392
+#: view/page_tree.php:400
 #@ swifty-page-manager
 msgid "Sidebar"
 msgstr "Zijbalk"
 
-#: view/page_tree.php:246
+#: view/page_tree.php:254
 #@ swifty-page-manager
 msgid "Text in menu"
 msgstr "Tekst in menu"
 
-#: view/page_tree.php:250
-#: view/page_tree.php:265
+#: view/page_tree.php:258
+#: view/page_tree.php:273
 #@ swifty-page-manager
 msgid "Title"
 msgstr "Titel"
 
-#: view/page_tree.php:277
+#: view/page_tree.php:285
 #@ swifty-page-manager
 msgid "Position"
 msgstr "Positie"
 
-#: view/page_tree.php:283
+#: view/page_tree.php:291
 #@ swifty-page-manager
 msgid "After"
 msgstr "Na"
 
-#: view/page_tree.php:289
+#: view/page_tree.php:297
 #@ swifty-page-manager
 msgid "As sub page of"
 msgstr "Als subpagina van"
 
-#: view/page_tree.php:301
+#: view/page_tree.php:309
 #@ swifty-page-manager
 msgid "Url"
 msgstr "Url"
 
-#: view/page_tree.php:311
+#: view/page_tree.php:319
 #@ swifty-page-manager
 msgid "In menu"
 msgstr "In menu"
 
-#: view/page_tree.php:333
+#: view/page_tree.php:341
 #@ swifty-page-manager
 msgid "Status"
 msgstr "Status"
 
-#: view/page_tree.php:371
+#: view/page_tree.php:379
 #@ swifty-page-manager
 msgid "Header"
 msgstr "Header"
 
-#: view/page_tree.php:399
+#: view/page_tree.php:407
 #@ swifty-page-manager
 msgid "Left"
 msgstr "Links"
 
-#: view/page_tree.php:406
+#: view/page_tree.php:414
 #@ swifty-page-manager
 msgid "Right"
 msgstr "Rechts"
@@ -316,50 +316,19 @@ msgstr "Weet je zeker dat je deze pagina wilt publiceren, zodat deze zichtbaar w
 msgid "Publish"
 msgstr "Publiceren"
 
-#: view/page_tree.php:205
+#: view/page_tree.php:213
 #@ swifty-page-manager
-msgid ""
-"The title of the page is the text that is shown in the tabs of the browser.<br>\n"
-"It is also the short text that is shown in blue in the search engines such as Google.<br>\n"
-"Therefore it is important that it contains the most important keywords of what this page is about.<br>\n"
-"Put these at the beginning of the text.<br>\n"
-"That is one of many things you can easily do to get a higher search engine ranking.<br>\n"
-"The text should ideally be no longer than 70 characters.<br><br>\n"
-"Example:<br><br>\n"
-"Swifty Page Manager - easily create a page tree in Wordpress<br>"
-msgstr ""
-"De titel van een pagina is de tekst die je in de tabs van de browser ziet.<br>\n"
-"Het is ook de korte blauwe tekst zichtbaar in de zoekmachines, zoals Google.<br>\n"
-"Daarom is het belangrijk dat deze de meest belangrijke trefwoorden bevat, van waar de pagina overgaat.<br>\n"
-"Plaats deze aan het begin van de tekst.<br>\n"
-"Dat is één van de vele dingen die je kunt doen om hoger in de zoekmachines te komen.<br>\n"
-"De ideale lengte van deze tekst zou niet langer mogen zijn dan 70 karakters.<br><br>\n"
-"Voorbeeld:<br><br>\n"
-"Swifty Page Manager - maak gemakkelijk een paginastructuur in Wordpress<br>"
+msgid "The title of the page is the text that is shown in the tabs of the browser.<br />It is also the short text that is shown in blue in the search engines such as Google.<br />Therefore it is important that it contains the most important keywords of what this page is about.<br />Put these at the beginning of the text.<br />That is one of many things you can easily do to get a higher search engine ranking.<br />The text should ideally be no longer than 70 characters.<br /><br />Example:<br /><br />Swifty Page Manager - easily create a page tree in Wordpress"
+msgstr "De titel van een pagina is de tekst die je in de tabs van de browser ziet.<br />Het is ook de korte blauwe tekst zichtbaar in de zoekmachines, zoals Google.<br />Daarom is het belangrijk dat deze de meest belangrijke trefwoorden bevat, van waar de pagina overgaat.<br />Plaats deze aan het begin van de tekst.<br />Dat is één van de vele dingen die je kunt doen om hoger in de zoekmachines te komen.<br />De ideale lengte van deze tekst zou niet langer mogen zijn dan 70 karakters.<br /><br />Voorbeeld:<br /><br />Swifty Page Manager - maak gemakkelijk een paginastructuur in Wordpress"
 
-#: view/page_tree.php:216
+#: view/page_tree.php:232
 #@ swifty-page-manager
-msgid ""
-"This is the link to your page. It is important that the name of the page is the main keyword of that page<br>\n"
-"or the name of the product or service that you offer on that page. Preferably right behind the domain name.<br><br>\n"
-"Example:<br><br>\n"
-"\n"
-"<?php echo home_url(); ?>/<b>keyword</b><br>\n"
-"<?php echo home_url(); ?>/<b>product-or-service</b><br>"
-msgstr ""
-"Dit is de link naar jouw pagina. Het is belangrijk dat de naam van de pagina het trefwoord is van die pagina<br>\n"
-" of de naam van het product of service die je aanbiedt op die pagina. Het liefst direct na de domeinnaam.<br><br>\n"
-"Voorbeeld:<br><br>\n"
-"\n"
-"<?php echo home_url(); ?>/<b>trefwoord</b><br>\n"
-"<?php echo home_url(); ?>/<b>product-of-service</b><br>"
+msgid "Status <b>Live</b> means that everyone in the world can see that page and that it is shown in your site menu.<br />Status <b>Draft</b> means that only you can see that page when you are logged in and it is not shown in the site menu."
+msgstr "Status <b>Publiceren</b> wil zeggen dat iedereen ter wereld jouw pagina kan zien en dat de pagina zichtbaar is in het menu.<br />Status <b>Klad</b> wil zeggen dat alleen jij de pagina kan zien wanneer je bent ingelogd en dat de pagina niet zichtbaar is in het menu."
 
-#: view/page_tree.php:225
+#: view/page_tree.php:224
+#, php-format
 #@ swifty-page-manager
-msgid ""
-"Status <b>Live</b> means that everyone in the world can see that page and that it is shown in your site menu.<br>\n"
-"Status <b>Draft</b> means that only you can see that page when you are logged in and it is not shown in the site menu.<br>"
-msgstr ""
-"Status <b>Gepubliceerd</b> wil zeggen dat iedereen ter wereld jouw pagina kan zien en dat de pagina zichtbaar is in het menu.<br>\n"
-"Status <b>Klad</b> wil zeggen dat alleen jij de pagina kan zien wanneer je bent ingelogd en dat de pagina niet zichtbaar is in het menu.<br>"
+msgid "This is the link to your page. It is important that the name of the page is the main keyword of that page<br />or the name of the product or service that you offer on that page. Preferably right behind the domain name.<br /><br />Example:<br><br />%s/<b>keyword</b><br />%s/<b>product-or-service</b>"
+msgstr "Dit is de link naar jouw pagina. Het is belangrijk dat de naam van de pagina het trefwoord is van die pagina<br /> of de naam van het product of service die je aanbiedt op die pagina. Het liefst direct na de domeinnaam.<br /><br />Voorbeeld:<br /><br />%s/<b>trefwoord</b><br />%s/<b>product-of-service</b>"
 
