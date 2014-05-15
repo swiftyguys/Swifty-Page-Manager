@@ -753,8 +753,6 @@ class SwiftyPageManager
         }
 
         ?>
-        var li = jQuery( 'li#cms-tpv-<?php echo $post_id; ?>' );
-
         var li = jQuery( '#spm-id-<?php echo $post_id; ?>' );
 
         li.find( 'input[name="post_title"]' ).val( <?php echo json_encode( $post->post_title ); ?> );
@@ -767,8 +765,6 @@ class SwiftyPageManager
         li.find( 'input[name="spm_header_visibility"]' ).val( [ <?php echo json_encode( $post_meta[ 'spm_header_visibility' ] ); ?> ] );
         li.find( 'input[name="spm_sidebar_visibility"]' ).val( [ <?php echo json_encode( $post_meta[ 'spm_sidebar_visibility' ] ); ?> ] );
 
-        li.find( 'input[name="post_title"]' ).val( <?php echo json_encode($post->post_title); ?> );
-        li.find( 'input[name="post_name"]' ).val( <?php echo json_encode($post->post_name); ?> );
         <?php
         exit;
     }
@@ -1046,11 +1042,13 @@ class SwiftyPageManager
         $pageJsonData['metadata']["post_id"] = $onePage->ID;
         $pageJsonData['metadata']["post_type"] = $onePage->post_type;
         $pageJsonData['metadata']["post_status"] = $onePage->post_status;
+
         if ( isset( $post_statuses[ $onePage->post_status ] )  ) {
             $pageJsonData['metadata']["post_status_translated"] = $post_statuses[ $onePage->post_status ];
         } else {
             $pageJsonData['metadata']["post_status_translated"] = $onePage->post_status;
         }
+
         $pageJsonData['metadata']["rel"] = $rel;
         $pageJsonData['metadata']["permalink"] = htmlspecialchars_decode( get_permalink( $onePage->ID ) );
         $pageJsonData['metadata']["editlink"] = htmlspecialchars_decode( $editLink );
