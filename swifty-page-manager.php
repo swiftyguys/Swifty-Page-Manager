@@ -69,7 +69,7 @@ class SwiftyPageManager
     /**
      * Adds the plugin css to the head tag.
      */
-    function add_plugin_css()
+    public function add_plugin_css()
     {
         wp_enqueue_style( "spm", $this->plugin_dir_url . "/css/styles.css", false, $this->_plugin_version );
     }
@@ -79,7 +79,7 @@ class SwiftyPageManager
      * @param string $sep
      * @return string
      */
-    function seo_wp_title( $title, $sep )
+    public function seo_wp_title( $title, $sep )
     {
         if ( is_feed() ) {
             return $title;
