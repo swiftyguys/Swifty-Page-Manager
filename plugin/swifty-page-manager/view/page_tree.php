@@ -36,7 +36,8 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
         }
     }
 
-    $jsonData = $this->getJsonData( $this->getTree() );
+    $tree = $this->getTree();
+    $jsonData = $this->getJsonData( $tree );
 
     ?>
     <script type="text/javascript">
