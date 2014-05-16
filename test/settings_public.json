@@ -1,0 +1,11 @@
+{
+    "default": {
+        "domain": "",
+        "do_setup_wordpress": "true",
+        "wp_user": "test",
+        "wp_pass": ""
+    },
+    "ec2": {
+        "wp_pass": "test"
+    }
+}
