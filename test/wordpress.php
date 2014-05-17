@@ -158,14 +158,15 @@ function ActionWPOpenAdminSubMenu( StoryTeller $st, $pluginCode, $submenuText ) 
     $st->usingBrowser()->gotoPage( "http://" . $checkpoint->testSettings->domain . "/wp-admin" );
 
     // Check if the WP menu is collapsed (to one icon) ( happens on small screens )
-    $elements = $st->fromBrowser()->getElementsByXpath( array( 'descendant::span[@class = "ab-icon"]' ) );
-    if( $elements[0]->displayed() ) {
+//    $elements = $st->fromBrowser()->getElementsByXpath( array( 'descendant::span[@class = "ab-icon"]' ) );
+    $elements = FindElementsByXpath( $st, 'descendant::li[@id = "wp-admin-bar-menu-toggle"]' );
+    if( count( $elements ) > 0 && $elements[0]->displayed() ) {
         // Click on the collapse menu button, so the menu will appear
         $elements[0]->click();
     }
 
     // Click on the main menu button, as on other screens (sizes or touch ) a click is needed
-    $elements = $st->fromBrowser()->getElementsByXpath( array( $xpathMainmenuItem ) );
+    $elements = FindElementsByXpathMustExist( $st, $xpathMainmenuItem );
     $elements[0]->click();
     // Hover the main menu button, as on some screens (sizes or touch) a hover is needed
     HoverElementByXpath( $st, $xpathMainmenuItem );
@@ -232,6 +233,7 @@ function InstallWordpress( StoryTeller $st ) {
 
     // create the parameters to inject into the test box
     $vmParams = array (
+        "install_now" => "wordpress",
         // Which version of Wordpress to deploy
         "wp_version" => "3.7",
         "wp_sha256sum" => "94b8b7a7241ec0817defa1c35f738d777f01ac17a4e45ee325c0f1778504fd94",
@@ -266,8 +268,23 @@ function InstallWordpress( StoryTeller $st ) {
 ////////////////////////////////////////
 
 function InstallPlugin( StoryTeller $st, $relpath, $toAbspath ) {
+    // we're going to store some information in here
+    $checkpoint = $st->getCheckpoint();
+
     if( $st->getParams()[ 'settings' ] == "ec2" ) {
-        // dorh
+        // create the parameters for Ansible
+        $vmParams = array (
+            "install_now" => "plugin",
+            "code" => "swifty-page-manager"
+        );
+
+        // build up the provisioning definition
+        $def = $st->usingProvisioning()->createDefinition();
+        $st->usingProvisioningDefinition($def)->addRole('wordpress-server')->toHost($checkpoint->instanceName);
+        $st->usingProvisioningDefinition($def)->addParams($vmParams)->toHost($checkpoint->instanceName);
+
+        // provision our VM
+        $st->usingProvisioningEngine('ansible')->provisionHosts($def);
     } else {
         // Copy plugin
         shell_exec( 'cp -a ' . dirname(__FILE__) . '/' . $relpath . ' ' . $toAbspath );
@@ -304,6 +321,18 @@ function FindElementsByXpath( $st, $xpath ) {
 
 ////////////////////////////////////////
 
+function FindElementsByXpathMustExist( $st, $xpath ) {
+    $elements = $st->fromBrowser()->getElementsByXpath( array( $xpath ) );
+    if( count( $elements ) > 0 ) {
+        return $elements;
+    } else {
+        // dorh Throw exception (or something) so teardown will be done correctly
+    }
+    return null;
+}
+
+////////////////////////////////////////
+
 function FindElementByXpath( $st, $xpath ) {
     // Find an element without throwing an error is no element found.
     $elements = $st->fromBrowser()->getElementsByXpath( array( $xpath ) );
@@ -323,7 +352,7 @@ function FindElementByXpathMustExist( $st, $xpath ) {
 ////////////////////////////////////////
 
 function HoverElementByXpath( $st, $xpath ) {
-    $element = FindElementByXpath( $st, $xpath );
+    $element = FindElementByXpathMustExist( $st, $xpath );
     $st->getRunningDevice()->moveto( array( 'element' => $element->getID() ) );
     $st->usingTimer()->wait( 1, "Wait for the hover to take effect (for instance a dropdown)." );
 }
