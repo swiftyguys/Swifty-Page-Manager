@@ -39,13 +39,22 @@ $story->addTestSetup( function( StoryTeller $st ) {
     }
 
     // Install items defined in settings
-    foreach( $checkpoint->testSettings->setup as $slug => $setupItem ) {
+    $checkpoint->do_phase_after_install = array();
+    $checkpoint->do_phase_after_login = array();
+    usort( $checkpoint->testSettings->setup, function( $a, $b ) {
+        if( $a[ 'order' ] < $b[ 'order' ] ) {
+            return -1;
+        }
+        return 1;
+    } );
+    var_dump( $checkpoint->testSettings);
+    foreach( $checkpoint->testSettings->setup as $setupItem ) {
         $setupItem = (object) $setupItem ;
         if( $setupItem->action == 'install' ) {
             if( $setupItem->type == 'webapp' ) {
-                InstallWebApp( $st, $slug );
+                InstallWebApp( $st, $setupItem->slug );
                 if( $setupItem->after_install == 'setup' ) {
-                    SetupWebApp( $st, $slug );
+                    array_push( $checkpoint->do_phase_after_install, $setupItem );
                 }
             }
             if( $setupItem->type == 'wp_plugin' ) {
@@ -53,6 +62,7 @@ $story->addTestSetup( function( StoryTeller $st ) {
             }
         }
     }
+
 } );
 
 $story->addTestTeardown( function( StoryTeller $st ) {
@@ -64,11 +74,30 @@ $story->addTestTeardown( function( StoryTeller $st ) {
     }
 } );
 
+function PrepareForTest( $st ) {
+    // Must be as a first start of the first test
+
+    // get 'global' data
+    $checkpoint = $st->getCheckpoint();
+
+
+    // Do after install
+    foreach( $checkpoint->do_phase_after_install as $setupItem ) {
+        if( $setupItem->type == 'webapp' ) {
+            if( $setupItem->after_install == 'setup' ) {
+                SetupWebApp( $st, $setupItem->slug );
+            }
+        }
+    }
+}
+
 ////////////////////////////////////////
 // Tests
 ////////////////////////////////////////
 
 $story->addAction( function( StoryTeller $st ) {
+    PrepareForTest( $st);
+
     ActionLoginWordpress( $st );
 
     ActionCheckPluginRunning( $st, 'Swifty Page Manager' );
@@ -268,10 +297,12 @@ function InstallWordpress( StoryTeller $st ) {
 ////////////////////////////////////////
 
 function InstallPlugin( StoryTeller $st, $relpath, $toAbspath ) {
-    // we're going to store some information in here
+    // get 'global' data
     $checkpoint = $st->getCheckpoint();
 
     if( $st->getParams()[ 'settings' ] == "ec2" ) {
+        // Copy plugin to remote server via Ansible
+
         // create the parameters for Ansible
         $vmParams = array (
             "install_now" => "plugin",
@@ -286,7 +317,7 @@ function InstallPlugin( StoryTeller $st, $relpath, $toAbspath ) {
         // provision our VM
         $st->usingProvisioningEngine('ansible')->provisionHosts($def);
     } else {
-        // Copy plugin
+        // Copy plugin locally
         shell_exec( 'cp -a ' . dirname(__FILE__) . '/' . $relpath . ' ' . $toAbspath );
     }
 }
