@@ -1,9 +1,15 @@
 {
     "default": {
         "domain": "",
-        "do_setup_wordpress": "true",
         "wp_user": "test",
-        "wp_pass": ""
+        "wp_pass": "",
+        "setup": {
+            "wordpress": {
+                "type": "webapp",
+                "action": "",
+                "after_install": ""
+            }
+        }
     },
     "ec2": {
         "wp_pass": "test"

@@ -28,21 +28,29 @@ $story->addTestSetup( function( StoryTeller $st ) {
     // what are we calling this host?
     $checkpoint->instanceName = 'storyplayer1';
 
-    // what are we setting up?
+    // What settings name was given? (Use # vendor/bin/storyplayer -D settings=...)
     switch( $st->getParams()[ 'settings' ] ) {
         case 'ec2':
             CreateEc2( $st );
-            InstallWordpress( $st );
             break;
         case 'local':
             break;
         default:
     }
 
-    foreach( $checkpoint->testSettings->setup as $setupItem ) {
+    // Install items defined in settings
+    foreach( $checkpoint->testSettings->setup as $slug => $setupItem ) {
         $setupItem = (object) $setupItem ;
-        if( $setupItem->action == 'install' && $setupItem->type == 'wp_plugin' ) {
-            InstallPlugin( $st, $setupItem->relpath, $setupItem->to_abspath );
+        if( $setupItem->action == 'install' ) {
+            if( $setupItem->type == 'webapp' ) {
+                InstallWebApp( $st, $slug );
+                if( $setupItem->after_install == 'setup' ) {
+                    SetupWebApp( $st, $slug );
+                }
+            }
+            if( $setupItem->type == 'wp_plugin' ) {
+                InstallPlugin( $st, $setupItem->relpath, $setupItem->to_abspath );
+            }
         }
     }
 } );
@@ -61,12 +69,6 @@ $story->addTestTeardown( function( StoryTeller $st ) {
 ////////////////////////////////////////
 
 $story->addAction( function( StoryTeller $st ) {
-    // get 'global' data
-    $checkpoint = $st->getCheckpoint();
-
-    if( $checkpoint->testSettings->do_setup_wordpress == "true" ) {
-        ActionSetupWordpress( $st );
-    }
     ActionLoginWordpress( $st );
 
     ActionCheckPluginRunning( $st, 'Swifty Page Manager' );
@@ -122,6 +124,7 @@ function ActionLoginWordpress( StoryTeller $st ) {
 
 function ActionCheckPlugins( StoryTeller $st ) {
     ActionWPOpenAdminSubMenu( $st, 'plugins', 'Installed Plugins' );
+    $st->usingTimer()->wait( 1, "Wait for Installed Plugin page." );
     $txt = $st->fromBrowser()->getText()->fromFieldWithText( 'Akismet' );
     $st->assertsString( $txt )->equals( "Akismet" );
 }
@@ -130,7 +133,6 @@ function ActionCheckPlugins( StoryTeller $st ) {
 
 function ActionActivatePlugin( StoryTeller $st, $pluginCode ) {
     ActionWPOpenAdminSubMenu( $st, 'plugins', 'Installed Plugins' );
-//    $st->fromBrowser()->getText()->fromFieldWithId( $pluginCode ); // Wait for the element to be there?
     $st->usingTimer()->wait( 1, "Wait for Installed Plugin page." );
     ClickElementByXpath( $st, 'descendant::tr[@id = "' . $pluginCode . '"]//a[normalize-space(text()) = "Activate"]', "graceful" );
 }
@@ -138,14 +140,7 @@ function ActionActivatePlugin( StoryTeller $st, $pluginCode ) {
 ////////////////////////////////////////
 
 function ActionCheckPluginRunning( StoryTeller $st, $pluginName ) {
-    // get 'global' data
-    $checkpoint = $st->getCheckpoint();
-
     ActionWPOpenAdminSubMenu( $st, 'pages', $pluginName );
-//    $st->usingBrowser()->gotoPage( "http://" . $checkpoint->testSettings->domain . "/wp-admin" );
-////    $st->usingBrowser()->click()->linkWithClass( 'menu-icon-page' );
-//    HoverElementByXpath( $st, 'descendant::li[@id = "menu-pages"]' );
-//    $st->usingBrowser()->click()->linkWithText( $pluginName );
     $txt = $st->fromBrowser()->getText()->fromHeadingWithText( $pluginName );
     $st->assertsString( $txt )->equals( $pluginName );
 }
@@ -265,12 +260,7 @@ function InstallWordpress( StoryTeller $st ) {
     $st->usingProvisioningDefinition($def)->addParams($vmParams)->toHost($checkpoint->instanceName);
 
     // provision our VM
-//    $st->usingProvisioner('ansible')->provisionHosts($def);
     $st->usingProvisioningEngine('ansible')->provisionHosts($def);
-
-// make sure the ACL is installed and running
-//    $st->expectsHost('pickle-node')->packageIsInstalled('ms-service-picklenode');
-//    $st->expectsHost('pickle-node')->processIsRunning('pickle-node');
 }
 
 ////////////////////////////////////////
@@ -281,6 +271,26 @@ function InstallPlugin( StoryTeller $st, $relpath, $toAbspath ) {
     } else {
         // Copy plugin
         shell_exec( 'cp -a ' . dirname(__FILE__) . '/' . $relpath . ' ' . $toAbspath );
+    }
+}
+
+////////////////////////////////////////
+
+function InstallWebApp( StoryTeller $st, $slug ) {
+    if( $st->getParams()[ 'settings' ] == "ec2" ) {
+        if( $slug == "wordpress" ) {
+            InstallWordpress( $st );
+        }
+    } else {
+        // dorh
+    }
+}
+
+////////////////////////////////////////
+
+function SetupWebApp( StoryTeller $st, $slug ) {
+    if( $slug == "wordpress" ) {
+        ActionSetupWordpress( $st );
     }
 }
 
