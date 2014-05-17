@@ -24,7 +24,6 @@ $story->addTestSetup( function( StoryTeller $st ) {
         $settingsPrivate[ 'default' ],
         $settingsPrivate[ $st->getParams()[ 'settings' ] ]
     );
-//    echo "=======================" . $checkpoint->testSettings->domain;
 
     // what are we calling this host?
     $checkpoint->instanceName = 'storyplayer1';
@@ -36,9 +35,15 @@ $story->addTestSetup( function( StoryTeller $st ) {
             InstallWordpress( $st );
             break;
         case 'local':
-            InstallMyPlugin( $st );
             break;
         default:
+    }
+
+    foreach( $checkpoint->testSettings->setup as $setupItem ) {
+        $setupItem = (object) $setupItem ;
+        if( $setupItem->action == 'install' && $setupItem->type == 'wp_plugin' ) {
+            InstallPlugin( $st, $setupItem->relpath, $setupItem->to_abspath );
+        }
     }
 } );
 
@@ -63,15 +68,13 @@ $story->addAction( function( StoryTeller $st ) {
         ActionSetupWordpress( $st );
     }
     ActionLoginWordpress( $st );
-//    ActionCheckPlugins( $st );
 
-    if( $st->getParams()[ 'settings' ] == 'local' ) {
-        ActionActivatePlugin( $st, 'swifty-page-manager' );
-        ActionCheckPluginRunning( $st, 'Swifty Page Manager' );
-    }
-
-//    $st->usingBrowser()->waitForTitle( 10, "bla bla bla");
+    ActionCheckPluginRunning( $st, 'Swifty Page Manager' );
 } );
+
+////////////////////////////////////////
+// Post inspections
+////////////////////////////////////////
 
 $story->addPostTestInspection( function( StoryTeller $st ) {
 //    $checkpoint = $st->getCheckpoint();
@@ -100,10 +103,19 @@ function ActionLoginWordpress( StoryTeller $st ) {
     // get 'global' data
     $checkpoint = $st->getCheckpoint();
 
+    // Login
     $st->usingBrowser()->gotoPage( "http://" . $checkpoint->testSettings->domain . "/wp-login.php?loggedout=true" );
     $st->usingBrowser()->type( $checkpoint->testSettings->wp_user )->intoFieldWithId( "user_login" );
     $st->usingBrowser()->type( $checkpoint->testSettings->wp_pass )->intoFieldWithId( "user_pass" );
     $st->usingBrowser()->click()->fieldWithName( 'wp-submit' );
+
+    // Do setup actions that need to be done after login
+    foreach( $checkpoint->testSettings->setup as $setupItem ) {
+        $setupItem = (object) $setupItem ;
+        if( $setupItem->after_login == 'activate' && $setupItem->type == 'wp_plugin' ) {
+            ActionActivatePlugin( $st, $setupItem->slug );
+        }
+    }
 }
 
 ////////////////////////////////////////
@@ -118,11 +130,9 @@ function ActionCheckPlugins( StoryTeller $st ) {
 
 function ActionActivatePlugin( StoryTeller $st, $pluginCode ) {
     ActionWPOpenAdminSubMenu( $st, 'plugins', 'Installed Plugins' );
-    $st->fromBrowser()->getText()->fromFieldWithId( $pluginCode ); // Wait for the element to be there?
-    $elements = $st->fromBrowser()->getElementsByXpath( array( 'descendant::tr[@id = "' . $pluginCode . '"]//a[normalize-space(text()) = "Activate"]' ) );
-    foreach( $elements as $element ) {
-        $element->click();
-    }
+//    $st->fromBrowser()->getText()->fromFieldWithId( $pluginCode ); // Wait for the element to be there?
+    $st->usingTimer()->wait( 1, "Wait for Installed Plugin page." );
+    ClickElementByXpath( $st, 'descendant::tr[@id = "' . $pluginCode . '"]//a[normalize-space(text()) = "Activate"]', "graceful" );
 }
 
 ////////////////////////////////////////
@@ -265,18 +275,56 @@ function InstallWordpress( StoryTeller $st ) {
 
 ////////////////////////////////////////
 
-function InstallMyPlugin( StoryTeller $st ) {
-    shell_exec( 'cp -a ' . dirname(__FILE__) . '/../plugin /media/sf__ubuntu14/wordpress/wp-content/plugins/swifty-page-manager' );
+function InstallPlugin( StoryTeller $st, $relpath, $toAbspath ) {
+    if( $st->getParams()[ 'settings' ] == "ec2" ) {
+        // dorh
+    } else {
+        // Copy plugin
+        shell_exec( 'cp -a ' . dirname(__FILE__) . '/' . $relpath . ' ' . $toAbspath );
+    }
+}
+
+////////////////////////////////////////
+
+function FindElementsByXpath( $st, $xpath ) {
+    return $st->fromBrowser()->getElementsByXpath( array( $xpath ) );
+//    $topElement = $st->fromBrowser()->getTopElement();
+//    $elements = $topElement->getElements('xpath', $xpath);
+}
+
+////////////////////////////////////////
+
+function FindElementByXpath( $st, $xpath ) {
+    // Find an element without throwing an error is no element found.
+    $elements = $st->fromBrowser()->getElementsByXpath( array( $xpath ) );
+    if( count( $elements ) > 0 ) {
+        return $elements[ 0 ];
+    }
+    return null;
+}
+
+////////////////////////////////////////
+
+function FindElementByXpathMustExist( $st, $xpath ) {
+    // Will throw an error if the element is not found
+    return $st->getRunningDevice()->getElement( 'xpath', $xpath );
 }
 
 ////////////////////////////////////////
 
 function HoverElementByXpath( $st, $xpath ) {
-    $elements = $st->fromBrowser()->getElementsByXpath( array( $xpath ) );
-//    foreach( $elements as $element ) {
-        $st->getRunningDevice()->moveto( array( 'element' => $elements[0]->getID() ) );
-//    }
-//    $st->usingTimer()->wait( 10, "Wait for the hover to take effect (for instance a dropdown)." );
+    $element = FindElementByXpath( $st, $xpath );
+    $st->getRunningDevice()->moveto( array( 'element' => $element->getID() ) );
+    $st->usingTimer()->wait( 1, "Wait for the hover to take effect (for instance a dropdown)." );
+}
+
+////////////////////////////////////////
+
+function ClickElementByXpath( $st, $xpath, $mode ) {
+    $element = FindElementByXpath( $st, $xpath );
+    if( $element || $mode != "graceful" ) {
+        $element->click();
+    }
 }
 
 ////////////////////////////////////////
