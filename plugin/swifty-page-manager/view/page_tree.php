@@ -36,7 +36,8 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
         }
     }
 
-    $jsonData = $this->getJsonData( $this->getTree() );
+    $tree = $this->getTree();
+    $jsonData = $this->getJsonData( $tree );
 
     ?>
     <script type="text/javascript">
@@ -202,28 +203,36 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
 </span>
 
 <span class="spm-tooltip spm-title-tooltip" style="display:none;">
-The title of the page is the text that is shown in the tabs of the browser.<br>
-It is also the short text that is shown in blue in the search engines such as Google.<br>
-Therefore it is important that it contains the most important keywords of what this page is about.<br>
-Put these at the beginning of the text.<br>
-That is one of many things you can easily do to get a higher search engine ranking.<br>
-The text should ideally be no longer than 70 characters.<br><br>
-Example:<br><br>
-Swifty Page Manager - easily create a page tree in Wordpress<br>
+<?php
+_e( 'The title of the page is the text that is shown in the tabs of the browser.<br />' .
+'It is also the short text that is shown in blue in the search engines such as Google.<br />' .
+'Therefore it is important that it contains the most important keywords of what this page is about.<br />' .
+'Put these at the beginning of the text.<br />' .
+'That is one of many things you can easily do to get a higher search engine ranking.<br />' .
+'The text should ideally be no longer than 70 characters.<br /><br />' .
+'Example:<br /><br />' .
+'Swifty Page Manager - easily create a page tree in Wordpress',
+'swifty-page-manager' );
+?>
 </span>
 
 <span class="spm-tooltip spm-url-tooltip" style="display:none;">
-This is the link to your page. It is important that the name of the page is the main keyword of that page<br>
-or the name of the product or service that you offer on that page. Preferably right behind the domain name.<br><br>
-Example:<br><br>
-
-<?php echo home_url(); ?>/<b>keyword</b><br>
-<?php echo home_url(); ?>/<b>product-or-service</b><br>
+<?php
+printf( __( 'This is the link to your page. It is important that the name of the page is the main keyword of that page<br />' .
+'or the name of the product or service that you offer on that page. Preferably right behind the domain name.<br /><br />' .
+'Example:<br><br />' .
+'%s/<b>keyword</b><br />' .
+'%s/<b>product-or-service</b>',
+'swifty-page-manager' ), home_url(), home_url() );
+?>
 </span>
 
 <span class="spm-tooltip spm-status-tooltip" style="display:none;">
-Status <b>Live</b> means that everyone in the world can see that page and that it is shown in your site menu.<br>
-Status <b>Draft</b> means that only you can see that page when you are logged in and it is not shown in the site menu.<br>
+<?php
+_e( 'Status <b>Live</b> means that everyone in the world can see that page and that it is shown in your site menu.<br />' .
+'Status <b>Draft</b> means that only you can see that page when you are logged in and it is not shown in the site menu.',
+'swifty-page-manager' );
+?>
 </span>
 
 <!-- SwiftySite template Add/Edit -->
