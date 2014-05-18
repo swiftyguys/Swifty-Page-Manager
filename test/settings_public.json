@@ -5,9 +5,11 @@
         "wp_pass": "",
         "setup": {
             "wordpress": {
+                "slug": "wordpress",
                 "type": "webapp",
                 "action": "",
-                "after_install": ""
+                "after_install": "",
+                "order": 1
             }
         }
     },

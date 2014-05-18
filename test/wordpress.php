@@ -80,7 +80,6 @@ function PrepareForTest( $st ) {
     // get 'global' data
     $checkpoint = $st->getCheckpoint();
 
-
     // Do after install
     foreach( $checkpoint->do_phase_after_install as $setupItem ) {
         if( $setupItem->type == 'webapp' ) {
@@ -118,6 +117,8 @@ function ActionSetupWordpress( StoryTeller $st ) {
     // get 'global' data
     $checkpoint = $st->getCheckpoint();
 
+    EchoMsg( "Setup Wordpress" );
+
     $st->usingBrowser()->gotoPage( "http://" . $checkpoint->testSettings->domain );
     $st->usingBrowser()->type( "storyplayer_test" )->intoFieldWithId( "weblog_title" );
     $st->usingBrowser()->type( $checkpoint->testSettings->wp_user )->intoFieldWithId( "user_login" );
@@ -133,6 +134,8 @@ function ActionSetupWordpress( StoryTeller $st ) {
 function ActionLoginWordpress( StoryTeller $st ) {
     // get 'global' data
     $checkpoint = $st->getCheckpoint();
+
+    EchoMsg( "Login Wordpress" );
 
     // Login
     $st->usingBrowser()->gotoPage( "http://" . $checkpoint->testSettings->domain . "/wp-login.php?loggedout=true" );
@@ -152,6 +155,8 @@ function ActionLoginWordpress( StoryTeller $st ) {
 ////////////////////////////////////////
 
 function ActionCheckPlugins( StoryTeller $st ) {
+    EchoMsg( "Check plugins" );
+
     ActionWPOpenAdminSubMenu( $st, 'plugins', 'Installed Plugins' );
     $st->usingTimer()->wait( 1, "Wait for Installed Plugin page." );
     $txt = $st->fromBrowser()->getText()->fromFieldWithText( 'Akismet' );
@@ -161,6 +166,8 @@ function ActionCheckPlugins( StoryTeller $st ) {
 ////////////////////////////////////////
 
 function ActionActivatePlugin( StoryTeller $st, $pluginCode ) {
+    EchoMsg( "Activate plugin: " . $pluginCode );
+
     ActionWPOpenAdminSubMenu( $st, 'plugins', 'Installed Plugins' );
     $st->usingTimer()->wait( 1, "Wait for Installed Plugin page." );
     ClickElementByXpath( $st, 'descendant::tr[@id = "' . $pluginCode . '"]//a[normalize-space(text()) = "Activate"]', "graceful" );
@@ -169,6 +176,8 @@ function ActionActivatePlugin( StoryTeller $st, $pluginCode ) {
 ////////////////////////////////////////
 
 function ActionCheckPluginRunning( StoryTeller $st, $pluginName ) {
+    EchoMsg( "Check plugin running: " . $pluginName );
+
     ActionWPOpenAdminSubMenu( $st, 'pages', $pluginName );
     $txt = $st->fromBrowser()->getText()->fromHeadingWithText( $pluginName );
     $st->assertsString( $txt )->equals( $pluginName );
@@ -179,6 +188,8 @@ function ActionCheckPluginRunning( StoryTeller $st, $pluginName ) {
 function ActionWPOpenAdminSubMenu( StoryTeller $st, $pluginCode, $submenuText ) {
     // get 'global' data
     $checkpoint = $st->getCheckpoint();
+
+    EchoMsg( "Open admin sub-menu: " . $pluginCode . " -> " . $submenuText );
 
     // Xpath for main menu button
     $xpathMainmenuItem = 'descendant::li[@id = "menu-' . $pluginCode . '"]';
@@ -210,6 +221,8 @@ function CreateEc2( StoryTeller $st ) {
     // get the checkpoint
     $checkpoint = $st->getCheckpoint();
 
+    EchoMsg( "Create Amazon AWS EC2 server" );
+
     // create the VM, based on an AMI
     $st->usingEc2()->createVm( $checkpoint->instanceName, "centos6", "ami-1f23522f", 't1.micro', "default" );
 
@@ -232,6 +245,8 @@ function CreateEc2( StoryTeller $st ) {
 function DestroyEc2( StoryTeller $st ) {
     // get the checkpoint
     $checkpoint = $st->getCheckpoint();
+
+    EchoMsg( "Destroy Amazon AWS EC2 server" );
 
     // destroy the instance we created
     if (isset($checkpoint->instanceName)) {
@@ -259,6 +274,8 @@ function DestroyEc2( StoryTeller $st ) {
 function InstallWordpress( StoryTeller $st ) {
     // we're going to store some information in here
     $checkpoint = $st->getCheckpoint();
+
+    EchoMsg( "Install Wordpress" );
 
     // create the parameters to inject into the test box
     $vmParams = array (
@@ -299,6 +316,8 @@ function InstallWordpress( StoryTeller $st ) {
 function InstallPlugin( StoryTeller $st, $relpath, $toAbspath ) {
     // get 'global' data
     $checkpoint = $st->getCheckpoint();
+
+    EchoMsg( "Install plugin: " . $relpath );
 
     if( $st->getParams()[ 'settings' ] == "ec2" ) {
         // Copy plugin to remote server via Ansible
@@ -395,6 +414,12 @@ function ClickElementByXpath( $st, $xpath, $mode ) {
     if( $element || $mode != "graceful" ) {
         $element->click();
     }
+}
+
+////////////////////////////////////////
+
+function EchoMsg( $s ) {
+    echo "\n######################################################################\n" . $s . "\n######################################################################\n\n";
 }
 
 ////////////////////////////////////////
