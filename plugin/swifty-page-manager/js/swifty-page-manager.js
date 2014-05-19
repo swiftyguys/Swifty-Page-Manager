@@ -114,21 +114,21 @@ var SPM = (function( $, document ) {
             return false;
         });
 
-        $( document ).on( 'click', '.spm-page-button', function( /*ev*/ ) {
+        $( document ).on( 'click', '.spm-page-button:not(.button-primary-disabled)', function( /*ev*/ ) {
             var $button = $( this );
             var $li = $button.closest( 'li' );
             var action = $button.data( 'spm-action' );
 
-            spm.$tooltips.tooltip( 'close' );
+            $SPMTips.tooltip( 'close' );
 
             switch ( action ) {
                 case 'add':
                 case 'settings':
                 case 'delete':
                 case 'publish':
-                    if ( $li.data( 'cur-action' ) && $li.data( 'cur-action' ) === action ) {
-                        spm.resetPageTree();
-                    } else {
+                    spm.resetPageTree();
+
+                    if ( ! $li.data( 'cur-action' ) || $li.data( 'cur-action' ) !== action ) {
                         spm.resetPageTree();
                         spm.preparePageActions( $li, action );
                         $li.data( 'cur-action', action );
@@ -376,8 +376,24 @@ var SPM = (function( $, document ) {
 
         $tree.find( '.spm-page-actions-tmpl' ).remove();
 
-        if ( ! isDraft ) {
-            $tmpl.find( '[data-spm-action=publish]' ).hide();
+        $tmpl.find( 'span[data-spm-action=add]' )
+            .toggleClass( 'button-primary-disabled',
+                          !$li.hasClass('spm_can_add_inside') && !$li.hasClass('spm_can_add_after') );
+
+        $tmpl.find( 'span[data-spm-action=settings]' )
+            .toggleClass( 'button-primary-disabled', !$li.hasClass('spm_can_edit') );
+
+        $tmpl.find( 'span[data-spm-action=delete]' )
+            .toggleClass( 'button-primary-disabled', !$li.hasClass('spm_can_delete') );
+
+        $tmpl.find( 'span[data-spm-action=edit]' )
+            .toggleClass( 'button-primary-disabled', !$li.hasClass('spm_can_edit') );
+
+        $tmpl.find( 'span[data-spm-action=publish]' )
+            .toggleClass( 'button-primary-disabled', !$li.hasClass('spm_can_publish') );
+
+        if ( !isDraft ) {
+            $tmpl.find( 'span[data-spm-action=publish]' ).hide();
         }
 
         $a.addClass( 'jstree-clicked' ).append( $tmpl.removeAttr( 'style' ) );
@@ -531,8 +547,8 @@ var SPM = (function( $, document ) {
         aFirst.find( 'ins' ).first().after( label );
     };
 
-    spm.bindCleanNodes = function() {
-        $SPMTree.bind( 'move_node.jstree', function( ev, data ) {
+    spm.bindCleanNodes = function () {
+        $SPMTree.bind( 'move_node.jstree', function ( ev, data ) {
             var $nodeBeingMoved = $( data.rslt.o );
             var $nodeR = $( data.rslt.r );
             var $nodeRef = $( data.rslt.or );
@@ -552,24 +568,21 @@ var SPM = (function( $, document ) {
             }
 
             // Update parent or menu order
-            $.post(
-                ajaxurl,
-                {
-                    action: 'spm_move_page',
-                    node_id: nodeId,
-                    ref_node_id: refNodeId,
-                    type: nodePosition
-                }
-            ).done(function() {
-                $SPMTree.jstree( 'refresh' );
-            });
-        });
+            $.post( ajaxurl, {
+                'action': 'spm_move_page',
+                'node_id': nodeId,
+                'ref_node_id': refNodeId,
+                'type': nodePosition
+            }, function ( /*data, textStatus*/ ) {
+                window.location.reload();
+            } );
+        } );
 
-        $SPMTree.bind( 'clean_node.jstree', function( ev, data ) {
+        $SPMTree.bind( 'clean_node.jstree', function ( ev, data ) {
             var obj = ( data.rslt.obj );
 
             if ( obj && obj !== -1 ) {
-                obj.each(function( i, el ) {
+                obj.each( function ( i, el ) {
                     var $li = $( el );
                     var rel = $li.data( 'rel' );
                     var postStatus = $li.data( 'post_status' );

@@ -43,8 +43,7 @@ class SwiftyPageManager
             add_filter( 'wp_title',      array( $this, 'seo_wp_title' ), 10, 2 );
         }
 
-        // Actions for admins
-
+        // Actions for admins, warning: is_admin is not a security check
         if ( is_admin() ) {
             add_action( 'init',       array( $this, 'admin_init' ) );
         }
@@ -58,31 +57,37 @@ class SwiftyPageManager
      */
     function admin_init()
     {
-        if ( !empty( $_GET[ "status" ] ) ) {
-            $this->_post_status = $_GET[ "status" ];
-        }
-        if ( !empty( $_GET[ "post_type" ] ) ) {
-            $this->_post_type = $_GET[ "post_type" ];
-        }
-        load_plugin_textdomain( 'swifty-page-manager', false, '/swifty-page-manager/languages' );
+        if ( current_user_can( 'edit_pages' ) ) {
+            if ( !empty( $_GET[ "status" ] ) ) {
+                $this->_post_status = $_GET[ "status" ];
+            }
+            if ( !empty( $_GET[ "post_type" ] ) ) {
+                $this->_post_type = $_GET[ "post_type" ];
+            }
+            load_plugin_textdomain( 'swifty-page-manager', false, '/swifty-page-manager/languages' );
 
-        add_action( 'init',       array( $this, 'spm_load_textdomain' ) );
-        add_action( 'admin_head', array( $this, 'admin_head' ) );
-        add_action( 'admin_menu', array( $this, 'admin_menu') );
-        add_action( 'wp_ajax_spm_get_childs',    array( $this, 'ajax_get_childs' ) );
-        add_action( 'wp_ajax_spm_move_page',     array( $this, 'ajax_move_page' ) );
-        add_action( 'wp_ajax_spm_save_page',     array( $this, 'ajax_save_page' ) );
-        add_action( 'wp_ajax_spm_delete_page',   array( $this, 'ajax_delete_page' ) );
-        add_action( 'wp_ajax_spm_publish_page',  array( $this, 'ajax_publish_page' ) );
-        add_action( 'wp_ajax_spm_post_settings', array( $this, 'ajax_post_settings' ) );
-        add_action( 'admin_enqueue_scripts',     array( $this, 'add_plugin_css' ) );
+            add_action( 'admin_head', array( $this, 'admin_head' ) );
+            add_action( 'admin_menu', array( $this, 'admin_menu') );
+            add_action( 'wp_ajax_spm_get_childs',    array( $this, 'ajax_get_childs' ) );
+            add_action( 'wp_ajax_spm_save_page',     array( $this, 'ajax_save_page' ) );
+            add_action( 'wp_ajax_spm_post_settings', array( $this, 'ajax_post_settings' ) );
+            add_action( 'wp_ajax_spm_move_page',     array( $this, 'ajax_move_page' ) );
 
-        if ( $this->is_swifty ) {
-            add_action( 'wp_ajax_spm_sanitize_url', array( $this, 'ajax_sanitize_url' ) );
-            add_action( 'save_post',           array( $this, 'restore_page_status' ), 10, 2 );
-            add_filter( 'wp_insert_post_data', array( $this, 'set_tmp_page_status' ), 10, 2 );
-            add_filter( 'wp_list_pages',       array( $this, 'wp_list_pages' ) );
-            add_filter( 'status_header',       array( $this, 'status_header' ) );
+            if ( current_user_can( 'delete_pages' ) ) {
+                add_action( 'wp_ajax_spm_delete_page',   array( $this, 'ajax_delete_page' ) );
+            }
+            if ( current_user_can( 'publish_pages' ) ) {
+                add_action( 'wp_ajax_spm_publish_page',  array( $this, 'ajax_publish_page' ) );
+            }
+            add_action( 'admin_enqueue_scripts',     array( $this, 'add_plugin_css' ) );
+
+            if ( $this->is_swifty ) {
+                add_action( 'wp_ajax_spm_sanitize_url', array( $this, 'ajax_sanitize_url' ) );
+                add_action( 'save_post',           array( $this, 'restore_page_status' ), 10, 2 );
+                add_filter( 'wp_insert_post_data', array( $this, 'set_tmp_page_status' ), 10, 2 );
+                add_filter( 'wp_list_pages',       array( $this, 'wp_list_pages' ) );
+                add_filter( 'status_header',       array( $this, 'status_header' ) );
+            }
         }
     }
 
@@ -107,7 +112,7 @@ class SwiftyPageManager
     }
 
     /**
-     * Called via WP Filter 'wp_insert_post_data', if is_admin && is_swifty
+     * Called via WP Filter 'wp_insert_post_data', if can_edit_pages && is_swifty
      *
      * @param array $data
      * @param array $postarr
@@ -127,12 +132,16 @@ class SwiftyPageManager
     }
 
     /**
-     * Called via WP Action 'save_post', if is_admin && is_swifty
+     * Called via WP Action 'save_post', if can_edit_pages && is_swifty
      *
      * @param integer $post_id
      * @param WP_Post $post
      */
     public function restore_page_status( $post_id, $post ) {
+        if ( !current_user_can( 'edit_pages' ) ) {
+            wp_die( __( 'You do not have sufficient permissions to access this page. #314' ) );
+        }
+
         /** @var wpdb $wpdb - Wordpress Database */
         global $wpdb;
 
@@ -211,7 +220,7 @@ class SwiftyPageManager
     }
 
     /**
-     * Called via WP Filter 'wp_list_pages', if is_admin && is_swifty
+     * Called via WP Filter 'wp_list_pages', if can_edit_pages && is_swifty
      *
      * Filter function to add "spm_hidden" class to hidden menu items in <li> tree.
      *
@@ -230,7 +239,7 @@ class SwiftyPageManager
     }
 
     /**
-     * Called via WP Filter 'status_header', if is_admin && is_swifty
+     * Called via WP Filter 'status_header', if can_edit_pages && is_swifty
      *
      * Status header filter function.
      * When a 404 error occurs check if we can find the URL in a post's spm_old_url_XXX field.
@@ -268,12 +277,16 @@ class SwiftyPageManager
     }
 
     /**
-     * Called via WP Action 'admin_head' if is_admin
+     * Called via WP Action 'admin_head' if can_edit_pages
      *
      * Output header for admin page
      */
     public function admin_head()
     {
+        if ( !current_user_can( 'edit_pages' ) ) {
+            wp_die( __( 'You do not have sufficient permissions to access this page. #314' ) );
+        }
+
         $currentScreen = get_current_screen();
 
         if ( 'pages_page_page-tree' === $currentScreen->base ) {
@@ -284,7 +297,7 @@ class SwiftyPageManager
     }
 
     /**
-     * Called via WP Action 'admin_menu' if is_admin
+     * Called via WP Action 'admin_menu' if can_edit_pages
      *
      * Add submenu to admin left menu
      */
@@ -293,20 +306,20 @@ class SwiftyPageManager
         add_submenu_page( 'edit.php?post_type='.$this->_post_type,
                           __( 'Swifty Page Manager', 'swifty-page-manager' ),
                           __( 'Swifty Page Manager', 'swifty-page-manager' ),
-                          'manage_options',
+                          'edit_pages',
                           'page-tree',
                           array( $this, 'view_page_tree' ) );
     }
 
     /**
-     * Called via WP do_action if is_admin
+     * Called via WP do_action if can_edit_pages
      *
      * Show page tree
      */
     public function view_page_tree()
     {
         if ( !current_user_can( 'edit_pages' ) ) {
-            wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+            wp_die( __( 'You do not have sufficient permissions to access this page. #314' ) );
         }
 
         // renamed from cookie to fix problems with mod_security
@@ -344,14 +357,14 @@ class SwiftyPageManager
     }
 
     /**
-     * Called via WP Ajax Action 'wp_ajax_spm_get_childs' if is_admin
+     * Called via WP Ajax Action 'wp_ajax_spm_get_childs' if can_edit_pages
      *
      * Return JSON with tree children, called from Ajax
      */
     public function ajax_get_childs()
     {
         if ( !current_user_can( 'edit_pages' ) ) {
-            wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+            wp_die( __( 'You do not have sufficient permissions to access this page. #359' ) );
         }
 
         header( "Content-type: application/json" );
@@ -363,7 +376,7 @@ class SwiftyPageManager
         $post_type_object = get_post_type_object( $this->_post_type );
 
         if ( !current_user_can( $post_type_object->cap->edit_posts ) ) {
-            die( __( 'Cheatin&#8217; uh?' ) );
+            wp_die( __( 'You do not have sufficient permissions to access this page. #371' ) );
         }
 
         if ( $action ) {   // regular get
@@ -391,7 +404,7 @@ class SwiftyPageManager
     }
 
     /**
-     * Called via WP Filter 'filter_views_edit_postsoverview' if is_admin
+     * Called via WP Filter 'filter_views_edit_postsoverview' if can_edit_pages
      *                                                           && 'pages_page_page-tree' == $currentScreen->base
      *
      * Output tree and html code for post overview page
@@ -450,14 +463,14 @@ class SwiftyPageManager
     }
 
     /**
-     * Called via WP Ajax Action 'wp_ajax_spm_move_page' if is_admin
+     * Called via WP Ajax Action 'wp_ajax_spm_move_page' if can_edit_pages
      *
      * Ajax function to move a page
      */
     public function ajax_move_page()
     {
         if ( !current_user_can( 'edit_pages' ) ) {
-            wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+            wp_die( __( 'You do not have sufficient permissions to access this page. #465' ) );
         }
 
         /*
@@ -573,14 +586,14 @@ class SwiftyPageManager
     }
 
     /**
-     * Called via WP Ajax Action 'ajax_save_page' if is_admin
+     * Called via WP Ajax Action 'ajax_save_page' if can_edit_pages
      *
      * Ajax funtion to save a page
      */
     public function ajax_save_page()
     {
         if ( !current_user_can( 'edit_pages' ) ) {
-            wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+            wp_die( __( 'You do not have sufficient permissions to access this page. #588' ) );
         }
 
         /** @var wpdb $wpdb - Wordpress Database */
@@ -693,14 +706,14 @@ class SwiftyPageManager
     }
 
     /**
-     * Called via WP Ajax action 'wp_ajax_spm_delete_page' if is_admin
+     * Called via WP Ajax action 'wp_ajax_spm_delete_page' if can_edit_pages
      *
      * Ajax function to delete a page
      */
     public function ajax_delete_page()
     {
         if ( !current_user_can( 'delete_pages' ) ) {
-            wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+            wp_die( __( 'You do not have sufficient permissions to access this page. #708' ) );
         }
 
         $post_id = intval( $_POST[ "post_ID" ] );
@@ -715,11 +728,6 @@ class SwiftyPageManager
             $post_data = wp_delete_post( $post_id, false );
 
             if ( is_object( $post_data ) ) {
-//                delete_post_meta( $post_id, 'spm_url' );
-//                delete_post_meta( $post_id, 'spm_show_in_menu' );
-//                delete_post_meta( $post_id, 'spm_page_title_seo' );
-//                delete_post_meta( $post_id, 'spm_header_visibility' );
-//                delete_post_meta( $post_id, 'spm_sidebar_visibility' );
                 echo "1";
             } else {
                 echo "0";   // fail, tell js
@@ -732,14 +740,14 @@ class SwiftyPageManager
     }
 
     /**
-     * Called via WP Ajax action 'wp_ajax_spm_publish_page' if is_admin
+     * Called via WP Ajax action 'wp_ajax_spm_publish_page' if can_edit_pages
      *
      * Ajax function to publish a page
      */
     public function ajax_publish_page()
     {
         if ( !current_user_can( 'publish_pages' ) ) {
-            wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+            wp_die( __( 'You do not have sufficient permissions to access this page. #747' ) );
         }
 
         $post_id = intval( $_POST[ "post_ID" ] );
@@ -756,14 +764,14 @@ class SwiftyPageManager
     }
 
     /**
-     * Called via WP Ajax 'wp_ajax_spm_post_settings' if is_admin
+     * Called via WP Ajax 'wp_ajax_spm_post_settings' if can_edit_pages
      *
      * Ajax function to set the settings of a post
      */
     public function ajax_post_settings()
     {
         if ( !current_user_can( 'edit_pages' ) ) {
-            wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+            wp_die( __( 'You do not have sufficient permissions to access this page. #771' ) );
         }
 
         header( 'Content-Type: text/javascript' );
@@ -827,7 +835,7 @@ class SwiftyPageManager
     }
 
     /**
-     * Called via WP Admin Ajax 'wp_ajax_spm_sanitize_url' if is_admin && is_swifty
+     * Called via WP Admin Ajax 'wp_ajax_spm_sanitize_url' if can_edit_pages && is_swifty
      *
      * Ajax function to use Wordpress' sanitize_title_with_dashes function to prepare an URL string
      */
@@ -1083,14 +1091,22 @@ class SwiftyPageManager
             $title = __( "<Untitled page>", 'swifty-page-manager' );
         }
 
-        $user_can_edit_page  = current_user_can( $post_type_object->cap->edit_post, $page_id );
-        $user_can_add_inside = current_user_can( $post_type_object->cap->create_posts, $page_id );
-        $user_can_add_after  = current_user_can( $post_type_object->cap->create_posts, $page_id );
-
         $arr_page_css_styles   = array();
-        $arr_page_css_styles[] = "spm_user_can_edit_page_" . ( $user_can_edit_page ? 'yes' : 'no' );
-        $arr_page_css_styles[] = "spm_user_can_add_page_inside_" . ( $user_can_add_inside ? 'yes' : 'no' );
-        $arr_page_css_styles[] = "spm_user_can_add_page_after_" . ( $user_can_add_after ? 'yes' : 'no' );
+        if ( current_user_can( $post_type_object->cap->edit_post, $page_id ) ) {
+            $arr_page_css_styles[] = "spm_can_edit";
+        }
+        if ( current_user_can( $post_type_object->cap->create_posts, $page_id ) ) {
+            $arr_page_css_styles[] = "spm_can_add_inside";
+        }
+        if ( current_user_can( $post_type_object->cap->create_posts, $onePage->post_parent ) ) {
+            $arr_page_css_styles[] = "spm_can_add_after";
+        }
+        if ( current_user_can( $post_type_object->cap->publish_posts, $page_id ) ) {
+            $arr_page_css_styles[] = "spm_can_publish";
+        }
+        if ( current_user_can( $post_type_object->cap->delete_post, $page_id ) ) {
+            $arr_page_css_styles[] = "spm_can_delete";
+        }
 
         if ( $this->is_swifty ) {
             $show_page_in_menu = get_post_meta( $page_id, 'spm_show_in_menu', true );
