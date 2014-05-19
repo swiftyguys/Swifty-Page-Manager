@@ -365,7 +365,7 @@ var SPM = (function( $, document ) {
     };
 
     spm.getWrapper = function( el ) {
-        return $( el ).closest( '.spm_wrapper' );
+        return $( el ).closest( '.spm-wrapper' );
     };
 
     spm.preparePageActionButtons = function( $li ) {
@@ -488,13 +488,13 @@ var SPM = (function( $, document ) {
             cache: false,
             dataType: 'html',
             dataFilter: function ( resp ) {
-                return $( '.spm-subsubsub', resp ).get( 0 );
+                return $( '.spm-status-links', resp ).get( 0 );
             }
         }).done(function( html ) {
             spm.getStatusCounts( html );
 
             $.each( spm.statusCounts, function( statusName, statusCount ) {
-                var $statusLink = $( '.cms_spm_status_' + statusName );
+                var $statusLink = $( '.spm-status-' + statusName );
                 var $li = $statusLink.closest( 'li' );
 
                 if ( !$li.hasClass( 'spm-hidden' ) && statusCount === '0' && statusName !== 'any' ) {
@@ -511,10 +511,10 @@ var SPM = (function( $, document ) {
     };
 
     spm.getStatusCounts = function( html ) {
-        var $statusLink = $( '[class^="cms_spm_status_"]' );
+        var $statusLink = $( '[class^="spm-status-"]' );
 
         if ( html ) {
-            $statusLink = $( html ).find( '[class^="cms_spm_status_"]' );
+            $statusLink = $( html ).find( '[class^="spm-status-"]' );
         }
 
         $statusLink.each(function() {

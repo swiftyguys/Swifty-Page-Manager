@@ -48,12 +48,12 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
 
     ?>
 
-    <div class="spm_wrapper">
+    <div class="spm-wrapper">
         <input type="hidden" name="spm_meta_post_type" value="<?php echo esc_attr( $this->_post_type ); ?>" />
 
-        <ul class="spm-subsubsub spm-subsubsub-select-view">
+        <ul class="spm-status-links spm-status-links-select-view">
             <li>
-                <a class="cms_spm_status_any
+                <a class="spm-status-any
                           <?php echo esc_attr( ('any' === $this->getPostStatus()) ? 'current' : '' ); ?>"
                    href="<?php echo esc_attr( add_query_arg( 'status', 'any', $this->getPluginUrl() ) ); ?>"
                     data-spm-status="any">
@@ -63,7 +63,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
             </li>
 
             <li class="<?php echo ( !$post_count_publish ) ? 'spm-hidden' : '' ?>">
-                <a class="cms_spm_status_publish
+                <a class="spm-status-publish
                           <?php echo esc_attr( ('publish' === $this->getPostStatus()) ? 'current' : '' ); ?>"
                    href="<?php echo esc_attr( add_query_arg( 'status', 'publish', $this->getPluginUrl() ) ); ?>"
                     data-spm-status="publish">
@@ -73,7 +73,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
             </li>
 
             <li class="<?php echo ( !$post_count_draft ) ? 'spm-hidden' : '' ?>">
-                <a class="cms_spm_status_draft
+                <a class="spm-status-draft
                           <?php echo esc_attr( ( 'draft' === $this->getPostStatus()) ? 'current' : '' ); ?>"
                    href="<?php echo esc_attr( add_query_arg( 'status', 'draft', $this->getPluginUrl() ) ); ?>"
                     data-spm-status="draft">
@@ -83,7 +83,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
             </li>
 
             <li class="<?php echo ( !$post_count_pending ) ? 'spm-hidden' : '' ?>">
-                <a class="cms_spm_status_pending
+                <a class="spm-status-pending
                           <?php echo esc_attr( ('pending' === $this->getPostStatus()) ? 'current' : '' ); ?>"
                    href="<?php echo esc_attr( add_query_arg( 'status', 'pending', $this->getPluginUrl() ) ); ?>"
                     data-spm-status="pending">
@@ -93,7 +93,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
             </li>
 
             <li class="<?php echo ( !$post_count_private ) ? 'spm-hidden' : '' ?>">
-                <a class="cms_spm_status_private
+                <a class="spm-status-private
                           <?php echo esc_attr( ('private' === $this->getPostStatus()) ? 'current' : '' ); ?>"
                    href="<?php echo esc_attr( add_query_arg( 'status', 'private', $this->getPluginUrl() ) ); ?>"
                     data-spm-status="private">
@@ -103,7 +103,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
             </li>
 
             <li class="<?php echo ( !$post_count_trash ) ? 'spm-hidden' : '' ?>">
-                <a class="cms_spm_status_trash"
+                <a class="spm-status-trash"
                    href="<?php esc_attr_e( admin_url() . 'edit.php?post_status=trash&post_type=page' ); ?>"
                    data-spm-status="trash">
                     <?php _e('Trash', 'swifty-page-manager') ?>
@@ -116,7 +116,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
 
         </ul>
 
-        <div class="spm_working">
+        <div class="spm-working">
             <?php _e( 'Loading...', 'swifty-page-manager' ); ?>
         </div>
 

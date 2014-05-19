@@ -425,9 +425,9 @@ class SwiftyPageManager
         if ( is_post_type_hierarchical( $this->_post_type ) ) {
             $mode      = "list";
             if ( isset( $_GET[ "mode" ] ) && $_GET[ "mode" ] != $mode  ) {
-                $class = " class='spm_add_list_view' ";
+                $class = " class='spm-add-list-view' ";
             } else {
-                $class = " class='spm_add_list_view current' ";
+                $class = " class='spm-add-list-view current' ";
             }
             $title     = __( "List View" ); /* translation not missing - exists in wp */
             $wp_list_a = "<a href='" . esc_url( add_query_arg( 'mode', $mode, $this->getPluginUrl() ) ) .

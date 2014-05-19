@@ -1,91 +1,51 @@
-/*
-#spm-dashboard-widget {
-	z-index: 10;
-}
-*/
-
-/*
-Don't use this anymore since it's against the repository guidelines
-@import url("htt ps://secure.wordpress.com/i/noticons/noticons.css");
-*/
-
-.spm_wrapper {
+.spm-wrapper {
     z-index: 10;
-    /*margin-right: 250px;*/
 }
 
-.postbox .spm_wrapper {
+.postbox .spm-wrapper {
     width: auto;
 }
 
 .spm-tree-container {
-    /* clear: both; */
     overflow: visible;
     margin-top: 1.5em;
     font-size: 13px;
 }
 
-#wpbody-content .spm-tree-container {
-    /*margin-right: 250px;*/
-}
-
-#dashboard-widgets-wrap .spm-tree-container {
-    margin-right: 0;
-}
-
-.pages-page-spm-pages-page .updated {
-    clear: both;
-}
-
-.spm-subsubsub {
+.spm-status-links {
     margin-top: 8px;
     color: #666;
     margin-bottom: 0;
 }
 
-.spm-switch-langs + .spm-subsubsub {
+.spm-switch-langs + .spm-status-links {
     margin-top: 0;
 }
 
-.spm-subsubsub li {
+.spm-status-links li {
     display: inline-block;
     /*margin-left: 2px;*/
 }
 
-.spm-subsubsub li:first-child {
+.spm-status-links li:first-child {
     margin-left: 0;
     margin-right: 1px;
 }
 
-.spm-subsubsub li a {
+.spm-status-links li a {
     text-decoration: none;
     line-height: 2;
     padding: .2em;
 }
 
-.spm-subsubsub li a.current {
+.spm-status-links li a.current {
     font-weight: bold;
     color: black;
 }
 
-.spm-subsubsub li a .count {
+.spm-status-links li a .count {
     font-weight: normal;
     color: #999;
-}
-
-.pages_page_spm-pages-page .spm-subsubsub li {
-    zoom: 1; /* weird ie-problems otherwise, like li-items that disappear on search. */
-}
-
-.spm_search_no_hits {
-    clear: both;
-}
-
-.spm-search {
-    background-color: #ffefba;
-    font-weight: bold;
-    font-family: "Lucida Grande", Verdana, Arial, "Bitstream Vera Sans", sans-serif;
-    font-size: 12px;
 }
 
 .jstree a ins {
@@ -97,14 +57,6 @@ Don't use this anymore since it's against the repository guidelines
     margin-top: 4px !important;
     margin-bottom: 4px !important;
     cursor: pointer;
-}
-
-.tree-default span.child_count {
-    background-color: transparent;
-    color: #999;
-    border: none;
-    font-size: .9em;
-    margin-left: .5em;
 }
 
 .tree-default span.post_protected {
@@ -132,7 +84,6 @@ Don't use this anymore since it's against the repository guidelines
 }
 
 .tree-default span.post_type_draft {
-
 }
 
 .tree-default span.post_type_password,
@@ -152,70 +103,10 @@ Don't use this anymore since it's against the repository guidelines
     opacity: .9;
 }
 
-.spm-search-form {
-    display: inline;
-    position: relative;
-    margin-left: 1em;
-    white-space: nowrap;
-}
-
-#spm-dashboard-widget .spm-search-form {
-    display: block;
-    margin-left: 0;
-    margin-top: .5em;
-}
-
-#spm-dashboard-widget .spm-subsubsub {
-    margin-top: -6px;
-    position: relative;
-    right: auto;
-    left: auto;
-    top: auto;
-    bottom: auto;
-}
-
-.cms_tree_view_search {
-    width: 130px;
-    height: 21px;
-    line-height: 20px;
-}
-
-.cms_tree_view_search_form_working,
-.cms_tree_view_search_form_no_hits {
-    position: absolute;
-    left: .5em;
-    top: 2em;
-    display: none;
-}
-
-.cms_tree_view_search_form_no_hits {
-    font-weight: bold;
-}
-
-.spm_working {
+.spm-working {
     position: absolute;
     line-height: 1;
     display: none;
-}
-
-.spm-search-form-reset {
-    display: none;
-    position: absolute;
-    top: 2px;
-    left: 112px;
-    width: 16px;
-    height: 16px;
-    padding: 0 !important;
-    background: transparent url(images/ui-icons_cccccc_256x240.png) no-repeat -32px -194px;
-    text-indent: -9999px;
-}
-
-#spm-dashboard-widget .spm-search-form-reset {
-    top: 8px;
-}
-
-.spm-search-form-reset:hover {
-    background: transparent url(images/ui-icons_222222_256x240.png) no-repeat -32px -194px;
 }
 
 .spm-page-actions {
@@ -264,27 +155,15 @@ Don't use this anymore since it's against the repository guidelines
 }
 
 .spm-page-actions.spm-page-actions-visible {
-    /*display: block;*/
     visibility: visible;
     opacity: 1;
 }
 
-/*
-div.spm-tree-container.has-visible-actions li {
-	opacity: .5
-}
-
-div.spm-tree-container.has-visible-actions li.has-visible-actions {
-	opacity: 1;
-}
-*/
 li.has-visible-actions > a:first-of-type {
-    /*font-weight: bold;*/
     background-color: #d8f5fa;
 }
 
 .jstree a > ins {
-
 }
 
 .spm-page-actions p {
@@ -292,12 +171,7 @@ li.has-visible-actions > a:first-of-type {
     line-height: 1.2;
 }
 
-p.spm_action_add_and_edit_page,
-p.spm_action_edit_and_view {
-    margin-top: 0em;
-}
-
-.spm_wrapper .spm-page-actions a {
+.spm-wrapper .spm-page-actions a {
     background: transparent;
     text-decoration: underline;
     color: #21759B;
@@ -306,32 +180,9 @@ p.spm_action_edit_and_view {
     margin-right: .2em;
 }
 
-.spm_wrapper .spm-page-actions .spm_action_edit_and_view a {
-    border-right: 1px solid #aaa;
-}
-
-.spm_wrapper .spm-page-actions .spm_action_edit_and_view a:not(.hidden):last-of-type {
-    border-right: none;
-}
-
-.spm_wrapper .spm-page-actions a:hover {
+.spm-wrapper .spm-page-actions a:hover {
     color: #d54e21;
     background-color: transparent;
-}
-
-/* applied to all (aka "first") */
-.spm_wrapper .spm-page-actions .spm_action_add_and_edit_page a:not(.hidden) {
-    /*background: red;*/
-    padding: 0;
-    margin: 0;
-}
-
-/* tricky way to get non first not hidden */
-.spm_wrapper .spm-page-actions .spm_action_add_and_edit_page a:not(.hidden) ~ a:not(.hidden) {
-    /*background: yellow;*/
-    border-left: 1px solid #aaa;
-    padding-left: .5em;
-    margin-left: .2em;
 }
 
 .spm-page-actions ul {
@@ -345,10 +196,6 @@ p.spm_action_edit_and_view {
     margin: 0;
     background: none;
     display: inline;
-}
-
-.spm_action_add_page {
-    display: block;
 }
 
 .spm-page-actions dl {
@@ -423,18 +270,13 @@ for posts overview enabled mode
     background-position: -20px 0;
 }
 
-.spm_add_list_view {
+.spm-add-list-view {
     display: none;
 }
 
 .view-switch #view-switch-tree,
-.view-switch .spm_add_list_view {
+.view-switch .spm-add-list-view {
     display: inline;
-}
-
-/* options screen */
-.spm_options_form {
-    float: left;
 }
 
 .spm-container {
@@ -622,6 +464,6 @@ li.spm-show-page-in-menu-no > a.spm-page-tree-element > ins {
     color: #777;
 }
 
-.spm-subsubsub li.spm-hidden {
+.spm-status-links li.spm-hidden {
     display: none;
 }
