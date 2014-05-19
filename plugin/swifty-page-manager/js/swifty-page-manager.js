@@ -119,7 +119,7 @@ var SPM = (function( $, document ) {
             var $li = $button.closest( 'li' );
             var action = $button.data( 'spm-action' );
 
-            $SPMTips.tooltip( 'close' );
+            spm.$tooltips.tooltip( 'close' );
 
             switch ( action ) {
                 case 'add':
@@ -378,19 +378,19 @@ var SPM = (function( $, document ) {
 
         $tmpl.find( 'span[data-spm-action=add]' )
             .toggleClass( 'button-primary-disabled',
-                          !$li.hasClass('spm_can_add_inside') && !$li.hasClass('spm_can_add_after') );
+                ! $li.hasClass( 'spm_can_add_inside' ) && ! $li.hasClass( 'spm_can_add_after' ) );
 
         $tmpl.find( 'span[data-spm-action=settings]' )
-            .toggleClass( 'button-primary-disabled', !$li.hasClass('spm_can_edit') );
+            .toggleClass( 'button-primary-disabled', ! $li.hasClass( 'spm_can_edit' ) );
 
         $tmpl.find( 'span[data-spm-action=delete]' )
-            .toggleClass( 'button-primary-disabled', !$li.hasClass('spm_can_delete') );
+            .toggleClass( 'button-primary-disabled', ! $li.hasClass( 'spm_can_delete' ) );
 
         $tmpl.find( 'span[data-spm-action=edit]' )
-            .toggleClass( 'button-primary-disabled', !$li.hasClass('spm_can_edit') );
+            .toggleClass( 'button-primary-disabled', ! $li.hasClass( 'spm_can_edit' ) );
 
         $tmpl.find( 'span[data-spm-action=publish]' )
-            .toggleClass( 'button-primary-disabled', !$li.hasClass('spm_can_publish') );
+            .toggleClass( 'button-primary-disabled', ! $li.hasClass( 'spm_can_publish' ) );
 
         if ( !isDraft ) {
             $tmpl.find( 'span[data-spm-action=publish]' ).hide();
@@ -568,13 +568,16 @@ var SPM = (function( $, document ) {
             }
 
             // Update parent or menu order
-            $.post( ajaxurl, {
-                'action': 'spm_move_page',
-                'node_id': nodeId,
-                'ref_node_id': refNodeId,
-                'type': nodePosition
-            }, function ( /*data, textStatus*/ ) {
-                window.location.reload();
+            $.post(
+                ajaxurl,
+                {
+                    action: 'spm_move_page',
+                    node_id: nodeId,
+                    ref_node_id: refNodeId,
+                    type: nodePosition
+                }
+            ).done(function() {
+                $SPMTree.jstree( 'refresh' );
             } );
         } );
 
