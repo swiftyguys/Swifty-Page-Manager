@@ -43,8 +43,7 @@ class SwiftyPageManager
             add_filter( 'wp_title',      array( $this, 'seo_wp_title' ), 10, 2 );
         }
 
-        // Actions for admins
-
+        // Actions for admins, warning: is_admin is not a security check
         if ( is_admin() ) {
             add_action( 'init',       array( $this, 'admin_init' ) );
         }
@@ -70,11 +69,17 @@ class SwiftyPageManager
         add_action( 'admin_head', array( $this, 'admin_head' ) );
         add_action( 'admin_menu', array( $this, 'admin_menu') );
         add_action( 'wp_ajax_spm_get_childs',    array( $this, 'ajax_get_childs' ) );
-        add_action( 'wp_ajax_spm_move_page',     array( $this, 'ajax_move_page' ) );
-        add_action( 'wp_ajax_spm_save_page',     array( $this, 'ajax_save_page' ) );
-        add_action( 'wp_ajax_spm_delete_page',   array( $this, 'ajax_delete_page' ) );
-        add_action( 'wp_ajax_spm_publish_page',  array( $this, 'ajax_publish_page' ) );
-        add_action( 'wp_ajax_spm_post_settings', array( $this, 'ajax_post_settings' ) );
+        if ( current_user_can( 'edit_pages' ) ) {
+            add_action( 'wp_ajax_spm_save_page',     array( $this, 'ajax_save_page' ) );
+            add_action( 'wp_ajax_spm_post_settings', array( $this, 'ajax_post_settings' ) );
+            add_action( 'wp_ajax_spm_move_page',     array( $this, 'ajax_move_page' ) );
+        }
+        if ( current_user_can( 'delete_pages' ) ) {
+            add_action( 'wp_ajax_spm_delete_page',   array( $this, 'ajax_delete_page' ) );
+        }
+        if ( current_user_can( 'publish_pages' ) ) {
+            add_action( 'wp_ajax_spm_publish_page',  array( $this, 'ajax_publish_page' ) );
+        }
         add_action( 'admin_enqueue_scripts',     array( $this, 'add_plugin_css' ) );
 
         if ( $this->is_swifty ) {
@@ -293,7 +298,7 @@ class SwiftyPageManager
         add_submenu_page( 'edit.php?post_type='.$this->_post_type,
                           __( 'Swifty Page Manager', 'swifty-page-manager' ),
                           __( 'Swifty Page Manager', 'swifty-page-manager' ),
-                          'manage_options',
+                          'edit_pages',
                           'page-tree',
                           array( $this, 'view_page_tree' ) );
     }
@@ -306,7 +311,7 @@ class SwiftyPageManager
     public function view_page_tree()
     {
         if ( !current_user_can( 'edit_pages' ) ) {
-            wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+            wp_die( __( 'You do not have sufficient permissions to access this page. #314' ) );
         }
 
         // renamed from cookie to fix problems with mod_security
@@ -351,7 +356,7 @@ class SwiftyPageManager
     public function ajax_get_childs()
     {
         if ( !current_user_can( 'edit_pages' ) ) {
-            wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+            wp_die( __( 'You do not have sufficient permissions to access this page. #359' ) );
         }
 
         header( "Content-type: application/json" );
@@ -363,7 +368,7 @@ class SwiftyPageManager
         $post_type_object = get_post_type_object( $this->_post_type );
 
         if ( !current_user_can( $post_type_object->cap->edit_posts ) ) {
-            die( __( 'Cheatin&#8217; uh?' ) );
+            wp_die( __( 'You do not have sufficient permissions to access this page. #371' ) );
         }
 
         if ( $action ) {   // regular get
@@ -457,7 +462,7 @@ class SwiftyPageManager
     public function ajax_move_page()
     {
         if ( !current_user_can( 'edit_pages' ) ) {
-            wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+            wp_die( __( 'You do not have sufficient permissions to access this page. #465' ) );
         }
 
         /*
@@ -580,7 +585,7 @@ class SwiftyPageManager
     public function ajax_save_page()
     {
         if ( !current_user_can( 'edit_pages' ) ) {
-            wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+            wp_die( __( 'You do not have sufficient permissions to access this page. #588' ) );
         }
 
         /** @var wpdb $wpdb - Wordpress Database */
@@ -700,7 +705,7 @@ class SwiftyPageManager
     public function ajax_delete_page()
     {
         if ( !current_user_can( 'delete_pages' ) ) {
-            wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+            wp_die( __( 'You do not have sufficient permissions to access this page. #708' ) );
         }
 
         $post_id = intval( $_POST[ "post_ID" ] );
@@ -739,7 +744,7 @@ class SwiftyPageManager
     public function ajax_publish_page()
     {
         if ( !current_user_can( 'publish_pages' ) ) {
-            wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+            wp_die( __( 'You do not have sufficient permissions to access this page. #747' ) );
         }
 
         $post_id = intval( $_POST[ "post_ID" ] );
@@ -763,7 +768,7 @@ class SwiftyPageManager
     public function ajax_post_settings()
     {
         if ( !current_user_can( 'edit_pages' ) ) {
-            wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+            wp_die( __( 'You do not have sufficient permissions to access this page. #771' ) );
         }
 
         header( 'Content-Type: text/javascript' );
@@ -1083,14 +1088,22 @@ class SwiftyPageManager
             $title = __( "<Untitled page>", 'swifty-page-manager' );
         }
 
-        $user_can_edit_page  = current_user_can( $post_type_object->cap->edit_post, $page_id );
-        $user_can_add_inside = current_user_can( $post_type_object->cap->create_posts, $page_id );
-        $user_can_add_after  = current_user_can( $post_type_object->cap->create_posts, $page_id );
-
         $arr_page_css_styles   = array();
-        $arr_page_css_styles[] = "spm_user_can_edit_page_" . ( $user_can_edit_page ? 'yes' : 'no' );
-        $arr_page_css_styles[] = "spm_user_can_add_page_inside_" . ( $user_can_add_inside ? 'yes' : 'no' );
-        $arr_page_css_styles[] = "spm_user_can_add_page_after_" . ( $user_can_add_after ? 'yes' : 'no' );
+        if ( current_user_can( $post_type_object->cap->edit_post, $page_id ) ) {
+            $arr_page_css_styles[] = "spm_can_edit";
+        }
+        if ( current_user_can( $post_type_object->cap->create_posts, $page_id ) ) {
+            $arr_page_css_styles[] = "spm_can_add_inside";
+        }
+        if ( current_user_can( $post_type_object->cap->create_posts, $onePage->post_parent ) ) {
+            $arr_page_css_styles[] = "spm_can_add_after";
+        }
+        if ( current_user_can( $post_type_object->cap->publish_posts, $page_id ) ) {
+            $arr_page_css_styles[] = "spm_can_publish";
+        }
+        if ( current_user_can( $post_type_object->cap->delete_post, $page_id ) ) {
+            $arr_page_css_styles[] = "spm_can_delete";
+        }
 
         if ( $this->is_swifty ) {
             $show_page_in_menu = get_post_meta( $page_id, 'spm_show_in_menu', true );
