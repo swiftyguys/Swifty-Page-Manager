@@ -372,11 +372,6 @@ p.spm_action_edit_and_view {
     display: none;
 }
 
-li.spm_user_can_edit_page_no a {
-    opacity: .6; /* Standard: FF gt 1.5, Opera, Safari */
-    -ms-filter: "alpha(opacity=60)"; /* IE 8 */
-}
-
 h4.spm-page-actions-headline {
     margin: 0 0 0 0;
     font-weight: bold !important;

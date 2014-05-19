@@ -21,7 +21,7 @@ class SwiftyPageManager
     protected $_tree = null;
     protected $_byPageId = null;
     protected $_mainMenuItems = null;
-    protected $is_swifty;   // TEMP!!!
+    protected $is_swifty = false; // Will be enabled in our future ecosystem of extensions.
 
     /**
      * Constructor
@@ -33,10 +33,8 @@ class SwiftyPageManager
         $this->plugin_basename = basename( $this->plugin_dir );
         $this->plugin_dir_url  = plugins_url( rawurlencode( basename( $this->plugin_dir ) ) );
         $this->plugin_url      = $_SERVER[ 'REQUEST_URI' ];
-        $this->is_swifty       = true;   // TEMP!!!
 
         // Actions for visitors viewing the site
-
         if ( $this->is_swifty ) {
             add_filter( 'page_link',     array( $this, 'page_link' ), 10, 2 );
             add_action( 'parse_request', array( $this, 'parse_request' ) );
@@ -1052,7 +1050,6 @@ class SwiftyPageManager
     {
         $pageJsonData = array();
 
-        $post    = $onePage;
         $page_id = $onePage->ID;
 
         $post_statuses    = get_post_statuses();
@@ -1071,9 +1068,9 @@ class SwiftyPageManager
         $post_modified_time = date_i18n( get_option( 'date_format' ), $post_modified_time, false );
 
         // last edited by
-        setup_postdata( $post );
+        setup_postdata( $onePage );
 
-        if ( $last_id = get_post_meta( $post->ID, '_edit_last', true ) ) {
+        if ( $last_id = get_post_meta( $onePage->ID, '_edit_last', true ) ) {
             $last_user = get_userdata( $last_id );
 
             if ( $last_user !== false ) {
@@ -1095,7 +1092,7 @@ class SwiftyPageManager
         if ( current_user_can( $post_type_object->cap->edit_post, $page_id ) ) {
             $arr_page_css_styles[] = "spm_can_edit";
         }
-        if ( current_user_can( $post_type_object->cap->create_posts, $page_id ) ) {
+        if ( current_user_can( $post_type_object->cap->create_posts, $page_id ) && 'draft' != $onePage->post_status ) {
             $arr_page_css_styles[] = "spm_can_add_inside";
         }
         if ( current_user_can( $post_type_object->cap->create_posts, $onePage->post_parent ) ) {
@@ -1142,9 +1139,6 @@ class SwiftyPageManager
         $pageJsonData['metadata']["editlink"] = htmlspecialchars_decode( $editLink );
         $pageJsonData['metadata']["modified_time"] = $post_modified_time;
         $pageJsonData['metadata']["modified_author"] = $post_author;
-        $pageJsonData['metadata']["user_can_edit_page"] = (int) $user_can_edit_page;
-        $pageJsonData['metadata']["user_can_add_page_inside"] = (int) $user_can_add_inside;
-        $pageJsonData['metadata']["user_can_add_page_after"] = (int) $user_can_add_after;
         $pageJsonData['metadata']["post_title"] = $title;
         $pageJsonData['metadata']["delete_nonce"] = wp_create_nonce( "delete-page_".$onePage->ID, '_trash' );
 

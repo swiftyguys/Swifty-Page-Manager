@@ -326,7 +326,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                                 <?php esc_html_e( 'After', 'swifty-page-manager' ) ?>
                                             </span>
                                         </label>
-                                        <label class="alignleft">
+                                        <label class="alignleft add_mode_inside">
                                             <input name="add_mode" type="radio" value="inside" class="spm-input-radio" />
                                             <span class="checkbox-title">
                                                 <?php esc_html_e( 'As sub page of', 'swifty-page-manager' ) ?>
