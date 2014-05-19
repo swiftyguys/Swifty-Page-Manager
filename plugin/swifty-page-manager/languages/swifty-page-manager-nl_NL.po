@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Swifty Page Manager v0.0.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-05-19 12:19:22+0000\n"
+"PO-Revision-Date: 2014-05-19 13:41:35+0000\n"
 "Last-Translator: jh-dev <jeroen.hoekstra@longtermresults.nl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -216,7 +216,7 @@ msgstr "Standaard sjabloon"
 #: swifty-page-manager.php:337
 #@ swifty-page-manager
 msgid "Sorry, can't create a sub page to a page with status \"draft\"."
-msgstr "Helaas is het niet mogelijk om een pagina als subpagina aan te maken waarvan de bovenliggende pagina de status \\\"Klad\\\" heeft."
+msgstr "Helaas is het niet mogelijk om een pagina als subpagina aan te maken waarvan de bovenliggende pagina de status \"Klad\" heeft."
 
 #: view/page_tree.php:109
 #@ swifty-page-manager

@@ -59,9 +59,11 @@ class SwiftyPageManager
             if ( !empty( $_GET[ "status" ] ) ) {
                 $this->_post_status = $_GET[ "status" ];
             }
+
             if ( !empty( $_GET[ "post_type" ] ) ) {
                 $this->_post_type = $_GET[ "post_type" ];
             }
+
             load_plugin_textdomain( 'swifty-page-manager', false, '/swifty-page-manager/languages' );
 
             add_action( 'admin_head', array( $this, 'admin_head' ) );
@@ -72,12 +74,14 @@ class SwiftyPageManager
             add_action( 'wp_ajax_spm_move_page',     array( $this, 'ajax_move_page' ) );
 
             if ( current_user_can( 'delete_pages' ) ) {
-                add_action( 'wp_ajax_spm_delete_page',   array( $this, 'ajax_delete_page' ) );
+                add_action( 'wp_ajax_spm_delete_page', array( $this, 'ajax_delete_page' ) );
             }
+
             if ( current_user_can( 'publish_pages' ) ) {
-                add_action( 'wp_ajax_spm_publish_page',  array( $this, 'ajax_publish_page' ) );
+                add_action( 'wp_ajax_spm_publish_page', array( $this, 'ajax_publish_page' ) );
             }
-            add_action( 'admin_enqueue_scripts',     array( $this, 'add_plugin_css' ) );
+
+            add_action( 'admin_enqueue_scripts', array( $this, 'add_plugin_css' ) );
 
             if ( $this->is_swifty ) {
                 add_action( 'wp_ajax_spm_sanitize_url', array( $this, 'ajax_sanitize_url' ) );
@@ -436,9 +440,9 @@ class SwiftyPageManager
         if ( is_post_type_hierarchical( $this->_post_type ) ) {
             $mode      = "list";
             if ( isset( $_GET[ "mode" ] ) && $_GET[ "mode" ] != $mode  ) {
-                $class = " class='spm_add_list_view' ";
+                $class = " class='spm-add-list-view' ";
             } else {
-                $class = " class='spm_add_list_view current' ";
+                $class = " class='spm-add-list-view current' ";
             }
             $title     = __( "List View" ); /* translation not missing - exists in wp */
             $wp_list_a = "<a href='" . esc_url( add_query_arg( 'mode', $mode, $this->getPluginUrl() ) ) .
@@ -1088,21 +1092,25 @@ class SwiftyPageManager
             $title = __( "<Untitled page>", 'swifty-page-manager' );
         }
 
-        $arr_page_css_styles   = array();
+        $arr_page_css_styles = array();
+
         if ( current_user_can( $post_type_object->cap->edit_post, $page_id ) ) {
-            $arr_page_css_styles[] = "spm_can_edit";
+            $arr_page_css_styles[] = 'spm_can_edit';
         }
         if ( current_user_can( $post_type_object->cap->create_posts, $page_id ) && 'draft' != $onePage->post_status ) {
             $arr_page_css_styles[] = "spm_can_add_inside";
         }
+
         if ( current_user_can( $post_type_object->cap->create_posts, $onePage->post_parent ) ) {
-            $arr_page_css_styles[] = "spm_can_add_after";
+            $arr_page_css_styles[] = 'spm_can_add_after';
         }
+
         if ( current_user_can( $post_type_object->cap->publish_posts, $page_id ) ) {
-            $arr_page_css_styles[] = "spm_can_publish";
+            $arr_page_css_styles[] = 'spm_can_publish';
         }
+
         if ( current_user_can( $post_type_object->cap->delete_post, $page_id ) ) {
-            $arr_page_css_styles[] = "spm_can_delete";
+            $arr_page_css_styles[] = 'spm_can_delete';
         }
 
         if ( $this->is_swifty ) {
@@ -1112,7 +1120,7 @@ class SwiftyPageManager
                 $show_page_in_menu = 'show';
             }
 
-            $arr_page_css_styles[] = "spm-show-page-in-menu-" . ( $show_page_in_menu === 'show' ? 'yes' : 'no' );
+            $arr_page_css_styles[] = 'spm-show-page-in-menu-' . ( $show_page_in_menu === 'show' ? 'yes' : 'no' );
         }
 
         $pageJsonData['data'] = array();
