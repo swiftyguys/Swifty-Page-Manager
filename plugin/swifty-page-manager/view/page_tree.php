@@ -395,7 +395,7 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
                                         <span class="title spm-label-title">
                                             <?php esc_html_e( 'Template', 'swifty-page-manager' ) ?>
                                         </span>
-                                        <select name="page_template" />
+                                        <select name="page_template">
                                             <option value="default">
                                                 <?php esc_html_e( 'Default template', 'swifty-page-manager' ) ?></option>
                                                 <?php

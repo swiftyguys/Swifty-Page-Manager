@@ -1089,7 +1089,7 @@ class SwiftyPageManager
         $title = get_the_title( $onePage->ID ); // so hooks and stuff will do their work
 
         if ( empty( $title ) ) {
-            $title = __( "<Untitled page>", 'swifty-page-manager' );
+            $title = __( "[untitled page]", 'swifty-page-manager' );
         }
 
         $arr_page_css_styles = array();
