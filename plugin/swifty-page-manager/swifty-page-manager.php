@@ -1097,6 +1097,7 @@ class SwiftyPageManager
         if ( current_user_can( $post_type_object->cap->edit_post, $page_id ) ) {
             $arr_page_css_styles[] = 'spm_can_edit';
         }
+
         if ( current_user_can( $post_type_object->cap->create_posts, $page_id ) && 'draft' != $onePage->post_status ) {
             $arr_page_css_styles[] = "spm_can_add_inside";
         }
