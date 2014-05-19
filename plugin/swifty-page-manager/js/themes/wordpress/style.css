@@ -106,6 +106,7 @@
 }
 
 #vakata-dragged.jstree-wordpress .post_type,
+#vakata-dragged.jstree-wordpress .spm-page-in-menu,
 #vakata-dragged.jstree-wordpress .spm-page-actions-tmpl {
     display: none;
 }

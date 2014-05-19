@@ -509,7 +509,7 @@ li.spm-show-page-in-menu-no > a.spm-page-tree-element > ins {
     filter: alpha(opacity=40);
 }
 
-.tree-default span.page-in-menu {
+.tree-default span.spm-page-in-menu {
     background-color: #777;
     -moz-border-radius: 2px;
     -webkit-border-radius: 2px;
@@ -620,4 +620,8 @@ li.spm-show-page-in-menu-no > a.spm-page-tree-element > ins {
 
 .button-secondary.spm-tooltip-button:hover i {
     color: #777;
+}
+
+.spm-subsubsub li.spm-hidden {
+    display: none;
 }
