@@ -440,6 +440,9 @@ var SPM = (function( $, document ) {
             $tmpl.find( '.spm-advanced-feature' ).hide();
         }
 
+        $tmpl.find( 'label.add_mode_inside' )
+            .toggleClass( 'spm-label-disabled', !$li.hasClass( 'spm_can_add_inside' ) );
+
         $tmpl.find( '.spm-less' ).hide();
         $tmpl.find( '.spm-more' ).show();
 

@@ -462,3 +462,7 @@ li.spm-show-page-in-menu-no > a.spm-page-tree-element > ins {
 .spm-status-links li.spm-hidden {
     display: none;
 }
+
+label.spm-label-disabled {
+    color: #CCC;
+}
