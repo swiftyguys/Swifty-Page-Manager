@@ -11,12 +11,22 @@ class Wordpress {
         $this->pass = $pass;
 
         $this->tmpl = $this->story->data->testSettings->tmpl[ 'wp_' . $this->version ];
+        $tl = $this->story->data->testSettings->tmpl[ 'wp_' . $this->lang . '_' . $this->version ];
+        if( isset( $tl ) ) {
+            $this->tmpl = $tl;
+        }
 
         $this->strings = Array();
-
         foreach( $this->story->data->testSettings->tmpl as $key => $tmpl ) {
+            $l = 5;
+            if( substr( $key, 0, $l ) == 's_wp_' ) { // global version
+                $v = floatval( substr( $key, $l ) );
+                if( floatval( $this->version ) >= $v ) {
+                    $this->strings = array_replace_recursive( $this->strings, $tmpl );
+                }
+            }
             $l = 6 + strlen( $this->lang );
-            if( substr( $key, 0, $l ) == 's_wp_' . $this->lang . '_' ) {
+            if( substr( $key, 0, $l ) == 's_wp_' . $this->lang . '_' ) { // specific lang
                 $v = floatval( substr( $key, $l ) );
                 if( floatval( $this->version ) >= $v ) {
                     $this->strings = array_replace_recursive( $this->strings, $tmpl );
@@ -44,6 +54,9 @@ class Wordpress {
             "install_now" => "wordpress",
             "wp_version" => $this->version,
             "wp_sha256sum" => $this->tmpl[ 'wp_sha256sum' ],
+            "wp_subsite" => $this->lang == 'en' ? '' : $this->lang . '.',
+            "wp_fileadd" => $this->lang == 'en' ? '' : '-' . $this->lang . '_' . strtoupper( $this->lang ),
+            "wp_conf_lang" => $this->lang == 'en' ? '' : $this->lang . '_' . strtoupper( $this->lang ),
             "wp_db_name" => "wordpress",
             "wp_db_user" => "wordpress",
             "wp_db_password" => "secret",
@@ -74,7 +87,7 @@ class Wordpress {
         $st->usingBrowser()->type( $this->pass )->intoFieldWithId( "pass2" );
         $st->usingBrowser()->type( "test@test.test" )->intoFieldWithId( "admin_email" );
         $st->usingBrowser()->click()->fieldWithName( "Submit" );
-        $st->usingBrowser()->click()->fieldWithText( "Log In" );
+        $st->usingBrowser()->click()->fieldWithText( $this->strings[ 's_login_button' ] );
     }
 
     ////////////////////////////////////////
@@ -137,7 +150,7 @@ class Wordpress {
 
         $this->OpenAdminSubMenu( 'plugins', $this->strings[ 's_submenu_installed_plugins' ] );
         $st->usingTimer()->wait( 1, "Wait for Installed Plugin page." );
-        $this->story->ClickElementByXpath( 'descendant::a[contains(@href, "plugin=' . $pluginCode . '") and normalize-space(text()) = "Activate"]', "graceful" );
+        $this->story->ClickElementByXpath( 'descendant::a[contains(@href, "plugin=' . $pluginCode . '") and normalize-space(text()) = "' . $this->strings[ 's_activate' ] . '"]', "graceful" );
     }
 
     ////////////////////////////////////////
