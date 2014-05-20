@@ -4,14 +4,14 @@
  * @var SwiftyPageManager $this
  */
 $post_type_object = get_post_type_object( $this->_post_type );
-$post_new_file = "post-new.php?post_type=".$this->_post_type;
+$post_new_file    = 'post-new.php?post_type=' . $this->_post_type;
 
 ?>
 <div class="wrap">
     <h2><?php _ex( 'Swifty Page Manager', 'headline of page with tree', 'swifty-page-manager' ); ?></h2>
     <?php
 
-    $get_pages_args = array( "post_type" => $this->_post_type );
+    $get_pages_args = array( 'post_type' => $this->_post_type );
 
     $status_data_attributes = array(
         'all'     => '',
@@ -37,12 +37,12 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
     // @todo: make into function since used at other places
     $jstree_open = array();
 
-    if ( isset( $_COOKIE[ "jstree_open" ] ) ) {
-        $jstree_open = $_COOKIE[ "jstree_open" ]; // like this: [jstree_open] => spm-id-1282,spm-id-1284,spm-id-3
-        $jstree_open = explode( ",", $jstree_open );
+    if ( isset( $_COOKIE['jstree_open'] ) ) {
+        $jstree_open = $_COOKIE['jstree_open'];  // like this: [jstree_open] => spm-id-1282,spm-id-1284,spm-id-3
+        $jstree_open = explode( ',', $jstree_open );
 
         for ( $i = 0; $i < sizeof( $jstree_open ); $i++ ) {
-            $jstree_open[ $i ] = (int) str_replace( "#spm-id-", "", $jstree_open[ $i ] );
+            $jstree_open[ $i ] = (int) str_replace( '#spm-id-', '', $jstree_open[ $i ] );
         }
     }
 
@@ -54,8 +54,8 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
         <ul class="spm-status-links spm-status-links-select-view">
             <li>
                 <a class="spm-status-any
-                          <?php echo esc_attr( ('any' === $this->getPostStatus()) ? 'current' : '' ); ?>"
-                   href="<?php echo esc_attr( add_query_arg( 'status', 'any', $this->getPluginUrl() ) ); ?>"
+                          <?php echo esc_attr( ('any' === $this->get_post_status()) ? 'current' : '' ); ?>"
+                   href="<?php echo esc_attr( add_query_arg( 'status', 'any', $this->get_plugin_url() ) ); ?>"
                     data-spm-status="any">
                     <?php _e('All', 'swifty-page-manager'); ?>
                     <span class="count">(<?php esc_html_e( $post_count_all ); ?>)</span>
@@ -64,8 +64,8 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
 
             <li class="<?php echo ( !$post_count_publish ) ? 'spm-hidden' : '' ?>">
                 <a class="spm-status-publish
-                          <?php echo esc_attr( ('publish' === $this->getPostStatus()) ? 'current' : '' ); ?>"
-                   href="<?php echo esc_attr( add_query_arg( 'status', 'publish', $this->getPluginUrl() ) ); ?>"
+                          <?php echo esc_attr( ('publish' === $this->get_post_status()) ? 'current' : '' ); ?>"
+                   href="<?php echo esc_attr( add_query_arg( 'status', 'publish', $this->get_plugin_url() ) ); ?>"
                     data-spm-status="publish">
                     <?php _e('Published', 'swifty-page-manager'); ?>
                     <span class="count">(<?php esc_html_e( $post_count_publish ); ?>)</span>
@@ -74,8 +74,8 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
 
             <li class="<?php echo ( !$post_count_draft ) ? 'spm-hidden' : '' ?>">
                 <a class="spm-status-draft
-                          <?php echo esc_attr( ( 'draft' === $this->getPostStatus()) ? 'current' : '' ); ?>"
-                   href="<?php echo esc_attr( add_query_arg( 'status', 'draft', $this->getPluginUrl() ) ); ?>"
+                          <?php echo esc_attr( ( 'draft' === $this->get_post_status()) ? 'current' : '' ); ?>"
+                   href="<?php echo esc_attr( add_query_arg( 'status', 'draft', $this->get_plugin_url() ) ); ?>"
                     data-spm-status="draft">
                     <?php _e('Draft', 'swifty-page-manager'); ?>
                     <span class="count">(<?php esc_html_e( $post_count_draft ); ?>)</span>
@@ -84,8 +84,8 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
 
             <li class="<?php echo ( !$post_count_pending ) ? 'spm-hidden' : '' ?>">
                 <a class="spm-status-pending
-                          <?php echo esc_attr( ('pending' === $this->getPostStatus()) ? 'current' : '' ); ?>"
-                   href="<?php echo esc_attr( add_query_arg( 'status', 'pending', $this->getPluginUrl() ) ); ?>"
+                          <?php echo esc_attr( ('pending' === $this->get_post_status()) ? 'current' : '' ); ?>"
+                   href="<?php echo esc_attr( add_query_arg( 'status', 'pending', $this->get_plugin_url() ) ); ?>"
                     data-spm-status="pending">
                     <?php _e('Pending', 'swifty-page-manager'); ?>
                     <span class="count">(<?php esc_html_e( $post_count_pending ); ?>)</span>
@@ -94,8 +94,8 @@ $post_new_file = "post-new.php?post_type=".$this->_post_type;
 
             <li class="<?php echo ( !$post_count_private ) ? 'spm-hidden' : '' ?>">
                 <a class="spm-status-private
-                          <?php echo esc_attr( ('private' === $this->getPostStatus()) ? 'current' : '' ); ?>"
-                   href="<?php echo esc_attr( add_query_arg( 'status', 'private', $this->getPluginUrl() ) ); ?>"
+                          <?php echo esc_attr( ('private' === $this->get_post_status()) ? 'current' : '' ); ?>"
+                   href="<?php echo esc_attr( add_query_arg( 'status', 'private', $this->get_plugin_url() ) ); ?>"
                     data-spm-status="private">
                     <?php _e('Private', 'swifty-page-manager'); ?>
                     <span class="count">(<?php esc_html_e( $post_count_private ); ?>)</span>
