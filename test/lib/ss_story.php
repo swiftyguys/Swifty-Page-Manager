@@ -10,6 +10,18 @@ class SSStory {
 
     ////////////////////////////////////////
 
+    function getText() { // Shortcut
+        return $this->st->fromBrowser()->getText();
+    }
+
+    ////////////////////////////////////////
+
+    function assertsString( $txt ) { // Shortcut
+        return $this->st->assertsString( $txt );
+    }
+
+    ////////////////////////////////////////
+
     function TakeAction() { // Must be called first in a derived method
         $this->PrepareForTest();
     }
@@ -19,16 +31,26 @@ class SSStory {
     function TestSetup() {
         $st = $this->st;
 
+        // Can be overwritten in command line, via -D platform=...
+        $this->ori_story->setParams( array(
+            'platform' => 'local',
+            'wp_version' => '3.9.1',
+            'lang' => 'en'
+        ) );
+        // get the final list of params
+        // this will include any changes made from the command-line
+        $this->params = $st->getParams();
+
         // load the test settings; any settings in private will overrule the same settings in public
         $settingsPublic = json_decode( file_get_contents( dirname(__FILE__) . '/../settings_public.json' ), true );
-        $settingsPublic[ $st->getParams()[ 'settings' ] ] = ( isset( $settingsPublic[ $st->getParams()[ 'settings' ] ] ) && is_array( $settingsPublic[ $st->getParams()[ 'settings' ] ] )) ? $settingsPublic[ $st->getParams()[ 'settings' ] ] : array(); // initialize if necessary
+        $settingsPublic[ $this->params[ 'platform' ] ] = ( isset( $settingsPublic[ $this->params[ 'platform' ] ] ) && is_array( $settingsPublic[ $this->params[ 'platform' ] ] )) ? $settingsPublic[ $this->params[ 'platform' ] ] : array(); // initialize if necessary
         $settingsPrivate = json_decode( file_get_contents( dirname(__FILE__) . '/../settings_private.json' ), true );
         $this->data = new stdClass(); // Empty object
         $this->data->testSettings = (object) array_merge(
             $settingsPublic[ 'default' ],
-            $settingsPublic[ $st->getParams()[ 'settings' ] ],
+            $settingsPublic[ $this->params[ 'platform' ] ],
             $settingsPrivate[ 'default' ],
-            $settingsPrivate[ $st->getParams()[ 'settings' ] ]
+            $settingsPrivate[ $this->params[ 'platform' ] ]
         );
         // Sort the settings by order field
         uasort( $this->data->testSettings->setup, function( $a, $b ) {
@@ -37,26 +59,21 @@ class SSStory {
             }
             return 1;
         } );
-        // Add includes
-        for( $x = 1; $x < 10; $x++ ) {
-            foreach( $this->data->testSettings->setup as $key => $setupItem ) {
-                if( isset( $setupItem[ '__include' . $x ] ) ) {
-                    $this->data->testSettings->setup[ $key ] = array_merge( $setupItem, $this->data->testSettings->tmpl[ $setupItem[ '__include' . $x ] ] );
-//    echo "\n\n\n\n\n";
-//                    var_dump($setupItem);
-                }
-            }
-        }
-//        echo "\n\n\n\n\n";
-//                        var_dump($this->data->testSettings);
 
-        $this->wordpress = new Wordpress( $this, $st, $this->data->testSettings->wp_user, $this->data->testSettings->wp_pass );
+        $this->wordpress = new Wordpress(
+            $this,
+            $st,
+            $this->params[ 'wp_version' ],
+            $this->params[ 'lang' ],
+            $this->data->testSettings->wp_user,
+            $this->data->testSettings->wp_pass
+        );
 
         // what are we calling this host?
         $this->data->instanceName = 'storyplayer1';
 
-        // What settings name was given? (Use # vendor/bin/storyplayer -D settings=...)
-        switch( $st->getParams()[ 'settings' ] ) {
+        // What settings name was given? (Use # vendor/bin/storyplayer -D platform=...)
+        switch( $this->params[ 'platform' ] ) {
             case 'ec2':
                 $this->CreateEc2();
                 break;
@@ -90,7 +107,7 @@ class SSStory {
     function TestTeardown() {
         $st = $this->st;
 
-        switch( $st->getParams()[ 'settings' ] ) {
+        switch( $this->params[ 'platform' ] ) {
             case 'ec2':
                 $this->DestroyEc2( $st );
                 break;
@@ -173,7 +190,7 @@ class SSStory {
 
         $this->EchoMsg( "Install Web App" );
 
-        if( $st->getParams()[ 'settings' ] == "ec2" ) {
+        if( $this->params[ 'platform' ] == "ec2" ) {
             if( $setupItem->slug == "wordpress" ) {
                 $this->wordpress->Install( $setupItem );
             }
@@ -270,13 +287,14 @@ class SSStory {
 
 ////////////////////////////////////////
 
-$story = newStoryFor('Wordpress')
+$story = $GLOBALS['story'] = newStoryFor('Wordpress')
          ->inGroup('Swifty Page Manager')
          ->called('Test Swifty Page Manager general behaviour.');
 
 $story->addTestSetup( function( StoryTeller $st ) {
     $ssStory = $GLOBALS['ssStory'];
     $ssStory->st = $st;
+    $ssStory->ori_story = $GLOBALS['story'];
     $ssStory->TestSetup();
 } );
 

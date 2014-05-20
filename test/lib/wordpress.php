@@ -2,11 +2,27 @@
 
 class Wordpress {
 
-    function Wordpress( $story, $st, $user, $pass ) {
+    function Wordpress( $story, $st, $version, $lang, $user, $pass ) {
         $this->story = $story; // The main/global application object
         $this->st = $st; // StoryTeller
+        $this->version = $version;
+        $this->lang = $lang;
         $this->user = $user;
         $this->pass = $pass;
+
+        $this->tmpl = $this->story->data->testSettings->tmpl[ 'wp_' . $this->version ];
+
+        $this->strings = Array();
+
+        foreach( $this->story->data->testSettings->tmpl as $key => $tmpl ) {
+            $l = 6 + strlen( $this->lang );
+            if( substr( $key, 0, $l ) == 's_wp_' . $this->lang . '_' ) {
+                $v = floatval( substr( $key, $l ) );
+                if( floatval( $this->version ) >= $v ) {
+                    $this->strings = array_replace_recursive( $this->strings, $tmpl );
+                }
+            }
+        }
     }
 
     ////////////////////////////////////////
@@ -26,8 +42,8 @@ class Wordpress {
         // Make sure these settings are not in Ansible's group_vars/all file otherwise those seem to take precedence
         $vmParams = array (
             "install_now" => "wordpress",
-            "wp_version" => $setupItem->wp_version,
-            "wp_sha256sum" => $setupItem->wp_sha256sum,
+            "wp_version" => $this->version,
+            "wp_sha256sum" => $this->tmpl[ 'wp_sha256sum' ],
             "wp_db_name" => "wordpress",
             "wp_db_user" => "wordpress",
             "wp_db_password" => "secret",
@@ -90,7 +106,7 @@ class Wordpress {
 
         $this->story->EchoMsg( "Install plugin: " . $relpath );
 
-        if( $st->getParams()[ 'settings' ] == "ec2" ) {
+        if( $this->story->params[ 'platform' ] == "ec2" ) {
             // Copy plugin to remote server via Ansible
 
             // create the parameters for Ansible
@@ -119,7 +135,7 @@ class Wordpress {
 
         $this->story->EchoMsg( "Activate plugin: " . $pluginCode );
 
-        $this->OpenAdminSubMenu( 'plugins', $this->story->data->testSettings->setup[ 'wordpress' ][ 's_submenu_installed_plugins' ] );
+        $this->OpenAdminSubMenu( 'plugins', $this->strings[ 's_submenu_installed_plugins' ] );
         $st->usingTimer()->wait( 1, "Wait for Installed Plugin page." );
         $this->story->ClickElementByXpath( 'descendant::tr[@id = "' . $pluginCode . '"]//a[normalize-space(text()) = "Activate"]', "graceful" );
     }

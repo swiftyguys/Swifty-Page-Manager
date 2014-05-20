@@ -28,7 +28,7 @@
             "s_wp_en_3.0": {
                 "s_submenu_installed_plugins": "Plugins"
             },
-            "s_wp_en_ge3.7": {
+            "s_wp_en_3.7": {
                 "s_submenu_installed_plugins": "Installed Plugins"
             }
         }
