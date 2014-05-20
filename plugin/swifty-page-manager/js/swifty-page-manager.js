@@ -6,45 +6,49 @@ Swifty Page Manager
 
 var $SPMTree,
     SPMOpts,
-    $SPMMsg;
+    $SPMMsg,
+    $SPMAddBtn;
 
-var SPM = ( function ( $, document ) {
+var SPM = (function( $, document ) {
     var spm = {};
-    var $SPMTips;
 
-    spm.init = function () {
-        $SPMTips = $( '.spm-tooltip' ).clone().tooltip();
+    spm.statusCounts = {};
 
+    spm.init = function() {
+        spm.$tooltips = $( '.spm-tooltip' ).clone().tooltip();
+        $SPMAddBtn = $( '.spm-no-pages' );
+
+        this.getStatusCounts();
         this.startListeners();
     };
 
-    spm.startListeners = function () {
+    spm.startListeners = function() {
         $( document ).on( 'mouseenter', '.spm-tooltip-button', spm.openTooltipHandler );
         $( document ).on( 'mouseleave', '.spm-tooltip-button', spm.closeTooltipHandler );
         $( document ).on( 'click', '.spm-tooltip-button', spm.openTooltipHandler );
         $( document ).on( 'click', spm.closeTooltipHandler );
 
-        $( document ).on( 'click', 'a.spm_open_all', function ( /*ev*/ ) {
-            $SPMTips.tooltip( 'close' );
+        $( document ).on( 'click', 'a.spm_open_all', function( /*ev*/ ) {
+            spm.$tooltips.tooltip( 'close' );
 
             spm.getWrapper( this ).find( '.spm-tree-container' ).jstree( 'open_all' );
 
             return false;
-        } );
+        });
 
-        $( document ).on( 'click', 'a.spm_close_all', function ( /*ev*/ ) {
-            $SPMTips.tooltip( 'close' );
+        $( document ).on( 'click', 'a.spm_close_all', function( /*ev*/ ) {
+            spm.$tooltips.tooltip( 'close' );
 
             spm.getWrapper( this ).find( '.spm-tree-container' ).jstree( 'close_all' );
 
             return false;
-        } );
+        });
 
-        $( document ).on( 'click', '.spm-page-tree-element', function ( /*ev*/ ) {
+        $( document ).on( 'click', '.spm-page-tree-element', function( /*ev*/ ) {
             var $li = $( this ).closest( 'li' );
             var id = $li.attr( 'id' ).replace( '#', '' );
 
-            $SPMTips.tooltip( 'close' );
+            spm.$tooltips.tooltip( 'close' );
 
             spm.resetPageTree();
             spm.preparePageActionButtons( $li );
@@ -52,9 +56,9 @@ var SPM = ( function ( $, document ) {
             $.cookie( 'jstree_select', id );
 
             return false;
-        } );
+        });
 
-        $( document ).on( 'keyup', 'input[name=post_title].spm-new-page', function ( ev ) {
+        $( document ).on( 'keyup', 'input[name=post_title].spm-new-page', function( ev ) {
             var $li = $( this ).closest( 'li' );
             var isCustomUrl = $li.find( 'input[name=spm_is_custom_url]' ).val();
             var path;
@@ -62,23 +66,23 @@ var SPM = ( function ( $, document ) {
             if ( isCustomUrl && isCustomUrl == '0' ) {
                 path = spm.generatePathToPage( $li );
 
-                setTimeout( function () {
+                setTimeout(function() {
                     $.post(
                         ajaxurl,
                         {
                             'action': 'spm_sanitize_url',
                             'url': ev.currentTarget.value
                         }
-                    ).done( function ( url ) {
+                    ).done(function( url ) {
                         $( 'input[name=post_name]' ).val( spm.generatePageUrl( path, url ) );
-                    } );
+                    });
                 }, 100 );
             }
 
             return false;
-        } );
+        });
 
-        $( document ).on( 'keyup', 'input[name=post_name]', function ( /*ev*/ ) {
+        $( document ).on( 'keyup', 'input[name=post_name]', function( /*ev*/ ) {
             var $li = $( this ).closest( 'li' );
             var isCustomUrl = $li.find( 'input[name=spm_is_custom_url]' ).val();
 
@@ -87,14 +91,14 @@ var SPM = ( function ( $, document ) {
             }
 
             return false;
-        } );
+        });
 
-        $( document ).on( 'change', 'input[name=add_mode].spm-new-page', function ( /*ev*/ ) {
+        $( document ).on( 'change', 'input[name=add_mode].spm-new-page', function( /*ev*/ ) {
             var $li = $( this ).closest( 'li' );
             var isCustomUrl = $li.find( 'input[name=spm_is_custom_url]' ).val();
             var path, url;
 
-            if ( !spm.validateSettings( $li ) ) {
+            if ( ! spm.validateSettings( $li ) ) {
                 return false;
             }
 
@@ -108,23 +112,23 @@ var SPM = ( function ( $, document ) {
             }
 
             return false;
-        } );
+        });
 
-        $( document ).on( 'click', '.spm-page-button', function ( /*ev*/ ) {
+        $( document ).on( 'click', '.spm-page-button:not(.button-primary-disabled)', function( /*ev*/ ) {
             var $button = $( this );
             var $li = $button.closest( 'li' );
             var action = $button.data( 'spm-action' );
 
-            $SPMTips.tooltip( 'close' );
+            spm.$tooltips.tooltip( 'close' );
 
             switch ( action ) {
                 case 'add':
                 case 'settings':
                 case 'delete':
                 case 'publish':
-                    if ( $li.data( 'cur-action' ) && $li.data( 'cur-action' ) === action ) {
-                        spm.resetPageTree();
-                    } else {
+                    spm.resetPageTree();
+
+                    if ( ! $li.data( 'cur-action' ) || $li.data( 'cur-action' ) !== action ) {
                         spm.resetPageTree();
                         spm.preparePageActions( $li, action );
                         $li.data( 'cur-action', action );
@@ -150,22 +154,22 @@ var SPM = ( function ( $, document ) {
             }
 
             return false;
-        } );
+        });
 
-        $( document ).on( 'click', '.spm-do-button', function ( /*ev*/ ) {
+        $( document ).on( 'click', '.spm-do-button', function( /*ev*/ ) {
             var $button = $( this );
             var $li = $button.closest( 'li' );
             var spmAction = $button.data( 'spm-action' );
             var $inlineEdit = $( 'input#_inline_edit' );
 
-            $SPMTips.tooltip( 'close' );
+            spm.$tooltips.tooltip( 'close' );
 
             switch ( spmAction ) {
                 case 'save':
                     var curAction = $li.data( 'cur-action' );
                     var settings;
 
-                    if ( !spm.validateSettings( $li ) ) {
+                    if ( ! spm.validateSettings( $li ) ) {
                         return false;
                     }
 
@@ -188,19 +192,19 @@ var SPM = ( function ( $, document ) {
                     if ( curAction === 'add' ) {   // Page creation
                         $.extend( true, settings, {
                             'parent_id': $li.attr( 'id' )
-                        } );
+                        });
                     } else if ( curAction === 'settings' ) {   // Page editing
                         $.extend( true, settings, {
                             'post_ID': $li.data( 'post_id' )
-                        } );
+                        });
                     }
 
                     $.post(
                         ajaxurl,
                         settings
-                    ).done( function() {
-                        window.location.reload();
-                    } );
+                    ).done(function() {
+                        $SPMTree.jstree( 'refresh' );
+                    });
 
                     break;
                 case 'delete':
@@ -212,9 +216,9 @@ var SPM = ( function ( $, document ) {
                             'post_ID': $li.data( 'post_id' ),
                             '_inline_edit': $inlineEdit.val()
                         }
-                    ).done( function() {
-                        window.location.reload();
-                    } );
+                    ).done(function() {
+                        $SPMTree.jstree( 'refresh' );
+                    });
 
                     break;
                 case 'cancel':
@@ -232,64 +236,68 @@ var SPM = ( function ( $, document ) {
                     $.post(
                         ajaxurl,
                         {
-                            'action': 'spm_save_page',
-                            'post_type': 'page',
-                            'post_title': 'Home',
-                            'post_status': 'draft',
-                            'add_mode': 'after',
-                            'page_template': 'default',
-                            'spm_show_in_menu': 'show',
-                            '_inline_edit': $inlineEdit.val()
-                        },
-                        function () {
-                            window.location.reload();
+                            action: 'spm_save_page',
+                            post_type: 'page',
+                            post_title: 'Home',
+                            post_status: 'draft',
+                            add_mode: 'after',
+                            page_template: 'default',
+                            spm_show_in_menu: 'show',
+                            _inline_edit: $inlineEdit.val()
                         }
-                    );
+                    ).done(function() {
+                        $SPMTree.jstree( 'refresh' );
+                    });
 
                     break;
             }
 
             return false;
-        } );
+        });
     };
 
-    spm.openTooltipHandler = function ( ev ) {
+    spm.openTooltipHandler = function( ev ) {
         var $toolTipBtn = $( this ).hasClass( 'spm-tooltip-button' )
                         ? $( this )
                         : $( this ).closest( '.spm-tooltip-button' );
         var $toolTipClass = '.' + $toolTipBtn.attr( 'rel' );
-        var $toolTip = $SPMTips.filter( $toolTipClass );
+        var $toolTip = spm.$tooltips.filter( $toolTipClass );
 
         if ( ev.type === 'click' && /(spm-tooltip-button|fa)/.test( ev.target.className ) ) {
             $( document ).off( 'mouseenter', '.spm-tooltip-button' );
             $( document ).off( 'mouseleave', '.spm-tooltip-button' );
         }
 
-        $SPMTips.tooltip( 'close' );
+        spm.$tooltips.tooltip( 'close' );
 
-        $toolTip.tooltip( {
+        $toolTip.tooltip({
             items: $toolTip[0],
             content: $toolTip.html(),
-            position: { of: $toolTipBtn[0], my: "left bottom", at: "right top", collision: "flipfit" }
-        } ).tooltip( 'open' );
+            position: {
+                of: $toolTipBtn[0],
+                my: 'left bottom',
+                at: 'right top',
+                collision: 'flipfit'
+            }
+        }).tooltip( 'open' );
 
         ev.stopImmediatePropagation();
 
         return false;
     };
 
-    spm.closeTooltipHandler = function ( ev ) {
-        if ( ev.type === 'click' && !/(spm-tooltip-button|fa)/.test( ev.target.className ) ) {
+    spm.closeTooltipHandler = function( ev ) {
+        if ( ev.type === 'click' && ! /(spm-tooltip-button|fa)/.test( ev.target.className ) ) {
             $( document ).on( 'mouseleave', '.spm-tooltip-button', spm.closeTooltipHandler );
             $( document ).on( 'mouseenter', '.spm-tooltip-button', spm.openTooltipHandler );
         }
 
-        $SPMTips.tooltip( 'close' );
+        spm.$tooltips.tooltip( 'close' );
     };
 
-    spm.generatePageUrl = function ( path, url ) {
+    spm.generatePageUrl = function( path, url ) {
         if ( url !== '' ) {
-            if ( !/\/$/.test( path ) ) {
+            if ( ! /\/$/.test( path ) ) {
                 path += '/';
             }
         }
@@ -299,7 +307,7 @@ var SPM = ( function ( $, document ) {
         return url.replace( /^\/|\/$/g, '' );
     };
 
-    spm.generatePathToPage = function ( $li ) {
+    spm.generatePathToPage = function( $li ) {
         var addMode = $li.find( 'input[name=add_mode]:checked' ).val();
         var siteUrl = $li.find( 'input[name=wp_site_url]' ).val();
         var path = $li.data( 'permalink' ).replace( siteUrl, '' );
@@ -318,16 +326,16 @@ var SPM = ( function ( $, document ) {
         return path;
     };
 
-    spm.adaptTreeLinkElements = function ( a ) {
-        $( a ).css( {
+    spm.adaptTreeLinkElements = function( a ) {
+        $( a ).css({
             width: '100%'
-        } ).attr( {
+        }).attr({
             href: 'javascript:;',
             class: 'spm-page-tree-element'
-        } );
+        });
     };
 
-    spm.resetPageTree = function () {
+    spm.resetPageTree = function() {
         var $tree = $( '.spm-tree-container' );
 
         $tree.find( 'li' ).data( 'cur-action', '' );
@@ -335,13 +343,13 @@ var SPM = ( function ( $, document ) {
         $tree.find( 'a.jstree-clicked' ).removeClass( 'jstree-clicked' );
     };
 
-    spm.validateSettings = function ( $li ) {
+    spm.validateSettings = function( $li ) {
         var postStatusParent = $li.data( 'post_status' );
         var addMode = $li.find( 'input[name=add_mode]:checked' ).val();
         var isOk = 1;
 
         // If status is draft then it's not possible to add sub pages
-        if ( postStatusParent === "draft" && addMode === "inside" ) {
+        if ( postStatusParent === 'draft' && addMode === 'inside' ) {
             jAlert( spm_l10n.no_sub_page_when_draft );
 
             $li.find( 'input[name=add_mode]' ).val( [ 'after' ] );
@@ -352,15 +360,15 @@ var SPM = ( function ( $, document ) {
         return isOk;
     };
 
-    spm.getPostType = function ( el ) {
+    spm.getPostType = function( el ) {
         return this.getWrapper( el ).find( '[name=spm_meta_post_type]' ).val();
     };
 
-    spm.getWrapper = function ( el ) {
-        return $( el ).closest( '.spm_wrapper' );
+    spm.getWrapper = function( el ) {
+        return $( el ).closest( '.spm-wrapper' );
     };
 
-    spm.preparePageActionButtons = function ( $li ) {
+    spm.preparePageActionButtons = function( $li ) {
         var $a = $li.find( '> a' );
         var isDraft = $a.find( '.post_type_draft' ).length;
         var $tree = $li.closest( '.spm-tree-container' );
@@ -368,24 +376,40 @@ var SPM = ( function ( $, document ) {
 
         $tree.find( '.spm-page-actions-tmpl' ).remove();
 
+        $tmpl.find( 'span[data-spm-action=add]' )
+            .toggleClass( 'button-primary-disabled',
+                ! $li.hasClass( 'spm_can_add_inside' ) && ! $li.hasClass( 'spm_can_add_after' ) );
+
+        $tmpl.find( 'span[data-spm-action=settings]' )
+            .toggleClass( 'button-primary-disabled', ! $li.hasClass( 'spm_can_edit' ) );
+
+        $tmpl.find( 'span[data-spm-action=delete]' )
+            .toggleClass( 'button-primary-disabled', ! $li.hasClass( 'spm_can_delete' ) );
+
+        $tmpl.find( 'span[data-spm-action=edit]' )
+            .toggleClass( 'button-primary-disabled', ! $li.hasClass( 'spm_can_edit' ) );
+
+        $tmpl.find( 'span[data-spm-action=publish]' )
+            .toggleClass( 'button-primary-disabled', ! $li.hasClass( 'spm_can_publish' ) );
+
         if ( !isDraft ) {
-            $tmpl.find( '[data-spm-action=publish]' ).hide();
+            $tmpl.find( 'span[data-spm-action=publish]' ).hide();
         }
 
         $a.addClass( 'jstree-clicked' ).append( $tmpl.removeAttr( 'style' ) );
     };
 
-    spm.getPageActionButtonsTmpl = function () {
+    spm.getPageActionButtonsTmpl = function() {
         return $( '.spm-page-actions-tmpl.__TMPL__' ).clone( true ).removeClass( '__TMPL__' );
     };
 
-    spm.preparePageActions = function ( $li, action ) {
+    spm.preparePageActions = function( $li, action ) {
         var self = this;
         var selector = {
-            'add': 'spm-page-add-edit-tmpl',
-            'settings': 'spm-page-add-edit-tmpl',
-            'delete': 'spm-page-delete-tmpl',
-            'publish': 'spm-page-publish-tmpl'
+            add: 'spm-page-add-edit-tmpl',
+            settings: 'spm-page-add-edit-tmpl',
+            delete: 'spm-page-delete-tmpl',
+            publish: 'spm-page-publish-tmpl'
         }[ action ];
         var $tmpl = this.getPageActionsTmpl( selector );
         var isSwifty = $tmpl.find( 'input[name=is_swifty]' ).val();
@@ -393,14 +417,14 @@ var SPM = ( function ( $, document ) {
         if ( action === 'add' ) {
             $tmpl.find( 'input[name=spm_show_in_menu][value=show]' ).prop( 'checked', true );
 
-            $tmpl.find( 'input[name=add_mode]' ).each( function() {
+            $tmpl.find( 'input[name=add_mode]' ).each(function() {
                 var labelText = $( this ).next().text();
 
                 $( this ).next().text( labelText + ' "' + self.getLiText( $li ) + '"' );
-            } );
+            });
 
-            $tmpl.find( 'input[name=add_mode]' ).val( [ 'after' ] );
-            $tmpl.find( 'input[name=post_status]' ).val( [ 'draft' ] );
+            $tmpl.find( 'input[name=add_mode]' ).val( ['after'] );
+            $tmpl.find( 'input[name=post_status]' ).val( ['draft'] );
             $tmpl.find( 'input[name=post_name]' ).val( '' );
 
             $tmpl.find( 'input[name=add_mode]' ).addClass( 'spm-new-page' );
@@ -416,6 +440,9 @@ var SPM = ( function ( $, document ) {
             $tmpl.find( '.spm-advanced-feature' ).hide();
         }
 
+        $tmpl.find( 'label.add_mode_inside' )
+            .toggleClass( 'spm-label-disabled', !$li.hasClass( 'spm_can_add_inside' ) );
+
         $tmpl.find( '.spm-less' ).hide();
         $tmpl.find( '.spm-more' ).show();
 
@@ -423,23 +450,23 @@ var SPM = ( function ( $, document ) {
         $li.find( '> a' ).after( $tmpl.removeAttr( 'style' ) );
     };
 
-    spm.getLiText = function ( $li ) {
+    spm.getLiText = function( $li ) {
         var liText = '';
 
-        $li.find( '> a' ).contents().filter( function() {
+        $li.find( '> a' ).contents().filter(function() {
             if ( this.nodeType === 3 ) {
                 liText = this.nodeValue;
             }
-        } );
+        });
 
         return liText;
     };
 
-    spm.getPageActionsTmpl = function ( selector ) {
+    spm.getPageActionsTmpl = function( selector ) {
         return $( '.' + selector + '.__TMPL__' ).clone( true ).removeClass( '__TMPL__' );
     };
 
-    spm.pageTreeLoaded = function ( ev ) {
+    spm.pageTreeLoaded = function( ev ) {
         var $container = $( ev.target );
         var cookieVal = $.cookie( 'jstree_select' );
 
@@ -448,7 +475,7 @@ var SPM = ( function ( $, document ) {
         $( 'a.jstree-clicked' ).removeClass( 'jstree-clicked' );
 
         if ( cookieVal ) {
-            if ( !/^\#/.test( cookieVal ) ) {
+            if ( ! /^\#/.test( cookieVal ) ) {
                 cookieVal = '#' + cookieVal;
             }
 
@@ -458,16 +485,63 @@ var SPM = ( function ( $, document ) {
             spm.preparePageActionButtons( $container.find( 'li:first' ) );
             $container.find( 'li:first > a' ).addClass( 'jstree-clicked' );
         }
+
+        if ( ev.type === 'refresh' ) {
+            spm.updateStatusCount();
+        }
     };
 
     spm.getPageSettings = function( $li ) {
         $.post(
             ajaxurl,
             {
-                'action': 'spm_post_settings',
-                'post_ID': $li.data( 'post_id' )
+                action: 'spm_post_settings',
+                post_ID: $li.data( 'post_id' )
             }
         );
+    };
+
+    spm.updateStatusCount = function() {
+        $.ajax({
+            url: location.href,
+            cache: false,
+            dataType: 'html',
+            dataFilter: function ( resp ) {
+                return $( '.spm-status-links', resp ).get( 0 );
+            }
+        }).done(function( html ) {
+            spm.getStatusCounts( html );
+
+            $.each( spm.statusCounts, function( statusName, statusCount ) {
+                var $statusLink = $( '.spm-status-' + statusName );
+                var $li = $statusLink.closest( 'li' );
+
+                if ( !$li.hasClass( 'spm-hidden' ) && statusCount === '0' && statusName !== 'any' ) {
+                    $li.addClass( 'spm-hidden' );
+                }
+
+                $statusLink.find( '.count' ).text( '(' + statusCount + ')' );
+
+                if ( $li.hasClass( 'spm-hidden' ) && statusCount === '1' && statusName !== 'any' ) {
+                    $li.removeClass( 'spm-hidden' );
+                }
+            });
+        });
+    };
+
+    spm.getStatusCounts = function( html ) {
+        var $statusLink = $( '[class^="spm-status-"]' );
+
+        if ( html ) {
+            $statusLink = $( html ).find( '[class^="spm-status-"]' );
+        }
+
+        $statusLink.each(function() {
+            var statusCount = $( this ).find( '.count' ).text().replace( /\((.+)\)/g, '$1' );
+            var statusName = $( this ).data( 'spmStatus' );
+
+            spm.statusCounts[ statusName ] = statusCount;
+        });
     };
 
     spm.setLabel = function( $li, label ) {
@@ -497,13 +571,16 @@ var SPM = ( function ( $, document ) {
             }
 
             // Update parent or menu order
-            $.post( ajaxurl, {
-                'action': 'spm_move_page',
-                'node_id': nodeId,
-                'ref_node_id': refNodeId,
-                'type': nodePosition
-            }, function ( /*data, textStatus*/ ) {
-                window.location.reload();
+            $.post(
+                ajaxurl,
+                {
+                    action: 'spm_move_page',
+                    node_id: nodeId,
+                    ref_node_id: refNodeId,
+                    type: nodePosition
+                }
+            ).done(function() {
+                $SPMTree.jstree( 'refresh' );
             } );
         } );
 
@@ -534,7 +611,7 @@ var SPM = ( function ( $, document ) {
 
                     // Post_status can be any value because of plugins like Edit flow
                     // Check if we have an existing translation for the string, otherwise use the post status directly
-                    if ( !postStatusToShow ) {
+                    if ( ! postStatusToShow ) {
                         postStatusToShow = postStatus;
                     }
 
@@ -548,12 +625,12 @@ var SPM = ( function ( $, document ) {
                     if ( $li.hasClass( 'spm-show-page-in-menu-no' ) ) {
                         spm.setLabel(
                             $li,
-                            '<span class="page-in-menu">' + spm_l10n.hidden_page + '</span>'
+                            '<span class="spm-page-in-menu">' + spm_l10n.hidden_page + '</span>'
                         );
                     }
-                } );
+                });
             }
-        } );
+        });
     };
 
     return spm;
@@ -561,7 +638,7 @@ var SPM = ( function ( $, document ) {
 }( jQuery, document ) );
 
 // Begin onDomReady
-jQuery( function ( $ ) {
+jQuery(function( $ ) {
     SPM.init();
 
     $SPMTree = $( '.spm-tree-container' );
@@ -588,51 +665,59 @@ jQuery( function ( $ ) {
         '#vakata-dragged { background-color: white; };' +
         '';
 
-    $.vakata.css.add_sheet( {
+    $.vakata.css.add_sheet({
         str: css,
         title: 'jstree_spm'
-    } );
+    });
 
     SPMOpts = {
-        plugins: [ 'themes', 'json_data', 'cookies', 'dnd', 'crrm', 'types', 'ui' ],
+        plugins: [ 'themes', 'json_data', 'cookies', 'dnd', 'crrm', 'types' ],
         core: {
-            'html_titles': true
+            html_titles: true
         },
-        'json_data': {
-            'ajax': {
-                'url': ajaxurl + '?action=spm_get_childs&status=' + $.data( document, 'spm_status' ),
+        rules: {
+            multiple: false,
+            drag_copy: false
+        },
+        json_data: {
+            ajax: {
+                url: ajaxurl + '?action=spm_get_childs&status=' + $.data( document, 'spm_status' ),
                 // this function is executed in the instance's scope (this refers to the tree instance)
                 // the parameter is the node being loaded (may be -1, 0, or undefined when loading the root nodes)
-                'data': function ( n ) {
+                data: function( n ) {
                     // the result is fed to the AJAX request `data` option
                     if ( n.data ) {
                         return {
-                            'id': n.data( 'post_id' )
+                            id: n.data( 'post_id' )
                         };
                     }
                 },
-                'success': function ( data /*, status*/ ) {
+                success: function( data /*, status*/ ) {
                     // If data is null or empty = show message about no nodes
-                    if ( data === null || !data ) {
+                    if ( data === null || ! data || ! data.length ) {
                         $SPMMsg.html( '<p>' + spm_l10n.no_pages_found + '</p>' );
                         $SPMMsg.show();
+                        $SPMAddBtn.removeClass( 'spm-hidden' );
+                    } else {
+                        $SPMMsg.hide();
+                        $SPMAddBtn.addClass( 'spm-hidden' );
                     }
                 },
-                'error': function ( data, status ) {
+                error: function( data, status ) {
                 }
             }
         },
-        'themes': {
-            'theme': 'wordpress',
-            'dots': true,
-            'icons': true
+        themes: {
+            theme: 'wordpress',
+            dots: true,
+            icons: true
         },
-        "crrm" : {
-            "move" : {
-                "check_move" : function ( m ) {
+        crrm : {
+            move : {
+                check_move : function( m ) {
                     var p = this._get_parent( m.o );
 
-                    if ( !p ) {
+                    if ( ! p ) {
                         return false;
                     }
 
@@ -642,11 +727,11 @@ jQuery( function ( $ ) {
                         return true;
                     }
 
-                    if ( m.p === "inside" || m.p === "last" ) {
-                        return !$( m.cr[0] ).find( '.post_type_draft' ).length;
+                    if ( m.p === 'inside' || m.p === 'last' ) {
+                        return ! $( m.cr[0] ).find( '.post_type_draft' ).length;
                     }
 
-                    if ( m.p === "before" || m.p === "after" ) {
+                    if ( m.p === 'before' || m.p === 'after' ) {
                         return true;
                     }
 
@@ -664,16 +749,14 @@ jQuery( function ( $ ) {
         SPM.bindCleanNodes();
     }
 
-    $SPMTree.each( function ( i, el ) {
+    $SPMTree.each(function( i, el ) {
         var $el = $( el );
         var treeOptionsTmp = $.extend( true, {}, SPMOpts );
         var postType = SPM.getPostType( el );
-        var spmJsonData = $.data( document, 'spm_json_data' );
 
         treeOptionsTmp.json_data.ajax.url = treeOptionsTmp.json_data.ajax.url + '&post_type=' + postType;
-        treeOptionsTmp.json_data.data = spmJsonData[ postType ];
 
-        $el.bind( 'loaded.jstree', SPM.pageTreeLoaded );
+        $el.bind( 'loaded.jstree refresh.jstree', SPM.pageTreeLoaded );
         $el.jstree( treeOptionsTmp );
-    } );
-} );  // End onDomReady
+    });
+});  // End onDomReady

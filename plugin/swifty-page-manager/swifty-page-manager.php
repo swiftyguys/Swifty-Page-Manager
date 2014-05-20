@@ -21,7 +21,7 @@ class SwiftyPageManager
     protected $_tree = null;
     protected $_byPageId = null;
     protected $_mainMenuItems = null;
-    protected $is_swifty;   // TEMP!!!
+    protected $is_swifty = false; // Will be enabled in our future ecosystem of extensions.
 
     /**
      * Constructor
@@ -33,45 +33,64 @@ class SwiftyPageManager
         $this->plugin_basename = basename( $this->plugin_dir );
         $this->plugin_dir_url  = plugins_url( rawurlencode( basename( $this->plugin_dir ) ) );
         $this->plugin_url      = $_SERVER[ 'REQUEST_URI' ];
-        $this->is_swifty       = true;   // TEMP!!!
 
-        if ( !empty( $_GET[ "status" ] ) ) {
-            $this->_post_status = $_GET[ "status" ];
-        }
-
-        if ( !empty( $_GET[ "post_type" ] ) ) {
-            $this->_post_type = $_GET[ "post_type" ];
-        }
-
-        add_action( 'init',       array( $this, 'spm_load_textdomain' ) );
-        add_action( 'admin_head', array( $this, 'admin_head' ) );
-        add_action( 'admin_menu', array( $this, 'admin_menu') );
-        add_action( 'wp_ajax_spm_get_childs',    array( $this, 'ajax_get_childs' ) );
-        add_action( 'wp_ajax_spm_move_page',     array( $this, 'ajax_move_page' ) );
-        add_action( 'wp_ajax_spm_save_page',     array( $this, 'ajax_save_page' ) );
-        add_action( 'wp_ajax_spm_delete_page',   array( $this, 'ajax_delete_page' ) );
-        add_action( 'wp_ajax_spm_publish_page',  array( $this, 'ajax_publish_page' ) );
-        add_action( 'wp_ajax_spm_post_settings', array( $this, 'ajax_post_settings' ) );
-        add_action( 'admin_enqueue_scripts',     array( $this, 'add_plugin_css' ) );
-
+        // Actions for visitors viewing the site
         if ( $this->is_swifty ) {
-            add_action( 'wp_ajax_spm_sanitize_url', array( $this, 'ajax_sanitize_url' ) );
-            add_action( 'parse_request',       array( $this, 'parse_request' ) );
-            add_action( 'save_post',           array( $this, 'restore_page_status' ), 10, 2 );
-            add_filter( 'wp_insert_post_data', array( $this, 'set_tmp_page_status' ), 10, 2 );
-            add_filter( 'page_link',           array( $this, 'page_link' ), 10, 2 );
-            add_filter( 'wp_list_pages',       array( $this, 'wp_list_pages' ) );
-            add_filter( 'status_header',       array( $this, 'status_header' ) );
-            add_filter( 'wp_title',            array( $this, 'seo_wp_title' ), 10, 2 );
+            add_filter( 'page_link',     array( $this, 'page_link' ), 10, 2 );
+            add_action( 'parse_request', array( $this, 'parse_request' ) );
+            add_filter( 'wp_title',      array( $this, 'seo_wp_title' ), 10, 2 );
         }
+
+        // Actions for admins, warning: is_admin is not a security check
+        if ( is_admin() ) {
+            add_action( 'init',       array( $this, 'admin_init' ) );
+        }
+
     }
 
     /**
-     * Adds the plugin css to the head tag.
+     * Called via WP Action 'init' if is_admin
+     *
+     * Load translations
      */
-    public function add_plugin_css()
+    function admin_init()
     {
-        wp_enqueue_style( "spm", $this->plugin_dir_url . "/css/styles.css", false, $this->_plugin_version );
+        if ( current_user_can( 'edit_pages' ) ) {
+            if ( !empty( $_GET[ "status" ] ) ) {
+                $this->_post_status = $_GET[ "status" ];
+            }
+
+            if ( !empty( $_GET[ "post_type" ] ) ) {
+                $this->_post_type = $_GET[ "post_type" ];
+            }
+
+            load_plugin_textdomain( 'swifty-page-manager', false, '/swifty-page-manager/languages' );
+
+            add_action( 'admin_head', array( $this, 'admin_head' ) );
+            add_action( 'admin_menu', array( $this, 'admin_menu') );
+            add_action( 'wp_ajax_spm_get_childs',    array( $this, 'ajax_get_childs' ) );
+            add_action( 'wp_ajax_spm_save_page',     array( $this, 'ajax_save_page' ) );
+            add_action( 'wp_ajax_spm_post_settings', array( $this, 'ajax_post_settings' ) );
+            add_action( 'wp_ajax_spm_move_page',     array( $this, 'ajax_move_page' ) );
+
+            if ( current_user_can( 'delete_pages' ) ) {
+                add_action( 'wp_ajax_spm_delete_page', array( $this, 'ajax_delete_page' ) );
+            }
+
+            if ( current_user_can( 'publish_pages' ) ) {
+                add_action( 'wp_ajax_spm_publish_page', array( $this, 'ajax_publish_page' ) );
+            }
+
+            add_action( 'admin_enqueue_scripts', array( $this, 'add_plugin_css' ) );
+
+            if ( $this->is_swifty ) {
+                add_action( 'wp_ajax_spm_sanitize_url', array( $this, 'ajax_sanitize_url' ) );
+                add_action( 'save_post',           array( $this, 'restore_page_status' ), 10, 2 );
+                add_filter( 'wp_insert_post_data', array( $this, 'set_tmp_page_status' ), 10, 2 );
+                add_filter( 'wp_list_pages',       array( $this, 'wp_list_pages' ) );
+                add_filter( 'status_header',       array( $this, 'status_header' ) );
+            }
+        }
     }
 
     /**
@@ -95,6 +114,8 @@ class SwiftyPageManager
     }
 
     /**
+     * Called via WP Filter 'wp_insert_post_data', if can_edit_pages && is_swifty
+     *
      * @param array $data
      * @param array $postarr
      * @return array
@@ -113,10 +134,16 @@ class SwiftyPageManager
     }
 
     /**
+     * Called via WP Action 'save_post', if can_edit_pages && is_swifty
+     *
      * @param integer $post_id
      * @param WP_Post $post
      */
     public function restore_page_status( $post_id, $post ) {
+        if ( !current_user_can( 'edit_pages' ) ) {
+            wp_die( __( 'You do not have sufficient permissions to access this page. #314' ) );
+        }
+
         /** @var wpdb $wpdb - Wordpress Database */
         global $wpdb;
 
@@ -136,6 +163,8 @@ class SwiftyPageManager
     }
 
     /**
+     * Called via WP Action 'parse_request' if is_swifty
+     *
      * Action function to make our overridden URLs work by changing the query params.
      *
      * @param wp $wp - WordPress object
@@ -157,6 +186,8 @@ class SwiftyPageManager
     }
 
     /**
+     * Called via WP Filter 'page_link', if is_swifty
+     *
      * Filter function called when the link to a page is needed.
      * We return our custom URL if it has been set.
      *
@@ -191,6 +222,8 @@ class SwiftyPageManager
     }
 
     /**
+     * Called via WP Filter 'wp_list_pages', if can_edit_pages && is_swifty
+     *
      * Filter function to add "spm_hidden" class to hidden menu items in <li> tree.
      *
      * @param $output
@@ -208,6 +241,8 @@ class SwiftyPageManager
     }
 
     /**
+     * Called via WP Filter 'status_header', if can_edit_pages && is_swifty
+     *
      * Status header filter function.
      * When a 404 error occurs check if we can find the URL in a post's spm_old_url_XXX field.
      * If found, 301 redirect to the post.
@@ -244,10 +279,16 @@ class SwiftyPageManager
     }
 
     /**
+     * Called via WP Action 'admin_head' if can_edit_pages
+     *
      * Output header for admin page
      */
     public function admin_head()
     {
+        if ( !current_user_can( 'edit_pages' ) ) {
+            wp_die( __( 'You do not have sufficient permissions to access this page. #314' ) );
+        }
+
         $currentScreen = get_current_screen();
 
         if ( 'pages_page_page-tree' === $currentScreen->base ) {
@@ -258,36 +299,29 @@ class SwiftyPageManager
     }
 
     /**
+     * Called via WP Action 'admin_menu' if can_edit_pages
+     *
      * Add submenu to admin left menu
      */
     public function admin_menu()
     {
-        add_submenu_page( 'edit.php?post_type='.$this->_post_type
-                        , __( 'Swifty Page Manager', 'swifty-page-manager' )
-                        , __( 'Swifty Page Manager', 'swifty-page-manager' )
-                        , 'manage_options'
-                        , 'page-tree'
-                        , array( $this, 'view_page_tree' )
-                        );
+        add_submenu_page( 'edit.php?post_type='.$this->_post_type,
+                          __( 'Swifty Page Manager', 'swifty-page-manager' ),
+                          __( 'Swifty Page Manager', 'swifty-page-manager' ),
+                          'edit_pages',
+                          'page-tree',
+                          array( $this, 'view_page_tree' ) );
     }
 
     /**
-     * Load translations
-     */
-    function spm_load_textdomain()
-    {
-        if ( is_admin() ) {
-            load_plugin_textdomain( 'swifty-page-manager', false, '/swifty-page-manager/languages' );
-        }
-    }
-
-    /**
+     * Called via WP do_action if can_edit_pages
+     *
      * Show page tree
      */
     public function view_page_tree()
     {
         if ( !current_user_can( 'edit_pages' ) ) {
-            wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+            wp_die( __( 'You do not have sufficient permissions to access this page. #314' ) );
         }
 
         // renamed from cookie to fix problems with mod_security
@@ -325,10 +359,16 @@ class SwiftyPageManager
     }
 
     /**
+     * Called via WP Ajax Action 'wp_ajax_spm_get_childs' if can_edit_pages
+     *
      * Return JSON with tree children, called from Ajax
      */
     public function ajax_get_childs()
     {
+        if ( !current_user_can( 'edit_pages' ) ) {
+            wp_die( __( 'You do not have sufficient permissions to access this page. #359' ) );
+        }
+
         header( "Content-type: application/json" );
 
         $action = $_GET[ "action" ];
@@ -338,7 +378,7 @@ class SwiftyPageManager
         $post_type_object = get_post_type_object( $this->_post_type );
 
         if ( !current_user_can( $post_type_object->cap->edit_posts ) ) {
-            die( __( 'Cheatin&#8217; uh?' ) );
+            wp_die( __( 'You do not have sufficient permissions to access this page. #371' ) );
         }
 
         if ( $action ) {   // regular get
@@ -366,6 +406,9 @@ class SwiftyPageManager
     }
 
     /**
+     * Called via WP Filter 'filter_views_edit_postsoverview' if can_edit_pages
+     *                                                           && 'pages_page_page-tree' == $currentScreen->base
+     *
      * Output tree and html code for post overview page
      */
     public function filter_views_edit_postsoverview( $filter_var )
@@ -397,9 +440,9 @@ class SwiftyPageManager
         if ( is_post_type_hierarchical( $this->_post_type ) ) {
             $mode      = "list";
             if ( isset( $_GET[ "mode" ] ) && $_GET[ "mode" ] != $mode  ) {
-                $class = " class='spm_add_list_view' ";
+                $class = " class='spm-add-list-view' ";
             } else {
-                $class = " class='spm_add_list_view current' ";
+                $class = " class='spm-add-list-view current' ";
             }
             $title     = __( "List View" ); /* translation not missing - exists in wp */
             $wp_list_a = "<a href='" . esc_url( add_query_arg( 'mode', $mode, $this->getPluginUrl() ) ) .
@@ -422,10 +465,16 @@ class SwiftyPageManager
     }
 
     /**
+     * Called via WP Ajax Action 'wp_ajax_spm_move_page' if can_edit_pages
+     *
      * Ajax function to move a page
      */
     public function ajax_move_page()
     {
+        if ( !current_user_can( 'edit_pages' ) ) {
+            wp_die( __( 'You do not have sufficient permissions to access this page. #465' ) );
+        }
+
         /*
          the node that was moved,
          the reference node in the move,
@@ -539,10 +588,16 @@ class SwiftyPageManager
     }
 
     /**
+     * Called via WP Ajax Action 'ajax_save_page' if can_edit_pages
+     *
      * Ajax funtion to save a page
      */
     public function ajax_save_page()
     {
+        if ( !current_user_can( 'edit_pages' ) ) {
+            wp_die( __( 'You do not have sufficient permissions to access this page. #588' ) );
+        }
+
         /** @var wpdb $wpdb - Wordpress Database */
         global $wpdb;
 
@@ -653,10 +708,16 @@ class SwiftyPageManager
     }
 
     /**
+     * Called via WP Ajax action 'wp_ajax_spm_delete_page' if can_edit_pages
+     *
      * Ajax function to delete a page
      */
     public function ajax_delete_page()
     {
+        if ( !current_user_can( 'delete_pages' ) ) {
+            wp_die( __( 'You do not have sufficient permissions to access this page. #708' ) );
+        }
+
         $post_id = intval( $_POST[ "post_ID" ] );
 
         if ( isset( $post_id ) && !empty( $post_id ) ) {
@@ -669,12 +730,6 @@ class SwiftyPageManager
             $post_data = wp_delete_post( $post_id, false );
 
             if ( is_object( $post_data ) ) {
-//                delete_post_meta( $post_id, 'spm_url' );
-//                delete_post_meta( $post_id, 'spm_show_in_menu' );
-//                delete_post_meta( $post_id, 'spm_page_title_seo' );
-//                delete_post_meta( $post_id, 'spm_header_visibility' );
-//                delete_post_meta( $post_id, 'spm_sidebar_visibility' );
-
                 echo "1";
             } else {
                 echo "0";   // fail, tell js
@@ -687,10 +742,16 @@ class SwiftyPageManager
     }
 
     /**
+     * Called via WP Ajax action 'wp_ajax_spm_publish_page' if can_edit_pages
+     *
      * Ajax function to publish a page
      */
     public function ajax_publish_page()
     {
+        if ( !current_user_can( 'publish_pages' ) ) {
+            wp_die( __( 'You do not have sufficient permissions to access this page. #747' ) );
+        }
+
         $post_id = intval( $_POST[ "post_ID" ] );
 
         if ( isset( $post_id ) && !empty( $post_id ) ) {
@@ -705,10 +766,16 @@ class SwiftyPageManager
     }
 
     /**
+     * Called via WP Ajax 'wp_ajax_spm_post_settings' if can_edit_pages
+     *
      * Ajax function to set the settings of a post
      */
     public function ajax_post_settings()
     {
+        if ( !current_user_can( 'edit_pages' ) ) {
+            wp_die( __( 'You do not have sufficient permissions to access this page. #771' ) );
+        }
+
         header( 'Content-Type: text/javascript' );
 
         $post_id          = intval( $_REQUEST[ 'post_ID' ] );
@@ -770,6 +837,8 @@ class SwiftyPageManager
     }
 
     /**
+     * Called via WP Admin Ajax 'wp_ajax_spm_sanitize_url' if can_edit_pages && is_swifty
+     *
      * Ajax function to use Wordpress' sanitize_title_with_dashes function to prepare an URL string
      */
     public function ajax_sanitize_url()
@@ -779,6 +848,8 @@ class SwiftyPageManager
     }
 
     /**
+     * Get page tree as PHP class.
+     *
      * @return StdClass
      */
     public function getTree()
@@ -797,6 +868,8 @@ class SwiftyPageManager
     }
 
     /**
+     * Get the JSON data for a branch of the tree, or the whole tree
+     *
      * @param $branch
      * @return array
      */
@@ -831,6 +904,7 @@ class SwiftyPageManager
     }
 
     /**
+     * Save an old page URL, we create a redirect for old links from other sites and Google.
      * USAGE:  $this->save_old_url( 469, 'old/url/path' );
      *
      * @param $post_id
@@ -863,7 +937,7 @@ class SwiftyPageManager
     }
 
     /**
-     * Get filter on post status. The user can choose this.
+     * Get current post status filter. The user can choose this.
      * - any
      * - publish
      * - trash
@@ -882,6 +956,14 @@ class SwiftyPageManager
      */
     public function getPluginUrl() {
         return $this->plugin_url;
+    }
+
+    /**
+     * Adds the plugin css to the head tag.
+     */
+    public function add_plugin_css()
+    {
+        wp_enqueue_style( "spm", $this->plugin_dir_url . "/css/styles.css", false, $this->_plugin_version );
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////
@@ -972,7 +1054,6 @@ class SwiftyPageManager
     {
         $pageJsonData = array();
 
-        $post    = $onePage;
         $page_id = $onePage->ID;
 
         $post_statuses    = get_post_statuses();
@@ -991,9 +1072,9 @@ class SwiftyPageManager
         $post_modified_time = date_i18n( get_option( 'date_format' ), $post_modified_time, false );
 
         // last edited by
-        setup_postdata( $post );
+        setup_postdata( $onePage );
 
-        if ( $last_id = get_post_meta( $post->ID, '_edit_last', true ) ) {
+        if ( $last_id = get_post_meta( $onePage->ID, '_edit_last', true ) ) {
             $last_user = get_userdata( $last_id );
 
             if ( $last_user !== false ) {
@@ -1008,17 +1089,30 @@ class SwiftyPageManager
         $title = get_the_title( $onePage->ID ); // so hooks and stuff will do their work
 
         if ( empty( $title ) ) {
-            $title = __( "<Untitled page>", 'swifty-page-manager' );
+            $title = __( "[untitled page]", 'swifty-page-manager' );
         }
 
-        $user_can_edit_page  = current_user_can( $post_type_object->cap->edit_post, $page_id );
-        $user_can_add_inside = current_user_can( $post_type_object->cap->create_posts, $page_id );
-        $user_can_add_after  = current_user_can( $post_type_object->cap->create_posts, $page_id );
+        $arr_page_css_styles = array();
 
-        $arr_page_css_styles   = array();
-        $arr_page_css_styles[] = "spm_user_can_edit_page_" . ( $user_can_edit_page ? 'yes' : 'no' );
-        $arr_page_css_styles[] = "spm_user_can_add_page_inside_" . ( $user_can_add_inside ? 'yes' : 'no' );
-        $arr_page_css_styles[] = "spm_user_can_add_page_after_" . ( $user_can_add_after ? 'yes' : 'no' );
+        if ( current_user_can( $post_type_object->cap->edit_post, $page_id ) ) {
+            $arr_page_css_styles[] = 'spm_can_edit';
+        }
+
+        if ( current_user_can( $post_type_object->cap->create_posts, $page_id ) && 'draft' != $onePage->post_status ) {
+            $arr_page_css_styles[] = "spm_can_add_inside";
+        }
+
+        if ( current_user_can( $post_type_object->cap->create_posts, $onePage->post_parent ) ) {
+            $arr_page_css_styles[] = 'spm_can_add_after';
+        }
+
+        if ( current_user_can( $post_type_object->cap->publish_posts, $page_id ) ) {
+            $arr_page_css_styles[] = 'spm_can_publish';
+        }
+
+        if ( current_user_can( $post_type_object->cap->delete_post, $page_id ) ) {
+            $arr_page_css_styles[] = 'spm_can_delete';
+        }
 
         if ( $this->is_swifty ) {
             $show_page_in_menu = get_post_meta( $page_id, 'spm_show_in_menu', true );
@@ -1027,7 +1121,7 @@ class SwiftyPageManager
                 $show_page_in_menu = 'show';
             }
 
-            $arr_page_css_styles[] = "spm-show-page-in-menu-" . ( $show_page_in_menu === 'show' ? 'yes' : 'no' );
+            $arr_page_css_styles[] = 'spm-show-page-in-menu-' . ( $show_page_in_menu === 'show' ? 'yes' : 'no' );
         }
 
         $pageJsonData['data'] = array();
@@ -1054,9 +1148,6 @@ class SwiftyPageManager
         $pageJsonData['metadata']["editlink"] = htmlspecialchars_decode( $editLink );
         $pageJsonData['metadata']["modified_time"] = $post_modified_time;
         $pageJsonData['metadata']["modified_author"] = $post_author;
-        $pageJsonData['metadata']["user_can_edit_page"] = (int) $user_can_edit_page;
-        $pageJsonData['metadata']["user_can_add_page_inside"] = (int) $user_can_add_inside;
-        $pageJsonData['metadata']["user_can_add_page_after"] = (int) $user_can_add_after;
         $pageJsonData['metadata']["post_title"] = $title;
         $pageJsonData['metadata']["delete_nonce"] = wp_create_nonce( "delete-page_".$onePage->ID, '_trash' );
 
