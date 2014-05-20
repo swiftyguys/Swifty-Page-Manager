@@ -11,6 +11,26 @@
                 "after_install": "",
                 "order": 1
             }
+        },
+        "tmpl": {
+            "wp_3.0": {
+                "wp_version": "3.0",
+                "wp_sha256sum": "73414effa3dd10a856b0e8e9a4726e92288fad7e43723106716b72de5f3ed91c"
+            },
+            "wp_3.7": {
+                "wp_version": "3.7",
+                "wp_sha256sum": "94b8b7a7241ec0817defa1c35f738d777f01ac17a4e45ee325c0f1778504fd94"
+            },
+            "wp_3.9.1": {
+                "wp_version": "3.9.1",
+                "wp_sha256sum": "73c21224d42156150b948ca645a296a2431f1dd6a19350e0d8a72e465adde56d"
+            },
+            "s_wp_en_3.0": {
+                "s_submenu_installed_plugins": "Plugins"
+            },
+            "s_wp_en_3.7": {
+                "s_submenu_installed_plugins": "Installed Plugins"
+            }
         }
     },
     "ec2": {
