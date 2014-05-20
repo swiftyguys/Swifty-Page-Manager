@@ -137,7 +137,7 @@ class Wordpress {
 
         $this->OpenAdminSubMenu( 'plugins', $this->strings[ 's_submenu_installed_plugins' ] );
         $st->usingTimer()->wait( 1, "Wait for Installed Plugin page." );
-        $this->story->ClickElementByXpath( 'descendant::tr[@id = "' . $pluginCode . '"]//a[normalize-space(text()) = "Activate"]', "graceful" );
+        $this->story->ClickElementByXpath( 'descendant::a[contains(@href, "plugin=' . $pluginCode . '") and normalize-space(text()) = "Activate"]', "graceful" );
     }
 
     ////////////////////////////////////////

@@ -46,7 +46,7 @@ class SSStory {
         $settingsPublic[ $this->params[ 'platform' ] ] = ( isset( $settingsPublic[ $this->params[ 'platform' ] ] ) && is_array( $settingsPublic[ $this->params[ 'platform' ] ] )) ? $settingsPublic[ $this->params[ 'platform' ] ] : array(); // initialize if necessary
         $settingsPrivate = json_decode( file_get_contents( dirname(__FILE__) . '/../settings_private.json' ), true );
         $this->data = new stdClass(); // Empty object
-        $this->data->testSettings = (object) array_merge(
+        $this->data->testSettings = (object) array_replace_recursive(
             $settingsPublic[ 'default' ],
             $settingsPublic[ $this->params[ 'platform' ] ],
             $settingsPrivate[ 'default' ],
