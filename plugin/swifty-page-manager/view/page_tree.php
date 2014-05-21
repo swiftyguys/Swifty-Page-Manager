@@ -114,6 +114,15 @@ $post_new_file    = 'post-new.php?post_type=' . $this->_post_type;
             <li><a href="#" class="spm_open_all"><?php _e( 'Expand', 'swifty-page-manager' ); ?></a> |</li>
             <li><a href="#" class="spm_close_all"><?php _e( 'Collapse', 'swifty-page-manager' ); ?></a></li>
 
+            <li>
+                <form class="spm-search-form" method="get" action="">
+                    <input type="text" name="search" class="spm-search" />
+                    <a title="<?php _e( 'Clear search', 'swifty-page-manager' ) ?>" class="spm-search-form-reset" href="#">x</a>
+                    <input type="button" class="spm-search-submit button button-small" value="<?php _e( 'Search', 'swifty-page-manager' ) ?>" />
+                    <span class="spm-search-form-working"><?php _e( 'Searching...', 'swifty-page-manager' ) ?></span>
+                    <span class="spm-search-form-no-hits"><?php _e( 'Nothing found.', 'swifty-page-manager' ) ?></span>
+                </form>
+            </li>
         </ul>
 
         <div class="spm-working">
@@ -160,7 +169,7 @@ $post_new_file    = 'post-new.php?post_type=' . $this->_post_type;
     </span>
 
     <!-- SPM template Delete -->
-    <span class="spm-container spm-page-delete-tmpl __TMPL__" style="display:none;">
+    <span class="spm-tmpl-container spm-page-delete-tmpl __TMPL__" style="display:none;">
         <form method="post" class="spm-form spm-page-delete-form">
             <input type="hidden" name="is_swifty" value="<?php echo esc_attr( ( $this->is_swifty ) ? '1' : '0' ); ?>" >
             <input type="hidden" name="wp_site_url" value="<?php echo get_site_url(); ?>" >
@@ -196,7 +205,7 @@ $post_new_file    = 'post-new.php?post_type=' . $this->_post_type;
     </span>
 
     <!-- SPM template Publish -->
-    <span class="spm-container spm-page-publish-tmpl __TMPL__" style="display:none;">
+    <span class="spm-tmpl-container spm-page-publish-tmpl __TMPL__" style="display:none;">
         <form method="post" class="spm-form spm-page-publish-form">
             <input type="hidden" name="is_swifty" value="<?php echo esc_attr( ( $this->is_swifty ) ? '1' : '0' ); ?>" >
             <input type="hidden" name="wp_site_url" value="<?php echo get_site_url(); ?>" >
@@ -270,7 +279,7 @@ $post_new_file    = 'post-new.php?post_type=' . $this->_post_type;
     </span>
 
     <!-- SwiftySite template Add/Edit -->
-    <span class="spm-container spm-page-add-edit-tmpl __TMPL__" style="display:none;">
+    <span class="spm-tmpl-container spm-page-add-edit-tmpl __TMPL__" style="display:none;">
         <form method="post" class="spm-form spm-page-add-edit-form">
             <input type="hidden" name="is_swifty" value="<?php echo esc_attr( ( $this->is_swifty ) ? '1' : '0' ); ?>" >
             <input type="hidden" name="wp_site_url" value="<?php echo get_site_url(); ?>" >

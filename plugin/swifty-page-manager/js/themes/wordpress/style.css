@@ -26,8 +26,6 @@
 
 .jstree-wordpress .jstree-no-icons a .jstree-icon { display:none; }
 
-.jstree-wordpress .jstree-search { font-style:italic; }
-
 .jstree-wordpress .jstree-no-icons .jstree-checkbox { display:inline-block; }
 .jstree-wordpress .jstree-no-checkboxes .jstree-checkbox { display:none !important; }
 .jstree-wordpress .jstree-checked > a > .jstree-checkbox { background-position:-38px -19px; }
@@ -42,7 +40,7 @@
 #vakata-dragged.jstree-wordpress .jstree-invalid { background:url("d.png") -35px -106px no-repeat !important; width: 36px; height: 36px; }
 #jstree-marker.jstree-wordpress { background:url("d.png") -82px -114px no-repeat !important; text-indent:-100px; width: 36px; height: 36px; margin-top:-6px; }
 
-.jstree-wordpress a.jstree-search { color:aqua; }
+.jstree-wordpress a.jstree-search { color:#444; font-weight:bold; font-style:italic; }
 .jstree-wordpress .jstree-locked a { color:silver; cursor:default; }
 
 #vakata-contextmenu.jstree-wordpress-context,

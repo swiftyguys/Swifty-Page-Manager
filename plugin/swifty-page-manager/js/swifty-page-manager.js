@@ -5,7 +5,6 @@ Swifty Page Manager
 */
 
 var $SPMTree,
-    SPMOpts,
     $SPMMsg,
     $SPMAddBtn;
 
@@ -23,6 +22,39 @@ var SPM = (function( $, document ) {
     };
 
     spm.startListeners = function() {
+        $( document ).on( 'click', '.spm-search-submit', function( /*ev*/ ) {
+            var $wrapper = spm.getWrapper( this );
+            var searchString = $.trim( $wrapper.find( '.spm-search' ).attr( 'value' ) );
+
+            if ( searchString ) {
+                $wrapper.find( '.spm-search-form-no-hits' ).fadeOut( 'fast' );
+                $wrapper.find( '.spm-search-form-working' ).fadeIn( 'fast' );
+                $wrapper.find( '.spm-search-form-reset' );
+                $SPMTree.jstree( 'search', searchString );
+                $wrapper.find( '.spm-search-form-reset' ).fadeIn( 'fast' );
+            } else {
+                $wrapper.find( '.spm-search-form-no-hits' ).fadeOut( 'fast' );
+                $wrapper.find( '.cms-tpv-container' ).jstree( 'clear_search' );
+                $wrapper.find( '.spm-search-form-reset' ).fadeOut( 'fast' );
+            }
+
+            $wrapper.find( '.spm-search-form-working' ).fadeOut( 'fast' );
+
+            return false;
+        });
+
+        // Reset search when click on x-link
+        $( document ).on( 'click', 'a.spm-search-form-reset', function( /*ev*/ ) {
+            var $wrapper = spm.getWrapper( this );
+
+            $wrapper.find( '.spm-search' ).val( '' );
+            $SPMTree.jstree( 'clear_search' );
+            $wrapper.find( '.spm-search-form-reset' ).fadeOut( 'fast' );
+            $wrapper.find( '.spm-search-form-no-hits' ).fadeOut( 'fast' );
+
+            return false;
+        });
+
         $( document ).on( 'mouseenter', '.spm-tooltip-button', spm.openTooltipHandler );
         $( document ).on( 'mouseleave', '.spm-tooltip-button', spm.closeTooltipHandler );
         $( document ).on( 'click', '.spm-tooltip-button', spm.openTooltipHandler );
@@ -50,7 +82,7 @@ var SPM = (function( $, document ) {
 
             spm.$tooltips.tooltip( 'close' );
 
-            spm.resetPageTree();
+            spm.resetPageTree( $li );
             spm.preparePageActionButtons( $li );
 
             $.cookie( 'jstree_select', curLiId );
@@ -126,10 +158,9 @@ var SPM = (function( $, document ) {
                 case 'settings':
                 case 'delete':
                 case 'publish':
-                    spm.resetPageTree();
+                    spm.resetPageTree( $li );
 
                     if ( ! $li.data( 'cur-action' ) || $li.data( 'cur-action' ) !== action ) {
-                        spm.resetPageTree();
                         spm.preparePageActions( $li, action );
                         $li.data( 'cur-action', action );
                     }
@@ -148,7 +179,7 @@ var SPM = (function( $, document ) {
 
                     break;
                 default:
-                    $( '.spm-container:visible' ).remove();
+                    $( '.spm-tmpl-container:visible' ).remove();
 
                     break;
             }
@@ -236,7 +267,7 @@ var SPM = (function( $, document ) {
 
                     break;
                 case 'cancel':
-                    $( '.spm-container:visible' ).remove();
+                    $( '.spm-tmpl-container:visible' ).remove();
 
                     break;
                 case 'less':
@@ -349,12 +380,12 @@ var SPM = (function( $, document ) {
         });
     };
 
-    spm.resetPageTree = function() {
+    spm.resetPageTree = function( $li ) {
         var $tree = $( '.spm-tree-container' );
 
         $tree.find( 'li' ).data( 'cur-action', '' );
-        $tree.find( '.spm-container' ).remove();
-        $tree.find( 'a.jstree-clicked' ).removeClass( 'jstree-clicked' );
+        $tree.find( '.spm-tmpl-container' ).remove();
+        $tree.find( 'a.jstree-clicked' ).not( $li.find( '> a' ) ).removeClass( 'jstree-clicked' );
     };
 
     spm.validateSettings = function( $li ) {
@@ -487,8 +518,6 @@ var SPM = (function( $, document ) {
 
         spm.adaptTreeLinkElements( $container.find( 'a' ) );
 
-        $( 'a.jstree-clicked' ).removeClass( 'jstree-clicked' );
-
         if ( selectedLiId ) {
             spm.preparePageActionButtons( $( selectedLiId ) );
             $container.find( selectedLiId + ' > a' ).addClass( 'jstree-clicked' );
@@ -508,6 +537,32 @@ var SPM = (function( $, document ) {
                     data.inst.open_node( id, null, true );
                 });
             }
+        }
+    };
+
+    spm.pageTreeSearch = function ( ev, data ) {
+        var searchString = data.rslt.str.toLowerCase();
+        var $tree = $( this );
+        var nodes = data.rslt.nodes;
+        var index = nodes.length;
+
+        // This workaround is needed because the jstree search also searches through the labels (Concept, Hidden, etc.)
+        if ( index ) {
+            while( index-- ) {
+                var $link = $( nodes[ index ] );
+                var liText = spm.getLiText( $link.closest( 'li' ) );
+
+                if ( liText.toLowerCase().indexOf( searchString ) === -1 ) {
+                    $link.removeClass( 'jstree-search' );
+                    nodes.splice( index, 1 );
+                }
+            }
+        }
+
+        if ( ! nodes.length ) {   // No search results
+            $tree.closest( '.spm-wrapper' )
+                .find( '.spm-search-form-no-hits' )
+                .fadeIn( 'fast' );
         }
     };
 
@@ -571,7 +626,7 @@ var SPM = (function( $, document ) {
     };
 
     spm.bindCleanNodes = function () {
-        $SPMTree.bind( 'move_node.jstree', function ( ev, data ) {
+        $SPMTree.on( 'move_node.jstree', function ( ev, data ) {
             var $nodeBeingMoved = $( data.rslt.o );
             var $nodeR = $( data.rslt.r );
             var $nodeRef = $( data.rslt.or );
@@ -604,7 +659,7 @@ var SPM = (function( $, document ) {
             } );
         } );
 
-        $SPMTree.bind( 'clean_node.jstree', function ( ev, data ) {
+        $SPMTree.on( 'clean_node.jstree', function ( ev, data ) {
             var obj = ( data.rslt.obj );
 
             if ( obj && obj !== -1 ) {
@@ -684,14 +739,8 @@ jQuery(function( $ ) {
         'li.jstree-closed > ul { display:none; } ' +
         '#vakata-dragged { background-color: white; };' +
         '';
-
-    $.vakata.css.add_sheet({
-        'str': css,
-        'title': 'jstree_spm'
-    });
-
-    SPMOpts = {
-        'plugins': [ 'themes', 'json_data', 'cookies', 'dnd', 'crrm', 'types' ],
+    var treeOptions = {
+        'plugins': [ 'themes', 'json_data', 'cookies', 'dnd', 'crrm', 'search', 'types' ],
         'core': {
             'html_titles': true
         },
@@ -701,7 +750,7 @@ jQuery(function( $ ) {
         },
         'json_data': {
             'ajax': {
-                'url': ajaxurl + '?action=spm_get_childs&status=' + $.data( document, 'spm_status' ),
+                'url': ajaxurl + '?action=spm_get_childs&post_type=page&status=' + $.data( document, 'spm_status' ),
                 // this function is executed in the instance's scope (this refers to the tree instance)
                 // the parameter is the node being loaded (may be -1, 0, or undefined when loading the root nodes)
                 'data': function( n ) {
@@ -765,18 +814,16 @@ jQuery(function( $ ) {
         }
     };
 
+    $.vakata.css.add_sheet({
+        'str': css,
+        'title': 'jstree_spm'
+    });
+
     if ( $SPMTree.length > 0 ) {
         SPM.bindCleanNodes();
     }
 
-    $SPMTree.each(function( i, el ) {
-        var $el = $( el );
-        var treeOptionsTmp = $.extend( true, {}, SPMOpts );
-        var postType = SPM.getPostType( el );
-
-        treeOptionsTmp.json_data.ajax.url = treeOptionsTmp.json_data.ajax.url + '&post_type=' + postType;
-
-        $el.bind( 'loaded.jstree refresh.jstree', SPM.pageTreeLoaded );
-        $el.jstree( treeOptionsTmp );
-    });
+    $SPMTree.on( 'loaded.jstree refresh.jstree', SPM.pageTreeLoaded );
+    $SPMTree.on( 'search.jstree', SPM.pageTreeSearch );
+    $SPMTree.jstree( treeOptions );
 });  // End onDomReady
