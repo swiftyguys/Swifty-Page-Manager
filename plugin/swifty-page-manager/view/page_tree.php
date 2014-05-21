@@ -4,9 +4,8 @@
  * @var SwiftyPageManager $this
  */
 $post_type_object = get_post_type_object( $this->_post_type );
-$post_new_file    = 'post-new.php?post_type=' . $this->_post_type;
-
 ?>
+
 <div class="wrap">
     <h2><?php _ex( 'Swifty Page Manager', 'headline of page with tree', 'swifty-page-manager' ); ?></h2>
     <?php
@@ -18,6 +17,7 @@ $post_new_file    = 'post-new.php?post_type=' . $this->_post_type;
         'publish' => '',
         'draft'   => '',
         'pending' => '',
+        'future'  => '',
         'private' => '',
         'trash'   => ''
     );
@@ -28,8 +28,9 @@ $post_new_file    = 'post-new.php?post_type=' . $this->_post_type;
                           $post_count->pending + $post_count->private;
     $post_count_publish = $post_count->publish;
     $post_count_draft   = $post_count->draft;
-    $post_count_private = $post_count->private;
     $post_count_pending = $post_count->pending;
+    $post_count_future  = $post_count->future;
+    $post_count_private = $post_count->private;
     $post_count_trash   = $post_count->trash;
 
     // output js for the root/top level
@@ -89,6 +90,16 @@ $post_new_file    = 'post-new.php?post_type=' . $this->_post_type;
                     data-spm-status="pending">
                     <?php _e('Pending', 'swifty-page-manager'); ?>
                     <span class="count">(<?php esc_html_e( $post_count_pending ); ?>)</span>
+                </a> |
+            </li>
+
+            <li class="<?php echo ( !$post_count_future ) ? 'spm-hidden' : '' ?>">
+                <a class="spm-status-future
+                          <?php echo esc_attr( ('future' === $this->get_post_status()) ? 'current' : '' ); ?>"
+                   href="<?php echo esc_attr( add_query_arg( 'status', 'future', $this->get_plugin_url() ) ); ?>"
+                    data-spm-status="future">
+                    <?php _e('Future', 'swifty-page-manager'); ?>
+                    <span class="count">(<?php esc_html_e( $post_count_future ); ?>)</span>
                 </a> |
             </li>
 
