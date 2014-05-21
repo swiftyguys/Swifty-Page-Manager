@@ -60,7 +60,7 @@ var SPM = (function( $, document ) {
         $( document ).on( 'click', '.spm-tooltip-button', spm.openTooltipHandler );
         $( document ).on( 'click', spm.closeTooltipHandler );
 
-        $( document ).on( 'click', 'a.spm_open_all', function( /*ev*/ ) {
+        $( document ).on( 'click', 'a.spm-open-all', function( /*ev*/ ) {
             spm.$tooltips.tooltip( 'close' );
 
             spm.getWrapper( this ).find( '.spm-tree-container' ).jstree( 'open_all' );
@@ -68,7 +68,7 @@ var SPM = (function( $, document ) {
             return false;
         });
 
-        $( document ).on( 'click', 'a.spm_close_all', function( /*ev*/ ) {
+        $( document ).on( 'click', 'a.spm-close-all', function( /*ev*/ ) {
             spm.$tooltips.tooltip( 'close' );
 
             spm.getWrapper( this ).find( '.spm-tree-container' ).jstree( 'close_all' );
@@ -423,19 +423,19 @@ var SPM = (function( $, document ) {
 
         $tmpl.find( 'span[data-spm-action=add]' )
             .toggleClass( 'button-primary-disabled',
-                ! $li.hasClass( 'spm_can_add_inside' ) && ! $li.hasClass( 'spm_can_add_after' ) );
+                ! $li.hasClass( 'spm-can-add-inside' ) && ! $li.hasClass( 'spm-can-add-after' ) );
 
         $tmpl.find( 'span[data-spm-action=settings]' )
-            .toggleClass( 'button-primary-disabled', ! $li.hasClass( 'spm_can_edit' ) );
+            .toggleClass( 'button-primary-disabled', ! $li.hasClass( 'spm-can-edit' ) );
 
         $tmpl.find( 'span[data-spm-action=delete]' )
-            .toggleClass( 'button-primary-disabled', ! $li.hasClass( 'spm_can_delete' ) );
+            .toggleClass( 'button-primary-disabled', ! $li.hasClass( 'spm-can-delete' ) );
 
         $tmpl.find( 'span[data-spm-action=edit]' )
-            .toggleClass( 'button-primary-disabled', ! $li.hasClass( 'spm_can_edit' ) );
+            .toggleClass( 'button-primary-disabled', ! $li.hasClass( 'spm-can-edit' ) );
 
         $tmpl.find( 'span[data-spm-action=publish]' )
-            .toggleClass( 'button-primary-disabled', ! $li.hasClass( 'spm_can_publish' ) );
+            .toggleClass( 'button-primary-disabled', ! $li.hasClass( 'spm-can-publish' ) );
 
         if ( !isDraft ) {
             $tmpl.find( 'span[data-spm-action=publish]' ).hide();
@@ -486,7 +486,7 @@ var SPM = (function( $, document ) {
         }
 
         $tmpl.find( 'label.add_mode_inside' )
-            .toggleClass( 'spm-label-disabled', !$li.hasClass( 'spm_can_add_inside' ) );
+            .toggleClass( 'spm-label-disabled', !$li.hasClass( 'spm-can-add-inside' ) );
 
         $tmpl.find( '.spm-less' ).hide();
         $tmpl.find( '.spm-more' ).show();

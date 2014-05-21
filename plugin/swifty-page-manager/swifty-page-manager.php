@@ -224,7 +224,7 @@ class SwiftyPageManager
     /**
      * Called via WP Filter 'wp_list_pages', if can_edit_pages && is_swifty
      *
-     * Filter function to add "spm_hidden" class to hidden menu items in <li> tree.
+     * Filter function to add "spm-hidden" class to hidden menu items in <li> tree.
      *
      * @param $output
      * @return string
@@ -1042,23 +1042,23 @@ class SwiftyPageManager
         $arr_page_css_styles = array();
 
         if ( current_user_can( $post_type_object->cap->edit_post, $page_id ) ) {
-            $arr_page_css_styles[] = 'spm_can_edit';
+            $arr_page_css_styles[] = 'spm-can-edit';
         }
 
         if ( current_user_can( $post_type_object->cap->create_posts, $page_id ) && 'draft' !== $one_page->post_status ) {
-            $arr_page_css_styles[] = 'spm_can_add_inside';
+            $arr_page_css_styles[] = 'spm-can-add-inside';
         }
 
         if ( current_user_can( $post_type_object->cap->create_posts, $one_page->post_parent ) ) {
-            $arr_page_css_styles[] = 'spm_can_add_after';
+            $arr_page_css_styles[] = 'spm-can-add-after';
         }
 
         if ( current_user_can( $post_type_object->cap->publish_posts, $page_id ) ) {
-            $arr_page_css_styles[] = 'spm_can_publish';
+            $arr_page_css_styles[] = 'spm-can-publish';
         }
 
         if ( current_user_can( $post_type_object->cap->delete_post, $page_id ) ) {
-            $arr_page_css_styles[] = 'spm_can_delete';
+            $arr_page_css_styles[] = 'spm-can-delete';
         }
 
         if ( $this->is_swifty ) {
@@ -1164,7 +1164,7 @@ class SwiftyPageManager
         $show    = get_post_meta( $post_id, 'spm_show_in_menu', true );
 
         if ( ! empty( $show ) && 'hide' === $show ) {
-            $result .= ' spm_hidden';
+            $result .= ' spm-hidden';
         };
 
         return $result;

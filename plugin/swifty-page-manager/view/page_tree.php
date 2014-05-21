@@ -111,8 +111,8 @@ $post_new_file    = 'post-new.php?post_type=' . $this->_post_type;
                 </a> |
             </li>
 
-            <li><a href="#" class="spm_open_all"><?php _e( 'Expand', 'swifty-page-manager' ); ?></a> |</li>
-            <li><a href="#" class="spm_close_all"><?php _e( 'Collapse', 'swifty-page-manager' ); ?></a></li>
+            <li><a href="#" class="spm-open-all"><?php _e( 'Expand', 'swifty-page-manager' ); ?></a> |</li>
+            <li><a href="#" class="spm-close-all"><?php _e( 'Collapse', 'swifty-page-manager' ); ?></a></li>
 
             <li>
                 <form class="spm-search-form" method="get" action="">
