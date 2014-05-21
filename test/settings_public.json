@@ -25,11 +25,22 @@
                 "wp_version": "3.9.1",
                 "wp_sha256sum": "73c21224d42156150b948ca645a296a2431f1dd6a19350e0d8a72e465adde56d"
             },
-            "s_wp_en_3.0": {
-                "s_submenu_installed_plugins": "Plugins"
+            "wp_nl_3.9.1": {
+                "wp_version": "3.9.1",
+                "wp_sha256sum": "47b4b41025ba4d03fa89e9e94593a6cef1986985a86f922ec000b1eaf6c6b544"
             },
-            "s_wp_en_3.7": {
+            "s_wp_3.0": {
+                "s_login_button": "Log In",
+                "s_submenu_installed_plugins": "Plugins",
+                "s_activate": "Activate"
+            },
+            "s_wp_3.7": {
                 "s_submenu_installed_plugins": "Installed Plugins"
+            },
+            "s_wp_nl_3.7": {
+                "s_login_button": "Inloggen",
+                "s_submenu_installed_plugins": "Geïnstalleerde plugins",
+                "s_activate": "Activeren"
             }
         }
     },
