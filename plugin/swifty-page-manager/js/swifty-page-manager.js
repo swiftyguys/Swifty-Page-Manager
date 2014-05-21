@@ -511,7 +511,7 @@ var SPM = (function( $, document ) {
         return $( '.' + selector + '.__TMPL__' ).clone( true ).removeClass( '__TMPL__' );
     };
 
-    spm.pageTreeLoaded = function( ev, data ) {
+    spm.pageTreeLoadedHandler = function( ev, data ) {
         var $container = $( ev.target );
         var selectedLiId = $.cookie( 'jstree_select' );   // Example: '#spm-id-800'
         var openLiIds;
@@ -540,7 +540,7 @@ var SPM = (function( $, document ) {
         }
     };
 
-    spm.pageTreeSearch = function ( ev, data ) {
+    spm.pageTreeSearchHandler = function ( ev, data ) {
         var searchString = data.rslt.str.toLowerCase();
         var $tree = $( this );
         var nodes = data.rslt.nodes;
@@ -823,7 +823,7 @@ jQuery(function( $ ) {
         SPM.bindCleanNodes();
     }
 
-    $SPMTree.on( 'loaded.jstree refresh.jstree', SPM.pageTreeLoaded );
-    $SPMTree.on( 'search.jstree', SPM.pageTreeSearch );
+    $SPMTree.on( 'loaded.jstree refresh.jstree', SPM.pageTreeLoadedHandler );
+    $SPMTree.on( 'search.jstree', SPM.pageTreeSearchHandler );
     $SPMTree.jstree( treeOptions );
 });  // End onDomReady
