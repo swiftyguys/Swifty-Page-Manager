@@ -46,14 +46,14 @@ var SPM = (function( $, document ) {
 
         $( document ).on( 'click', '.spm-page-tree-element', function( /*ev*/ ) {
             var $li = $( this ).closest( 'li' );
-            var id = $li.attr( 'id' ).replace( '#', '' );
+            var curLiId = '#' + $li.attr( 'id' );
 
             spm.$tooltips.tooltip( 'close' );
 
             spm.resetPageTree();
             spm.preparePageActionButtons( $li );
 
-            $.cookie( 'jstree_select', id );
+            $.cookie( 'jstree_select', curLiId );
 
             return false;
         });
@@ -167,6 +167,7 @@ var SPM = (function( $, document ) {
             switch ( spmAction ) {
                 case 'save':
                     var curAction = $li.data( 'cur-action' );
+                    var addMode = $li.find( 'input[name=add_mode]:checked' ).val();
                     var settings;
 
                     if ( ! spm.validateSettings( $li ) ) {
@@ -177,7 +178,7 @@ var SPM = (function( $, document ) {
                         'action': 'spm_save_page',
                         'post_type': 'page',
                         'post_title': $li.find( 'input[name=post_title]' ).val(),
-                        'add_mode': $li.find( 'input[name=add_mode]:checked' ).val(),   // after | inside
+                        'add_mode': addMode,   // after | inside
                         'post_status': $li.find( 'input[name=post_status]:checked' ).val(),   // draft | publish
                         'page_template': $li.find( 'select[name=page_template]' ).val(),
                         'post_name': $li.find( 'input[name=post_name]' ).val() || $li.find( 'input[name=spm_url]' ).val(),
@@ -203,6 +204,19 @@ var SPM = (function( $, document ) {
                         ajaxurl,
                         settings
                     ).done(function() {
+                        // We add a sub page, so the parent page needs to be opened after refresh.
+                        // We add the id of the parent LI to the cookie.
+                        if ( curAction === 'add' && addMode === 'inside' ) {
+                            var openLiIds = $.cookie( 'jstree_open' ).split( ',' );
+                            var curLiId = '#' + $li.attr( 'id' );
+
+                            if ( $.inArray( curLiId, openLiIds ) === -1 ) {
+                                openLiIds.push( curLiId );
+                            }
+
+                            $.cookie( 'jstree_open', openLiIds.join( ',' ) );
+                        }
+
                         $SPMTree.jstree( 'refresh' );
                     });
 
@@ -236,14 +250,14 @@ var SPM = (function( $, document ) {
                     $.post(
                         ajaxurl,
                         {
-                            action: 'spm_save_page',
-                            post_type: 'page',
-                            post_title: 'Home',
-                            post_status: 'draft',
-                            add_mode: 'after',
-                            page_template: 'default',
-                            spm_show_in_menu: 'show',
-                            _inline_edit: $inlineEdit.val()
+                            'action': 'spm_save_page',
+                            'post_type': 'page',
+                            'post_title': 'Home',
+                            'post_status': 'draft',
+                            'add_mode': 'after',
+                            'page_template': 'default',
+                            'spm_show_in_menu': 'show',
+                            '_inline_edit': $inlineEdit.val()
                         }
                     ).done(function() {
                         $SPMTree.jstree( 'refresh' );
@@ -271,13 +285,13 @@ var SPM = (function( $, document ) {
         spm.$tooltips.tooltip( 'close' );
 
         $toolTip.tooltip({
-            items: $toolTip[0],
-            content: $toolTip.html(),
-            position: {
-                of: $toolTipBtn[0],
-                my: 'left bottom',
-                at: 'right top',
-                collision: 'flipfit'
+            'items': $toolTip[0],
+            'content': $toolTip.html(),
+            'position': {
+                'of': $toolTipBtn[0],
+                'my': 'left bottom',
+                'at': 'right top',
+                'collision': 'flipfit'
             }
         }).tooltip( 'open' );
 
@@ -328,10 +342,10 @@ var SPM = (function( $, document ) {
 
     spm.adaptTreeLinkElements = function( a ) {
         $( a ).css({
-            width: '100%'
+            'width': '100%'
         }).attr({
-            href: 'javascript:;',
-            class: 'spm-page-tree-element'
+            'href': 'javascript:;',
+            'class': 'spm-page-tree-element'
         });
     };
 
@@ -406,10 +420,10 @@ var SPM = (function( $, document ) {
     spm.preparePageActions = function( $li, action ) {
         var self = this;
         var selector = {
-            add: 'spm-page-add-edit-tmpl',
-            settings: 'spm-page-add-edit-tmpl',
-            delete: 'spm-page-delete-tmpl',
-            publish: 'spm-page-publish-tmpl'
+            'add': 'spm-page-add-edit-tmpl',
+            'settings': 'spm-page-add-edit-tmpl',
+            'delete': 'spm-page-delete-tmpl',
+            'publish': 'spm-page-publish-tmpl'
         }[ action ];
         var $tmpl = this.getPageActionsTmpl( selector );
         var isSwifty = $tmpl.find( 'input[name=is_swifty]' ).val();
@@ -466,21 +480,18 @@ var SPM = (function( $, document ) {
         return $( '.' + selector + '.__TMPL__' ).clone( true ).removeClass( '__TMPL__' );
     };
 
-    spm.pageTreeLoaded = function( ev ) {
+    spm.pageTreeLoaded = function( ev, data ) {
         var $container = $( ev.target );
-        var cookieVal = $.cookie( 'jstree_select' );
+        var selectedLiId = $.cookie( 'jstree_select' );   // Example: '#spm-id-800'
+        var openLiIds;
 
         spm.adaptTreeLinkElements( $container.find( 'a' ) );
 
         $( 'a.jstree-clicked' ).removeClass( 'jstree-clicked' );
 
-        if ( cookieVal ) {
-            if ( ! /^\#/.test( cookieVal ) ) {
-                cookieVal = '#' + cookieVal;
-            }
-
-            spm.preparePageActionButtons( $( cookieVal ) );
-            $container.find( cookieVal + ' > a' ).addClass( 'jstree-clicked' );
+        if ( selectedLiId ) {
+            spm.preparePageActionButtons( $( selectedLiId ) );
+            $container.find( selectedLiId + ' > a' ).addClass( 'jstree-clicked' );
         } else {
             spm.preparePageActionButtons( $container.find( 'li:first' ) );
             $container.find( 'li:first > a' ).addClass( 'jstree-clicked' );
@@ -488,6 +499,15 @@ var SPM = (function( $, document ) {
 
         if ( ev.type === 'refresh' ) {
             spm.updateStatusCount();
+
+            // We manually open all the LI's stored in the cookie.
+            openLiIds = $.cookie( 'jstree_open' ).split( ',' );   // Example: '#spm-id-800,#spm-id-650,#spm-id-44'
+
+            if ( openLiIds && openLiIds.length ) {
+                $.each( openLiIds, function ( i, id ) {
+                    data.inst.open_node( id, null, true );
+                });
+            }
         }
     };
 
@@ -495,18 +515,18 @@ var SPM = (function( $, document ) {
         $.post(
             ajaxurl,
             {
-                action: 'spm_post_settings',
-                post_ID: $li.data( 'post_id' )
+                'action': 'spm_post_settings',
+                'post_ID': $li.data( 'post_id' )
             }
         );
     };
 
     spm.updateStatusCount = function() {
         $.ajax({
-            url: location.href,
-            cache: false,
-            dataType: 'html',
-            dataFilter: function ( resp ) {
+            'url': location.href,
+            'cache': false,
+            'dataType': 'html',
+            'dataFilter': function ( resp ) {
                 return $( '.spm-status-links', resp ).get( 0 );
             }
         }).done(function( html ) {
@@ -574,10 +594,10 @@ var SPM = (function( $, document ) {
             $.post(
                 ajaxurl,
                 {
-                    action: 'spm_move_page',
-                    node_id: nodeId,
-                    ref_node_id: refNodeId,
-                    type: nodePosition
+                    'action': 'spm_move_page',
+                    'node_id': nodeId,
+                    'ref_node_id': refNodeId,
+                    'type': nodePosition
                 }
             ).done(function() {
                 $SPMTree.jstree( 'refresh' );
@@ -666,25 +686,25 @@ jQuery(function( $ ) {
         '';
 
     $.vakata.css.add_sheet({
-        str: css,
-        title: 'jstree_spm'
+        'str': css,
+        'title': 'jstree_spm'
     });
 
     SPMOpts = {
-        plugins: [ 'themes', 'json_data', 'cookies', 'dnd', 'crrm', 'types' ],
-        core: {
-            html_titles: true
+        'plugins': [ 'themes', 'json_data', 'cookies', 'dnd', 'crrm', 'types' ],
+        'core': {
+            'html_titles': true
         },
-        rules: {
-            multiple: false,
-            drag_copy: false
+        'rules': {
+            'multiple': false,
+            'drag_copy': false
         },
-        json_data: {
-            ajax: {
-                url: ajaxurl + '?action=spm_get_childs&status=' + $.data( document, 'spm_status' ),
+        'json_data': {
+            'ajax': {
+                'url': ajaxurl + '?action=spm_get_childs&status=' + $.data( document, 'spm_status' ),
                 // this function is executed in the instance's scope (this refers to the tree instance)
                 // the parameter is the node being loaded (may be -1, 0, or undefined when loading the root nodes)
-                data: function( n ) {
+                'data': function( n ) {
                     // the result is fed to the AJAX request `data` option
                     if ( n.data ) {
                         return {
@@ -692,7 +712,7 @@ jQuery(function( $ ) {
                         };
                     }
                 },
-                success: function( data /*, status*/ ) {
+                'success': function( data /*, status*/ ) {
                     // If data is null or empty = show message about no nodes
                     if ( data === null || ! data || ! data.length ) {
                         $SPMMsg.html( '<p>' + spm_l10n.no_pages_found + '</p>' );
@@ -703,18 +723,18 @@ jQuery(function( $ ) {
                         $SPMAddBtn.addClass( 'spm-hidden' );
                     }
                 },
-                error: function( data, status ) {
+                'error': function( data, status ) {
                 }
             }
         },
-        themes: {
-            theme: 'wordpress',
-            dots: true,
-            icons: true
+        'themes': {
+            'theme': 'wordpress',
+            'dots': true,
+            'icons': true
         },
-        crrm : {
-            move : {
-                check_move : function( m ) {
+        'crrm': {
+            'move': {
+                'check_move': function( m ) {
                     var p = this._get_parent( m.o );
 
                     if ( ! p ) {

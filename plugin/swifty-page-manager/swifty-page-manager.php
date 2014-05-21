@@ -516,7 +516,7 @@ class SwiftyPageManager
             }
 
             // Store the moved page id in the jstree_select cookie
-            setcookie( 'jstree_select', 'spm-id-' . $post_node->ID );
+            setcookie( 'jstree_select', '#spm-id-' . $post_node->ID );
 
         } else {
             // error
@@ -636,7 +636,7 @@ class SwiftyPageManager
                 }
 
                 // Store the new page id in the jstree_select cookie
-                setcookie( 'jstree_select', 'spm-id-' . $post_id );
+                setcookie( 'jstree_select', '#spm-id-' . $post_id );
 
                 echo '1';
             } else {
