@@ -32,6 +32,8 @@
             "s_wp_3.0": {
                 "s_login_button": "Log In",
                 "s_submenu_installed_plugins": "Plugins",
+                "s_submenu_all_pages": "All Pages",
+                "s_pages_actions_delete": "Move to Trash",
                 "s_activate": "Activate"
             },
             "s_wp_3.7": {
@@ -40,6 +42,8 @@
             "s_wp_nl_3.7": {
                 "s_login_button": "Inloggen",
                 "s_submenu_installed_plugins": "Geïnstalleerde plugins",
+                "s_submenu_all_pages": "Alle pagina's",
+                "s_pages_actions_delete": "Naar de prullenbak verplaatsen",
                 "s_activate": "Activeren"
             }
         }

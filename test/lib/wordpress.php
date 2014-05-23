@@ -184,6 +184,21 @@ class Wordpress {
         $st->usingBrowser()->click()->linkWithText( $submenuText );
     }
 
+
+    ////////////////////////////////////////
+
+    function DeleteAllPages() {
+        $st = $this->st;
+
+        $this->story->EchoMsg( "Delete All Pages" );
+
+        $this->OpenAdminSubMenu( 'pages', $this->strings[ 's_submenu_all_pages' ] );
+        $st->usingTimer()->wait( 1, "Wait for Wordpress Pages page." );
+        $st->usingBrowser()->click()->fieldWithId( "cb-select-all-1" );
+        $st->usingBrowser()->select( $this->strings[ 's_pages_actions_delete' ] )->fromDropdownWithName( "action" );
+        $st->usingBrowser()->click()->buttonWithId( "doaction" );
+    }
+
     ////////////////////////////////////////
 
 }

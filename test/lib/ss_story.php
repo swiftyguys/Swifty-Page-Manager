@@ -283,6 +283,11 @@ class SSStory {
 
     ////////////////////////////////////////
 
+    function ContainingClass( $className ) {
+        return "contains(concat(' ',normalize-space(@class),' '),' " . $className . " ')";
+    }
+
+    ////////////////////////////////////////
 }
 
 ////////////////////////////////////////
