@@ -238,14 +238,14 @@ var SPM = (function( $, document ) {
                         // We add a sub page, so the parent page needs to be opened after refresh.
                         // We add the id of the parent LI to the cookie.
                         if ( curAction === 'add' && addMode === 'inside' ) {
-                            var openLiIds = $.cookie( 'jstree_open' ).split( ',' );
                             var curLiId = '#' + $li.attr( 'id' );
+                            var openLiIdsArr = spm.getOpenLiIdsFromCookie();
 
-                            if ( $.inArray( curLiId, openLiIds ) === -1 ) {
-                                openLiIds.push( curLiId );
+                            if ( $.inArray( curLiId, openLiIdsArr ) === -1 ) {
+                                openLiIdsArr.push( curLiId );
                             }
 
-                            $.cookie( 'jstree_open', openLiIds.join( ',' ) );
+                            $.cookie( 'jstree_open', openLiIdsArr.join( ',' ) );
                         }
 
                         $SPMTree.jstree( 'refresh' );
@@ -514,7 +514,7 @@ var SPM = (function( $, document ) {
     spm.pageTreeLoadedHandler = function( ev, data ) {
         var $container = $( ev.target );
         var selectedLiId = $.cookie( 'jstree_select' );   // Example: '#spm-id-800'
-        var openLiIds;
+        var openLiIdsArr = spm.getOpenLiIdsFromCookie();
 
         spm.adaptTreeLinkElements( $container.find( 'a' ) );
 
@@ -530,13 +530,9 @@ var SPM = (function( $, document ) {
             spm.updateStatusCount();
 
             // We manually open all the LI's stored in the cookie.
-            openLiIds = $.cookie( 'jstree_open' ).split( ',' );   // Example: '#spm-id-800,#spm-id-650,#spm-id-44'
-
-            if ( openLiIds && openLiIds.length ) {
-                $.each( openLiIds, function ( i, id ) {
-                    data.inst.open_node( id, null, true );
-                });
-            }
+            $.each( openLiIdsArr, function ( i, id ) {
+                data.inst.open_node( id, null, true );
+            });
         }
     };
 
@@ -564,6 +560,17 @@ var SPM = (function( $, document ) {
                 .find( '.spm-search-form-no-hits' )
                 .fadeIn( 'fast' );
         }
+    };
+
+    spm.getOpenLiIdsFromCookie = function() {
+        var openLiIdsStr = $.cookie( 'jstree_open' );   // Example: '#spm-id-800,#spm-id-650,#spm-id-44'
+        var openLiIdsArr = [];
+
+        if ( openLiIdsStr ) {
+            openLiIdsArr = openLiIdsStr.split( ',' );
+        }
+
+        return openLiIdsArr;
     };
 
     spm.getPageSettings = function( $li ) {
@@ -605,10 +612,10 @@ var SPM = (function( $, document ) {
     };
 
     spm.getStatusCounts = function( html ) {
-        var $statusLink = $( '[class^="spm-status-"]' );
+        var $statusLink = $( 'a[class^="spm-status-"]' );
 
         if ( html ) {
-            $statusLink = $( html ).find( '[class^="spm-status-"]' );
+            $statusLink = $( html ).find( 'a[class^="spm-status-"]' );
         }
 
         $statusLink.each(function() {
@@ -764,6 +771,8 @@ jQuery(function( $ ) {
                 'success': function( data /*, status*/ ) {
                     // If data is null or empty = show message about no nodes
                     if ( data === null || ! data || ! data.length ) {
+                        SPM.updateStatusCount();
+
                         $SPMMsg.html( '<p>' + spm_l10n.no_pages_found + '</p>' );
                         $SPMMsg.show();
                         $SPMAddBtn.removeClass( 'spm-hidden' );
