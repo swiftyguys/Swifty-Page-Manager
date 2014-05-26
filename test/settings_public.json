@@ -33,7 +33,11 @@
                 "s_login_button": "Log In",
                 "s_submenu_installed_plugins": "Plugins",
                 "s_submenu_all_pages": "All Pages",
-                "s_pages_actions_delete": "Move to Trash",
+                "s_wp_pages_actions_delete": "Move to Trash",
+                "s_wp_pages_empty_trash": "Empty Trash",
+                "s_wp_pages_create_new": "Add New",
+                "s_wp_pages_save_concept": "Save Draft",
+                "s_spm_pages_save": "Save",
                 "s_activate": "Activate"
             },
             "s_wp_3.7": {
@@ -43,7 +47,11 @@
                 "s_login_button": "Inloggen",
                 "s_submenu_installed_plugins": "Geïnstalleerde plugins",
                 "s_submenu_all_pages": "Alle pagina's",
-                "s_pages_actions_delete": "Naar de prullenbak verplaatsen",
+                "s_wp_pages_actions_delete": "Naar de prullenbak verplaatsen",
+                "s_wp_pages_empty_trash": "Prullenbak leegmaken",
+                "s_wp_pages_create_new": "Nieuwe pagina",
+                "s_wp_pages_save_concept": "Opslaan als concept",
+                "s_spm_pages_save": "Opslaan",
                 "s_activate": "Activeren"
             }
         }
