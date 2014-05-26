@@ -21,14 +21,14 @@ class Wordpress {
             $l = 5;
             if( substr( $key, 0, $l ) == 's_wp_' ) { // global version
                 $v = floatval( substr( $key, $l ) );
-                if( floatval( $this->version ) >= $v ) {
+                if( $v > 0 && floatval( $this->version ) >= $v ) {
                     $this->strings = array_replace_recursive( $this->strings, $tmpl );
                 }
             }
             $l = 6 + strlen( $this->lang );
             if( substr( $key, 0, $l ) == 's_wp_' . $this->lang . '_' ) { // specific lang
                 $v = floatval( substr( $key, $l ) );
-                if( floatval( $this->version ) >= $v ) {
+                if( $v > 0 && floatval( $this->version ) >= $v ) {
                     $this->strings = array_replace_recursive( $this->strings, $tmpl );
                 }
             }

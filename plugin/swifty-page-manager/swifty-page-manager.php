@@ -324,13 +324,13 @@ class SwiftyPageManager
         }
 
         // renamed from cookie to fix problems with mod_security
-        wp_enqueue_script( 'jquery-cookie', $this->plugin_dir_url . '/js/jquery.biscuit.js', array( 'jquery' ) );
+        wp_enqueue_script( 'jquery-cookie', $this->plugin_dir_url . $this->_find_minified( '/js/jquery.biscuit.js' ), array( 'jquery' ) );
         wp_enqueue_script( 'jquery-ui-tooltip' );
-        wp_enqueue_script( 'jquery-jstree', $this->plugin_dir_url . '/js/jquery.jstree.js', false,
+        wp_enqueue_script( 'jquery-jstree', $this->plugin_dir_url . $this->_find_minified( '/js/jquery.jstree.js' ), false,
                            $this->_plugin_version );
-        wp_enqueue_script( 'jquery-alerts', $this->plugin_dir_url . '/js/jquery.alerts.js', false,
+        wp_enqueue_script( 'jquery-alerts', $this->plugin_dir_url . $this->_find_minified( '/js/jquery.alerts.js' ), false,
                            $this->_plugin_version );
-        wp_enqueue_script( 'spm',   $this->plugin_dir_url . '/js/swifty-page-manager.js', false,
+        wp_enqueue_script( 'spm',   $this->plugin_dir_url . $this->_find_minified( '/js/swifty-page-manager.js' ), false,
                            $this->_plugin_version );
 
         wp_enqueue_style( 'jquery-alerts',  $this->plugin_dir_url . '/css/jquery.alerts.css', false,
@@ -1168,6 +1168,17 @@ class SwiftyPageManager
         };
 
         return $result;
+    }
+
+    /**
+     * Return minified filename, if exists; otherwise original filename
+     */
+    protected function _find_minified( $file_name ) {
+        $file_name_min = preg_replace( '|\.js$|', '.min.js', $file_name );
+        if( file_exists( $this->plugin_dir . $file_name_min ) ) {
+            $file_name = $file_name_min;
+        }
+        return $file_name;
     }
 
 } // End of class SwiftyPageManager
