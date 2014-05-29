@@ -1,6 +1,7 @@
 <?php
 
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
 
 include 'wordpress.php';
 
@@ -283,8 +284,61 @@ class SSStory {
 
     ////////////////////////////////////////
 
+    function EchoMsgJs( $s ) {
+        echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\nJS = " . $s;
+    }
+
+    ////////////////////////////////////////
+
     function ContainingClass( $className ) {
         return "contains(concat(' ',normalize-space(@class),' '),' " . $className . " ')";
+    }
+
+    ////////////////////////////////////////
+
+    function Probe( $functionName, $input ) {
+        $js = 'return swiftyProbe.DoStart(arguments);';
+        $ret = $this->st->getRunningDevice()->execute( array( 'script' => $js, 'args' => Array( $functionName, $input ) ) );
+
+        $this->ProbeProcessRet( $functionName, $input, $ret );
+    }
+
+    ////////////////////////////////////////
+
+    function ProbeProcessRet( $functionName, $input, $returned ) {
+        $ret = $returned;
+
+        if( ! isset( $ret[ 'ret' ] ) ) {
+            $this->EchoMsgJs( "NO DATA RETURNED:\n" );
+            throw new E5xx_ActionFailed( "JS NO DATA RETURNED", "No data returned" );
+        } else {
+            if( isset( $ret[ 'ret' ][ 'fail' ] ) ) {
+                $this->EchoMsgJs( "FAIL:". $ret[ 'ret' ][ 'fail' ] . "\n" );
+                throw new E5xx_ActionFailed( "JS FAIL", $ret[ 'ret' ][ 'fail' ] );
+            } else {
+                $this->EchoMsgJs( $ret[ 'ret' ][ 'tmp_log' ] );
+//                $this->EchoMsg( "DEBUG:\n". print_r( $ret, true ) );
+
+                if( isset( $returned[ 'ret' ][ 'wait' ] ) ) {
+                    $wait = $returned[ 'ret' ][ 'wait' ];
+                    $js = 'return swiftyProbe.DoWait(arguments);';
+                    $waiting = true;
+                    while( $waiting ) {
+                        $ret = $this->st->getRunningDevice()->execute( array( 'script' => $js, 'args' => Array( $wait, $functionName, $input ) ) );
+//                        $this->EchoMsg( "DEBUG 2:\n". print_r( $ret, true ) );
+                        if( ! isset( $ret[ 'ret' ][ 'wait_status' ] )
+                            || $ret[ 'ret' ][ 'wait_status' ] != "waiting"
+                            || isset( $ret[ 'ret' ][ 'fail' ] )
+                        ) {
+                            $waiting = false;
+                        }
+                    }
+                    $ret = $this->ProbeProcessRet( $functionName, $input, $ret );
+                }
+            }
+        }
+
+        return $ret;
     }
 
     ////////////////////////////////////////

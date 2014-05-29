@@ -44,6 +44,9 @@ class SwiftyPageManager
         if ( is_admin() ) {
             add_action( 'init', array( $this, 'admin_init' ) );
         }
+
+        // Swifty Probe Module include (used for testing and gamification)
+        add_action( 'admin_enqueue_scripts', array( $this, 'add_module_swifty_probe' ) );
     }
 
     /**
@@ -1179,6 +1182,14 @@ class SwiftyPageManager
             $file_name = $file_name_min;
         }
         return $file_name;
+    }
+
+    /**
+     * Swifty Probe Module include (used for testing and gamification)
+     */
+    public function add_module_swifty_probe()
+    {
+        wp_enqueue_script( 'swifty-probe-page-manager',   $this->plugin_dir_url . $this->_find_minified( '/js/swifty-probe-page-manager.js' ), false );
     }
 
 } // End of class SwiftyPageManager
