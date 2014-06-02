@@ -3,10 +3,6 @@ var swiftyProbe = ( function( $, probe ) {
         tmp_log: "",
         fail: "",
 
-        Sel: function( selector ) {
-            return new El( selector );
-        },
-
         TypeText: function( $el, $txt ) {
             this.Click( $el );
             $el.val( $txt ); // dorh Do via keypress events
@@ -171,7 +167,7 @@ var swiftyProbe = ( function( $, probe ) {
             }
 
             if( wait.tp === "wait_for_fn" ) {
-                argsArray[ 0 ] = argsArZero + wait.wait_fn_name;
+                argsArray[ 0 ] = argsArZero + "." + wait.wait_fn_name;
                 ret = this.Execute( argsArray );
                 if( ret.ret.wait_result ) {
                     waitCheckResult = true;
@@ -179,7 +175,7 @@ var swiftyProbe = ( function( $, probe ) {
             }
 
             if( waitCheckResult ) {
-                argsArray[ 0 ] = argsArZero + wait.fn_name;
+                argsArray[ 0 ] = argsArZero + "." + wait.fn_name;
                 ret = this.Execute( argsArray );
             } else if( Date.now() > wait.tm ) {
                 ret = { "ret": { "wait_status": "timeout" } };
@@ -197,7 +193,7 @@ var swiftyProbe = ( function( $, probe ) {
 
             var argsArray = this.ArgsToArray( args );
 
-            argsArray[ 0 ] += args[1].next_fn_name;
+            argsArray[ 0 ] += "." + args[1].next_fn_name;
             return this.Execute( argsArray );
         },
 
@@ -210,100 +206,105 @@ var swiftyProbe = ( function( $, probe ) {
         }
     }
 
-    var Sel = probe.Sel;
-
     ////////////////////////////////////////
 
-    function El( selector ) {
-        this.probe = probe;
-        this.selector = selector;
-        this.$el = $( this.selector );
-        this.valid = true;
+    jQuery.fn.extend( {
+        // Function names start with a capital by design! That way they will not conflict with native jQuery functions (for instance Click() vs click())
 
-        this.MustExist = function() {
+        MustExist: function() {
             return this.MustExistTimes( 1, false );
-        };
+        },
 
-        this.MustExistOnce = function() {
+        MustExistOnce: function() {
             return this.MustExistTimes( 1 );
-        };
+        },
 
-        this.MustExistTimes = function( count, exact ) {
+        MustExistTimes: function( count, exact ) {
             if( typeof exact === "undefined" ) {
                 exact = true;
             }
-            if( ( exact && this.$el.length !== count ) || ( ! exact && this.$el.length < count ) ) {
-                this.valid = false;
-                this.probe.SetFail( "Element does not exist (or not enough times): " + this.selector );
+            if( ( exact && this.length !== count ) || ( ! exact && this.length < count ) ) {
+                this.prb_valid = false;
+                probe.SetFail( "Element does not exist (or not enough times): " + this.selector );
             } else {
-                this.valid = true;
+                this.prb_valid = true;
             }
             return this;
-        };
+        },
 
-        this.MustBeVisible = function() {
-            if( ! this.probe.IsVisible( this.$el ) ) {
-                this.valid = false;
-                this.probe.SetFail( "Element is not visible: " + this.selector );
+        MustBeVisible: function() {
+            if( ! probe.IsVisible( this ) ) {
+                this.prb_valid = false;
+                probe.SetFail( "Element is not visible: " + this.selector );
             }
             return this;
-        };
+        },
 
-        this.IfVisible = function() {
-            if( this.valid ) {
-                if( ! this.probe.IsVisible( this.$el ) ) {
-                    this.valid = false;
+        IfVisible: function() {
+            if( this._Check_Valid() ) {
+                if( ! probe.IsVisible( this ) ) {
+                    this.prb_valid = false;
                 }
             }
             return this;
-        };
+        },
 
-        this.OtherIfNotVisible = function( selector ) {
-            if( this.valid ) {
-                if( this.probe.IsVisible( $( selector ) ) ) {
-                    this.valid = false;
+        OtherIfNotVisible: function( selector ) {
+            if( this._Check_Valid() ) {
+                if( probe.IsVisible( $( selector ) ) ) {
+                    this.prb_valid = false;
                 }
             }
             return this;
-        };
+        },
 
-        this.IsVisible = function() {
-            if( this.valid ) {
-                return this.probe.IsVisible( this.$el );
+        IsVisible: function() {
+            if( this._Check_Valid() ) {
+                return probe.IsVisible( this );
             }
             return false;
-        };
+        },
 
-        this.Click = function() {
-            if( this.valid ) {
-                this.probe.Click( this.$el );
+        Click: function() {
+            if( this._Check_Valid() ) {
+                probe.Click( this );
             }
             return this;
-        };
+        },
 
-        this.AddClass = function( cls ) {
-            if( this.valid ) {
-                this.$el.addClass( cls );
+        AddClass: function( cls ) {
+            if( this._Check_Valid() ) {
+                this.addClass( cls );
             }
             return this;
-        };
+        },
 
-        this.WaitForFn = function( waitFnName, fnName, tm ) {
+        WaitForFn: function( waitFnName, fnName, tm ) {
             if( typeof tm === "undefined" ) {
                 tm = 5000;
             }
-            this.probe.WaitForFn( waitFnName, fnName, tm );
+            probe.WaitForFn( waitFnName, fnName, tm );
             return this;
-        };
+        },
 
-        this.WaitForVisible = function( fnName, tm ) {
+        WaitForVisible: function( fnName, tm ) {
             if( typeof tm === "undefined" ) {
                 tm = 5000;
             }
-            this.probe.WaitForElementVisible( this.selector, fnName, tm );
+            probe.WaitForElementVisible( this.selector, fnName, tm );
             return this;
-        };
-    }
+        },
+
+        // Functions for internal use only
+
+        _Check_Valid: function() {
+            if( typeof this.prb_valid === "undefined" || this.prb_valid ) {
+                return true;
+            }
+            return false;
+        }
+
+    } );
 
     ////////////////////////////////////////
 

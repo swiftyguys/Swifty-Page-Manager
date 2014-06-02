@@ -11,15 +11,17 @@ class ThisStory extends SSStory {
         parent::TakeAction(); // Must be called first!
 
         $this->wordpress->Login();
-        $this->wordpress->DeleteAllPages();
-        $this->wordpress->EmptyTrash();
-//        $this->CheckIfXPagesExist( 0 );
-//        $this->CheckAddButtonVisibleWhenNoPagesExist();
-        $this->wordpress->CreateXDraftPages( 2 );
-//        $this->CheckIfXPagesExist( 4 );
-////        $this->CheckPluginRunning();
-//        $this->Probe( 'SPM.CheckRunning', Array( "plugin_name" => $this->pluginName ) );
-        $this->CreateNewPageAftersLastPage();
+        $this->Probe( 'SPM.CheckRunning', Array( "plugin_name" => $this->pluginName ) );
+
+//        $this->wordpress->DeleteAllPages();
+//        $this->wordpress->EmptyTrash();
+////        $this->CheckIfXPagesExist( 0 );
+////        $this->CheckAddButtonVisibleWhenNoPagesExist();
+//        $this->wordpress->CreateXDraftPages( 2 );
+////        $this->CheckIfXPagesExist( 4 );
+//////        $this->CheckPluginRunning();
+////        $this->Probe( 'SPM.CheckRunning', Array( "plugin_name" => $this->pluginName ) );
+//        $this->CreateNewPageAftersLastPage();
     }
 
     ////////////////////////////////////////
