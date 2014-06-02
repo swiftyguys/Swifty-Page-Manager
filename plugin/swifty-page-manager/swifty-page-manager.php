@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: Swifty Page Manager
-Description: Swifty Page Manager
-Author: SwiftyGuys
-Version: 0.0.2
-Author URI: http://swiftysite.com/
-Plugin URI: https://bitbucket.org/swiftyguys/SwiftyPageManager
+Description: Easily create, move and delete pages. Manage page settings.
+Author: SwiftyLife
+Version: 1.0.0
+Author URI: http://swiftylife.com/plugins/
+Plugin URI: http://swiftylife.com/plugins/swifty-page-manager/
 */
 
 class SwiftyPageManager
@@ -15,7 +15,7 @@ class SwiftyPageManager
     protected $plugin_basename;
     protected $plugin_dir_url;
     protected $plugin_url;
-    protected $_plugin_version = '0.0.2';
+    protected $_plugin_version = '1.0.0';
     protected $_post_status = 'any';
     protected $_post_type = 'page';
     protected $_tree = null;
@@ -44,9 +44,6 @@ class SwiftyPageManager
         if ( is_admin() ) {
             add_action( 'init', array( $this, 'admin_init' ) );
         }
-
-        // Swifty Probe Module include (used for testing and gamification)
-        add_action( 'admin_enqueue_scripts', array( $this, 'add_module_swifty_probe' ) );
     }
 
     /**
@@ -1182,16 +1179,6 @@ class SwiftyPageManager
             $file_name = $file_name_min;
         }
         return $file_name;
-    }
-
-    /**
-     * Swifty Probe Module include (used for testing and gamification)
-     */
-    public function add_module_swifty_probe()
-    {
-        wp_enqueue_script( 'swifty-probe',   $this->plugin_dir_url . $this->_find_minified( '/js/probe/__probe.js' ), false );
-        wp_enqueue_script( 'swifty-probe-wp',   $this->plugin_dir_url . $this->_find_minified( '/js/probe/_probe.wp.js' ), array( 'swifty-probe' ) );
-        wp_enqueue_script( 'swifty-probe-spm',   $this->plugin_dir_url . $this->_find_minified( '/js/probe/probe.spm.js' ), array( 'swifty-probe-wp' ) );
     }
 
 } // End of class SwiftyPageManager

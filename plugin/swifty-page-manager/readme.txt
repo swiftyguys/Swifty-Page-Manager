@@ -1,14 +1,14 @@
 === Swifty Page Manager ===
-Contributors: (this should be a list of wordpress.org userid's)
-Donate link: http://www.SwiftyPlugins.com/Donate
-Tags: Swifty, page, pages, tree, menu, manage, CMS, site, navigation, navigate, sub, view, hierarchy
+Contributors: robertheessels
+Donate link: http://swiftylife.com/donate/
+Tags: Swifty, page, pages, tree, menu, manage, hierarchy, structure
 Requires at least: 3.8
 Tested up to: 3.9
-Stable tag: 1.0
+Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Page & menu creator in one. Easily create, move and delete pages. Manage page settings. Your site menu is automatically generated for you.
+Easily create, move and delete pages. Manage page settings.
 
 == Description ==
 
@@ -19,8 +19,7 @@ As you might have noticed, managing the pages of your WordPress site isn't very 
 **Reasons to try Swifty Page Manager:**
 
 1. It shows you how the pages of your WordPress site are positioned and related to each other in a so called page tree view.
-2. It also automatically creates the main site menu from this page overview so that your menu and page overview look the same.
-3. It alows you to manage the page settings (such as name, status etc.) in a very intuitive way.
+2. It alows you to manage the page settings (such as name, status etc.) in a very intuitive way.
 
 Try it – it’s free ;-)
 
@@ -43,15 +42,9 @@ As with all the plugins the Swifty team develops, the Swifty Page Manager is foc
 
 If you want to do some more advanced stuff, that’s still possible because you can switch freely between the traditional WordPress mode and Swifty mode.
 
-**One main menu, multiple extra menu’s**
-
-Swifty Page Manager works under the assumption that you have one main menu. That main menu will be automatically adapted when you create or move a page in your page tree.
-
-Of course you can create multiple menu’s, but you’ll have to do that in the traditional WordPress way, using pages from the page tree (remember, you can hide pages in the main menu that you can show in one or more of the extra menu’s you create).
-
 **Support**
 
-In order to provide you with the best support experience, help by other users and our team is only avaliable on our website: http://swiftyplugins.com/support/
+Please use the support tab above.
 
 **Enjoy**
 
@@ -59,7 +52,7 @@ We hope that Swifty Page Manager makes your life a little easier and that you wi
 
 Credits: this plugin is based on [CMS Tree Page View](http://wordpress.org/plugins/cms-tree-page-view/).
 
-[Click here to get to know us a bit better](http://swiftyplugins.com/about/).
+[Click here to get to know us a bit better](http://swiftylife.com/about/).
 
 
 
@@ -90,7 +83,7 @@ Minimum Requirements
 
 Draft is beer from the tap and Live is ... :-)
 
-In the page settings you can choose between 'Draft' and 'Live'. When you select 'Live' the page will be visible for the visitors of your site. And the page will also be available in your menu. When you select 'Draft', the page will not be visible on your website nor in your menu. This is great if you are making a new page which is not final yet or if you temporarily want to take a page offline. When you are ready, you can change the page settings to 'live'.
+In the page settings you can choose between 'Draft' and 'Live'. When you select 'Live' the page will be visible for the visitors of your site. When you select 'Draft', the page will not be visible on your website nor in your menu. This is great if you are making a new page which is not final yet or if you temporarily want to take a page offline. When you are ready, you can change the page settings to 'live'.
 
 = Oops...I deleted the wrong page. What should I do? =
 
@@ -120,27 +113,15 @@ Next, put in the lights. Lots of lights! Step back, squeeze your eyes a bit and 
 
 If you put candy in your tree, make sure you put it low enough so that the kids can reach it. If you put it out of reach, they WILL find a way to get it. And most of the time it ends badly for the tree!
 
-= Can I create multiple menu’s on my website with Swifty Page Manager? =
+= Where can I find more info? =
 
-If you run a restaurant, you might want to consider using just one menu. You know, to keep everyone on the same page.
-
-Swifty Page Manager positions all your pages in a page tree and generates one main menu from that tree. If you want more than one menu, you can create those menu's in the traditional WordPress way and use the pages from the Swifty Page tree.
-
-**Tip**: You can hide pages in your main menu and show them in your extra menu's.
-
-= Where can I find more info or help? =
-
-Well, because this plugin is free, the Swifty team can not provide personal support on this specific plugin. However, we do provide you with a knowledge base that can be very helpful as well as a community forum where your fellow Wordpress users might be of help to you:
-
-http://swiftyplugins.com/support/
+http://swiftylife.com/plugins/swifty-page-manager/
 
 = I want to report a bug. Where can I do that? =
 
 If it's a real bug, you can call 1-800-BUG-BUSTERS
 
-If there is something wrong with our plugin, we really want to know, so that we can fix it. Please submit a bug report here:
-
-http://swiftyplugins.com/support/
+If there is something wrong with our plugin, we really want to know, so that we can fix it. Please submit a bug report via the support tab above!
 
 Try to describe the actions that lead up to the point where something is not working right, so that we can reproduce the problem.
 
@@ -157,7 +138,7 @@ Try it - it's free!
 
 == Changelog ==
 
-= 1.0 =
+= 1.0.0 =
  * We are very happy to release our very first open source product.
 
 == Upgrade Notice ==
