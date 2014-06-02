@@ -17,19 +17,9 @@ class ThisStory extends SSStory {
 //        $this->CheckAddButtonVisibleWhenNoPagesExist();
         $this->wordpress->CreateXDraftPages( 2 );
 //        $this->CheckIfXPagesExist( 4 );
-//        $this->CheckPluginRunning();
+////        $this->CheckPluginRunning();
+//        $this->Probe( 'SPM.CheckRunning', Array( "plugin_name" => $this->pluginName ) );
         $this->CreateNewPageAftersLastPage();
-    }
-
-    ////////////////////////////////////////
-
-    function CheckPluginRunning() {
-        $this->EchoMsg( "Check plugin running: " . $this->pluginName );
-
-        $this->wordpress->OpenAdminSubMenu( 'pages', $this->pluginName );
-
-        $txt = $this->getText()->fromHeadingWithText( $this->pluginName );
-        $this->assertsString( $txt )->equals( $this->pluginName );
     }
 
     ////////////////////////////////////////

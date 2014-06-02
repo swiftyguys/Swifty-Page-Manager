@@ -1189,7 +1189,9 @@ class SwiftyPageManager
      */
     public function add_module_swifty_probe()
     {
-        wp_enqueue_script( 'swifty-probe-page-manager',   $this->plugin_dir_url . $this->_find_minified( '/js/swifty-probe-page-manager.js' ), false );
+        wp_enqueue_script( 'swifty-probe',   $this->plugin_dir_url . $this->_find_minified( '/js/probe/__probe.js' ), false );
+        wp_enqueue_script( 'swifty-probe-wp',   $this->plugin_dir_url . $this->_find_minified( '/js/probe/_probe.wp.js' ), array( 'swifty-probe' ) );
+        wp_enqueue_script( 'swifty-probe-spm',   $this->plugin_dir_url . $this->_find_minified( '/js/probe/probe.spm.js' ), array( 'swifty-probe-wp' ) );
     }
 
 } // End of class SwiftyPageManager

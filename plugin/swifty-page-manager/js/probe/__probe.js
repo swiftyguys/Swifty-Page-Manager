@@ -123,6 +123,10 @@ var swiftyProbe = ( function( $, probe ) {
             if( this.fail !== "" ) {
                 output.fail = this.fail;
             }
+            if( this.queue ) {
+                output.queue = this.queue;
+                delete this.queue;
+            }
             return output;
         },
 
@@ -186,6 +190,23 @@ var swiftyProbe = ( function( $, probe ) {
             }
 
             return $.extend( true, { "DoWait args": args, "ret": this.GetGenericRetOutput() }, ret );
+        },
+
+        DoNext: function( args ) {
+            this.StartTmpLog();
+
+            var argsArray = this.ArgsToArray( args );
+
+            argsArray[ 0 ] += args[1].next_fn_name;
+            return this.Execute( argsArray );
+        },
+
+        QueueStory: function( fnName, newInput, nextFnName ) {
+            this.queue = {
+                "new_fn_name": fnName,
+                "new_input": newInput,
+                "next_fn_name": nextFnName
+            }
         }
     }
 
@@ -285,64 +306,6 @@ var swiftyProbe = ( function( $, probe ) {
     }
 
     ////////////////////////////////////////
-
-    probe.WP = probe.WP || {}
-
-    probe.WP.AdminOpenSubmenu = {
-        Start: function( input ) {
-            // Check if the WP menu is collapsed (to one icon) ( happens on small screens )
-            Sel( "li#wp-admin-bar-menu-toggle" )
-                .IfVisible().OtherIfNotVisible( "ul#adminmenu" ).Click();
-
-            // Wait until the submenu becomes visible
-            Sel( "ul#adminmenu" )
-                .WaitForVisible( ".Step2" );
-        },
-
-        Step2: function( input ) {
-            // Click on the menu item in the left admin bar
-            Sel( this.GetSelMainmenu( input.plugin_code ) )
-                .MustExist().Click();
-
-            // Wait until the submenu becomes visible
-            Sel( this.GetSelSubmenu( input.submenu_text ) )
-                .WaitForFn( ".Wait2", ".Step3" );
-        },
-
-        Wait2: function( input ) {
-            // Trick WP into thinking the mouse hovers over the menu item (so the submenu popup opens)
-            // In some cases (WP version, screen size) this hover is needed
-            Sel( this.GetSelMainmenu( input.plugin_code ) )
-                .AddClass( "opensub" );
-
-            // Is the submenu item visible?
-            var check = Sel( this.GetSelSubmenu( input.submenu_text ) )
-                            .IsVisible();
-            return { "wait_result": check };
-        },
-
-        Step3: function( input ) {
-            // Click on the sub menu
-            Sel( this.GetSelSubmenu( input.submenu_text ) )
-                .MustExist().Click();
-        },
-
-        GetSelMainmenu: function( pluginCode) {
-            return "li#menu-" + pluginCode;
-        },
-
-        GetSelSubmenu: function( submenuText) {
-            return "a:contains('" + submenuText + "')";
-        }
-    }
-
-    ////////////////////////////////////////
-
-//    probe.SPM = {
-//        Hallo: function() {
-//            alert( "ggg" );
-//        }
-//    }
 
     return probe;
 } )( jQuery, swiftyProbe );

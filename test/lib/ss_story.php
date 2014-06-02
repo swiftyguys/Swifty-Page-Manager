@@ -319,6 +319,27 @@ class SSStory {
                 $this->EchoMsgJs( $ret[ 'ret' ][ 'tmp_log' ] );
 //                $this->EchoMsg( "DEBUG:\n". print_r( $ret, true ) );
 
+                if( isset( $ret[ 'ret' ][ 'queue' ] ) ) {
+                    $js = 'return swiftyProbe.DoStart(arguments);';
+
+//                    echo "\n\n\neeeeeeeeeeeeeeeeeeeee:\n".$ret[ 'ret' ][ 'queue' ][ 'new_fn_name' ]."\n\n\n";
+
+                    $prevFunctionName = $functionName;
+                    $prevInput = $input;
+                    $functionName = $ret[ 'ret' ][ 'queue' ][ 'new_fn_name' ];
+                    $input = $ret[ 'ret' ][ 'queue' ][ 'new_input' ];
+                    $nextFnName = $ret[ 'ret' ][ 'queue' ][ 'next_fn_name' ];
+                    $ret = $this->st->getRunningDevice()->execute( array( 'script' => $js, 'args' => Array( $functionName, $input ) ) );
+//                    $this->st->usingTimer()->wait( 5, "------------" );
+                    $ret = $this->ProbeProcessRet( $functionName, $input, $ret );
+                    $functionName = $prevFunctionName;
+                    $input = $prevInput;
+                    $input[ 'next_fn_name' ] = $nextFnName;
+                    $js = 'return swiftyProbe.DoNext(arguments);';
+                    $ret = $this->st->getRunningDevice()->execute( array( 'script' => $js, 'args' => Array( $functionName, $input ) ) );
+                    $ret = $this->ProbeProcessRet( $functionName, $input, $ret );
+                }
+
                 if( isset( $returned[ 'ret' ][ 'wait' ] ) ) {
                     $wait = $returned[ 'ret' ][ 'wait' ];
                     $js = 'return swiftyProbe.DoWait(arguments);';

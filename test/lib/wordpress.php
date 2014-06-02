@@ -156,10 +156,33 @@ class Wordpress {
     ////////////////////////////////////////
 
     function OpenAdminSubMenu( $pluginCode, $submenuText ) {
+        $st = $this->st;
+
         $this->story->EchoMsg( "Open admin sub-menu: " . $pluginCode . " -> " . $submenuText );
 
-        // Open de admin submenu
-        $this->story->Probe( 'WP.AdminOpenSubmenu', Array( "plugin_code" => $pluginCode, "submenu_text" => $submenuText ) );
+        // Xpath for main menu button
+        $xpathMainmenuItem = 'descendant::li[@id = "menu-' . $pluginCode . '"]';
+
+        // Open the admin page
+        $st->usingBrowser()->gotoPage( "http://" . $this->story->data->testSettings->domain . "/wp-admin" );
+
+        // Check if the WP menu is collapsed (to one icon) ( happens on small screens )
+        $elements = $this->story->FindElementsByXpath( 'descendant::li[@id = "wp-admin-bar-menu-toggle"]' );
+        if( count( $elements ) > 0 && $elements[0]->displayed() ) {
+            // Click on the collapse menu button, so the menu will appear
+            $elements[0]->click();
+        }
+
+        // Click on the main menu button, as on other screens (sizes or touch ) a click is needed
+        $elements = $this->story->FindElementsByXpathMustExist( $xpathMainmenuItem );
+        $elements[0]->click();
+        // Hover the main menu button, as on some screens (sizes or touch) a hover is needed
+        $this->story->HoverElementByXpath( $xpathMainmenuItem );
+
+        // Click on the sub menuu
+        $st->usingBrowser()->click()->linkWithText( $submenuText );
+
+//        $this->story->Probe( 'WP.AdminOpenSubmenu', Array( "plugin_code" => $pluginCode, "submenu_text" => $submenuText ) );
     }
 
 
