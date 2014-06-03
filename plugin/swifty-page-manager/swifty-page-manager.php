@@ -45,8 +45,10 @@ class SwiftyPageManager
             add_action( 'init', array( $this, 'admin_init' ) );
         }
 
+        // @if PROBE='include'
         // Swifty Probe Module include (used for testing and gamification)
         add_action( 'admin_enqueue_scripts', array( $this, 'add_module_swifty_probe' ) );
+        // @endif
     }
 
     /**
@@ -1184,6 +1186,7 @@ class SwiftyPageManager
         return $file_name;
     }
 
+    // @if PROBE='include'
     /**
      * Swifty Probe Module include (used for testing and gamification)
      */
@@ -1193,6 +1196,7 @@ class SwiftyPageManager
         wp_enqueue_script( 'swifty-probe-wp',   $this->plugin_dir_url . $this->_find_minified( '/js/probe/_probe.wp.js' ), array( 'swifty-probe' ) );
         wp_enqueue_script( 'swifty-probe-spm',   $this->plugin_dir_url . $this->_find_minified( '/js/probe/probe.spm.js' ), array( 'swifty-probe-wp' ) );
     }
+    // @endif
 
 } // End of class SwiftyPageManager
 
