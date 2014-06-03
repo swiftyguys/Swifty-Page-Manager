@@ -125,7 +125,8 @@ class Wordpress {
             // create the parameters for Ansible
             $vmParams = array (
                 "install_now" => "plugin",
-                "code" => "swifty-page-manager"
+                "code" => "swifty-page-manager",
+                "wp_plugin_relpath" => $relpath
             );
 
             // build up the provisioning definition

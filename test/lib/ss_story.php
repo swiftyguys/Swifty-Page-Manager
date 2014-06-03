@@ -96,7 +96,11 @@ class SSStory {
                     }
                 }
                 if( $setupItem->type == 'wp_plugin' ) {
-                    $this->wordpress->InstallPlugin( $setupItem->relpath, $setupItem->to_abspath );
+                    if( isset( $this->params[ 'relpath' ] ) ) {
+                        $this->wordpress->InstallPlugin( $this->params[ 'relpath' ], $setupItem->to_abspath );
+                    } else {
+                        $this->wordpress->InstallPlugin( $setupItem->relpath, $setupItem->to_abspath );
+                    }
                 }
             }
         }
