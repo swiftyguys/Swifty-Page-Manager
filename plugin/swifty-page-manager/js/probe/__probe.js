@@ -343,7 +343,11 @@ var swiftyProbe = ( function( $, probe ) {
         // Functions for internal use only
 
         _CheckValid: function() {
-            return ( typeof this.prb_valid === "undefined" || this.prb_valid );
+            if ( typeof this.prb_valid === "undefined" || this.prb_valid ) {
+                return true;
+            }
+
+            return false;
         }
     } );
 

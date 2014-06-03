@@ -38,7 +38,8 @@
                 "s_wp_pages_create_new": "Add New",
                 "s_wp_pages_save_concept": "Save Draft",
                 "s_spm_pages_save": "Save",
-                "s_activate": "Activate"
+                "s_activate": "Activate",
+                "s_deactivate": "Deactivate"
             },
             "s_wp_3.7": {
                 "s_submenu_installed_plugins": "Installed Plugins"
@@ -52,7 +53,8 @@
                 "s_wp_pages_create_new": "Nieuwe pagina",
                 "s_wp_pages_save_concept": "Opslaan als concept",
                 "s_spm_pages_save": "Opslaan",
-                "s_activate": "Activeren"
+                "s_activate": "Activeren",
+                "s_deactivate": "Deactiveren"
             }
         }
     },

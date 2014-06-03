@@ -12,6 +12,9 @@ class ThisStory extends SSStory {
 
         $this->wordpress->Login();
         $this->Probe( 'SPM.CheckRunning', Array( "plugin_name" => $this->pluginName ) );
+        $this->Probe( 'WP.DeleteAllPages', Array( "plugin_name" => $this->pluginName ) );
+
+
 
 //        $this->wordpress->DeleteAllPages();
 //        $this->wordpress->EmptyTrash();
@@ -85,12 +88,6 @@ class ThisStory extends SSStory {
 
         $allLiAfter = $this->st->fromBrowser()->getElementsByClass( 'jstree-leaf' );
         $this->st->assertsInteger( count( $allLiAfter ) )->equals( 3 );
-    }
-
-    ////////////////////////////////////////
-
-    function CreateNewPageAsSubOfTheLastPage()
-    {
     }
 
     ////////////////////////////////////////

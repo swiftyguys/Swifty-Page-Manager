@@ -58,6 +58,40 @@
         }
     };
 
+    probe.WP.DeleteAllPages = {
+        Start: function( input ) {
+            probe.QueueStory(
+                "WP.AdminOpenSubmenu",
+                {
+                    "plugin_code": "pages",
+                    "submenu_text": "Alle pagina's"   // Here we need something for translations
+                },
+                "Step2"
+            );
+        },
+
+        Step2: function( /*input*/ ) {
+            // Wait until the checkbox becomes visible
+            $( '#cb-select-all-1' ).WaitForVisible( "Step3" );
+        },
+
+        Step3: function( /*input*/ ) {
+            // Click on the checkbox to select all pages
+            $( '#cb-select-all-1' )
+                .MustExist()
+                .Click();
+
+            // Select the trash option
+            $( 'select[name="action"]' )
+                .MustExist()
+                .val( [ "trash" ] );
+
+            $( '#doaction' )
+                .MustExist()
+                .Click();
+        }
+    };
+
     ////////////////////////////////////////
 
 } )( jQuery, swiftyProbe );
