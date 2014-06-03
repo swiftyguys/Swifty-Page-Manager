@@ -147,12 +147,22 @@ class Wordpress {
     function ActivatePlugin( $pluginCode ) {
         $st = $this->st;
 
-        $this->story->EchoMsg( "Activate plugin: " . $pluginCode );
+        $this->story->EchoMsg( "Activate plugin: " . $pluginCode . ' ' . $this->IsPluginActivated( $pluginCode ) );
 
         $this->OpenAdminSubMenu( 'plugins', $this->strings[ 's_submenu_installed_plugins' ] );
         $st->usingTimer()->wait( 1, "Wait for Installed Plugin page." );
-        $this->story->ClickElementByXpath( 'descendant::a[contains(@href, "plugin=' . $pluginCode . '") and normalize-space(text()) = "' . $this->strings[ 's_activate' ] . '"]', "graceful" );
+
+        if ( ! $this->IsPluginActivated( $pluginCode ) ) {
+            $this->story->ClickElementByXpath( 'descendant::a[contains(@href, "plugin=' . $pluginCode . '") and normalize-space(text()) = "' . $this->strings[ 's_activate' ] . '"]', "graceful" );
+        }
     }
+
+    function IsPluginActivated( $pluginCode ) {
+        $element = $this->story->FindElementsByXpath( 'descendant::a[contains(@href, "plugin=' . $pluginCode . '") and normalize-space(text()) = "' . $this->strings[ 's_deactivate' ] . '"]' );
+
+        return ( $element && count( $element ) === 1 );
+    }
+
 
     ////////////////////////////////////////
 
