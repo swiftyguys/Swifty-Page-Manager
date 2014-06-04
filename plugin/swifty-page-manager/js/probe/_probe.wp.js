@@ -59,23 +59,18 @@
     };
 
     probe.WP.DeleteAllPages = {
-        Start: function( input ) {
+        Start: function( /*input*/ ) {
             probe.QueueStory(
-                "WP.AdminOpenSubmenu",
+                'WP.AdminOpenSubmenu',
                 {
-                    "plugin_code": "pages",
-                    "submenu_text": "Alle pagina's"   // Here we need something for translations
+                    'plugin_code': 'pages',
+                    'submenu_text': 'All Pages'   // Here we need something for translations
                 },
-                "Step2"
+                'Step2'
             );
         },
 
         Step2: function( /*input*/ ) {
-            // Wait until the checkbox becomes visible
-            $( '#cb-select-all-1' ).WaitForVisible( "Step3" );
-        },
-
-        Step3: function( /*input*/ ) {
             // Click on the checkbox to select all pages
             $( '#cb-select-all-1' )
                 .MustExist()
@@ -84,11 +79,72 @@
             // Select the trash option
             $( 'select[name="action"]' )
                 .MustExist()
-                .val( [ "trash" ] );
+                .val( [ 'trash' ] );
 
+            // Click on the Apply button
             $( '#doaction' )
                 .MustExist()
                 .Click();
+        }
+    };
+
+    ////////////////////////////////////////
+
+    probe.WP.EmptyTrash = {
+        Start: function( /*input*/ ) {
+            probe.QueueStory(
+                'WP.AdminOpenSubmenu',
+                {
+                    'plugin_code': 'pages',
+                    'submenu_text': 'All Pages'   // Here we need something for translations
+                },
+                'Step2'
+            );
+        },
+
+        Step2: function( /*input*/ ) {
+            // Click on the 'Trash' link
+            $( 'li.trash a' )
+                .MustExist()
+                .Click();
+
+            // Wait until the 'Empty Trash' button becomes visible
+            $( '#delete_all' ).WaitForVisible( 'Step3' );
+        },
+
+        Step3: function( /*input*/ ) {
+            // Click on the 'Empty Trash' button
+            $( '#delete_all' )
+                .MustExist()
+                .Click();
+        }
+    };
+
+    ////////////////////////////////////////
+
+    probe.WP.CreateXDraftPages = {
+        Start: function( /*input*/ ) {
+            probe.QueueStory(
+                'WP.AdminOpenSubmenu',
+                {
+                    'plugin_code': 'pages',
+                    'submenu_text': 'All Pages'   // Here we need something for translations
+                },
+                'Step2'
+            );
+        },
+
+        Step2: function( input ) {
+            for ( var i = 1; i <= input.x_pages; i++ ) {
+                // Click on the 'Trash' link
+                $( 'a.add-new-h2' )
+                    .MustExist()
+                    .Click();
+
+                $( 'input[name="post_title"]' ).val( 'WP Page ' . i );
+
+                $( '#save-post' ).WaitForVisible( 'Step3' );
+            }
         }
     };
 

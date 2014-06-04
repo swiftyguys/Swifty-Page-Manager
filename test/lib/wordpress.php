@@ -199,38 +199,38 @@ class Wordpress {
 
     ////////////////////////////////////////
 
-    function DeleteAllPages()
-    {
-        $st = $this->st;
-
-        $this->story->EchoMsg( 'Delete All Pages' );
-
-        $this->OpenAdminSubMenu( 'pages', $this->strings[ 's_submenu_all_pages' ] );
-        $st->usingTimer()->wait( 1, 'Wait for Wordpress Pages page' );
-        $st->usingBrowser()->click()->fieldWithId( 'cb-select-all-1' );
-        $st->usingBrowser()->select( $this->strings[ 's_wp_pages_actions_delete' ] )->fromDropdownWithName( 'action' );
-        $st->usingBrowser()->click()->buttonWithId( 'doaction' );
-    }
+//    function DeleteAllPages()
+//    {
+//        $st = $this->st;
+//
+//        $this->story->EchoMsg( 'Delete All Pages' );
+//
+//        $this->OpenAdminSubMenu( 'pages', $this->strings[ 's_submenu_all_pages' ] );
+//        $st->usingTimer()->wait( 1, 'Wait for Wordpress Pages page' );
+//        $st->usingBrowser()->click()->fieldWithId( 'cb-select-all-1' );
+//        $st->usingBrowser()->select( $this->strings[ 's_wp_pages_actions_delete' ] )->fromDropdownWithName( 'action' );
+//        $st->usingBrowser()->click()->buttonWithId( 'doaction' );
+//    }
 
     ////////////////////////////////////////
 
-    function EmptyTrash()
-    {
-        $st = $this->st;
-
-        $this->story->EchoMsg( 'Empty trash' );
-
-        $this->OpenAdminSubMenu( 'pages', $this->strings[ 's_submenu_all_pages' ] );
-        $st->usingTimer()->wait( 1, 'Wait for Wordpress Pages page' );
-        $elements = $this->story->FindElementsByXpathMustExist( '//li[@class="trash"]/a' );
-
-        if ( count( $elements ) > 0 && $elements[0]->displayed() ) {
-            $elements[0]->click();   // Click on the trash link
-            $st->usingBrowser()->click()->buttonWithText( $this->strings[ 's_wp_pages_empty_trash' ] );
-            $elements = $st->fromBrowser()->getElementsByClass( 'no-items' );
-            $this->st->assertsInteger( count( $elements ) )->equals( 1 );
-        }
-    }
+//    function EmptyTrash()
+//    {
+//        $st = $this->st;
+//
+//        $this->story->EchoMsg( 'Empty trash' );
+//
+//        $this->OpenAdminSubMenu( 'pages', $this->strings[ 's_submenu_all_pages' ] );
+//        $st->usingTimer()->wait( 1, 'Wait for Wordpress Pages page' );
+//        $elements = $this->story->FindElementsByXpathMustExist( '//li[@class="trash"]/a' );
+//
+//        if ( count( $elements ) > 0 && $elements[0]->displayed() ) {
+//            $elements[0]->click();   // Click on the trash link
+//            $st->usingBrowser()->click()->buttonWithText( $this->strings[ 's_wp_pages_empty_trash' ] );
+//            $elements = $st->fromBrowser()->getElementsByClass( 'no-items' );
+//            $this->st->assertsInteger( count( $elements ) )->equals( 1 );
+//        }
+//    }
 
     ////////////////////////////////////////
 

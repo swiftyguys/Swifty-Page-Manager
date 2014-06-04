@@ -11,8 +11,16 @@ class ThisStory extends SSStory {
         parent::TakeAction(); // Must be called first!
 
         $this->wordpress->Login();
-        $this->Probe( 'SPM.CheckRunning', Array( "plugin_name" => $this->pluginName ) );
-        $this->Probe( 'WP.DeleteAllPages', Array( "plugin_name" => $this->pluginName ) );
+//        $this->Probe( 'WP.DeleteAllPages', Array( 'plugin_name' => $this->pluginName ) );
+//        $this->Probe( 'WP.EmptyTrash', Array( 'plugin_name' => $this->pluginName ) );
+        $this->Probe( 'WP.CreateXDraftPages', Array(
+            'plugin_name' => $this->pluginName,
+            'x_pages'     => 2
+        ) );
+
+
+
+//        $this->Probe( 'SPM.CheckRunning', Array( "plugin_name" => $this->pluginName ) );
 
 
 
