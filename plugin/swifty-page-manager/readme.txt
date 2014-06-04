@@ -1,5 +1,5 @@
 === Swifty Page Manager ===
-Contributors: robertheessels
+Contributors: SwiftyLife, robertheessels, chrisvermeulen, jeroenh, noemi-van-de-moosdijk
 Donate link: http://swiftylife.com/donate/
 Tags: Swifty, page, pages, tree, menu, manage, hierarchy, structure
 Requires at least: 3.8
@@ -8,7 +8,7 @@ Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Easily create, move and delete pages. Manage page settings.
+Makes creating and managing your pages easy.
 
 == Description ==
 
@@ -42,10 +42,6 @@ As with all the plugins the Swifty team develops, the Swifty Page Manager is foc
 
 If you want to do some more advanced stuff, that’s still possible because you can switch freely between the traditional WordPress mode and Swifty mode.
 
-**Support**
-
-Please use the support tab above.
-
 **Enjoy**
 
 We hope that Swifty Page Manager makes your life a little easier and that you will enjoy this free plugin. If you like it, **don’t forget to rate it!** This helps others make a well informed decision.
@@ -59,12 +55,12 @@ Credits: this plugin is based on [CMS Tree Page View](http://wordpress.org/plugi
 
 == Installation ==
 
-Automatic installation
-----------------------
+**Automatic installation**
+
 The easiest way to get your hands on Swifty Page Manager is to go to your WordPress website, log in and go to the plugin menu in the Wordpress admin sidebar. Click “Add new” and search for “Swifty Page Manager” in the search field. When you found it, simply click “Install now” and you’re done.
 
-Manual installation
--------------------
+**Manual installation**
+
  1. Use the big download button above to download the latest version of Swifty Page Manager to your computer.
  2. Then upload the entire folder with FTP to the wp-content/plugins folder of your WordPress website.
  3. Go to the plugins screen and find Swifty Page Manager plugin in the list
@@ -72,8 +68,8 @@ Manual installation
 
 For more detailed instructions, look [here](http://codex.wordpress.org/Managing_Plugins#Installing_Plugins).
 
-Minimum Requirements
---------------------
+**Minimum Requirements**
+
  * WordPress 3.8 or greater
 
 
