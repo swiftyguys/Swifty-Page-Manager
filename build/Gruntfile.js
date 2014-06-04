@@ -1,28 +1,47 @@
 module.exports = function( grunt ) {
 
+    grunt.getSourcePath = function() {
+        return '../plugin/swifty-page-manager/';
+    }
+    grunt.getDestBasePath = function() {
+        return 'generated/dist/';
+    }
+    grunt.getDestPath = function() {
+        return grunt.getDestBasePath() + '<%= pkg.version %>';
+    }
+    grunt.getDestPathSPM = function() {
+        return grunt.getDestPath() + '/swifty-page-manager/';
+    }
+    grunt.getDestZip = function() {
+        return grunt.getDestBasePath() + '<%= pkg.name %>_<%= pkg.version %>.zip';
+    }
+
     // Project configuration.
     grunt.initConfig( {
         pkg: grunt.file.readJSON( 'package.json' ),
         env : {
             dist : {
                 PROBE: 'none' // 'none', 'include'
+            },
+            test : {
+                PROBE: 'include'
             }
         },
         clean: {
-            dist: [ "generated/dist/<%= pkg.version %>" ],
-            probe: [ 'generated/dist/<%= pkg.version %>/swifty-page-manager/js/probe' ]
+            dist: [ "<%= grunt.getDestPath() %>", "<%= grunt.getDestZip() %>" ],
+            probe: [ '<%= grunt.getDestPathSPM() %>js/probe' ]
         },
         copy: {
             dist: {
                 files: [
-                    { expand: true, cwd: '../plugin/swifty-page-manager/', src: [ '**' ], dest: 'generated/dist/<%= pkg.version %>/swifty-page-manager/' }
+                    { expand: true, cwd: '<%= grunt.getSourcePath() %>', src: [ '**' ], dest: '<%= grunt.getDestPathSPM() %>' }
                 ]
             }
         },
         preprocess: {
             dist: {
-                src: '../plugin/swifty-page-manager/swifty-page-manager.php',
-                dest: 'generated/dist/<%= pkg.version %>/swifty-page-manager/swifty-page-manager.php'
+                src: '<%= grunt.getSourcePath() %>swifty-page-manager.php',
+                dest: '<%= grunt.getDestPathSPM() %>swifty-page-manager.php'
             }
         },
         uglify: {
@@ -35,10 +54,10 @@ module.exports = function( grunt ) {
             },
             dist: {
                 files: {
-                    'generated/dist/<%= pkg.version %>/swifty-page-manager/js/swifty-page-manager.min.js': [ '../plugin/swifty-page-manager/js/swifty-page-manager.js' ],
-                    'generated/dist/<%= pkg.version %>/swifty-page-manager/js/jquery.alerts.min.js': [ '../plugin/swifty-page-manager/js/jquery.alerts.js' ],
-                    'generated/dist/<%= pkg.version %>/swifty-page-manager/js/jquery.biscuit.min.js': [ '../plugin/swifty-page-manager/js/jquery.biscuit.js' ],
-                    'generated/dist/<%= pkg.version %>/swifty-page-manager/js/jquery.jstree.min.js': [ '../plugin/swifty-page-manager/js/jquery.jstree.js' ]
+                    '<%= grunt.getDestPathSPM() %>js/swifty-page-manager.min.js': [ '<%= grunt.getSourcePath() %>js/swifty-page-manager.js' ],
+                    '<%= grunt.getDestPathSPM() %>js/jquery.alerts.min.js': [ '<%= grunt.getSourcePath() %>js/jquery.alerts.js' ],
+                    '<%= grunt.getDestPathSPM() %>js/jquery.biscuit.min.js': [ '<%= grunt.getSourcePath() %>js/jquery.biscuit.js' ],
+                    '<%= grunt.getDestPathSPM() %>js/jquery.jstree.min.js': [ '<%= grunt.getSourcePath() %>js/jquery.jstree.js' ]
                 }
             }
         },
@@ -49,21 +68,47 @@ module.exports = function( grunt ) {
             },
             dist: {
                 files: {
-                    'generated/dist/<%= pkg.version %>/swifty-page-manager/css/styles.min.css': [ '../plugin/swifty-page-manager/css/styles.css' ],
-                    'generated/dist/<%= pkg.version %>/swifty-page-manager/css/jquery.alerts.min.css': [ '../plugin/swifty-page-manager/css/jquery.alerts.css' ]
+                    '<%= grunt.getDestPathSPM() %>css/styles.min.css': [ '<%= grunt.getSourcePath() %>css/styles.css' ],
+                    '<%= grunt.getDestPathSPM() %>css/jquery.alerts.min.css': [ '<%= grunt.getSourcePath() %>css/jquery.alerts.css' ]
                 }
             }
         },
         compress: {
             dist: {
                 options: {
-                    archive: 'generated/dist/<%= pkg.name %>_<%= pkg.version %>.zip',
+                    archive: '<%= grunt.getDestZip() %>',
                     mode: 'zip',
                     pretty: true
                 },
                 files: [
-                    { expand: true, cwd: 'generated/dist/<%= pkg.version %>/', src: ['**'], dest: '' }
+                    { expand: true, cwd: '<%= grunt.getDestPath() %>/', src: ['**'], dest: '' }
                 ]
+            }
+        },
+        shell: {
+            test1: {
+                command: '~/storyplayer/vendor/bin/storyplayer' +
+                         ' -D relpath="../build/<%= grunt.getDestPath() %>"' +
+                         ' -D platform=ec2' +
+//                         ' -D wp_version=3.7' +
+                         ' -D wp_version=3.9.1' +
+                         ' -D lang=en' +
+                         ' -d sl_ie9_win7' +
+                         ' test.php',
+                options: {
+                    stderr: false,
+                    execOptions: {
+                        cwd: '../test/'
+                    },
+                    'callback': function(err, stdout, stderr, cb) {
+                        if( stderr.indexOf( "action: COMPLETED" ) >= 0 ) {
+                            console.log( "\n\n========================================\nTEST SUCCESFUL\n========================================\n\n\n" );
+                        } else {
+                            grunt.fatal( "\n\n========================================\n\nTEST FAILED!!!!!!!!!!!!!!\n\n" + stderr + "\n\n========================================\n\n\n" );
+                        }
+                        cb();
+                    }
+                }
             }
         }
     } );
@@ -76,6 +121,7 @@ module.exports = function( grunt ) {
     grunt.loadNpmTasks( 'grunt-contrib-compress' );
     grunt.loadNpmTasks( 'grunt-preprocess' );
     grunt.loadNpmTasks( 'grunt-env' );
+    grunt.loadNpmTasks( 'grunt-shell' );
 
     // Helper tasks.
     grunt.registerTask( 'clean_probe', function() {
@@ -86,16 +132,32 @@ module.exports = function( grunt ) {
         }
     } );
 
-    // Default tasks.
-    grunt.registerTask( 'default', [
-        'env',
+    // Main tasks.
+    grunt.registerTask( 'main_build', [
         'clean:dist',
         'copy',
         'clean_probe',
         'preprocess',
         'uglify',
-        'cssmin',
+        'cssmin'
+    ] );
+
+    grunt.registerTask( 'build_and_test', [
+        'env:test',
+        'main_build',
+        'shell:test1'
+    ] );
+
+    grunt.registerTask( 'build_dist', [
+        'env:dist',
+        'main_build',
         'compress'
+    ] );
+
+    // Default task.
+    grunt.registerTask( 'default', [
+        'build_and_test',
+        'build_dist'
     ] );
 
 };
