@@ -205,9 +205,29 @@ module.exports = function( grunt ) {
                     execOptions: {
                     },
                     'callback': function(err, stdout, stderr, cb) {
-                        if( stdout.indexOf( 'nothing to commit (working directory clean)' ) < 0 ) {
+                        if( stdout.indexOf( 'nothing to commit' ) < 0 ) {
                             grunt.fatal( "\n\n========================================\n\nGIT HAS UNCOMITTED FILES. PLEASE COMMIT FIRST!!!!!!!!!!!!!!\n\n========================================\n\n\n" );
                         }
+                        cb();
+                    }
+                }
+            },
+            git_tag: {
+                command: 'git tag v<%= pkg.version %>',
+                options: {
+                    execOptions: {
+                    },
+                    'callback': function(err, stdout, stderr, cb) {
+                        cb();
+                    }
+                }
+            },
+            git_push_tags: {
+                command: 'git push origin --tags',
+                options: {
+                    execOptions: {
+                    },
+                    'callback': function(err, stdout, stderr, cb) {
                         cb();
                     }
                 }
@@ -267,6 +287,7 @@ module.exports = function( grunt ) {
     ] );
 
     grunt.registerTask( 'svn_update', [
+        'shell:git_check_status',
         'build_dist',
         'check_changelog',
         'clean:svn',
@@ -279,7 +300,9 @@ module.exports = function( grunt ) {
         'svn_update',
         'shell:svn_ci',
         'shell:svn_cp_trunk',
-        'shell:svn_ci_tags'
+        'shell:svn_ci_tags',
+        'shell:git_tag',
+        'shell:git_push_tags'
     ] );
 
     // Default task.
