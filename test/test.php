@@ -18,7 +18,10 @@ class ThisStory extends SSStory {
             'x_pages'     => 2
         ) );
         $this->Probe( 'SPM.CheckRunning', Array( "plugin_name" => $this->pluginName ) );
-        $this->Probe( 'SPM.CheckIfXPagesExist', Array( "plugin_name" => $this->pluginName ) );
+        $this->Probe( 'SPM.CheckIfXPagesExist', Array(
+            'plugin_name' => $this->pluginName,
+            'x_pages'     => 2
+        ) );
 
 
 
@@ -46,15 +49,15 @@ class ThisStory extends SSStory {
 
     ////////////////////////////////////////
 
-    function CheckIfXPagesExist( $total = 1 )
-    {
-        $this->EchoMsg( 'Check if x pages exist' );
-
-        $this->wordpress->OpenAdminSubMenu( 'pages', $this->pluginName );
-        $this->st->usingTimer()->wait( 3, 'Wait for the page tree to be visible' );
-        $elements = $this->FindElementsByXpath( 'descendant::div[' . $this->ContainingClass( "spm-tree-container" ) . ']/ul/li' );
-        $this->st->assertsInteger( count( $elements ) )->equals( $total );
-    }
+//    function CheckIfXPagesExist( $total = 1 )
+//    {
+//        $this->EchoMsg( 'Check if x pages exist' );
+//
+//        $this->wordpress->OpenAdminSubMenu( 'pages', $this->pluginName );
+//        $this->st->usingTimer()->wait( 3, 'Wait for the page tree to be visible' );
+//        $elements = $this->FindElementsByXpath( 'descendant::div[' . $this->ContainingClass( "spm-tree-container" ) . ']/ul/li' );
+//        $this->st->assertsInteger( count( $elements ) )->equals( $total );
+//    }
 
     ////////////////////////////////////////
 
