@@ -5,3 +5,4 @@ settings_private.json
 vendor
 node_modules
 build/generated
+build/svn
