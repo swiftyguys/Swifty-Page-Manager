@@ -1,6 +1,6 @@
 {
   "name": "Swifty-Page-Manager",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Swifty Page Manager",
   "main": "index.js",
   "scripts": {

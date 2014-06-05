@@ -172,7 +172,7 @@ module.exports = function( grunt ) {
                     }
                 }
             },
-            svn_ci_trunk: {
+            svn_ci_tags: {
                 command: 'svn ci -m "Tagging version <%= pkg.version %>" --username "SwiftyLife" --force-interactive',
                 options: {
                     execOptions: {
@@ -193,6 +193,20 @@ module.exports = function( grunt ) {
                     'callback': function(err, stdout, stderr, cb) {
                         if( stdout.indexOf( grunt.config.data.pkg.version ) >= 0 ) {
                             grunt.fatal( "\n\n========================================\n\nCURRENT RELEASETAG ALREADY EXISTS IN SVN " + grunt.config.data.pkg.version + "!!!!!!!!!!!!!!\n\n========================================\n\n\n" );
+                        }
+                        cb();
+                    }
+                }
+            },
+            git_check_status: {
+                command: 'git status',
+                options: {
+                    stdout: false,
+                    execOptions: {
+                    },
+                    'callback': function(err, stdout, stderr, cb) {
+                        if( stdout.indexOf( 'nothing to commit (working directory clean)' ) < 0 ) {
+                            grunt.fatal( "\n\n========================================\n\nGIT HAS UNCOMITTED FILES. PLEASE COMMIT FIRST!!!!!!!!!!!!!!\n\n========================================\n\n\n" );
                         }
                         cb();
                     }
@@ -259,6 +273,13 @@ module.exports = function( grunt ) {
         'shell:svn_co',
         'copy:svn',
         'shell:svn_stat'
+    ] );
+
+    grunt.registerTask( 'svn_submit', [
+        'svn_update',
+        'shell:svn_ci',
+        'shell:svn_cp_trunk',
+        'shell:svn_ci_tags'
     ] );
 
     // Default task.
