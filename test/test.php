@@ -17,21 +17,19 @@ class ThisStory extends SSStory {
             'plugin_name' => $this->pluginName,
             'x_pages'     => 2
         ) );
-
-
-
-//        $this->Probe( 'SPM.CheckRunning', Array( "plugin_name" => $this->pluginName ) );
+        $this->Probe( 'SPM.CheckRunning', Array( "plugin_name" => $this->pluginName ) );
+        $this->Probe( 'SPM.CheckIfXPagesExist', Array( "plugin_name" => $this->pluginName ) );
 
 
 
 //        $this->wordpress->DeleteAllPages();
 //        $this->wordpress->EmptyTrash();
-////        $this->CheckIfXPagesExist( 0 );
-////        $this->CheckAddButtonVisibleWhenNoPagesExist();
+//        $this->CheckIfXPagesExist( 0 );
+//        $this->CheckAddButtonVisibleWhenNoPagesExist();
 //        $this->wordpress->CreateXDraftPages( 2 );
-////        $this->CheckIfXPagesExist( 4 );
-//////        $this->CheckPluginRunning();
-////        $this->Probe( 'SPM.CheckRunning', Array( "plugin_name" => $this->pluginName ) );
+//        $this->CheckIfXPagesExist( 4 );
+//        $this->CheckPluginRunning();
+//        $this->Probe( 'SPM.CheckRunning', Array( "plugin_name" => $this->pluginName ) );
 //        $this->CreateNewPageAftersLastPage();
     }
 
