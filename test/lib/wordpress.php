@@ -234,23 +234,23 @@ class Wordpress {
 
     ////////////////////////////////////////
 
-    function CreateXDraftPages( $total = 1 )
-    {
-        $st = $this->st;
-
-        $this->story->EchoMsg( 'Create x draft pages' );
-
-        $this->OpenAdminSubMenu( 'pages', $this->strings[ 's_submenu_all_pages' ] );
-        $st->usingTimer()->wait( 1, 'Wait for Wordpress Pages page' );
-
-        for ( $i = 1; $i <= $total; $i++ ) {
-            $st->usingBrowser()->click()->linkWithText( $this->strings[ 's_wp_pages_create_new' ] );
-            $st->usingTimer()->wait( 1, 'Wait for Wordpress New Page page' );
-            $st->usingBrowser()->type( 'WP Pagina ' . $i )->intoFieldWithName( 'post_title' );
-            $st->usingBrowser()->click()->buttonWithText( $this->strings[ 's_wp_pages_save_concept' ] );
-            $st->usingTimer()->wait( 1, 'Wait for Wordpress Edit Page page' );
-        }
-    }
+//    function CreateXDraftPages( $total = 1 )
+//    {
+//        $st = $this->st;
+//
+//        $this->story->EchoMsg( 'Create x draft pages' );
+//
+//        $this->OpenAdminSubMenu( 'pages', $this->strings[ 's_submenu_all_pages' ] );
+//        $st->usingTimer()->wait( 1, 'Wait for Wordpress Pages page' );
+//
+//        for ( $i = 1; $i <= $total; $i++ ) {
+//            $st->usingBrowser()->click()->linkWithText( $this->strings[ 's_wp_pages_create_new' ] );
+//            $st->usingTimer()->wait( 1, 'Wait for Wordpress New Page page' );
+//            $st->usingBrowser()->type( 'WP Pagina ' . $i )->intoFieldWithName( 'post_title' );
+//            $st->usingBrowser()->click()->buttonWithText( $this->strings[ 's_wp_pages_save_concept' ] );
+//            $st->usingTimer()->wait( 1, 'Wait for Wordpress Edit Page page' );
+//        }
+//    }
 
     ////////////////////////////////////////
 }
