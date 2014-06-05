@@ -1,6 +1,6 @@
 === Swifty Page Manager ===
-Contributors: SwiftyLife, robertheessels, chrisvermeulen, jeroenh, noemi-van-de-moosdijk
-Donate link: http://swiftylife.com/donate/
+Contributors: robertheessels, chrisvermeulen, SwiftyLife, jeroenh, noemi-van-de-moosdijk
+Donate link: http://swiftylife.com/plugins/donate/
 Tags: Swifty, page, pages, tree, menu, manage, hierarchy, structure
 Requires at least: 3.8
 Tested up to: 3.9
@@ -41,6 +41,15 @@ Try it – it’s free ;-)
 As with all the plugins the Swifty team develops, the Swifty Page Manager is focused on simplifying the things that you use most, making them easier and faster to work with.
 
 Once you've installed Swifty Page Manager you can manage your pages both in our new way, and in the native Wordpress way. You are free to use both of these modes any time you like.
+
+**Languages**
+
+Swifty Page Manager is currently available in:
+
+ * English
+ * Nederlands
+
+[Want to help add or improve translations? Click here.](http://swiftylife.com/plugins/translate/)
 
 **Enjoy**
 
