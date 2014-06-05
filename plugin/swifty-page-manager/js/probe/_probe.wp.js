@@ -134,16 +134,45 @@
             );
         },
 
-        Step2: function( input ) {
-            for ( var i = 1; i <= input.x_pages; i++ ) {
-                // Click on the 'Trash' link
+        Step2: function( /*input*/ ) {
+            // Wait until the 'Add new' link becomes visible
+            $( 'a.add-new-h2' ).WaitForVisible( 'Step3', 5000, 1 );
+        },
+
+        Step3: function( input ) {
+            if ( input.wait_data <= input.x_pages ) {
+                // Click on the 'Add new' link
                 $( 'a.add-new-h2' )
                     .MustExist()
                     .Click();
 
-                $( 'input[name="post_title"]' ).val( 'WP Page ' . i );
+                // Wait until the 'post_type' input becomes visible
+                $( 'input[name="post_title"]' ).WaitForVisible( 'Step4', 5000, input.wait_data );
+            } else {
+                probe.QueueStory(
+                    'WP.AdminOpenSubmenu',
+                    {
+                        'plugin_code': 'pages',
+                        'submenu_text': 'All Pages'   // Here we need something for translations
+                    },
+                    'Step2'
+                );
 
-                $( '#save-post' ).WaitForVisible( 'Step3' );
+                // Check to see if there are really 2 pages created
+                $( 'tbody#the-list tr' ).MustExistTimes( 2 );
+            }
+        },
+
+        Step4: function( input ) {
+            var currentNr = input.wait_data;
+
+            $( 'input[name="post_title"]' ).val( 'WP Page ' + currentNr );
+            $( '#save-post' ).MustExist().Click();
+
+            if ( currentNr <= input.x_pages ) {
+                currentNr++;
+
+                $( 'a.add-new-h2' ).WaitForVisible( 'Step3', 5000, currentNr );
             }
         }
     };

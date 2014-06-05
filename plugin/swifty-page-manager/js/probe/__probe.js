@@ -143,21 +143,23 @@ var swiftyProbe = ( function( $, probe ) {
             return output;
         },
 
-        WaitForElementVisible: function( sel, fnName, tm ) {
+        WaitForElementVisible: function( sel, fnName, tm, waitData ) {
             this.wait = {
                 "tp": "wait_for_element",
                 "sel": sel,
                 "tm": Date.now() + tm,
-                "fn_name": fnName
+                "fn_name": fnName,
+                "wait_data": waitData
             };
         },
 
-        WaitForFn: function( waitFnName, fnName, tm ) {
+        WaitForFn: function( waitFnName, fnName, tm, waitData ) {
             this.wait = {
                 "tp": "wait_for_fn",
                 "wait_fn_name": waitFnName,
                 "tm": Date.now() + tm,
-                "fn_name": fnName
+                "fn_name": fnName,
+                "wait_data": waitData
             };
         },
 
@@ -320,22 +322,22 @@ var swiftyProbe = ( function( $, probe ) {
             return this;
         },
 
-        WaitForFn: function( waitFnName, fnName, tm ) {
+        WaitForFn: function( waitFnName, fnName, tm, waitData ) {
             if ( typeof tm === "undefined" ) {
                 tm = 5000;
             }
 
-            probe.WaitForFn( waitFnName, fnName, tm );
+            probe.WaitForFn( waitFnName, fnName, tm, waitData );
 
             return this;
         },
 
-        WaitForVisible: function( fnName, tm ) {
+        WaitForVisible: function( fnName, tm, waitData ) {
             if ( typeof tm === "undefined" ) {
                 tm = 5000;
             }
 
-            probe.WaitForElementVisible( this.selector, fnName, tm );
+            probe.WaitForElementVisible( this.selector, fnName, tm, waitData );
 
             return this;
         },
