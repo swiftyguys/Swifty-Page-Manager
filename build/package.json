@@ -1,6 +1,6 @@
 {
   "name": "Swifty-Page-Manager",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Swifty Page Manager",
   "main": "index.js",
   "scripts": {
@@ -17,6 +17,7 @@
     "grunt-contrib-compress": "~0.9.1",
     "grunt-preprocess": "~4.0.0",
     "grunt-env": "~0.4.1",
-    "grunt-shell": "~0.7.0"
+    "grunt-shell": "~0.7.0",
+    "grunt-text-replace": "~0.3.12"
   }
 }

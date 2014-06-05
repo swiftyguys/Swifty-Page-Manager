@@ -21,20 +21,28 @@ module.exports = function( grunt ) {
         pkg: grunt.file.readJSON( 'package.json' ),
         env : {
             dist : {
-                PROBE: 'none' // 'none', 'include'
+                PROBE: 'none', // 'none', 'include'
+                RELEASE_TAG: '<%= pkg.version %>'
             },
             test : {
-                PROBE: 'include'
+                PROBE: 'include',
+                RELEASE_TAG: '<%= pkg.version %>'
             }
         },
         clean: {
             dist: [ "<%= grunt.getDestPath() %>", "<%= grunt.getDestZip() %>" ],
-            probe: [ '<%= grunt.getDestPathSPM() %>js/probe' ]
+            probe: [ '<%= grunt.getDestPathSPM() %>js/probe' ],
+            svn: [ 'svn' ]
         },
         copy: {
             dist: {
                 files: [
                     { expand: true, cwd: '<%= grunt.getSourcePath() %>', src: [ '**' ], dest: '<%= grunt.getDestPathSPM() %>' }
+                ]
+            },
+            svn: {
+                files: [
+                    { expand: true, cwd: '<%= grunt.getDestPathSPM() %>', src: [ '**' ], dest: 'svn/swifty-page-manager/trunk/' }
                 ]
             }
         },
@@ -42,6 +50,16 @@ module.exports = function( grunt ) {
             dist: {
                 src: '<%= grunt.getSourcePath() %>swifty-page-manager.php',
                 dest: '<%= grunt.getDestPathSPM() %>swifty-page-manager.php'
+            }
+        },
+        replace: {
+            dist: {
+                src: [ '<%= grunt.getSourcePath() %>readme.txt' ],
+                dest: '<%= grunt.getDestPathSPM() %>readme.txt',
+                replacements: [ {
+                        from: 'RELEASE_TAG',
+                        to: '<%= pkg.version %>'
+                } ]
             }
         },
         uglify: {
@@ -109,6 +127,76 @@ module.exports = function( grunt ) {
                         cb();
                     }
                 }
+            },
+            svn_co: {
+                command: 'svn co http://plugins.svn.wordpress.org/swifty-page-manager/ svn/swifty-page-manager',
+                options: {
+                    execOptions: {
+                        cwd: '../build/'
+                    },
+                    'callback': function(err, stdout, stderr, cb) {
+                        cb();
+                    }
+                }
+            },
+            svn_stat: {
+                command: 'svn stat',
+                options: {
+                    execOptions: {
+                        cwd: 'svn/swifty-page-manager/'
+                    },
+                    'callback': function(err, stdout, stderr, cb) {
+                        cb();
+                    }
+                }
+            },
+            svn_ci: {
+                command: 'svn ci -m "v<%= pkg.version %>" --username "SwiftyLife" --force-interactive',
+                options: {
+                    execOptions: {
+                        cwd: 'svn/swifty-page-manager/'
+                    },
+                    'callback': function(err, stdout, stderr, cb) {
+                        cb();
+                    }
+                }
+            },
+            svn_cp_trunk: {
+                command: 'svn cp trunk tags/<%= pkg.version %>',
+                options: {
+                    execOptions: {
+                        cwd: 'svn/swifty-page-manager/'
+                    },
+                    'callback': function(err, stdout, stderr, cb) {
+                        cb();
+                    }
+                }
+            },
+            svn_ci_trunk: {
+                command: 'svn ci -m "Tagging version <%= pkg.version %>" --username "SwiftyLife" --force-interactive',
+                options: {
+                    execOptions: {
+                        cwd: 'svn/swifty-page-manager/'
+                    },
+                    'callback': function(err, stdout, stderr, cb) {
+                        cb();
+                    }
+                }
+            },
+            svn_check_tags: {
+                command: 'svn ls http://plugins.svn.wordpress.org/swifty-page-manager/tags',
+                options: {
+                    stdout: false,
+                    execOptions: {
+                        cwd: 'svn/swifty-page-manager/'
+                    },
+                    'callback': function(err, stdout, stderr, cb) {
+                        if( stdout.indexOf( grunt.config.data.pkg.version ) >= 0 ) {
+                            grunt.fatal( "\n\n========================================\n\nCURRENT RELEASETAG ALREADY EXISTS IN SVN " + grunt.config.data.pkg.version + "!!!!!!!!!!!!!!\n\n========================================\n\n\n" );
+                        }
+                        cb();
+                    }
+                }
             }
         }
     } );
@@ -122,6 +210,7 @@ module.exports = function( grunt ) {
     grunt.loadNpmTasks( 'grunt-preprocess' );
     grunt.loadNpmTasks( 'grunt-env' );
     grunt.loadNpmTasks( 'grunt-shell' );
+    grunt.loadNpmTasks( 'grunt-text-replace' );
 
     // Helper tasks.
     grunt.registerTask( 'clean_probe', function() {
@@ -132,12 +221,21 @@ module.exports = function( grunt ) {
         }
     } );
 
+    grunt.registerTask( 'check_changelog', function() {
+        var fileContent = grunt.file.read( grunt.getSourcePath() + 'readme.txt' );
+        if( fileContent.indexOf( grunt.config.data.pkg.version ) < 0 ) {
+            grunt.fatal( "\n\n========================================\n\nREADME FILE DOES NOT CONTAIN CHANGELOG FOR " + grunt.config.data.pkg.version + "!!!!!!!!!!!!!!\n\n========================================\n\n\n" );
+        }
+    } );
+
     // Main tasks.
     grunt.registerTask( 'main_build', [
+        'shell:svn_check_tags',
         'clean:dist',
         'copy',
         'clean_probe',
         'preprocess',
+        'replace',
         'uglify',
         'cssmin'
     ] );
@@ -152,6 +250,15 @@ module.exports = function( grunt ) {
         'env:dist',
         'main_build',
         'compress'
+    ] );
+
+    grunt.registerTask( 'svn_update', [
+        'build_dist',
+        'check_changelog',
+        'clean:svn',
+        'shell:svn_co',
+        'copy:svn',
+        'shell:svn_stat'
     ] );
 
     // Default task.
