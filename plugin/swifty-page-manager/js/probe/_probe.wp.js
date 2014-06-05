@@ -104,9 +104,7 @@
 
         Step2: function( /*input*/ ) {
             // Click on the 'Trash' link
-            $( 'li.trash a' )
-                .MustExist()
-                .Click();
+            $( 'li.trash a' ).MustExist().Click();
 
             // Wait until the 'Empty Trash' button becomes visible
             $( '#delete_all' ).WaitForVisible( 'Step3' );
@@ -114,9 +112,7 @@
 
         Step3: function( /*input*/ ) {
             // Click on the 'Empty Trash' button
-            $( '#delete_all' )
-                .MustExist()
-                .Click();
+            $( '#delete_all' ).MustExist().Click();
         }
     };
 
@@ -128,7 +124,7 @@
                 'WP.AdminOpenSubmenu',
                 {
                     'plugin_code': 'pages',
-                    'submenu_text': 'All Pages'   // Here we need something for translations
+                    'submenu_text': 'All Pages'   // dojh Here we need something for translations
                 },
                 'Step2'
             );
@@ -142,38 +138,47 @@
         Step3: function( input ) {
             if ( input.wait_data <= input.x_pages ) {
                 // Click on the 'Add new' link
-                $( 'a.add-new-h2' )
-                    .MustExist()
-                    .Click();
+                $( 'a.add-new-h2' ).MustExist().Click();
 
-                // Wait until the 'post_type' input becomes visible
+                // Wait until the 'post_type' input field becomes visible
                 $( 'input[name="post_title"]' ).WaitForVisible( 'Step4', 5000, input.wait_data );
             } else {
                 probe.QueueStory(
                     'WP.AdminOpenSubmenu',
                     {
                         'plugin_code': 'pages',
-                        'submenu_text': 'All Pages'   // Here we need something for translations
+                        'submenu_text': 'All Pages'   //dojh Here we need something for translations
                     },
-                    'Step2'
+                    'Step5'
                 );
-
-                // Check to see if there are really 2 pages created
-                $( 'tbody#the-list tr' ).MustExistTimes( 2 );
             }
         },
 
         Step4: function( input ) {
             var currentNr = input.wait_data;
 
+            // Enter a value into the post_type input field
             $( 'input[name="post_title"]' ).val( 'WP Page ' + currentNr );
+
+            // Click the 'Save Draft' button
             $( '#save-post' ).MustExist().Click();
 
             if ( currentNr <= input.x_pages ) {
                 currentNr++;
 
+                // Wait until the 'Add new' link becomes visible and proceed to step 3 again.
                 $( 'a.add-new-h2' ).WaitForVisible( 'Step3', 5000, currentNr );
             }
+        },
+
+        Step5: function( /*input*/ ) {
+            // Wait until the WP page list becomes visible
+            $( '#the-list' ).WaitForVisible( 'Step6' );
+        },
+
+        Step6: function( /*input*/ ) {
+            // Check to see if there are really 2 pages created
+            $( '#the-list' ).find( 'tr' ).MustExistTimes( 2 );
         }
     };
 

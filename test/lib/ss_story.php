@@ -349,7 +349,10 @@ class SSStory {
                     $js = 'return swiftyProbe.DoWait(arguments);';
                     $waiting = true;
                     while( $waiting ) {
+                        $prevInput = $input;
+                        $input[ 'wait_data' ] = isset( $returned[ 'ret' ][ 'wait' ][ 'wait_data' ] ) ? $returned[ 'ret' ][ 'wait' ][ 'wait_data' ] : "undefined";
                         $ret = $this->st->getRunningDevice()->execute( array( 'script' => $js, 'args' => Array( $wait, $functionName, $input ) ) );
+                        $input = $prevInput;
 //                        $this->EchoMsg( "DEBUG 2:\n". print_r( $ret, true ) );
                         if( ! isset( $ret[ 'ret' ][ 'wait_status' ] )
                             || $ret[ 'ret' ][ 'wait_status' ] != "waiting"
