@@ -143,6 +143,12 @@ Try it - it's free!
 
 == Changelog ==
 
+= 1.0.3 =
+ * Small fix for incorrect version number.
+
+= 1.0.2 =
+ * Added language/translation info.
+
 = 1.0.1 =
  * Improved the description page.
 
