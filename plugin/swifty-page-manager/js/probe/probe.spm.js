@@ -14,7 +14,7 @@
         },
 
         Step2: function( input ) {
-            $( "h2:contains('" + input.plugin_name + "')" ).MustExist();
+            $( 'h2:contains("' + input.plugin_name + '")' ).MustExist();
         }
     };
 

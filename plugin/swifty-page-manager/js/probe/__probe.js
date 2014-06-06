@@ -1,7 +1,7 @@
 var swiftyProbe = ( function( $, probe ) {
     probe = probe || {
-        tmp_log: "",
-        fail: "",
+        tmp_log: '',
+        fail: '',
 
         TypeText: function( $el, $txt ) {
             this.Click( $el );
@@ -15,13 +15,13 @@ var swiftyProbe = ( function( $, probe ) {
         },
 
         ClickXY: function( x, y ){
-            this.SendEventXY( x, y, "click" );
+            this.SendEventXY( x, y, 'click' );
         },
 
         SendEventXY: function( x, y, name ){
-//            this.TmpLog( "Clixk XY: " + x + "," + y );
+//            this.TmpLog( 'Clixk XY: ' + x + ',' + y );
 
-            var ev = document.createEvent( "MouseEvent" );
+            var ev = document.createEvent( 'MouseEvent' );
             var el = document.elementFromPoint( x, y );
 
             ev.initMouseEvent(
@@ -42,20 +42,20 @@ var swiftyProbe = ( function( $, probe ) {
             var offset = $el.offset();
 
             return {
-                "x": offset.left + $el.width() / 2,
-                "y": offset.top + $el.height() / 2
+                'x': offset.left + $el.width() / 2,
+                'y': offset.top + $el.height() / 2
             };
         },
 
+        /**
+         * @return bool
+         */
         IsVisible: function( $el ) {
             if ( $el.length > 0 ) {
                 var xy = this.GetElementCenter( $el );
 
-                if (
-                    xy.x >= 0
-                    && xy.y >= 0
-                    && $el.is( ":visible" )
-                ) {   // dorh Improve; in viewport?; on top?; hidden?; width>0? height>0?
+                // dorh Improve; in viewport?; on top?; hidden?; width>0? height>0?
+                if ( xy.x >= 0 && xy.y >= 0 && $el.is( ':visible' ) ) {
                     return true;
                 }
             }
@@ -64,11 +64,11 @@ var swiftyProbe = ( function( $, probe ) {
         },
 
         StartTmpLog: function(){
-            this.tmp_log = "";
+            this.tmp_log = '';
         },
 
         TmpLog: function( s ){
-            this.tmp_log += s + "\n";
+            this.tmp_log += s + '\n';
         },
 
         SetFail: function( s ){
@@ -86,9 +86,9 @@ var swiftyProbe = ( function( $, probe ) {
             ret = this.ExecuteSub( pth[ 0 ], pth[ 1 ], args[ 0 ] );
 
             return {
-                "args": args,
-                "fnArgs": pth[ 1 ],
-                "ret": ret
+                'args': args,
+                'fnArgs': pth[ 1 ],
+                'ret': ret
             };
         },
 
@@ -97,7 +97,7 @@ var swiftyProbe = ( function( $, probe ) {
                 return [ value ];
             } );
             var fnArgs = argsArray.slice( 1 );
-            var pth = args[ 0 ].split( "." );
+            var pth = args[ 0 ].split( '.' );
 
             return [ pth, fnArgs ];
         },
@@ -105,7 +105,7 @@ var swiftyProbe = ( function( $, probe ) {
         ExecuteSub: function( pth, args, nm ){
             var ret;
 
-            this.TmpLog( nm + " = " + JSON.stringify( args ) );
+            this.TmpLog( nm + ' = ' + JSON.stringify( args ) );
 
             if ( pth.length === 1 ) {
                 ret = this[ pth[0] ].apply( this, args );
@@ -120,7 +120,7 @@ var swiftyProbe = ( function( $, probe ) {
             }
 
             if ( this.wait ) {
-                ret = $.extend( true, { "wait": this.wait }, ret );
+                ret = $.extend( true, { 'wait': this.wait }, ret );
             }
 
             return $.extend( true, this.GetGenericRetOutput(), ret );
@@ -128,10 +128,10 @@ var swiftyProbe = ( function( $, probe ) {
 
         GetGenericRetOutput: function() {
             var output = {
-                "tmp_log": this.tmp_log
+                'tmp_log': this.tmp_log
             };
 
-            if ( this.fail !== "" ) {
+            if ( this.fail !== '' ) {
                 output.fail = this.fail;
             }
 
@@ -145,21 +145,21 @@ var swiftyProbe = ( function( $, probe ) {
 
         WaitForElementVisible: function( sel, fnName, tm, waitData ) {
             this.wait = {
-                "tp": "wait_for_element",
-                "sel": sel,
-                "tm": Date.now() + tm,
-                "fn_name": fnName,
-                "wait_data": waitData
+                'tp': 'wait_for_element',
+                'sel': sel,
+                'tm': Date.now() + tm,
+                'fn_name': fnName,
+                'wait_data': waitData
             };
         },
 
         WaitForFn: function( waitFnName, fnName, tm, waitData ) {
             this.wait = {
-                "tp": "wait_for_fn",
-                "wait_fn_name": waitFnName,
-                "tm": Date.now() + tm,
-                "fn_name": fnName,
-                "wait_data": waitData
+                'tp': 'wait_for_fn',
+                'wait_fn_name': waitFnName,
+                'tm': Date.now() + tm,
+                'fn_name': fnName,
+                'wait_data': waitData
             };
         },
 
@@ -174,7 +174,7 @@ var swiftyProbe = ( function( $, probe ) {
 
             var argsArray = this.ArgsToArray( args );
 
-            argsArray[ 0 ] += ".Start";
+            argsArray[ 0 ] += '.Start';
 
             return this.Execute( argsArray );
         },
@@ -191,14 +191,14 @@ var swiftyProbe = ( function( $, probe ) {
 
             var argsArZero = argsArray[ 0 ];
 
-            if ( wait.tp === "wait_for_element" ) {
+            if ( wait.tp === 'wait_for_element' ) {
                 if ( this.IsVisible( $( wait.sel ) ) ) {
                     waitCheckResult = true;
                 }
             }
 
-            if ( wait.tp === "wait_for_fn" ) {
-                argsArray[ 0 ] = argsArZero + "." + wait.wait_fn_name;
+            if ( wait.tp === 'wait_for_fn' ) {
+                argsArray[ 0 ] = argsArZero + '.' + wait.wait_fn_name;
                 ret = this.Execute( argsArray );
 
                 if ( ret.ret.wait_result ) {
@@ -207,18 +207,18 @@ var swiftyProbe = ( function( $, probe ) {
             }
 
             if ( waitCheckResult ) {
-                argsArray[ 0 ] = argsArZero + "." + wait.fn_name;
+                argsArray[ 0 ] = argsArZero + '.' + wait.fn_name;
                 ret = this.Execute( argsArray );
             } else if ( Date.now() > wait.tm ) {
-                ret = { "ret": { "wait_status": "timeout" } };
+                ret = { 'ret': { 'wait_status': 'timeout' } };
 
-                this.TmpLog( "WAIT TIMEOUT!!!" );
-                this.SetFail( "WAIT TIMEOUT!!!" );
+                this.TmpLog( 'WAIT TIMEOUT!!!' );
+                this.SetFail( 'WAIT TIMEOUT!!!' );
             } else {
-                ret = { "ret": { "wait_status": "waiting" } };
+                ret = { 'ret': { 'wait_status': 'waiting' } };
             }
 
-            return $.extend( true, { "DoWait args": args, "ret": this.GetGenericRetOutput() }, ret );
+            return $.extend( true, { 'DoWait args': args, 'ret': this.GetGenericRetOutput() }, ret );
         },
 
         DoNext: function( args ) {
@@ -226,17 +226,17 @@ var swiftyProbe = ( function( $, probe ) {
 
             var argsArray = this.ArgsToArray( args );
 
-            argsArray[ 0 ] += "." + args[ 1 ].next_fn_name;
+            argsArray[ 0 ] += '.' + args[ 1 ].next_fn_name;
 
             return this.Execute( argsArray );
         },
 
         QueueStory: function( fnName, newInput, nextFnName ) {
             this.queue = {
-                "new_fn_name": fnName,
-                "new_input": newInput,
-                "next_fn_name": nextFnName
-            }
+                'new_fn_name': fnName,
+                'new_input': newInput,
+                'next_fn_name': nextFnName
+            };
         }
     };
 
@@ -255,14 +255,14 @@ var swiftyProbe = ( function( $, probe ) {
         },
 
         MustExistTimes: function( count, exact ) {
-            if ( typeof exact === "undefined" ) {
+            if ( typeof exact === 'undefined' ) {
                 exact = true;
             }
 
             if ( ( exact && this.length !== count ) || ( !exact && this.length < count ) ) {
                 this.prb_valid = false;
 
-                probe.SetFail( "Element does not exist (or not enough times): " + this.selector );
+                probe.SetFail( 'Element does not exist (or not enough times): ' + this.selector );
             } else {
                 this.prb_valid = true;
             }
@@ -273,7 +273,7 @@ var swiftyProbe = ( function( $, probe ) {
         MustBeVisible: function() {
             if ( ! probe.IsVisible( this ) ) {
                 this.prb_valid = false;
-                probe.SetFail( "Element is not visible: " + this.selector );
+                probe.SetFail( 'Element is not visible: ' + this.selector );
             }
 
             return this;
@@ -299,6 +299,9 @@ var swiftyProbe = ( function( $, probe ) {
             return this;
         },
 
+        /**
+         * @return mixed
+         */
         IsVisible: function() {
             if ( this._CheckValid() ) {
                 return probe.IsVisible( this );
@@ -324,7 +327,7 @@ var swiftyProbe = ( function( $, probe ) {
         },
 
         WaitForFn: function( waitFnName, fnName, tm, waitData ) {
-            if ( typeof tm === "undefined" ) {
+            if ( typeof tm === 'undefined' ) {
                 tm = 5000;
             }
 
@@ -334,7 +337,7 @@ var swiftyProbe = ( function( $, probe ) {
         },
 
         WaitForVisible: function( fnName, tm, waitData ) {
-            if ( typeof tm === "undefined" ) {
+            if ( typeof tm === 'undefined' ) {
                 tm = 5000;
             }
 
@@ -346,11 +349,7 @@ var swiftyProbe = ( function( $, probe ) {
         // Functions for internal use only
 
         _CheckValid: function() {
-            if ( typeof this.prb_valid === "undefined" || this.prb_valid ) {
-                return true;
-            }
-
-            return false;
+            return ( typeof this.prb_valid === 'undefined' || this.prb_valid );
         }
     } );
 

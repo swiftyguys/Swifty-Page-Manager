@@ -20,6 +20,7 @@
         "ajaxurl": false, // global var from Wordpress
         "jAlert": false, // global var from jquery.alerts.js
         "spm_l10n": false, // Is set in our PHP file
+        "swiftyProbe": false, // global var from test system
         "_": false, // default WP
         "Backbone": false, // default WP
         "jQuery": false, // default WP
