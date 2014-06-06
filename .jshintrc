@@ -9,7 +9,7 @@
     "immed": true, // default WP & jQuery
     "noarg": true, // default WP & jQuery
     "onevar": true, // default WP & jQuery
-    "quotmark": "double", // default jQuery // ( was "single" in default WP )
+    "quotmark": "single", // default WP // ( is "double" in default jQuery )
     "trailing": true, // default WP & jQuery
     "undef": true, // default WP & jQuery
     "unused": true, // default WP & jQuery
