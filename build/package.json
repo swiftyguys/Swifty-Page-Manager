@@ -1,13 +1,9 @@
 {
   "name": "Swifty-Page-Manager",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Swifty Page Manager",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "SwiftyLife.com",
-  "license": "GPL2",
+  "license": "GPL-2.0+",
   "devDependencies": {
     "grunt": "~0.4.5",
     "grunt-contrib-uglify": "~0.4.0",
@@ -18,6 +14,8 @@
     "grunt-preprocess": "~4.0.0",
     "grunt-env": "~0.4.1",
     "grunt-shell": "~0.7.0",
-    "grunt-text-replace": "~0.3.12"
+    "grunt-text-replace": "~0.3.12",
+    "grunt-contrib-csslint": "git://github.com/gruntjs/grunt-contrib-csslint.git#warn-instead-of-error",
+    "grunt-contrib-jshint": "~0.10.0"
   }
 }

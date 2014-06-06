@@ -62,6 +62,13 @@ module.exports = function( grunt ) {
                 } ]
             }
         },
+        jshint: {
+            options: {
+                jshintrc: ".jshintrc",
+//                reporter: require( 'jshint-stylish' )
+            },
+            dist: [ '<%= grunt.getSourcePath() %>js/swifty-page-manager.js' ]
+        },
         uglify: {
             options: {
 //                banner: '/*! Minified for <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
@@ -77,6 +84,20 @@ module.exports = function( grunt ) {
                     '<%= grunt.getDestPathSPM() %>js/jquery.biscuit.min.js': [ '<%= grunt.getSourcePath() %>js/jquery.biscuit.js' ],
                     '<%= grunt.getDestPathSPM() %>js/jquery.jstree.min.js': [ '<%= grunt.getSourcePath() %>js/jquery.jstree.js' ]
                 }
+            }
+        },
+        csslint: {
+            dist: {
+                force: true,
+                options: {
+                    "unqualified-attributes": true,
+                    ids: false,
+                    "overqualified-elements": false,
+                    important: false,
+                    "adjoining-classes": false,
+                    "box-model": false
+                },
+                src: ['<%= grunt.getSourcePath() %>css/styles.css']
             }
         },
         cssmin: {
@@ -112,7 +133,7 @@ module.exports = function( grunt ) {
                          ' -D wp_version=3.9.1' +
                          ' -D lang=en' +
                          ' -d sl_ie9_win7' +
-                         ' test.php',
+                         ' test_dist.php',
                 options: {
                     stderr: false,
                     execOptions: {
@@ -245,6 +266,8 @@ module.exports = function( grunt ) {
     grunt.loadNpmTasks( 'grunt-env' );
     grunt.loadNpmTasks( 'grunt-shell' );
     grunt.loadNpmTasks( 'grunt-text-replace' );
+    grunt.loadNpmTasks( 'grunt-contrib-csslint' );
+    grunt.loadNpmTasks( 'grunt-contrib-jshint' );
 
     // Helper tasks.
     grunt.registerTask( 'clean_probe', function() {
@@ -270,7 +293,9 @@ module.exports = function( grunt ) {
         'clean_probe',
         'preprocess',
         'replace',
+        'jshint',
         'uglify',
+        'csslint',
         'cssmin'
     ] );
 
