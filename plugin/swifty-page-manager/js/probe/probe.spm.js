@@ -18,9 +18,9 @@
         }
     };
 
-    ////////////////////////////////////////
+    probe.SPM.NoPagesExist = {
+        noPostSel: '.spm-no-posts-add',
 
-    probe.SPM.CheckIfXPagesExist = {
         Start: function( input ) {
             probe.QueueStory(
                 'WP.AdminOpenSubmenu',
@@ -32,18 +32,75 @@
             );
         },
 
-        Step2: function( input ) {
-            probe.TmpLog( "LENGTH " + $( 'li[id^="spm-id-"]' ).length );
+        Step2: function( /*input*/ ) {
+            $( this.noPostSel ).WaitForVisible( 'Step3' );
+        },
 
-            if ( $( 'li[id^="spm-id-"]' ).length ) {
-                $( 'li[id^="spm-id-"]' ).WaitForVisible( 'Step3', 5000 );
-            } else {
-                $( 'li[id^="spm-id-"]' ).MustExistTimes( input.x_pages );
-            }
+        Step3: function( /*input*/ ) {
+            $( this.noPostSel ).MustExistTimes( 1 );
+        }
+    };
+
+    ////////////////////////////////////////
+
+    probe.SPM.XPagesExist = {
+        pageLiSel: 'li[id^=spm-id-]',
+
+        Start: function( input ) {
+            probe.QueueStory(
+                'WP.AdminOpenSubmenu',
+                {
+                    'plugin_code': 'pages',
+                    'submenu_text': input.plugin_name
+                },
+                'Step2'
+            );
+        },
+
+        Step2: function( /*input*/ ) {
+            $( this.pageLiSel ).WaitForVisible( 'Step3' );
         },
 
         Step3: function( input ) {
-            $( 'li[id^="spm-id-"]' ).MustExistTimes( input.x_pages );
+            $( this.pageLiSel ).MustExistTimes( input.x_pages );
+        }
+    };
+
+    ////////////////////////////////////////
+
+    probe.SPM.CreatePageAfterLastPage = {
+        lastPageSel: '.spm-page-tree-element:last',
+        addBtnSel: '.spm-page-button:first',
+        postTitleSel: 'input[name="post_title"]',
+        saveBtnSel: '[data-spm-action="save"]',
+
+        Start: function( input ) {
+            probe.QueueStory(
+                'WP.AdminOpenSubmenu',
+                {
+                    'plugin_code': 'pages',
+                    'submenu_text': input.plugin_name
+                },
+                'Step2'
+            );
+        },
+
+        Step2: function( /*input*/ ) {
+            $( this.lastPageSel ).WaitForVisible( 'Step3' );
+        },
+
+        Step3: function( /*input*/ ) {
+            // Click to see the page buttons
+            $( this.lastPageSel ).MustExist().Click();
+
+            // Click on the 'Add page' button (+ button)
+            $( this.addBtnSel ).MustBeVisible().Click();
+
+            // Enter a value into the post_type input field
+            $( this.postTitleSel ).val( 'SPM Page' );
+
+            // Click the 'Save' button
+            $( this.saveBtnSel ).MustBeVisible().Click();
         }
     };
 

@@ -259,8 +259,9 @@ var swiftyProbe = ( function( $, probe ) {
                 exact = true;
             }
 
-            if ( ( exact && this.length !== count ) || ( ! exact && this.length < count ) ) {
+            if ( ( exact && this.length !== count ) || ( !exact && this.length < count ) ) {
                 this.prb_valid = false;
+
                 probe.SetFail( "Element does not exist (or not enough times): " + this.selector );
             } else {
                 this.prb_valid = true;
