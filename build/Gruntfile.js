@@ -64,7 +64,7 @@ module.exports = function( grunt ) {
         },
         jshint: {
             options: {
-                jshintrc: ".jshintrc",
+                jshintrc: "../.jshintrc",
 //                reporter: require( 'jshint-stylish' )
             },
             dist: [ '<%= grunt.getSourcePath() %>js/swifty-page-manager.js' ]
