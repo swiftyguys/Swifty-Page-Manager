@@ -1,26 +1,27 @@
 {
     "scripturl": true, // "javascript:" url's are acceptable to us
-    "boss": true, // default WP
-    "curly": true, // default WP
-    "eqeqeq": true, // default WP
-    "eqnull": true, // default WP
+    "boss": true, // default WP & jQuery
+    "curly": true, // default WP & jQuery
+    "eqeqeq": true, // default WP & jQuery
+    "eqnull": true, // default WP & jQuery
     "es3": true, // default WP
-    "expr": true, // default WP
-    "immed": true, // default WP
-    "noarg": true, // default WP
-    "onevar": true, // default WP
-    "quotmark": "single", // default WP
-    "trailing": true, // default WP
-    "undef": true, // default WP
-    "unused": true, // default WP
+    "expr": true, // default WP & jQuery
+    "immed": true, // default WP & jQuery
+    "noarg": true, // default WP & jQuery
+    "onevar": true, // default WP & jQuery
+    "quotmark": "double", // default jQuery // ( was "single" in default WP )
+    "trailing": true, // default WP & jQuery
+    "undef": true, // default WP & jQuery
+    "unused": true, // default WP & jQuery
+    "smarttabs": true, // default jQuery
 
     "browser": true, // default WP
+    "node": true, // default jQuery
 
     "globals": {
         "ajaxurl": false, // global var from Wordpress
         "jAlert": false, // global var from jquery.alerts.js
-        "spm_l10n": false, // Is set in our PHP file
-        "swiftyProbe": false, // global var from test system
+        "spm_l10n": false, // is set in our PHP file
         "_": false, // default WP
         "Backbone": false, // default WP
         "jQuery": false, // default WP
