@@ -13,26 +13,13 @@ class ThisStory extends SSStory {
         $this->wordpress->Login();
         $this->Probe( 'WP.DeleteAllPages', Array( 'plugin_name' => $this->pluginName ) );
         $this->Probe( 'WP.EmptyTrash', Array( 'plugin_name' => $this->pluginName ) );
-        $this->Probe( 'WP.CreateXDraftPages', Array(
-            'plugin_name' => $this->pluginName,
-            'x_pages'     => 2
-        ) );
-        $this->Probe( 'SPM.CheckRunning', Array( "plugin_name" => $this->pluginName ) );
-        $this->Probe( 'SPM.CheckIfXPagesExist', Array(
-            'plugin_name' => $this->pluginName,
-            'x_pages'     => 2
-        ) );
-
-
-
-//        $this->wordpress->DeleteAllPages();
-//        $this->wordpress->EmptyTrash();
-//        $this->CheckIfXPagesExist( 0 );
-//        $this->CheckAddButtonVisibleWhenNoPagesExist();
-//        $this->wordpress->CreateXDraftPages( 2 );
-//        $this->CheckIfXPagesExist( 4 );
-//        $this->CheckPluginRunning();
+        $this->Probe( 'SPM.CheckIfXPagesExist', Array( 'plugin_name' => $this->pluginName, 'x_pages' => 0 ) );
+        $this->Probe( 'WP.CreateXDraftPages', Array( 'plugin_name' => $this->pluginName, 'x_pages' => 2 ) );
 //        $this->Probe( 'SPM.CheckRunning', Array( "plugin_name" => $this->pluginName ) );
+        $this->Probe( 'SPM.CheckIfXPagesExist', Array( 'plugin_name' => $this->pluginName, 'x_pages' => 2 ) );
+
+
+//        $this->CheckAddButtonVisibleWhenNoPagesExist();
 //        $this->CreateNewPageAftersLastPage();
     }
 

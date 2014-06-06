@@ -32,8 +32,14 @@
             );
         },
 
-        Step2: function( /*input*/ ) {
-            $( 'li[id^="spm-id-"]' ).WaitForVisible( 'Step3' );
+        Step2: function( input ) {
+            probe.TmpLog( "LENGTH " + $( 'li[id^="spm-id-"]' ).length );
+
+            if ( $( 'li[id^="spm-id-"]' ).length ) {
+                $( 'li[id^="spm-id-"]' ).WaitForVisible( 'Step3', 5000 );
+            } else {
+                $( 'li[id^="spm-id-"]' ).MustExistTimes( input.x_pages );
+            }
         },
 
         Step3: function( input ) {
