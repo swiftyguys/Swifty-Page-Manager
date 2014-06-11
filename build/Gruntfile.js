@@ -255,7 +255,7 @@ module.exports = function( grunt ) {
                 }
             },
             send_mail: {
-                command: 'echo "<%= myTask.send_mail_msg %>" | mail -s "Cactus grunt message" robert@heessels.com jeroen.hoekstra@longtermresults.nl',
+                command: 'echo "<%= myTask.send_mail_msg %>" | mail -s "Cactus grunt message" robert@heessels.com jeroen.hoekstra@longtermresults.nl noemi.moosdijk@longtermresults.nl',
                 options: {
                     execOptions: {
                     },
