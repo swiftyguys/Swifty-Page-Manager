@@ -452,7 +452,7 @@ class SwiftyPageManager
             $post_to_save = array(
                 'ID'          => $post_node->ID,
                 'menu_order'  => $this->_createSpaceForMove( $post_ref_node, $type ),
-                'post_parent' => ('inside' === $type) ? $post_ref_node->ID : $post_ref_node->post_parent,
+                'post_parent' => ( 'inside' === $type ) ? $post_ref_node->ID : $post_ref_node->post_parent,
                 'post_type'   => $this->_post_type
             );
 
@@ -460,7 +460,8 @@ class SwiftyPageManager
 
             if ( 'inside' === $type && $id_saved ) {
                 $show_ref_page_in_menu = get_post_meta( $ref_node_id, 'spm_show_in_menu', true );
-                if ( !empty( $show_ref_page_in_menu ) && $show_ref_page_in_menu !== 'show' ) {
+
+                if ( ! empty( $show_ref_page_in_menu ) && $show_ref_page_in_menu !== 'show' ) {
                     update_post_meta( $id_saved, 'spm_show_in_menu', 'hide' );
                 }
             }
@@ -554,8 +555,8 @@ class SwiftyPageManager
             $add_mode  = $_POST['add_mode'];
 
             $post_data['post_content'] = '';
-            $post_data['menu_order'] = $this->_createSpaceForMove( $ref_post, $add_mode );
-            $post_data['post_parent'] = ( 'inside' === $add_mode ) ? $ref_post->ID :  $ref_post->post_parent;
+            $post_data['menu_order']   = $this->_createSpaceForMove( $ref_post, $add_mode );
+            $post_data['post_parent']  = ( 'inside' === $add_mode ) ? $ref_post->ID :  $ref_post->post_parent;
 
             $post_id = wp_insert_post( $post_data );
             $post_id = intval( $post_id );
@@ -1137,46 +1138,51 @@ class SwiftyPageManager
      * @param WP_Post $ref_post
      * @param string $direction, can be 'before','after' or 'inside'
      */
-    protected function _createSpaceForMove( $ref_post, $direction='after' ) {
+    protected function _createSpaceForMove( $ref_post, $direction = 'after' ) {
         /** @var wpdb $wpdb */
         global $wpdb;
-        if ( 'inside' == $direction ) {
-            $query = $wpdb->prepare( "SELECT MAX(menu_order) FROM $wpdb->posts WHERE post_parent = %d", $ref_post->ID );
+
+        if ( 'inside' === $direction ) {
+            $query  = $wpdb->prepare( "SELECT MAX(menu_order) FROM $wpdb->posts WHERE post_parent = %d", $ref_post->ID );
             $result = $wpdb->get_var( $query ) + 1;
         } else { // after or before
             $result = $ref_post->menu_order;
+
             if ( 'after' === $direction ) {
                 $result++;
             }
 
             $posts = get_posts( array(
-                                    "post_status" => "any",
-                                    "post_type" => $this->_post_type,
-                                    "numberposts" => -1,
-                                    "offset" => 0,
-                                    "orderby" => 'menu_order title',
-                                    'order' => 'asc',
-                                    'post_parent' => $ref_post->post_parent,
-                                    "suppress_filters" => false
-                                ) );
+                'post_status'      => 'any',
+                'post_type'        => $this->_post_type,
+                'numberposts'      => -1,
+                'offset'           => 0,
+                'orderby'          => 'menu_order title',
+                'order'            => 'asc',
+                'post_parent'      => $ref_post->post_parent,
+                'suppress_filters' => false
+            ) );
             $has_passed_ref_post = false;
 
             foreach ( $posts as $one_post ) {
                 if ( $has_passed_ref_post or ( 'before' === $direction && $ref_post->ID === $one_post->ID ) ) {
                     $post_update = array(
-                        "ID" => $one_post->ID,
-                        "menu_order" => $one_post->menu_order + 2
+                        'ID'         => $one_post->ID,
+                        'menu_order' => $one_post->menu_order + 2
                     );
-                    $return_id = wp_update_post($post_update);
-                    if ( 0 ===$return_id ) {
-                        die( "Error: could not update post with id " . $post_update->ID . "<br>Technical details: " . print_r($post_update) );
+                    $return_id = wp_update_post( $post_update );
+
+                    if ( 0 === $return_id ) {
+                        die( 'Error: could not update post with id ' . $post_update->ID . '<br>Technical details: ' . print_r( $post_update ) );
                     }
                 }
+
                 if ( ! $has_passed_ref_post && $ref_post->ID === $one_post->ID ) {
                     $has_passed_ref_post = true;
                 }
             }
         }
+
         return $result;
     }
 
