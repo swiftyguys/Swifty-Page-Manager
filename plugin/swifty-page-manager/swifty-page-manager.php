@@ -607,33 +607,34 @@ class SwiftyPageManager
             $ref_post  = get_post( $parent_id );
 
             if ( 'after' === $_POST['add_mode'] ) {
-                // update menu_order of all pages below our page
-
                 $posts = get_posts( array(
-                                        "post_status" => "any",
-                                        "post_type" => $ref_post->post_type,
-                                        "numberposts" => -1,
-                                        "offset" => 0,
-                                        "orderby" => 'menu_order title',
-                                        'order' => 'asc',
-                                        'post_parent' => $ref_post->post_parent,
-                                        "suppress_filters" => false
-                                    ) );
+                    'post_status'      => 'any',
+                    'post_type'        => $ref_post->post_type,
+                    'numberposts'      => -1,
+                    'offset'           => 0,
+                    'orderby'          => 'menu_order title',
+                    'order'            => 'asc',
+                    'post_parent'      => $ref_post->post_parent,
+                    'suppress_filters' => false
+                ) );
                 $has_passed_ref_post = false;
 
+                // Update menu_order of all pages below our page
                 foreach ( $posts as $one_post ) {
                     if ( $has_passed_ref_post ) {
                         $post_update = array(
-                            "ID" => $one_post->ID,
-                            "menu_order" => $one_post->menu_order + 1
+                            'ID'         => $one_post->ID,
+                            'menu_order' => $one_post->menu_order + 1
                         );
-                        $return_id = wp_update_post($post_update);
-                        if ( 0 ===$return_id ) {
-                            die( "Error: could not update post with id " . $post_update->ID . "<br>Technical details: " . print_r($post_update) );
+                        $return_id = wp_update_post( $post_update );
+
+                        if ( 0 === $return_id ) {
+                            die( 'Error: could not update post with id ' . $post_update->ID . '<br>Technical details: ' . print_r( $post_update ) );
                         }
                     }
+
                     if ( ! $has_passed_ref_post && $ref_post->ID === $one_post->ID ) {
-                        $has_passed_ref_post = TRUE;
+                        $has_passed_ref_post = true;
                     }
                 }
 
@@ -842,21 +843,23 @@ class SwiftyPageManager
      */
     public function get_json_data( &$branch )
     {
-        $result     = array();
+        $result   = array();
+        $children = $branch->children;
 
-        // Sort children by menu_order
-        $children   = $branch->children;
-        usort( $children, function($a,$b) {
-                $result = 0;
-                if ( isset($a->page) && isset($b->page) ) {
-                    $result = $a->page->menu_order - $b->page->menu_order;
-                    if ( 0 == $result ) {
-                        $result = strcmp( $a->page->post_title, $b->page->post_title );
-                    }
+        // Sort children by menu_order and post_title
+        usort( $children, function( $a, $b ) {
+            $result = 0;
+
+            if ( isset( $a->page ) && isset( $b->page ) ) {
+                $result = $a->page->menu_order - $b->page->menu_order;
+
+                if ( 0 == $result ) {
+                    $result = strcmp( $a->page->post_title, $b->page->post_title );
                 }
-                return $result;
             }
-        );
+
+            return $result;
+        } );
 
         foreach ( $children as $child ) {
             if ( isset( $child->page ) ) {
@@ -1211,11 +1214,14 @@ class SwiftyPageManager
     /**
      * Return minified filename, if exists; otherwise original filename
      */
-    protected function _find_minified( $file_name ) {
+    protected function _find_minified( $file_name )
+    {
         $file_name_min = preg_replace( '|\.js$|', '.min.js', $file_name );
-        if( file_exists( $this->plugin_dir . $file_name_min ) ) {
+
+        if ( file_exists( $this->plugin_dir . $file_name_min ) ) {
             $file_name = $file_name_min;
         }
+
         return $file_name;
     }
 
@@ -1225,9 +1231,9 @@ class SwiftyPageManager
      */
     public function add_module_swifty_probe()
     {
-        wp_enqueue_script( 'swifty-probe',   $this->plugin_dir_url . $this->_find_minified( '/js/probe/__probe.js' ), false );
-        wp_enqueue_script( 'swifty-probe-wp',   $this->plugin_dir_url . $this->_find_minified( '/js/probe/_probe.wp.js' ), array( 'swifty-probe' ) );
-        wp_enqueue_script( 'swifty-probe-spm',   $this->plugin_dir_url . $this->_find_minified( '/js/probe/probe.spm.js' ), array( 'swifty-probe-wp' ) );
+        wp_enqueue_script( 'swifty-probe', $this->plugin_dir_url . $this->_find_minified( '/js/probe/__probe.js' ), false );
+        wp_enqueue_script( 'swifty-probe-wp', $this->plugin_dir_url . $this->_find_minified( '/js/probe/_probe.wp.js' ), array( 'swifty-probe' ) );
+        wp_enqueue_script( 'swifty-probe-spm', $this->plugin_dir_url . $this->_find_minified( '/js/probe/probe.spm.js' ), array( 'swifty-probe-wp' ) );
     }
     // @endif
 
