@@ -608,12 +608,34 @@ class SwiftyPageManager
 
             if ( 'after' === $_POST['add_mode'] ) {
                 // update menu_order of all pages below our page
-                $wpdb->query(
-                    $wpdb->prepare(
-                        "UPDATE $wpdb->posts SET menu_order = menu_order+2 WHERE post_parent = %d AND menu_order >= %d AND id <> %d ",
-                            $ref_post->post_parent,
-                            $ref_post->menu_order,
-                            $ref_post->ID ) );
+
+                $posts = get_posts( array(
+                                        "post_status" => "any",
+                                        "post_type" => $ref_post->post_type,
+                                        "numberposts" => -1,
+                                        "offset" => 0,
+                                        "orderby" => 'menu_order title',
+                                        'order' => 'asc',
+                                        'post_parent' => $ref_post->post_parent,
+                                        "suppress_filters" => false
+                                    ) );
+                $has_passed_ref_post = false;
+
+                foreach ( $posts as $one_post ) {
+                    if ( $has_passed_ref_post ) {
+                        $post_update = array(
+                            "ID" => $one_post->ID,
+                            "menu_order" => $one_post->menu_order + 1
+                        );
+                        $return_id = wp_update_post($post_update);
+                        if ( 0 ===$return_id ) {
+                            die( "Error: could not update post with id " . $post_update->ID . "<br>Technical details: " . print_r($post_update) );
+                        }
+                    }
+                    if ( ! $has_passed_ref_post && $ref_post->ID === $one_post->ID ) {
+                        $has_passed_ref_post = TRUE;
+                    }
+                }
 
                 // create a new page and then goto it
                 $post_data['menu_order']  = $ref_post->menu_order + 1;
@@ -821,11 +843,22 @@ class SwiftyPageManager
     public function get_json_data( &$branch )
     {
         $result     = array();
-        $child_keys = array_keys( $branch->children );
 
-        foreach ( $child_keys as $child_key ) {
-            $child = &$branch->children[ $child_key ];
+        // Sort children by menu_order
+        $children   = $branch->children;
+        usort( $children, function($a,$b) {
+                $result = 0;
+                if ( isset($a->page) && isset($b->page) ) {
+                    $result = $a->page->menu_order - $b->page->menu_order;
+                    if ( 0 == $result ) {
+                        $result = strcmp( $a->page->post_title, $b->page->post_title );
+                    }
+                }
+                return $result;
+            }
+        );
 
+        foreach ( $children as $child ) {
             if ( isset( $child->page ) ) {
                 $new_branch = $this->_get_page_json_data( $child->page );
 
@@ -949,7 +982,7 @@ class SwiftyPageManager
         $args['post_type'] = 'page';
         $args['post_status'] = $this->get_post_status();
         $args['numberposts'] = -1;
-        $args['orderby'] = 'menu_order date';
+        $args['orderby'] = 'menu_order title';
         $args['order'] = 'ASC';
         $pages = get_posts( $args );
         $added = true;
@@ -975,7 +1008,7 @@ class SwiftyPageManager
                     $new_branch->page = $page;
                     $new_branch->children = array();
                     $this->_by_page_id[ $new_branch->page->ID ] = &$new_branch;
-                    $parent_branch->children[] = &$new_branch;
+                    $parent_branch->children[] = &$new_branch; // Warning, does not sort children correctly
 
                     unset( $new_branch );
                     unset( $pages[ $key ] );
