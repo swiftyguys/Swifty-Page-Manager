@@ -341,9 +341,9 @@ module.exports = function( grunt ) {
     ] );
 
     grunt.registerTask( 'svn_update', [
-//        'shell:git_check_status',
+        'shell:git_check_status',
         /*'build_and_test',*/ 'build_dist',
-//        'check_changelog',
+        'check_changelog',
         'clean:svn',
         'shell:svn_co',
         'clean:svn_trunk',
