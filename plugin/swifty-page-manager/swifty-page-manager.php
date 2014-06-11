@@ -548,7 +548,6 @@ class SwiftyPageManager
             }
         }
         else {   // We're in create mode
-
             $parent_id = $_POST['parent_id'];
             $parent_id = intval( str_replace( 'spm-id-', '', $parent_id ) );
             $ref_post  = get_post( $parent_id );
