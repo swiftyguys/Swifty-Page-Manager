@@ -949,7 +949,7 @@ class SwiftyPageManager
         $args['post_type'] = 'page';
         $args['post_status'] = $this->get_post_status();
         $args['numberposts'] = -1;
-        $args['orderby'] = 'menu_order';
+        $args['orderby'] = 'menu_order date';
         $args['order'] = 'ASC';
         $pages = get_posts( $args );
         $added = true;
