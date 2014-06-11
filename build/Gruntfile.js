@@ -32,7 +32,8 @@ module.exports = function( grunt ) {
         clean: {
             dist: [ "<%= grunt.getDestPath() %>", "<%= grunt.getDestZip() %>" ],
             probe: [ '<%= grunt.getDestPathSPM() %>js/probe' ],
-            svn: [ 'svn' ]
+            svn: [ 'svn' ],
+            svn_trunk: [ 'svn/swifty-page-manager/trunk' ]
         },
         copy: {
             dist: {
@@ -64,7 +65,7 @@ module.exports = function( grunt ) {
         },
         jshint: {
             options: {
-                jshintrc: "../.jshintrc",
+                jshintrc: "../.jshintrc"//,
 //                reporter: require( 'jshint-stylish' )
             },
             dist: [ '<%= grunt.getSourcePath() %>js/swifty-page-manager.js' ]
@@ -252,6 +253,34 @@ module.exports = function( grunt ) {
                         cb();
                     }
                 }
+            },
+            send_mail: {
+                command: 'echo "<%= myTask.send_mail_msg %>" | mail -s "Cactus grunt message" robert@heessels.com jeroen.hoekstra@longtermresults.nl',
+                options: {
+                    execOptions: {
+                    },
+                    'callback': function(err, stdout, stderr, cb) {
+                        cb();
+                    }
+                }
+            },
+            upload_dropbox: {
+                command: 'gdrive upload -f ' + grunt.getDestZip() + ' -p 0B9usKfgdtpwIZ3VFcVpZYmY5VUU --share',
+                options: {
+                    execOptions: {
+                    },
+                    'callback': function(err, stdout, stderr, cb) {
+                        var s = '';
+                        var sc = 'readable by everyone @ ';
+                        var i = stdout.indexOf( sc );
+                        if( i > 0 ) {
+                            s = stdout.substr( i + sc.length );
+                            grunt.config.set( 'myTask.send_mail_msg', 'New Swifty Page Manager build ready for public release after manual test:\n' + grunt.config.data.pkg.version + '\n' + s );
+                            grunt.task.run( 'shell:send_mail' );
+                        }
+                        cb();
+                    }
+                }
             }
         }
     } );
@@ -289,7 +318,7 @@ module.exports = function( grunt ) {
     grunt.registerTask( 'main_build', [
         'shell:svn_check_tags',
         'clean:dist',
-        'copy',
+        'copy:dist',
         'clean_probe',
         'preprocess',
         'replace',
@@ -312,12 +341,14 @@ module.exports = function( grunt ) {
     ] );
 
     grunt.registerTask( 'svn_update', [
-        'shell:git_check_status',
-        'build_dist',
-        'check_changelog',
+//        'shell:git_check_status',
+        /*'build_and_test',*/ 'build_dist',
+//        'check_changelog',
         'clean:svn',
         'shell:svn_co',
+        'clean:svn_trunk',
         'copy:svn',
+        'shell:upload_dropbox',
         'shell:svn_stat'
     ] );
 
