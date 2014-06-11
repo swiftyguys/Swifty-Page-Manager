@@ -438,9 +438,6 @@ class SwiftyPageManager
         $_POST['skip_sitepress_actions'] = true; // sitepress.class.php->save_post_actions
 
         if ( $node_id && $ref_node_id ) {
-            #echo "\nnode_id: $node_id";
-            #echo "\ntype: $type";
-
             $post_node     = get_post( $node_id );
             $post_ref_node = get_post( $ref_node_id );
 
@@ -494,9 +491,9 @@ class SwiftyPageManager
         /** @var wpdb $wpdb - Wordpress Database */
         global $wpdb;
 
-        $post_id     = ! empty( $_POST['post_ID'] ) ? intval( $_POST['post_ID'] ) : null;
+        $post_id     = ! empty( $_POST['post_ID'] )    ? intval( $_POST['post_ID'] )  : null;
         $post_title  = ! empty( $_POST['post_title'] ) ? trim( $_POST['post_title'] ) : '';
-        $post_name   = ! empty( $_POST['post_name'] ) ? trim( $_POST['post_name'] ) : '';
+        $post_name   = ! empty( $_POST['post_name'] )  ? trim( $_POST['post_name'] )  : '';
         $post_status = $_POST['post_status'];
 
         if ( ! $post_title ) {
