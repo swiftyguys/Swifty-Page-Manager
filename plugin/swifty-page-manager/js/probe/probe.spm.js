@@ -73,6 +73,7 @@
         addBtnSel: '.spm-page-button:first',
         postTitleSel: 'input[name="post_title"]',
         saveBtnSel: '[data-spm-action="save"]',
+        pageLiSel: 'li[id^=spm-id-]',
 
         Start: function( input ) {
             probe.QueueStory(
@@ -89,7 +90,7 @@
             $( this.lastPageSel ).WaitForVisible( 'Step3' );
         },
 
-        Step3: function( /*input*/ ) {
+        Step3: function( input ) {
             // Click to see the page buttons
             $( this.lastPageSel ).MustExist().Click();
 
@@ -101,6 +102,24 @@
 
             // Click the 'Save' button
             $( this.saveBtnSel ).MustBeVisible().Click();
+
+            probe.QueueStory(
+                'WP.AdminOpenSubmenu',
+                {
+                    'plugin_code': 'pages',
+                    'submenu_text': input.plugin_name
+                },
+                'Step4'
+            );
+        },
+
+        Step4: function( /*input*/ ) {
+            $( this.pageLiSel ).WaitForVisible( 'Step5' );
+        },
+
+        Step5: function( /*input*/ ) {
+            $( this.pageLiSel + ' a:contains("SPM Page")' ).MustExistTimes( 1 );
+            $( this.pageLiSel + ' a:contains("Draft")' ).MustExistTimes( 3 );
         }
     };
 

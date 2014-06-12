@@ -77,11 +77,20 @@
         },
 
         Step2: function( /*input*/ ) {
+            $( 'input[name="post[]"]' ).WaitForVisible( 'Step3' );
+        },
+
+        Step3: function( /*input*/ ) {
             // Click on the checkbox to select all pages
             $( '#cb-select-all-1' )
                 .MustExist()
                 .Click();
 
+            // Wait until the checked checkboxes are visible
+            $( 'input[name="post[]"]:checked' ).WaitForVisible( 'Step4' );
+        },
+
+        Step4: function( /*input*/ ) {
             // Select the trash option
             $( 'select[name="action"]' )
                 .MustExist()
