@@ -584,6 +584,8 @@ var SPM = (function( $, document ) {
     };
 
     spm.updateStatusCount = function() {
+        var dfd = $.Deferred();
+
         $.ajax({
             'url': location.href,
             'cache': false,
@@ -607,8 +609,17 @@ var SPM = (function( $, document ) {
                 if ( $li.hasClass( 'spm-hidden' ) && statusCount === '1' && statusName !== 'any' ) {
                     $li.removeClass( 'spm-hidden' );
                 }
+
+                if ( $statusLink.hasClass( 'current' ) &&
+                     $statusLink.data( 'spm-status' ) === statusName &&
+                     statusCount === '0'
+                ) {
+                    dfd.resolve( $li.siblings().find( 'a.spm-status-any' ).attr( 'href' ) );
+                }
             });
         });
+
+        return dfd;
     };
 
     spm.getStatusCounts = function( html ) {
@@ -771,11 +782,17 @@ jQuery(function( $ ) {
                 'success': function( data /*, status*/ ) {
                     // If data is null or empty = show message about no nodes
                     if ( data === null || ! data || ! data.length ) {
-                        SPM.updateStatusCount();
+                        var dfd = SPM.updateStatusCount();
 
-                        $SPMMsg.html( '<p>' + spm_l10n.no_pages_found + '</p>' );
-                        $SPMMsg.show();
-                        $SPMAddBtn.removeClass( 'spm-hidden' );
+                        dfd.done(function( redirUrl ) {
+                            if ( redirUrl ) {
+                                window.location = redirUrl;
+                            } else {
+                                $SPMMsg.html( '<p>' + spm_l10n.no_pages_found + '</p>' );
+                                $SPMMsg.show();
+                                $SPMAddBtn.removeClass( 'spm-hidden' );
+                            }
+                        });
                     } else {
                         $SPMMsg.hide();
                         $SPMAddBtn.addClass( 'spm-hidden' );
