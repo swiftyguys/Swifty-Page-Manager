@@ -302,7 +302,7 @@ class SSStory {
 
     function Probe( $functionName, $input ) {
         $js = 'return swiftyProbe.DoStart(arguments);';
-        $ret = $this->st->getRunningDevice()->execute( array( 'script' => $js, 'args' => Array( $functionName, $input ) ) );
+        $ret = $this->st->getRunningDevice()->execute( array( 'script' => $js, 'args' => array( $functionName, $input ) ) );
 
         $this->ProbeProcessRet( $functionName, $input, $ret );
     }
@@ -333,14 +333,14 @@ class SSStory {
                     $functionName = $ret[ 'ret' ][ 'queue' ][ 'new_fn_name' ];
                     $input = $ret[ 'ret' ][ 'queue' ][ 'new_input' ];
                     $nextFnName = $ret[ 'ret' ][ 'queue' ][ 'next_fn_name' ];
-                    $ret = $this->st->getRunningDevice()->execute( array( 'script' => $js, 'args' => Array( $functionName, $input ) ) );
+                    $ret = $this->st->getRunningDevice()->execute( array( 'script' => $js, 'args' => array( $functionName, $input ) ) );
 //                    $this->st->usingTimer()->wait( 5, "------------" );
                     $ret = $this->ProbeProcessRet( $functionName, $input, $ret );
                     $functionName = $prevFunctionName;
                     $input = $prevInput;
                     $input[ 'next_fn_name' ] = $nextFnName;
                     $js = 'return swiftyProbe.DoNext(arguments);';
-                    $ret = $this->st->getRunningDevice()->execute( array( 'script' => $js, 'args' => Array( $functionName, $input ) ) );
+                    $ret = $this->st->getRunningDevice()->execute( array( 'script' => $js, 'args' => array( $functionName, $input ) ) );
                     $ret = $this->ProbeProcessRet( $functionName, $input, $ret );
                 }
 
@@ -351,7 +351,7 @@ class SSStory {
                     while( $waiting ) {
                         $prevInput = $input;
                         $input[ 'wait_data' ] = isset( $returned[ 'ret' ][ 'wait' ][ 'wait_data' ] ) ? $returned[ 'ret' ][ 'wait' ][ 'wait_data' ] : "undefined";
-                        $ret = $this->st->getRunningDevice()->execute( array( 'script' => $js, 'args' => Array( $wait, $functionName, $input ) ) );
+                        $ret = $this->st->getRunningDevice()->execute( array( 'script' => $js, 'args' => array( $wait, $functionName, $input ) ) );
                         $input = $prevInput;
 //                        $this->EchoMsg( "DEBUG 2:\n". print_r( $ret, true ) );
                         if( ! isset( $ret[ 'ret' ][ 'wait_status' ] )

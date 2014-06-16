@@ -16,7 +16,7 @@ class Wordpress {
             $this->tmpl = $tl;
         }
 
-        $this->strings = Array();
+        $this->strings = array();
         foreach( $this->story->data->testSettings->tmpl as $key => $tmpl ) {
             $l = 5;
             if( substr( $key, 0, $l ) == 's_wp_' ) { // global version
@@ -193,7 +193,7 @@ class Wordpress {
         // Click on the sub menuu
         $st->usingBrowser()->click()->linkWithText( $submenuText );
 
-//        $this->story->Probe( 'WP.AdminOpenSubmenu', Array( "plugin_code" => $pluginCode, "submenu_text" => $submenuText ) );
+//        $this->story->Probe( 'WP.AdminOpenSubmenu', array( "plugin_code" => $pluginCode, "submenu_text" => $submenuText ) );
     }
 
 
