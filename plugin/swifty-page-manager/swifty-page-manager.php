@@ -20,7 +20,7 @@ class SwiftyPageManager
     protected $_post_type = 'page';
     protected $_tree = null;
     protected $_by_page_id = null;
-    protected $is_swifty = false; // Will be enabled in our future ecosystem of extensions.
+    protected $is_swifty = false;
 
     /**
      * Constructor
@@ -32,6 +32,7 @@ class SwiftyPageManager
         $this->plugin_basename = basename( $this->plugin_dir );
         $this->plugin_dir_url  = plugins_url( rawurlencode( basename( $this->plugin_dir ) ) );
         $this->plugin_url      = $_SERVER['REQUEST_URI'];
+        $this->is_swifty       = $this->_is_plugin_minimal( 'swifty-menu/*', '0.0.3' );
 
         // Actions for visitors viewing the site
         if ( $this->is_swifty ) {
