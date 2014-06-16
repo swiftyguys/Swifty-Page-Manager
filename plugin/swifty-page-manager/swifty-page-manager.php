@@ -185,7 +185,13 @@ class SwiftyPageManager
             $post_id = $wpdb->get_var( $query );
 
             if ( $post_id ) {
-                $wp->query_vars = array( 'p' => $post_id, 'post_type' => 'page' );
+                if  ( 'page' == get_option('show_on_front') && $post_id == get_option('page_for_posts') ) {
+                    // Workaround to be able to show the blog posts on a page with custom URL
+                    $post = get_post( $post_id );
+                    $wp->query_vars = array( 'pagename', $post->post_name );
+                } else {
+                    $wp->query_vars = array( 'p' => $post_id, 'post_type' => 'page' );
+                }
             }
         }
     }
