@@ -875,18 +875,6 @@ class SwiftyPageManager
     }
 
     /**
-     * @param string $route
-     * @param callable $callable
-     */
-    protected function _add_route( $route, $callable )
-    {
-        $hook_name = get_plugin_page_hookname( $route, '' );
-        add_action( $hook_name, $callable );
-        global $_registered_pages;
-        $_registered_pages[ $hook_name ] = true;
-    }
-
-    /**
      *
      */
     protected function _add_all_pages()
@@ -1140,6 +1128,7 @@ class SwiftyPageManager
      *
      * @param WP_Post $ref_post
      * @param string $direction, can be 'before','after' or 'inside'
+     * @return int
      */
     protected function _createSpaceForMove( $ref_post, $direction = 'after' ) {
         /** @var wpdb $wpdb */
