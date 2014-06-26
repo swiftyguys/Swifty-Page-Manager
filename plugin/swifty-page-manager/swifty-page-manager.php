@@ -757,7 +757,7 @@ class SwiftyPageManager
         $children = $branch->children;
 
         // Sort children by menu_order and post_title
-        usort( $children, '_sort_children' );
+        usort( $children, array( $this, '_sort_children' ) );
 
         foreach ( $children as $child ) {
             if ( isset( $child->page ) ) {
