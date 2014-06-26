@@ -757,19 +757,7 @@ class SwiftyPageManager
         $children = $branch->children;
 
         // Sort children by menu_order and post_title
-        usort( $children, function( $a, $b ) {
-            $result = 0;
-
-            if ( isset( $a->page ) && isset( $b->page ) ) {
-                $result = $a->page->menu_order - $b->page->menu_order;
-
-                if ( 0 == $result ) {
-                    $result = strcmp( $a->page->post_title, $b->page->post_title );
-                }
-            }
-
-            return $result;
-        } );
+        usort( $children, '_sort_children' );
 
         foreach ( $children as $child ) {
             if ( isset( $child->page ) ) {
@@ -861,6 +849,24 @@ class SwiftyPageManager
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Sort children by menu_order and post_title
+     */
+    protected function _sort_children( $a, $b )
+    {
+        $result = 0;
+
+        if ( isset( $a->page ) && isset( $b->page ) ) {
+            $result = $a->page->menu_order - $b->page->menu_order;
+
+            if ( 0 == $result ) {
+                $result = strcmp( $a->page->post_title, $b->page->post_title );
+            }
+        }
+
+        return $result;
+    }
 
     /**
      * @param integer $post_id
