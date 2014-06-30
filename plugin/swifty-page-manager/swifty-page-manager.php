@@ -1190,9 +1190,59 @@ class SwiftyPageManager
      */
     public function add_module_swifty_probe()
     {
-        wp_enqueue_script( 'swifty-probe', $this->plugin_dir_url . $this->_find_minified( '/js/probe/__probe.js' ), false );
-        wp_enqueue_script( 'swifty-probe-wp', $this->plugin_dir_url . $this->_find_minified( '/js/probe/_probe.wp.js' ), array( 'swifty-probe' ) );
-        wp_enqueue_script( 'swifty-probe-spm', $this->plugin_dir_url . $this->_find_minified( '/js/probe/probe.spm.js' ), array( 'swifty-probe-wp' ) );
+        wp_enqueue_script(
+            'swifty-probe',
+            $this->plugin_dir_url . $this->_find_minified( '/js/probe/__probe.js' ),
+            false
+        );
+
+        wp_enqueue_script(
+            'swifty-probe-wp',
+            $this->plugin_dir_url . $this->_find_minified( '/js/probe/_probe.wp.js' ),
+            array( 'swifty-probe' )
+        );
+
+        wp_enqueue_script(
+            'swifty-probe-utils',
+            $this->plugin_dir_url . $this->_find_minified( '/js/probe/_probe.utils.js' ),
+            array( 'swifty-probe' )
+        );
+
+        wp_enqueue_script(
+            'swifty-probe-spm',
+            $this->plugin_dir_url . $this->_find_minified( '/js/probe/probe.spm.js' ),
+            array( 'swifty-probe-wp' )
+        );
+
+        wp_enqueue_script(
+            'bililite-range',
+            $this->plugin_dir_url . $this->_find_minified( '/js/probe/lib/bililiteRange.js' ),
+            false
+        );
+
+        wp_enqueue_script(
+            'jquery-simulate',
+            $this->plugin_dir_url . $this->_find_minified( '/js/probe/lib/jquery.simulate.js' ),
+            false
+        );
+
+        wp_enqueue_script(
+            'jquery-simulate-ext',
+            $this->plugin_dir_url . $this->_find_minified( '/js/probe/lib/jquery.simulate.ext.js' ),
+            array( 'jquery-simulate' )
+        );
+
+        wp_enqueue_script(
+            'jquery-drag-n-drop',
+            $this->plugin_dir_url . $this->_find_minified( '/js/probe/lib/jquery.simulate.drag-n-drop.js' ),
+            array( 'jquery-simulate-ext' )
+        );
+
+        wp_enqueue_script(
+            'jquery-key-sequence',
+            $this->plugin_dir_url . $this->_find_minified( '/js/probe/lib/jquery.simulate.key-sequence.js' ),
+            array( 'jquery-simulate-ext' )
+        );
     }
     // @endif
 

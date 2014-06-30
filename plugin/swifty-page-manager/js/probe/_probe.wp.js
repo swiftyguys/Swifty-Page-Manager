@@ -35,8 +35,9 @@
         },
 
         Step3: function( input ) {
-            // Click on the sub menu
-            $( this.GetSelSubmenu( input.submenu_text ) )
+            $( this.GetSelMainmenu( input.plugin_code ) )
+                .find( this.GetSelSubmenu( input.submenu_text ) )
+                .last()
                 .MustExist()
                 .Click();
         },
@@ -70,35 +71,38 @@
                 'WP.AdminOpenSubmenu',
                 {
                     'plugin_code': 'pages',
-                    'submenu_text': 'All Pages'   // Here we need something for translations
+                    'submenu_text': 'All Pages'   // dojh: translation issue -> All Pages.
                 },
                 'Step2'
             );
         },
 
         Step2: function( /*input*/ ) {
-            $( 'input[name="post[]"]' ).WaitForVisible( 'Step3' );
+            $( 'h2:contains("Pages ")' ).WaitForVisible( 'Step3' );   // dojh: translation issue -> Pages.
         },
 
         Step3: function( /*input*/ ) {
             // Click on the checkbox to select all pages
-            $( '#cb-select-all-1' )
-                .MustExist()
+            $( 'span:contains("Title"):first' )   // dojh: translation issue -> Title.
+                .closest( 'th' )
+                .prev( 'th' )
+                .find( 'input' )
+                .MustExistOnce()
                 .Click();
+
+            $( 'select[name="action"]' )
+                .MustExistOnce()
+                .find( 'option:contains("Move to Trash")' )   // dojh: translation issue -> Move to Trash.
+                .prop( 'selected', true );
 
             // Wait until the checked checkboxes are visible
             $( 'input[name="post[]"]:checked' ).WaitForVisible( 'Step4' );
         },
 
         Step4: function( /*input*/ ) {
-            // Select the trash option
-            $( 'select[name="action"]' )
-                .MustExist()
-                .val( [ 'trash' ] );
-
-            // Click on the Apply button
-            $( '#doaction' )
-                .MustExist()
+            // Click on the Apply button. There are 3 Apply buttons on the page. We need the second (index 1)
+            $( 'input[value="Apply"]:eq(1)' )   // dojh: translation issue -> Apply.
+                .MustExistOnce()
                 .Click();
         }
     };
@@ -114,43 +118,43 @@
                 'WP.AdminOpenSubmenu',
                 {
                     'plugin_code': 'pages',
-                    'submenu_text': 'All Pages'   // Here we need something for translations
+                    'submenu_text': 'All Pages'   // dojh: translation issue -> All Pages.
                 },
                 'Step2'
             );
         },
 
         Step2: function( /*input*/ ) {
-            var trashLink = $( this.trashSel );
+            var trashLink = $( 'a:contains("Trash")' );   // dojh: translation issue -> Trash.
 
             // Click on the 'Trash' link
             if ( trashLink.length ) {
-                trashLink.Click();
+                trashLink.MustExistOnce().Click();
 
                 // Wait until the 'Empty Trash' button becomes visible
-                $( this.deleteAllSel ).WaitForVisible( 'Step3' );
+                $( 'a.current:contains("Trash")' ).WaitForVisible( 'Step3' );   // dojh: translation issue -> Trash.
             }
         },
 
         Step3: function( /*input*/ ) {
             // Click on the 'Empty Trash' button
-            $( this.deleteAllSel ).MustExist().Click();
+            $( 'input[value="Empty Trash"]:first' )   // dojh: translation issue -> Empty Trash.
+                .MustExistOnce()
+                .Click();
         }
     };
 
     ////////////////////////////////////////
 
     probe.WP.CreateXDraftPages = {
-        addNewSel: 'a.add-new-h2',
-        pageListSel: '#the-list',
-        postTitleSel: 'input[name="post_title"]',
+        addNewSel: 'h2 a:contains("Add New")',   // dojh: translation issue -> Add New.
 
         Start: function( /*input*/ ) {
             probe.QueueStory(
                 'WP.AdminOpenSubmenu',
                 {
                     'plugin_code': 'pages',
-                    'submenu_text': 'All Pages'   // dojh Here we need something for translations
+                    'submenu_text': 'All Pages'   // dojh: translation issue -> All Pages.
                 },
                 'Step2'
             );
@@ -166,17 +170,8 @@
                 // Click on the 'Add new' link
                 $( this.addNewSel ).MustExist().Click();
 
-                // Wait until the 'post_type' input field becomes visible
-                $( this.postTitleSel ).WaitForVisible( 'Step4', 5000, input.wait_data );
-            } else {
-                probe.QueueStory(
-                    'WP.AdminOpenSubmenu',
-                    {
-                        'plugin_code': 'pages',
-                        'submenu_text': 'All Pages'   //dojh Here we need something for translations
-                    },
-                    'Step5'
-                );
+                // dojh: translation issue -> Enter title here.
+                $( 'h2:contains("Add New Page")' ).WaitForVisible( 'Step4', 5000, input.wait_data );
             }
         },
 
@@ -184,10 +179,14 @@
             var currentNr = input.wait_data;
 
             // Enter a value into the post_type input field
-            $( this.postTitleSel ).val( 'WP Page ' + currentNr );
+            $( 'label:contains("Enter title here")' )   // dojh: translation issue -> Enter title here.
+                .next( 'input' )
+                .val( 'WP Page ' + currentNr );
 
             // Click the 'Save Draft' button
-            $( '#save-post' ).MustExist().Click();
+            $( 'input[value="Save Draft"]' )   // dojh: translation issue -> Save Draft.
+                .MustExist()
+                .Click();
 
             if ( currentNr <= input.x_pages ) {
                 currentNr++;
@@ -195,16 +194,6 @@
                 // Wait until the 'Add new' link becomes visible and proceed to step 3 again.
                 $( this.addNewSel ).WaitForVisible( 'Step3', 5000, currentNr );
             }
-        },
-
-        Step5: function( /*input*/ ) {
-            // Wait until the WP page list becomes visible
-            $( this.pageListSel ).WaitForVisible( 'Step6' );
-        },
-
-        Step6: function( /*input*/ ) {
-            // Check to see if there are really 2 pages created
-            $( this.pageListSel ).find( 'tr' ).MustExistTimes( 2 );
         }
     };
 

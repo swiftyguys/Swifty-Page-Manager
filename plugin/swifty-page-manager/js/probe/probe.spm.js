@@ -14,12 +14,12 @@
         },
 
         Step2: function( input ) {
-            $( 'h2:contains("' + input.plugin_name + '")' ).MustExist();
+            $( 'h2:contains("' + input.plugin_name + '")' ).MustExistOnce();
         }
     };
 
     probe.SPM.NoPagesExist = {
-        noPostSel: '.spm-no-posts-add',
+        messageSel: '.spm-message',
 
         Start: function( input ) {
             probe.QueueStory(
@@ -33,11 +33,12 @@
         },
 
         Step2: function( /*input*/ ) {
-            $( this.noPostSel ).WaitForVisible( 'Step3' );
+            $( this.messageSel ).WaitForVisible( 'Step3' );
         },
 
         Step3: function( /*input*/ ) {
-            $( this.noPostSel ).MustExistTimes( 1 );
+            // dojh: translation issue -> No pages found.
+            $( this.messageSel + ' p:contains("No pages found")' ).MustExistOnce();
         }
     };
 
@@ -56,17 +57,21 @@
         },
 
         Step2: function( /*input*/ ) {
-            $( probe.SPM.Helpers.getPageSelector() ).WaitForVisible( 'Step3' );
+            $( probe.Utils.getPageSelector() ).WaitForVisible( 'Step3' );
         },
 
         Step3: function( input ) {
-            $( probe.SPM.Helpers.getPageSelector() ).MustExistTimes( input.x_pages );
+            $( probe.Utils.getPageSelector() ).MustExistTimes( input.x_pages );
         }
     };
 
     ////////////////////////////////////////
 
-    probe.SPM.CreatePage = {
+    probe.SPM.SavePage = {
+        running: false,
+        titleLabel: 'span:contains("Title")',   // dojh: translation issue -> Title.
+        saveButton: 'input[value="Save"]',   // dojh: translation issue -> Save.
+
         Start: function( input ) {
             probe.QueueStory(
                 'WP.AdminOpenSubmenu',
@@ -78,21 +83,125 @@
             );
         },
 
-        Step2: function( /*input*/ ) {
-            $( probe.SPM.Helpers.getPageSelector() ).WaitForVisible( 'Step3' );
+        Step2: function( input ) {
+            $( probe.Utils.getPageSelector( input.page ) ).WaitForVisible( 'Step3' );
         },
 
         Step3: function( input ) {
+            var $curPage = $( probe.Utils.getPageSelector( input.page ) );
+            var $li = $curPage.closest( 'li' );
+            var buttonNr = input.action === 'add' ? 0 : 1;
+
             // Click to see the page buttons
-            $( probe.SPM.Helpers.getPageSelector( input ) ).MustExist().Click();
+            $curPage.MustExist().Click();
 
             // Click on the 'Add page' button (+ button)
-            $( '.spm-page-button:first' ).MustBeVisible().Click();
+            $li.find( '.spm-page-button:eq(' + buttonNr + ')' ).MustBeVisible().Click();
 
-            probe.SPM.Helpers.setValues( input.values );
+            // Wait for input field with label "Title" to become visible
+            $li.find( this.titleLabel ).WaitForVisible( 'Step4' );
+        },
 
-            // Click the 'Save' confirm button
-            $( 'input[value="Save"]' ).MustBeVisible().Click();
+        Step4: function( input ) {
+            var $curPage = $( probe.Utils.getPageSelector( input.page ) );
+            var $li = $curPage.closest( 'li' );
+            var $titleLabel = $li.find( this.titleLabel );
+            var fields = probe.Utils.getFieldProps( input.values );
+
+            if ( input.wait_data && input.wait_data === fields.post_title.value ) {
+                if ( input.action === 'add' ) {
+                    probe.Utils.setValues( input.values, 'add_mode' );
+                }
+
+                probe.Utils.setValues( input.values, 'post_status' );
+                probe.Utils.setValues( input.values, 'page_template' );
+
+                // Click the 'Save' confirm button
+                $li.find( this.saveButton ).MustBeVisible().Click();
+            } else {
+                if ( !this.running ) {
+                    this.running = true;
+
+                    probe.Utils.setValues( input.values, 'post_title' );
+                }
+
+                $titleLabel.WaitForVisible( 'Step4', 5000, $titleLabel.next( 'span' ).find( 'input' ).val() );
+            }
+        }
+    };
+
+    ////////////////////////////////////////
+
+    probe.SPM.MovePage = {
+        step_size: 38,
+        dnd_done: false,
+
+        Start: function( input ) {
+            probe.QueueStory(
+                'WP.AdminOpenSubmenu',
+                {
+                    'plugin_code': 'pages',
+                    'submenu_text': input.plugin_name
+                },
+                'Step2'
+            );
+        },
+
+        Step2: function( input ) {
+            $( probe.Utils.getPageSelector( input.page ) ).WaitForVisible( 'Step3' );
+        },
+
+        Step3: function( input ) {
+            var self = this;
+            var $allPages = $( probe.Utils.getPageSelector() );
+            var $pageToMove = $( probe.Utils.getPageSelector( input.page ) );
+            var pageToMoveIndex = $allPages.index( $pageToMove );
+            var destinationIndex = $allPages.index( $( probe.Utils.getPageSelector( input.destination ) ) );
+            var multiplier = destinationIndex;
+            var yMove;
+
+            if ( pageToMoveIndex < destinationIndex ) {
+                multiplier = destinationIndex - pageToMoveIndex;
+
+                if ( input.position === 'before' ) {
+                    multiplier--;
+                }
+            } else {
+                multiplier = pageToMoveIndex - destinationIndex;
+
+                if ( input.position === 'after' ) {
+                    multiplier--;
+                }
+
+                multiplier *= -1;
+            }
+
+            yMove = multiplier * this.step_size;
+
+            if ( input.position === 'inside' ) {
+                yMove--;
+            }
+
+            $pageToMove.simulate( 'drag-n-drop', {
+                'dy': yMove,
+                'interpolation': {
+                    'stepWidth': 2,
+                    'stepDelay': 5
+                },
+                'callback': function() {
+                    self.dnd_done = true;
+                }
+            } );
+
+            $pageToMove.WaitForFn( 'Wait2', 'Step4' );
+        },
+
+        Wait2: function( /*input*/ ) {
+            return { 'wait_result': this.dnd_done };
+        },
+
+        Step4: function( /*input*/ ) {
+            probe.TmpLog( 'Drag-n-Drop finished' );
         }
     };
 
@@ -110,59 +219,26 @@
             );
         },
 
-        Step2: function( /*input*/ ) {
-            $( probe.SPM.Helpers.getPageSelector() ).WaitForVisible( 'Step3' );
+        Step2: function( input ) {
+            $( probe.Utils.getPageSelector( input.page ) ).WaitForVisible( 'Step3' );
         },
 
         Step3: function( input ) {
-            var pageSel = probe.SPM.Helpers.getPageSelector( input );
+            var $page = $( probe.Utils.getPageSelector( input.page ) );
             var actualPos;
 
             if ( input.x_pages ) {
-                $( pageSel ).MustExistTimes( input.x_pages );
+                $page.MustExistTimes( input.x_pages );
             }
 
             if ( typeof input.at_pos === 'number' ) {
-                actualPos = $( probe.SPM.Helpers.getPageSelector() ).index( $( pageSel ) ) + 1;
+                actualPos = $( probe.Utils.getPageSelector() ).index( $page ) + 1;
 
                 if ( actualPos !== input.at_pos ) {
                     probe.SetFail( 'Element exists on position ' + actualPos +
                                    ' and not on the expected position ' + input.at_pos );
                 }
             }
-        }
-    };
-
-    ////////////////////////////////////////
-
-    probe.SPM.EditPage = {
-        Start: function( input ) {
-            probe.QueueStory(
-                'WP.AdminOpenSubmenu',
-                {
-                    'plugin_code': 'pages',
-                    'submenu_text': input.plugin_name
-                },
-                'Step2'
-            );
-        },
-
-        Step2: function( /*input*/ ) {
-            $( probe.SPM.Helpers.getPageSelector() ).WaitForVisible( 'Step3' );
-        },
-
-        Step3: function( input ) {
-            // Click to see the page buttons
-            $( probe.SPM.Helpers.getPageSelector( input ) ).MustExist().Click();
-
-            // Click on the 'Add page' button (+ button)
-            $( '.spm-page-button:eq( 1 )' ).MustBeVisible().Click();
-
-            // Enter or select the form values
-            probe.SPM.Helpers.setValues( input.values );
-
-            // Click the 'Save' confirm button
-            $( 'input[value="Save"]' ).MustBeVisible().Click();
         }
     };
 
@@ -180,17 +256,17 @@
             );
         },
 
-        Step2: function( /*input*/ ) {
-            $( probe.SPM.Helpers.getPageSelector() ).WaitForVisible( 'Step3' );
+        Step2: function( input ) {
+            $( probe.Utils.getPageSelector( input.page ) ).WaitForVisible( 'Step3' );
         },
 
         Step3: function( input ) {
             var status = input.is_status === 'publish' ? '' : input.is_status;
-            var statusSpan = $( probe.SPM.Helpers.getPageSelector( input ) ).MustExist().find( ':nth-child( 2 )' );
+            var $statusSpan = $( probe.Utils.getPageSelector( input.page ) ).MustExist().find( ':nth-child( 2 )' );
             var text = '';
 
-            if ( statusSpan.is( 'span' ) ) {
-                text = $.trim( statusSpan.text().toLowerCase() );
+            if ( $statusSpan.is( 'span' ) ) {
+                text = $.trim( $statusSpan.text().toLowerCase() );
             }
 
             if ( status !== text ) {
@@ -202,6 +278,8 @@
     ////////////////////////////////////////
 
     probe.SPM.DeletePage = {
+        deleteButton: 'input[value="Delete"]',   // dojh: translation issue -> Delete.
+
         Start: function( input ) {
             probe.QueueStory(
                 'WP.AdminOpenSubmenu',
@@ -213,25 +291,27 @@
             );
         },
 
-        Step2: function( /*input*/ ) {
-            $( probe.SPM.Helpers.getPageSelector() ).WaitForVisible( 'Step3' );
+        Step2: function( input ) {
+            $( probe.Utils.getPageSelector( input.page ) ).WaitForVisible( 'Step3' );
         },
 
         Step3: function( input ) {
             // Click to see the page buttons
-            $( probe.SPM.Helpers.getPageSelector( input ) ).MustExist().Click();
+            $( probe.Utils.getPageSelector( input.page ) ).MustExist().Click();
 
             // Click on the 'Delete page' button
             $( '.spm-page-button:eq(2)' ).MustBeVisible().Click();
 
             // Click the 'Delete' confirm button
-            $( 'input[value="Delete"]' ).MustBeVisible().Click();
+            $( this.deleteButton ).MustBeVisible().Click();
         }
     };
 
     ////////////////////////////////////////
 
     probe.SPM.PublishPage = {
+        publishButton: 'input[value="Publish"]',   // dojh: translation issue -> Publish.
+
         Start: function( input ) {
             probe.QueueStory(
                 'WP.AdminOpenSubmenu',
@@ -243,25 +323,28 @@
             );
         },
 
-        Step2: function( /*input*/ ) {
-            $( probe.SPM.Helpers.getPageSelector() ).WaitForVisible( 'Step3' );
+        Step2: function( input ) {
+            $( probe.Utils.getPageSelector( input.page ) ).WaitForVisible( 'Step3' );
         },
 
         Step3: function( input ) {
             // Click to see the page buttons
-            $( probe.SPM.Helpers.getPageSelector( input ) ).MustExist().Click();
+            $( probe.Utils.getPageSelector( input.page ) ).MustExist().Click();
 
             // Click on the 'Publish page' button
             $( '.spm-page-button:eq(5)' ).MustBeVisible().Click();
 
             // Click the 'Publish' confirm button
-            $( 'input[value="Publish"]' ).MustExist().Click();
+            $( this.publishButton ).MustExist().Click();
         }
     };
 
     ////////////////////////////////////////
 
     probe.SPM.EditPageContent = {
+        running: false,
+        titleLabel: 'label:contains("Enter title here")',   // dojh: translation issue -> Enter title here.
+
         Start: function( input ) {
             probe.QueueStory(
                 'WP.AdminOpenSubmenu',
@@ -273,32 +356,47 @@
             );
         },
 
-        Step2: function( /*input*/ ) {
-            $( probe.SPM.Helpers.getPageSelector() ).WaitForVisible( 'Step3' );
+        Step2: function( input ) {
+            $( probe.Utils.getPageSelector( input.page ) ).WaitForVisible( 'Step3' );
         },
 
         Step3: function( input ) {
             // Click to see the page buttons
-            $( probe.SPM.Helpers.getPageSelector( input ) ).MustExist().Click();
+            $( probe.Utils.getPageSelector( input.page ) ).MustExist().Click();
 
             // Click on the 'Edit page content' button
-            $( '.spm-page-button:eq( 3 )' ).MustBeVisible().Click();
+            $( '.spm-page-button:eq(3)' ).MustBeVisible().Click();
 
-            $( 'h2:contains("Edit Page")' ).WaitForVisible( 'Step4' );
+            $( 'h2:contains("Edit Page")' ).WaitForVisible( 'Step4' );   // dojh: translation issue -> Edit Page.
         },
 
         Step4: function( input ) {
-            // Enter or select the form values
-            probe.SPM.Helpers.setValues( input.values );
+            var $titleLabel = $( this.titleLabel );
+            var fields = probe.Utils.getFieldProps( input.values );
 
-            // Click the 'Save' button
-            $( '#save-post' ).MustBeVisible().Click();
+            if ( input.wait_data && input.wait_data === fields.post_title.value ) {
+                probe.Utils.setValues( input.values );
+
+                // Click the 'Save' confirm button
+                $( 'input[value="Save Draft"]' )   // dojh: translation issue -> Save Draft.
+                    .IfVisible()
+                    .OtherIfNotVisible( 'input[value="Publish"]' )   // dojh: translation issue -> Publish.
+                    .Click();
+            } else {
+                if ( !this.running ) {
+                    this.running = true;
+
+                    probe.Utils.setValues( input.values, 'post_title' );
+                }
+
+                $titleLabel.WaitForVisible( 'Step4', 5000, $titleLabel.next( 'input' ).val() );
+            }
         }
     };
 
     ////////////////////////////////////////
 
-    probe.SPM.OpenSubMenu = {
+    probe.SPM.SubPageExist = {
         Start: function( input ) {
             probe.QueueStory(
                 'WP.AdminOpenSubmenu',
@@ -310,59 +408,40 @@
             );
         },
 
-        Step2: function( /*input*/ ) {
-            $( probe.SPM.Helpers.getPageSelector() ).WaitForVisible( 'Step3' );
+        Step2: function( input ) {
+            $( probe.Utils.getPageSelector( input.page ) ).WaitForVisible( 'Step3' );
         },
 
         Step3: function( input ) {
-            $( probe.SPM.Helpers.getPageSelector( input ) ).MustExist().prev( 'jstree-icon' ).Click();
-        }
-    };
+            var $li = $( probe.Utils.getPageSelector( input.page ) ).closest( 'li' );
 
-    ////////////////////////////////////////
+            if ( $li.find( '> ul' ).length ) {
+                if ( ! $li.find( '> ul' ).IsVisible() ) {
+                    $li.find( '> ins' ).MustBeVisible().Click();
+                }
 
-    probe.SPM.Helpers = {
-        setValues: function( values ) {
-            // Enter or select the form values
-            if ( values && typeof values === 'string' ) {
-                values = JSON.parse( values );
-
-                $.each( values, function( key, value ) {
-                    var pair = value.split( ':' );
-                    var type = pair[ 0 ];
-                    var val = pair[ 1 ];
-                    var sel = 'input[name="' + key + '"]';
-
-                    switch ( type ) {
-                        case 'text':
-                            $( sel ).val( val );
-
-                            break;
-                        case 'radio':
-                            $( sel ).val( [ val ] );
-
-                            break;
-                    }
-                } );
+                $( probe.Utils.getPageSelector( input.sub_page ) ).MustExistOnce();
+            } else {
+                probe.SetFail( 'Page "' + input.page + '" does not have a sub page.' );
             }
         },
 
-        getPageSelector: function( input ) {
-            var selector = '.spm-page-tree-element';
+        Step4: function( input ) {
+            var $page = $( probe.Utils.getPageSelector( input.page ) );
+            var actualPos;
 
-            if ( input ) {
-                if ( input.post_title ) {
-                    selector += ':contains("' + input.post_title + '")';
-                } else if ( input.page_nr ) {
-                    if ( typeof input.page_nr === 'number' ) {
-                        selector += ':eq(' + --input.page_nr + ')';
-                    } else if ( typeof input.page_nr === 'string' && $.inArray( input.page_nr, [ 'first', 'last' ] ) ) {
-                        selector += ':' + input.page_nr;
-                    }
-                }
+            if ( input.x_pages ) {
+                $page.MustExistTimes( input.x_pages );
             }
 
-            return selector;
+            if ( typeof input.at_pos === 'number' ) {
+                actualPos = $( probe.Utils.getPageSelector() ).index( $page ) + 1;
+
+                if ( actualPos !== input.at_pos ) {
+                    probe.SetFail( 'Element exists on position ' + actualPos +
+                                   ' and not on the expected position ' + input.at_pos );
+                }
+            }
         }
     };
 
