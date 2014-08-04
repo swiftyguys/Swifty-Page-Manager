@@ -145,7 +145,7 @@ Try it - it's free!
 
 == Changelog ==
 
-= 1.0.6 =
+= 1.0.7 =
  * Added language: Simplified Chinese (Thanks to: LoveFS).
  * Added language: Serbian (Thanks to: Borisa Djuraskovic).
 

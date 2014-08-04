@@ -46,6 +46,17 @@ module.exports = function( grunt/*, options*/ ) {
                 }
             }
         },
+        svn_add: {
+            command: 'svn status | grep "^\\?" | sed -e \'s/? *//\' | sed -e \'s/ /\\\\ /g\' | xargs svn add',
+            options: {
+                execOptions: {
+                    cwd: 'svn/swifty-page-manager/'
+                },
+                'callback': function(err, stdout, stderr, cb) {
+                    cb();
+                }
+            }
+        },
         svn_ci: {
             command: 'svn ci -m "v' + grunt.myPkg.version + '" --username "SwiftyLife" --force-interactive',
             options: {
