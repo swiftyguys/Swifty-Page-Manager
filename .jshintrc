@@ -19,13 +19,18 @@
     "node": true, // default jQuery
 
     "globals": {
+        "define": false, // global var from RequireJs
+        "requirejs": false, // global var from RequireJs
         "ajaxurl": false, // global var from Wordpress
         "jAlert": false, // global var from jquery.alerts.js
         "spm_l10n": false, // is set in our PHP file
+        "php_data": false, // is set in our PHP file
         "swiftyProbe": false, // global var from test system
         "_": false, // default WP
         "Backbone": false, // default WP
         "jQuery": false, // default WP
-        "wp": false // default WP
+        "wp": false, // default WP
+        "tinymce": false, // Set where?
+        "confirm": false // Default javascript?
     }
 }
