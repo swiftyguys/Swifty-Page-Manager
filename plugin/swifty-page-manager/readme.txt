@@ -48,6 +48,8 @@ Swifty Page Manager is currently available in:
 
  * English
  * Nederlands
+ * Simplified Chinese
+ * Serbian (by [Borisa Djuraskovic](http://www.webhostinghub.com))
 
 [Want to help add or improve translations? Click here.](http://swiftylife.com/plugins/translate/)
 

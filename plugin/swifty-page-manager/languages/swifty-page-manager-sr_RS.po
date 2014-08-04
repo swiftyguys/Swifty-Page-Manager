@@ -1,0 +1,395 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Swifty Page Manager v// @echo RELEASE_TAG\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2014-07-25 13:59:46+0000\n"
+"Last-Translator: Borisa Djuraskovic <borisad@webhostinghub.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Poedit 1.5.7\n"
+"X-Poedit-Language: \n"
+"X-Poedit-Country: \n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
+"X-Poedit-Basepath: \n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Textdomain-Support: yes"
+
+#: view/page_tree.php:161
+#@ swifty-page-manager
+msgid "Edit page"
+msgstr "Uredi stranicu"
+
+#: view/page_tree.php:173
+#@ swifty-page-manager
+msgid "View page"
+msgstr "Pregledaj stranicu"
+
+#: view/page_tree.php:157
+#: view/page_tree.php:512
+#@ swifty-page-manager
+msgid "Add page"
+msgstr "Dodaj stranicu"
+
+#: swifty-page-manager.php:354
+#@ swifty-page-manager
+msgid "draft"
+msgstr "skica"
+
+#: swifty-page-manager.php:355
+#@ swifty-page-manager
+msgid "future"
+msgstr "budući"
+
+#: swifty-page-manager.php:356
+#@ swifty-page-manager
+msgid "protected"
+msgstr "zaštićeni"
+
+#: swifty-page-manager.php:357
+#@ swifty-page-manager
+msgid "pending"
+msgstr "na čekanju"
+
+#: swifty-page-manager.php:358
+#@ swifty-page-manager
+msgid "private"
+msgstr "privatni"
+
+#: swifty-page-manager.php:359
+#@ swifty-page-manager
+msgid "trash"
+msgstr "korpa za otpatke"
+
+#: swifty-page-manager.php:360
+#@ swifty-page-manager
+msgid "Password protected page"
+msgstr "Stranica zaštićena lozinkom"
+
+#: view/page_tree.php:381
+#: view/page_tree.php:441
+#@ swifty-page-manager
+msgid "Show"
+msgstr "Prikaži"
+
+#: view/page_tree.php:388
+#: view/page_tree.php:448
+#: view/page_tree.php:476
+#@ swifty-page-manager
+msgid "Hide"
+msgstr "Sakrij"
+
+#: view/page_tree.php:81
+#: view/page_tree.php:403
+#@ swifty-page-manager
+msgid "Draft"
+msgstr "Skica"
+
+#: view/page_tree.php:410
+#@ swifty-page-manager
+msgid "Live"
+msgstr "Uživo"
+
+#: view/page_tree.php:169
+#@ swifty-page-manager
+msgid "Edit page content"
+msgstr "Uredi sadržaj stranice"
+
+#: view/page_tree.php:165
+#@ swifty-page-manager
+msgid "Delete page"
+msgstr "Obriši stranicu"
+
+#: view/page_tree.php:208
+#@ swifty-page-manager
+msgid "Delete"
+msgstr "Obriši"
+
+#: view/page_tree.php:360
+#@ swifty-page-manager
+msgid "More"
+msgstr "Više"
+
+#: view/page_tree.php:483
+#@ swifty-page-manager
+msgid "Less"
+msgstr "Manje"
+
+#: swifty-page-manager.php:507
+#@ swifty-page-manager
+msgid "New page"
+msgstr "Nova stranica"
+
+#: swifty-page-manager.php:978
+#@ swifty-page-manager
+msgid "Unknown user"
+msgstr "Nepoznat korisnik"
+
+#: view/page_tree.php:125
+#@ swifty-page-manager
+msgid "Expand"
+msgstr "Proširi"
+
+#: view/page_tree.php:126
+#@ swifty-page-manager
+msgid "Collapse"
+msgstr "Skupi"
+
+#: view/page_tree.php:140
+#@ swifty-page-manager
+msgid "Loading..."
+msgstr "Učitavanje..."
+
+#: view/page_tree.php:148
+#@ swifty-page-manager
+msgid "Loading tree"
+msgstr "Učitavanje modela drveta"
+
+#: view/page_tree.php:177
+#@ swifty-page-manager
+msgid "Publish page"
+msgstr "Objavi stranicu"
+
+#: view/page_tree.php:205
+#: view/page_tree.php:242
+#: view/page_tree.php:493
+#@ swifty-page-manager
+msgid "Cancel"
+msgstr "Otkaži"
+
+#: view/page_tree.php:497
+#@ swifty-page-manager
+msgid "Save"
+msgstr "Sačuvaj"
+
+#: swifty-page-manager.php:361
+#@ swifty-page-manager
+msgid "No pages found."
+msgstr "Nisu pronađene stranice"
+
+#: swifty-page-manager.php:362
+#@ swifty-page-manager
+msgid "Hidden"
+msgstr "Skrivene"
+
+#: view/page_tree.php:416
+#@ swifty-page-manager
+msgid "Template"
+msgstr "Šablon"
+
+#: view/page_tree.php:420
+#@ swifty-page-manager
+msgid "Default template"
+msgstr "Podrazumevani šablon"
+
+#: swifty-page-manager.php:363
+#@ swifty-page-manager
+msgid "Sorry, can't create a sub page to a page with status \"draft\"."
+msgstr "Žao nam je, ne možemo da kreiramo substranicu za stranicu sa statusom \"skica\"."
+
+#: view/page_tree.php:120
+#@ swifty-page-manager
+msgid "Trash"
+msgstr "Korpa za otpatke"
+
+#: view/page_tree.php:196
+#@ swifty-page-manager
+msgid "Are you sure you want to delete this page with all it's content?"
+msgstr "Da li ste sigurni da želite da obrišete ovu stranicu sa celokupnim sadržajem?"
+
+#: swifty-page-manager.php:320
+#: swifty-page-manager.php:321
+#@ swifty-page-manager
+msgid "Swifty Page Manager"
+msgstr "Swifty Page Manager"
+
+#: view/page_tree.php:10
+#@ swifty-page-manager
+msgctxt "headline of page with tree"
+msgid "Swifty Page Manager"
+msgstr "Swifty Page Manager"
+
+#: view/page_tree.php:455
+#@ swifty-page-manager
+msgid "Sidebar"
+msgstr "Bočna traka sa menijem"
+
+#: view/page_tree.php:309
+#@ swifty-page-manager
+msgid "Text in menu"
+msgstr "Tekst u meniju"
+
+#: view/page_tree.php:313
+#: view/page_tree.php:328
+#@ swifty-page-manager
+msgid "Title"
+msgstr "Naslov"
+
+#: view/page_tree.php:340
+#@ swifty-page-manager
+msgid "Position"
+msgstr "Pozicioniranje"
+
+#: view/page_tree.php:346
+#@ swifty-page-manager
+msgid "After"
+msgstr "Posle"
+
+#: view/page_tree.php:352
+#@ swifty-page-manager
+msgid "As sub page of"
+msgstr "Kao substranica od"
+
+#: view/page_tree.php:364
+#@ swifty-page-manager
+msgid "Url"
+msgstr "Url"
+
+#: view/page_tree.php:374
+#@ swifty-page-manager
+msgid "In menu"
+msgstr "U meniju"
+
+#: view/page_tree.php:396
+#@ swifty-page-manager
+msgid "Status"
+msgstr "Status"
+
+#: view/page_tree.php:434
+#@ swifty-page-manager
+msgid "Header"
+msgstr "Zaglavlje"
+
+#: view/page_tree.php:462
+#@ swifty-page-manager
+msgid "Left"
+msgstr "Levo"
+
+#: view/page_tree.php:469
+#@ swifty-page-manager
+msgid "Right"
+msgstr "Desno"
+
+#: view/page_tree.php:61
+#@ swifty-page-manager
+msgid "All"
+msgstr "Svi"
+
+#: view/page_tree.php:71
+#@ swifty-page-manager
+msgid "Published"
+msgstr "Objavljen"
+
+#: view/page_tree.php:232
+#@ swifty-page-manager
+msgid "Are you sure you want to publish this page so it becomes visible to your visitors?"
+msgstr "Jeste li sigurni da želite da objavite ovu stranicu i da je vaši posetioci vide?"
+
+#: view/page_tree.php:246
+#@ swifty-page-manager
+msgid "Publish"
+msgstr "Objavi"
+
+#: view/page_tree.php:266
+#@ swifty-page-manager
+msgid "The title of the page is the text that is shown in the tabs of the browser.<br />It is also the short text that is shown in blue in the search engines such as Google.<br />Therefore it is important that it contains the most important keywords of what this page is about.<br />Put these at the beginning of the text.<br />That is one of many things you can easily do to get a higher search engine ranking.<br />The text should ideally be no longer than 70 characters.<br /><br />Example:<br /><br />Swifty Page Manager - easily create a page tree in Wordpress"
+msgstr "Naziv stranice je tekst prikazan na tabulatorima pretraživača.<br />Takođe, to je kratki tekst prikazan u plavom polju pretraživača, kao što je Google.<br /> Zato je važno da sadrži najvažnije ključne reči o kojima govori stranica.<br />Sve to navedite na početku teksta.<br /> To je jedan od mnogih načina koji vam pomažu da lako dođete do bolje rangirane pozicije prilikom pretraživanja. <br /> Tekst ne treba da bude duži od 70 karaktera. <br /><br /> <br /><br />Primer:<br /><br />Swifty Page Manager - lako kreira drvo stranice u Wordpress-u."
+
+#: view/page_tree.php:287
+#@ swifty-page-manager
+msgid "Status <b>Live</b> means that everyone in the world can see that page and that it is shown in your site menu.<br />Status <b>Draft</b> means that only you can see that page when you are logged in and it is not shown in the site menu."
+msgstr "Status <b>Uživo</b> znači da svi na svetu vide tu stranicu i da je prikazana na meniju vašeg site-a. <br />Status <b>Skica</b> znači da samo vi vidite tu stranicu kad ste prijavljeni, kao i da se ta stranica ne prikazuje na meniju stranice."
+
+#: view/page_tree.php:278
+#, php-format
+#@ swifty-page-manager
+msgid "This is the link to your page. It is important that the name of the page is the main keyword of that page<br />or the name of the product or service that you offer on that page. Preferably right behind the domain name.<br /><br />Example:<br><br />%s/<b>keyword</b><br />%s/<b>product-or-service</b>"
+msgstr "Ovo je link za vašu stranicu. Važno je da naziv stranice bude glavna ključna reč te stranice<br />ili naziv proizvoda, odnosno usluge koju nudite na stranici. Najbolje, odmah iza naziva domena. <br /><br />Primer:<br><br />%s/<b>ključna reč</b><br />%s/<b>proizvod-ili-usluga</b>"
+
+#: view/page_tree.php:91
+#@ swifty-page-manager
+msgid "Pending"
+msgstr "Na čekanju"
+
+#: view/page_tree.php:111
+#@ swifty-page-manager
+msgid "Private"
+msgstr "Privatno"
+
+#: swifty-page-manager.php:149
+#: swifty-page-manager.php:301
+#: swifty-page-manager.php:335
+#@ default
+msgid "You do not have sufficient permissions to access this page. #314"
+msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #314"
+
+#: swifty-page-manager.php:380
+#@ default
+msgid "You do not have sufficient permissions to access this page. #359"
+msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #359"
+
+#: swifty-page-manager.php:392
+#@ default
+msgid "You do not have sufficient permissions to access this page. #371"
+msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #371"
+
+#: swifty-page-manager.php:427
+#@ default
+msgid "You do not have sufficient permissions to access this page. #465"
+msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #465"
+
+#: swifty-page-manager.php:495
+#@ default
+msgid "You do not have sufficient permissions to access this page. #588"
+msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #588"
+
+#: swifty-page-manager.php:596
+#@ default
+msgid "You do not have sufficient permissions to access this page. #708"
+msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #708"
+
+#: swifty-page-manager.php:630
+#@ default
+msgid "You do not have sufficient permissions to access this page. #747"
+msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #747"
+
+#: swifty-page-manager.php:654
+#@ default
+msgid "You do not have sufficient permissions to access this page. #771"
+msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #771"
+
+#: swifty-page-manager.php:984
+#@ swifty-page-manager
+msgid "[untitled page]"
+msgstr "[bezimena stranica]"
+
+#: view/page_tree.php:131
+#@ swifty-page-manager
+msgid "Clear search"
+msgstr "Obriši pretragu"
+
+#: view/page_tree.php:132
+#@ swifty-page-manager
+msgid "Search"
+msgstr "Traži"
+
+#: view/page_tree.php:133
+#@ swifty-page-manager
+msgid "Searching..."
+msgstr "Pretraga..."
+
+#: view/page_tree.php:134
+#@ swifty-page-manager
+msgid "Nothing found."
+msgstr "Nijedan rezultat nije pronađen"
+
+#: view/page_tree.php:101
+#@ swifty-page-manager
+msgid "Future"
+msgstr "Budućnost"
+
