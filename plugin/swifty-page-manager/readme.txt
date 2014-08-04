@@ -3,7 +3,7 @@ Contributors: SwiftyLife, robertheessels, chrisvermeulen, jeroenh, jeroenvermeul
 Donate link: http://swiftylife.com/plugins/donate/
 Tags: Swifty, page, pages, tree, menu, manage, hierarchy, structure
 Requires at least: 3.8
-Tested up to: 3.9
+Tested up to: 4.0
 Stable tag: RELEASE_TAG
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -147,6 +147,10 @@ Try it - it's free!
 
 = 1.0.8 =
  * Fixed bug: post-type related
+
+= 1.0.7 =
+ * Added language: Simplified Chinese (Thanks to: LoveFS).
+ * Added language: Serbian (Thanks to: Borisa Djuraskovic).
 
 = 1.0.5 =
  * Fixed bug: plugin did not activate in PHP 5.2.4.
