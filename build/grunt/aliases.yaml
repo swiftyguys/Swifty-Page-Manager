@@ -56,7 +56,7 @@ helper_build:
   - 'compress'
 
 helper_svnupdate:
-#  - 'shell:git_check_status'
+  - 'shell:git_check_status'
   - 'check_changelog'
   - 'clean:svn'
   - 'shell:svn_co'
