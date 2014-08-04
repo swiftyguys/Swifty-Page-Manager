@@ -65,6 +65,7 @@ helper_svnupdate:
   - 'shell:svn_stat'
 
 helper_svnsubmit:
+  - 'shell:svn_add'
   - 'shell:svn_ci'
   - 'shell:svn_cp_trunk'
   - 'shell:svn_ci_tags'

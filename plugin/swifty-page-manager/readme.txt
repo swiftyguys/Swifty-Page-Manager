@@ -145,9 +145,12 @@ Try it - it's free!
 
 == Changelog ==
 
+<<<<<<< HEAD
 = 1.0.8 =
  * Fixed bug: post-type related
 
+=======
+>>>>>>> Releasing 1.0.6.
 = 1.0.7 =
  * Added language: Simplified Chinese (Thanks to: LoveFS).
  * Added language: Serbian (Thanks to: Borisa Djuraskovic).
