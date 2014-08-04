@@ -47,7 +47,7 @@ module.exports = function( grunt/*, options*/ ) {
             }
         },
         svn_ci: {
-            command: 'svn ci -m "v<%= pkg.version %>" --username "SwiftyLife" --force-interactive',
+            command: 'svn ci -m "v' + grunt.myPkg.version + '" --username "SwiftyLife" --force-interactive',
             options: {
                 execOptions: {
                     cwd: 'svn/swifty-page-manager/'
@@ -58,7 +58,7 @@ module.exports = function( grunt/*, options*/ ) {
             }
         },
         svn_cp_trunk: {
-            command: 'svn cp trunk tags/<%= pkg.version %>',
+            command: 'svn cp trunk tags/' + grunt.myPkg.version,
             options: {
                 execOptions: {
                     cwd: 'svn/swifty-page-manager/'
@@ -69,7 +69,7 @@ module.exports = function( grunt/*, options*/ ) {
             }
         },
         svn_ci_tags: {
-            command: 'svn ci -m "Tagging version <%= pkg.version %>" --username "SwiftyLife" --force-interactive',
+            command: 'svn ci -m "Tagging version ' + grunt.myPkg.version + '" --username "SwiftyLife" --force-interactive',
             options: {
                 execOptions: {
                     cwd: 'svn/swifty-page-manager/'
@@ -109,7 +109,7 @@ module.exports = function( grunt/*, options*/ ) {
             }
         },
         git_tag: {
-            command: 'git tag v<%= pkg.version %>',
+            command: 'git tag v' + grunt.myPkg.version,
             options: {
                 execOptions: {
                 },
