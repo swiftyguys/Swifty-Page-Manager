@@ -145,6 +145,10 @@ Try it - it's free!
 
 == Changelog ==
 
+= 1.0.6 =
+ * Added language: Simplified Chinese (Thanks to: LoveFS).
+ * Added language: Serbian (Thanks to: Borisa Djuraskovic).
+
 = 1.0.5 =
  * Fixed bug: plugin did not activate in PHP 5.2.4.
 

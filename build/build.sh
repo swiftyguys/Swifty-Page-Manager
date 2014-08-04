@@ -1,9 +1,10 @@
 #!/bin/bash
 cmd=(dialog --separate-output --checklist "Build Swifty plugin:" 22 76 16)
 options=(1 "DIST version" on    # any option can be set to default to "on"
-         2 "Send email" off
-         3 "SVN update" off
-         4 "SVN submit" off)
+         2 "Test" off
+         3 "Send email" off
+         4 "SVN update" off
+         5 "SVN submit" off)
 choices=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 clear
 startgruntcmd="from_dialog_do"
@@ -16,14 +17,18 @@ do
             gruntcmd=$gruntcmd$sss
             ;;
         2)
-            sss="_mail"
+            sss="_test"
             gruntcmd=$gruntcmd$sss
             ;;
         3)
-            sss="_svnupdate"
+            sss="_mail"
             gruntcmd=$gruntcmd$sss
             ;;
         4)
+            sss="_svnupdate"
+            gruntcmd=$gruntcmd$sss
+            ;;
+        5)
             sss="_svnsubmit"
             gruntcmd=$gruntcmd$sss
             ;;

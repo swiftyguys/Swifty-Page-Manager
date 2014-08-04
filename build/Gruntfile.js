@@ -59,8 +59,8 @@ module.exports = function( grunt ) {
 
     grunt.registerTask( 'check_changelog', function() {
         var fileContent = grunt.file.read( grunt.getSourcePath() + 'readme.txt' );
-        if( fileContent.indexOf( grunt.config.data.pkg.version ) < 0 ) {
-            grunt.fatal( "\n\n========================================\n\nREADME FILE DOES NOT CONTAIN CHANGELOG FOR " + grunt.config.data.pkg.version + "!!!!!!!!!!!!!!\n\n========================================\n\n\n" );
+        if( fileContent.indexOf( grunt.myPkg.version ) < 0 ) {
+            grunt.fatal( "\n\n========================================\n\nREADME FILE DOES NOT CONTAIN CHANGELOG FOR " + grunt.myPkg.version + "!!!!!!!!!!!!!!\n\n========================================\n\n\n" );
         }
     } );
 };
