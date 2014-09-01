@@ -64,10 +64,6 @@ class SwiftyPageManager
                 $this->_post_status = $_GET['status'];
             }
 
-            if ( ! empty( $_GET['post_type'] ) ) {
-                $this->_post_type = $_GET['post_type'];
-            }
-
             load_plugin_textdomain( 'swifty-page-manager', false, '/swifty-page-manager/languages' );
 
             add_action( 'admin_head', array( $this, 'admin_head' ) );
