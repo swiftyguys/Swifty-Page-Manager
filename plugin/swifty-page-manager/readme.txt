@@ -1,5 +1,5 @@
 === Swifty Page Manager ===
-Contributors: robertheessels, chrisvermeulen, SwiftyLife, jeroenh, jeroenvermeulen, eenhoopjob, noemi-van-de-moosdijk
+Contributors: SwiftyLife, robertheessels, chrisvermeulen, jeroenh, jeroenvermeulen, martijn-van-der-kooij, eenhoopjob, noemi-van-de-moosdijk
 Donate link: http://swiftylife.com/plugins/donate/
 Tags: Swifty, page, pages, tree, menu, manage, hierarchy, structure
 Requires at least: 3.8
@@ -144,6 +144,9 @@ Try to describe the actions that lead up to the point where something is not wor
 Try it - it's free!
 
 == Changelog ==
+
+= 1.0.8 =
+ * Fixed bug: post-type related
 
 = 1.0.5 =
  * Fixed bug: plugin did not activate in PHP 5.2.4.
