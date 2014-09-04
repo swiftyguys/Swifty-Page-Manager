@@ -145,12 +145,10 @@ Try it - it's free!
 
 == Changelog ==
 
-<<<<<<< HEAD
-= 1.0.8 =
+= 1.1.0 =
  * Fixed bug: post-type related
+ * Ready for Wordpress 4.0
 
-=======
->>>>>>> Releasing 1.0.6.
 = 1.0.7 =
  * Added language: Simplified Chinese (Thanks to: LoveFS).
  * Added language: Serbian (Thanks to: Borisa Djuraskovic).

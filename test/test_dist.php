@@ -8,75 +8,301 @@ class ThisStory extends SSStory {
     protected $pluginName = 'Swifty Page Manager';
 
     function TakeAction() {
-        parent::TakeAction(); // Must be called first!
+        parent::TakeAction();   // Must be called first!
 
         $this->wordpress->Login();
-        $this->Probe( 'SPM.CheckRunning', Array( "plugin_name" => $this->pluginName ) );
-//        $this->Probe( 'WP.DeleteAllPages', Array( 'plugin_name' => $this->pluginName ) );
-//        $this->Probe( 'WP.EmptyTrash', Array( 'plugin_name' => $this->pluginName ) );
-    }
 
-    ////////////////////////////////////////
+        $this->Probe( 'SPM.CheckRunning', array(
+            "plugin_name" => $this->pluginName
+        ) );
 
-    function CheckAddButtonVisibleWhenNoPagesExist()
-    {
-        $this->EchoMsg( 'Check add button visible when no pages exist' );
+        $this->Probe( 'WP.DeleteAllPages', array(
+            'plugin_name' => $this->pluginName
+        ) );
 
-        $this->wordpress->OpenAdminSubMenu( 'pages', $this->pluginName );
-        $this->st->usingTimer()->wait( 2, 'Wait for the add button to be visible' );
-        $element = $this->FindElementByXpathMustExist( 'descendant::div[' . $this->ContainingClass( "spm-no-pages" ) . ']//span[' . $this->ContainingClass( "dashicons-plus" ) . ']' );
-    }
+        $this->Probe( 'WP.EmptyTrash', array(
+            'plugin_name' => $this->pluginName
+        ) );
 
-    ////////////////////////////////////////
+        $this->Probe( 'SPM.NoPagesExist', array(
+            'plugin_name' => $this->pluginName
+        ) );
 
-    function CheckIfXPagesExist( $total = 1 )
-    {
-        $this->EchoMsg( 'Check if x pages exist' );
+        $this->Probe( 'WP.CreateXDraftPages', array(
+            'plugin_name' => $this->pluginName,
+            'x_pages'     => 4
+        ) );
 
-        $this->wordpress->OpenAdminSubMenu( 'pages', $this->pluginName );
-        $this->st->usingTimer()->wait( 3, 'Wait for the page tree to be visible' );
-        $elements = $this->FindElementsByXpath( 'descendant::div[' . $this->ContainingClass( "spm-tree-container" ) . ']/ul/li' );
-        $this->st->assertsInteger( count( $elements ) )->equals( $total );
-    }
+        $this->Probe( 'SPM.XPagesExist', array(
+            'plugin_name' => $this->pluginName,
+            'x_pages'     => 4
+        ) );
 
-    ////////////////////////////////////////
+        $this->Probe( 'SPM.MovePage', array(
+            'plugin_name' => $this->pluginName,
+            'page'        => 'WP Page 1',
+            'destination' => 'WP Page 4',
+            'position'    => 'before',
+        ) );
 
-    function CreateNewPageAfterLastPage()
-    {
-        $this->EchoMsg( 'Create new page with the plugin' . $this->wordpress->strings[ 's_spm_pages_save' ] );
+        $this->Probe( 'SPM.PageExists', array(
+            'plugin_name' => $this->pluginName,
+            'page'        => 'WP Page 1',
+            'at_pos'      => 3
+        ) );
 
-        $this->wordpress->OpenAdminSubMenu( 'pages', $this->pluginName );
-        $this->st->usingTimer()->wait( 3, 'Wait for the page tree to be visible' );
+        $this->Probe( 'SPM.PageExists', array(
+            'plugin_name' => $this->pluginName,
+            'page'        => 'WP Page 3',
+            'at_pos'      => 2
+        ) );
 
-        $allLiBefore = $this->st->fromBrowser()->getElementsByClass( 'jstree-leaf' );
-        $this->st->assertsInteger( count( $allLiBefore ) )->equals( 2 );
+        $this->Probe( 'SPM.MovePage', array(
+            'plugin_name' => $this->pluginName,
+            'page'        => 'WP Page 1',
+            'destination' => 'WP Page 2',
+            'position'    => 'before',
+        ) );
 
-        $lastLi = $this->st->fromBrowser()->getElementsByClass( 'jstree-last' );
-        $this->st->assertsInteger( count( $lastLi ) )->equals( 1 );
-        $lastLiId = $lastLi[0]->attribute( 'id' );   // Example: spm-id-1238
-        $lastLiXPath = 'descendant::li[@id="' . $lastLiId . '"]';
+        $this->Probe( 'SPM.PageExists', array(
+            'plugin_name' => $this->pluginName,
+            'page'        => 'WP Page 1',
+            'at_pos'      => 1
+        ) );
 
-        // Selects the last page tree element.
-        $pageTreeElement = $this->FindElementsByXpath( $lastLiXPath . '/a[' . $this->ContainingClass( "spm-page-tree-element" ) . ']' );
-        $this->st->assertsInteger( count( $pageTreeElement ) )->equals( 1 );
-        $pageTreeElement[0]->click();
+        $this->Probe( 'SPM.PageExists', array(
+            'plugin_name' => $this->pluginName,
+            'page'  => 'WP Page 2',
+            'at_pos'      => 2
+        ) );
 
-        // Find the page create button, check if there's only one, click it.
-        $pageCreateButton = $this->FindElementsByXpath( $lastLiXPath . '//span[@data-spm-action="add"]' );
-        $this->st->assertsInteger( count( $pageCreateButton ) )->equals( 1 );
-        $pageCreateButton[0]->click();
+        $this->Probe( 'SPM.MovePage', array(
+            'plugin_name' => $this->pluginName,
+            'page'        => 'WP Page 2',
+            'destination' => 'WP Page 4',
+            'position'    => 'after',
+        ) );
 
-        $this->st->usingBrowser()->type( 'SPM Pagina 1' )->intoFieldWithName( "post_title" );
+        $this->Probe( 'SPM.PageExists', array(
+            'plugin_name' => $this->pluginName,
+            'page'        => 'WP Page 2',
+            'at_pos'      => 4
+        ) );
 
-        // Find the page save button, check if there's only one, click it.
-        $pageSaveButton = $this->FindElementsByXpath( $lastLiXPath . '//input[@data-spm-action="save"]' );
-        $this->st->assertsInteger( count( $pageSaveButton ) )->equals( 1 );
-        $pageSaveButton[0]->click();
+        $this->Probe( 'SPM.PageExists', array(
+            'plugin_name' => $this->pluginName,
+            'page'        => 'WP Page 4',
+            'at_pos'      => 3
+        ) );
 
-        $this->st->usingTimer()->wait( 3, 'Wait for the new page to be saved' );
+        $this->Probe( 'SPM.MovePage', array(
+            'plugin_name' => $this->pluginName,
+            'page'        => 'WP Page 2',
+            'destination' => 'WP Page 1',
+            'position'    => 'after',
+        ) );
 
-        $allLiAfter = $this->st->fromBrowser()->getElementsByClass( 'jstree-leaf' );
-        $this->st->assertsInteger( count( $allLiAfter ) )->equals( 3 );
+        $this->Probe( 'SPM.PageExists', array(
+            'plugin_name' => $this->pluginName,
+            'page'        => 'WP Page 2',
+            'at_pos'      => 2
+        ) );
+
+        $this->Probe( 'SPM.PageExists', array(
+            'plugin_name' => $this->pluginName,
+            'page'        => 'WP Page 4',
+            'at_pos'      => 4
+        ) );
+
+        $this->Probe( 'SPM.SavePage', array(
+            'plugin_name' => $this->pluginName,
+            'action'      => 'add',
+            'page'        => 'WP Page 4',
+            'values'      => json_encode( array(
+                'post_title' => array(
+                    'type'  => 'text',
+                    'value' => 'SPM Page last'
+                ),
+                'add_mode' => array(
+                    'type'  => 'radio',
+                    'value' => 'after'
+                ),
+                'post_status' => array(
+                    'type'  => 'radio',
+                    'value' => 'draft'
+                ),
+                'page_template' => array(
+                    'type'  => 'select',
+                    'value' => 'Full Width Page'
+                )
+            ) )
+        ) );
+
+        $this->Probe( 'SPM.XPagesExist', array(
+            'plugin_name' => $this->pluginName,
+            'x_pages'     => 5
+        ) );
+
+        $this->Probe( 'SPM.SavePage', array(
+            'plugin_name' => $this->pluginName,
+            'action'      => 'add',
+            'page'        => 'WP Page 1',
+            'values'      => json_encode( array(
+                'post_title' => array(
+                    'type'  => 'text',
+                    'value' => 'SPM Page second'
+                ),
+                'add_mode' => array(
+                    'type'  => 'radio',
+                    'value' => 'after'
+                ),
+                'post_status' => array(
+                    'type'  => 'radio',
+                    'value' => 'draft'
+                )
+            ) )
+        ) );
+
+        $this->Probe( 'SPM.XPagesExist', array(
+            'plugin_name' => $this->pluginName,
+            'x_pages'     => 6
+        ) );
+
+        $this->Probe( 'SPM.PageExists', array(
+            'plugin_name' => $this->pluginName,
+            'page'        => 'SPM Page last',
+            'x_pages'     => 1,
+            'at_pos'      => 6
+        ) );
+
+        $this->Probe( 'SPM.CheckPageStatus', array(
+            'plugin_name' => $this->pluginName,
+            'page'        => 'SPM Page last',
+            'is_status'   => 'draft'   // draft | publish
+        ) );
+
+        $this->Probe( 'SPM.PageExists', array(
+            'plugin_name' => $this->pluginName,
+            'page'        => 'SPM Page second',
+            'x_pages'     => 1,
+            'at_pos'      => 2
+        ) );
+
+        $this->Probe( 'SPM.SavePage', array(
+            'plugin_name' => $this->pluginName,
+            'action'      => 'edit',
+            'page'        => 'SPM Page second',
+            'values'      => json_encode( array(
+                'post_title' => array(
+                    'type'  => 'text',
+                    'value' => 'Tweede SPM Pagina'
+                ),
+                'post_status' => array(
+                    'type'  => 'radio',
+                    'value' => 'publish'
+                ),
+                'page_template' => array(
+                    'type'  => 'select',
+                    'value' => 'Contributor Page'
+                )
+            ) )
+        ) );
+
+        $this->Probe( 'SPM.PageExists', array(
+            'plugin_name' => $this->pluginName,
+            'page'        => 'Tweede SPM Pagina',
+            'x_pages'     => 1,
+            'at_pos'      => 2
+        ) );
+
+        $this->Probe( 'SPM.CheckPageStatus', array(
+            'plugin_name' => $this->pluginName,
+            'page'        => 'Tweede SPM Pagina',
+            'is_status'   => 'publish'   // draft | publish
+        ) );
+
+        $this->Probe( 'SPM.MovePage', array(
+            'plugin_name' => $this->pluginName,
+            'page'        => 'WP Page 2',
+            'destination' => 'Tweede SPM Pagina',
+            'position'    => 'inside',
+        ) );
+
+        $this->Probe( 'SPM.SubPageExist', array(
+            'plugin_name' => $this->pluginName,
+            'page'        => 'Tweede SPM Pagina',
+            'sub_page'    => 'WP Page 2'
+        ) );
+
+        $this->Probe( 'SPM.DeletePage', array(
+            'plugin_name' => $this->pluginName,
+            'page'        => 'Tweede SPM Pagina',
+        ) );
+
+        $this->Probe( 'SPM.XPagesExist', array(
+            'plugin_name' => $this->pluginName,
+            'x_pages'     => 5
+        ) );
+
+        $this->Probe( 'SPM.PublishPage', array(
+            'plugin_name' => $this->pluginName,
+            'page'        => 'SPM Page last',
+        ) );
+
+        $this->Probe( 'SPM.CheckPageStatus', array(
+            'plugin_name' => $this->pluginName,
+            'page'        => 'SPM Page last',
+            'is_status'   => 'publish'   // draft | publish
+        ) );
+
+        $this->Probe( 'SPM.SavePage', array(
+            'plugin_name' => $this->pluginName,
+            'action'      => 'add',
+            'page'        => 'SPM Page last',
+            'values'      => json_encode( array(
+                'post_title' => array(
+                    'type'  => 'text',
+                    'value' => 'SPM Page inside'
+                ),
+                'add_mode' => array(
+                    'type'  => 'radio',
+                    'value' => 'inside'   // after | inside
+                ),
+                'post_status' => array(
+                    'type'  => 'radio',
+                    'value' => 'publish'   // draft | publish
+                )
+            ) )
+        ) );
+
+        $this->Probe( 'SPM.SubPageExist', array(
+            'plugin_name' => $this->pluginName,
+            'page'        => 'SPM Page last',
+            'sub_page'    => 'SPM Page inside'
+        ) );
+
+        $this->Probe( 'SPM.XPagesExist', array(
+            'plugin_name' => $this->pluginName,
+            'x_pages'     => 6
+        ) );
+
+        $this->Probe( 'SPM.EditPageContent', array(
+            'plugin_name' => $this->pluginName,
+            'page'        => 'WP Page 1',
+            'values'      => json_encode( array(
+                'post_title' => array(
+                    'type'  => 'text',
+                    'value' => 'SPM Page 1'
+                )
+            ) )
+        ) );
+
+        $this->Probe( 'SPM.PageExists', array(
+            'plugin_name' => $this->pluginName,
+            'page'        => 'SPM Page 1',
+            'x_pages'     => 1,
+            'at_pos'      => 1
+        ) );
     }
 
     ////////////////////////////////////////
