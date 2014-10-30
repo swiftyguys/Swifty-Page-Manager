@@ -21,6 +21,7 @@ class SwiftyPageManager
     protected $_tree = null;
     protected $_by_page_id = null;
     protected $is_swifty = false;
+    protected $swifty_admin_page = 'swifty_page_manager_admin';
 
     /**
      * Constructor
@@ -318,6 +319,14 @@ class SwiftyPageManager
                           'edit_pages',
                           'page-tree',
                           array( $this, 'view_page_tree' ) );
+
+        // check if the class is already loaded, this class is shared with other Swifty plugins
+        if ( ! class_exists( 'LibSwiftyPlugin' ) ) {
+            require_once plugin_dir_path( __FILE__ ) . 'lib/lib_swifty_plugin.php';
+            new LibSwiftyPlugin();
+        }
+
+        LibSwiftyPlugin::get_instance()->admin_add_swifty_menu( __('Swifty Page Manager', 'swifty-page-manager'), $this->swifty_admin_page, array( &$this, 'admin_spm_menu_page' ), true );
     }
 
     /**
@@ -363,6 +372,25 @@ class SwiftyPageManager
 
         /** @noinspection PhpIncludeInspection */
         require( $this->plugin_dir . '/view/page_tree.php' );
+    }
+
+    // Our plugin admin menu page
+    function admin_spm_menu_page()
+    {
+        $admin_page_title = __( 'Swifty Page Manager', 'swifty-page-manager' );
+        $admin_page = $this->swifty_admin_page;
+        $tab_general_title = __( 'General', 'swifty-page-manager' );
+        $tab_general_method = array( $this, 'spm_tab_options_content' );
+
+        LibSwiftyPlugin::get_instance()->admin_options_menu_page( $admin_page_title, $admin_page, $tab_general_title, $tab_general_method );
+    }
+
+    function spm_tab_options_content()
+    {
+        echo '<p>' . __( 'There are currently no settings for this plugin.', 'swifty-page-manager' ) . '</p>';
+//        settings_fields( 'spm_plugin_options' );
+//        do_settings_sections( 'spm_plugin_options_page' );
+//        submit_button();
     }
 
     /**
