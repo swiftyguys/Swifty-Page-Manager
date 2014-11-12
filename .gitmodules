@@ -1,3 +1,0 @@
-[submodule "plugin/swifty-page-manager/lib"]
-	path = plugin/swifty-page-manager/lib
-	url = git@github.com:swiftyguys/lib-swifty-plugin.git
