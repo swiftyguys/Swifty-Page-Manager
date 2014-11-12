@@ -298,12 +298,21 @@ class SwiftyPageManager
             wp_die( __( 'You do not have sufficient permissions to access this page. #314' ) );
         }
 
+        // hide update notices from this page
+        remove_action( 'admin_notices', 'update_nag', 3 );
+
         $currentScreen = get_current_screen();
 
         if ( 'pages_page_page-tree' === $currentScreen->base ) {
             /** @noinspection PhpIncludeInspection */
             require $this->plugin_dir . '/view/admin_head.php';
+
+            if( $this->is_swifty ) {
+                require $this->plugin_dir . '/view/swifty_admin_head.php';
+            }
         }
+
+
     }
 
     /**
