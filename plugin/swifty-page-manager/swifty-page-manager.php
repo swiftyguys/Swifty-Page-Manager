@@ -33,7 +33,12 @@ class SwiftyPageManager
         $this->plugin_basename = basename( $this->plugin_dir );
         $this->plugin_dir_url  = plugins_url( rawurlencode( basename( $this->plugin_dir ) ) );
         $this->plugin_url      = $_SERVER['REQUEST_URI'];
-        $this->is_swifty       = $this->_is_plugin_minimal( 'swifty-menu/*', '0.0.3' );
+
+        if ( ! class_exists( 'LibSwiftyPluginView' ) ) {
+            require_once plugin_dir_path( __FILE__ ) . 'lib/swifty_plugin/lib_swifty_plugin_view.php';
+        }
+
+        $this->is_swifty       = LibSwiftyPluginView::is_ss_mode();
 
         // Actions for visitors viewing the site
         if ( $this->is_swifty ) {
