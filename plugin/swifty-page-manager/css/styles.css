@@ -128,6 +128,11 @@
     background-color: rgba(0, 105, 224, .75);
 }
 
+.spm-tree-container span.post_type_published_draft_content {
+    background-color: rgb(160, 32, 240);
+    background-color: rgba(160, 32, 240, .75);
+}
+
 #jstree-dragged {
     background-color: white;
     opacity: .9;

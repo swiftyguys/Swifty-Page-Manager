@@ -699,6 +699,7 @@ var SPM = (function( $, document ) {
                     var rel = $li.data( 'rel' );
                     var postStatus = $li.data( 'post_status' );
                     var postStatusToShow = spm_l10n[ 'status_' + postStatus + '_ucase' ];
+                    var publishedDraftContent = $li.data( 'published_draft_content' );
 
                     // Check that we haven't added our stuff already
                     if ( $li.data( 'done_spm_clean_node' ) ) {
@@ -726,6 +727,15 @@ var SPM = (function( $, document ) {
                             $li,
                             '<span class="post_type post_type_' + postStatus + '">' + postStatusToShow + '</span>'
                         );
+                    } else {
+                        if( publishedDraftContent ) {
+                            spm.setLabel(
+                                $li,
+                                '<span class="post_type post_type_published_draft_content">' +
+                                    spm_l10n[ 'status_published_draft_content_ucase' ] +
+                                '</span>'
+                            );
+                        }
                     }
 
                     if ( $li.hasClass( 'spm-show-page-in-menu-no' ) ) {

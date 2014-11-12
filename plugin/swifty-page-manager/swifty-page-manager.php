@@ -331,7 +331,7 @@ class SwiftyPageManager
 
         // check if the class is already loaded, this class is shared with other Swifty plugins
         if ( ! class_exists( 'LibSwiftyPlugin' ) ) {
-            require_once plugin_dir_path( __FILE__ ) . 'lib/lib_swifty_plugin.php';
+            require_once plugin_dir_path( __FILE__ ) . 'lib/swifty_plugin/lib_swifty_plugin.php';
             new LibSwiftyPlugin();
         }
 
@@ -375,6 +375,7 @@ class SwiftyPageManager
             'no_pages_found'          => __( 'No pages found.', 'swifty-page-manager' ),
             'hidden_page'             => __( 'Hidden', 'swifty-page-manager' ),
             'no_sub_page_when_draft'  => __( "Sorry, can't create a sub page to a page with status \"draft\".", 'swifty-page-manager' ),
+            'status_published_draft_content_ucase' => ucfirst( __( 'published - draft content', 'swifty-page-manager' ) )
         );
 
         wp_localize_script( 'spm', 'spm_l10n', $oLocale );
@@ -1075,6 +1076,7 @@ class SwiftyPageManager
         $page_json_data['metadata']['modified_author'] = $post_author;
         $page_json_data['metadata']['post_title']      = $title;
         $page_json_data['metadata']['delete_nonce']    = wp_create_nonce( 'delete-page_' . $one_page->ID, '_trash' );
+        $page_json_data['metadata']['published_draft_content'] = LibSwiftyPlugin::get_instance()->get_autosave_version_if_newer( $page_id );
 
         return $page_json_data;
     }
