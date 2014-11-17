@@ -1,6 +1,6 @@
 <?php
 
-include 'lib/ss_story.php';
+include 'spm_story.php';
 
 ////////////////////////////////////////
 
