@@ -96,9 +96,15 @@ class SwiftyPageManager
                 add_filter( 'wp_list_pages',       array( $this, 'wp_list_pages' ) );
                 add_filter( 'status_header',       array( $this, 'status_header' ) );
             }
+
+            if ( ! class_exists( 'LibSwiftyPlugin' ) ) {
+                require_once plugin_dir_path( __FILE__ ) . 'lib/swifty_plugin/lib_swifty_plugin.php';
+                new LibSwiftyPlugin();
+            }
         }
     }
 
+    /**
     /**
      * @param string $title
      * @param string $sep
@@ -333,12 +339,6 @@ class SwiftyPageManager
                           'edit_pages',
                           'page-tree',
                           array( $this, 'view_page_tree' ) );
-
-        // check if the class is already loaded, this class is shared with other Swifty plugins
-        if ( ! class_exists( 'LibSwiftyPlugin' ) ) {
-            require_once plugin_dir_path( __FILE__ ) . 'lib/swifty_plugin/lib_swifty_plugin.php';
-            new LibSwiftyPlugin();
-        }
 
         LibSwiftyPlugin::get_instance()->admin_add_swifty_menu( __('Swifty Page Manager', 'swifty-page-manager'), $this->swifty_admin_page, array( &$this, 'admin_spm_menu_page' ), true );
     }

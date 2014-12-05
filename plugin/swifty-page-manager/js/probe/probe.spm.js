@@ -70,6 +70,7 @@
     probe.SPM.SavePage = {
         running: false,
         titleLabel: 'span:contains("Title")',   // dojh: translation issue -> Title.
+        titleEdit: 'input[name="post_title"]',
         saveButton: 'input[value="Save"]',   // dojh: translation issue -> Save.
 
         Start: function( input ) {
@@ -98,8 +99,26 @@
             // Click on the 'Add page' button (+ button)
             $li.find( '.spm-page-button:eq(' + buttonNr + ')' ).MustBeVisible().Click();
 
-            // Wait for input field with label "Title" to become visible
-            $li.find( this.titleLabel ).WaitForVisible( 'Step4' );
+            if( input.action === 'add' ) {
+                // Wait for input field with label "Title" to become visible
+                $li.find( this.titleLabel ).WaitForVisible( 'Step4' );
+            } else {
+                input.wait_data = null;
+                $li.find( this.titleEdit ).WaitForVisible( 'Step3a' );
+            }
+        },
+
+        Step3a: function( input ) {
+            var $curPage = $( probe.Utils.getPageSelector( input.page ) );
+            var $li = $curPage.closest( 'li' );
+            var $titleLabel = $li.find( this.titleLabel );
+
+            // wait until a value has bee set in the input box
+            if ( input.wait_data && input.wait_data === input.page ) {
+                $li.find( this.titleLabel ).WaitForVisible( 'Step4' );
+            } else {
+                $titleLabel.WaitForVisible( 'Step3a', 5000, $titleLabel.next( 'span' ).find( 'input' ).val() );
+            }
         },
 
         Step4: function( input ) {
@@ -333,6 +352,18 @@
 
             // Click on the 'Publish page' button
             $( '.spm-page-button:eq(5)' ).MustBeVisible().Click();
+
+            $( probe.Utils.getPageSelector( input.page ) ).WaitForFn( 'Wait3', 'Step4', 1000, new Date().getTime() + 800 );
+        },
+
+        Wait3: function( input ) {
+
+            // has the time come to continue?
+            var check = input.wait_data < new Date().getTime();
+            return { 'wait_result': check };
+        },
+
+        Step4: function( input ) {
 
             // Click the 'Publish' confirm button
             $( this.publishButton ).MustExist().Click();
