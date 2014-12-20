@@ -9,7 +9,16 @@
         "do": false
     },
     "clean": {
-        "unwanted": [ "<%= grunt.getDestPathPlugin() %>js/probe" ]
+        "unwanted": [
+            "<%= grunt.getDestPathPlugin() %>js/probe",
+            "<%= grunt.getDestPathPlugin() %>lib/swifty_plugin/README.md",
+            "<%= grunt.getDestPathPlugin() %>lib/swifty_plugin/js",
+            "<%= grunt.getDestPathPlugin() %>lib/swifty_plugin/css/*.less",
+            "<%= grunt.getDestPathPlugin() %>lib/swifty_plugin/php/probe"
+        ],
+        "unwanted2": [
+            "<%= grunt.getDestPathPlugin() %>lib/swifty_plugin/css"
+        ]
     },
     "uglify": {
         "src": {
@@ -20,7 +29,16 @@
         }
     },
     "rename": {
-        "do": false
+        "post_requirejs": { "files": [
+            {
+                "src": "<%= grunt.getDestPathPlugin() %>lib/swifty_plugin/css/swifty-font.css",
+                "dest": "<%= grunt.getDestPathPlugin() %>css/swifty-font.css"
+            },
+            {
+                "src": "<%= grunt.getDestPathPlugin() %>lib/swifty_plugin/css/fonts",
+                "dest": "<%= grunt.getDestPathPlugin() %>css/fonts"
+            }
+        ] }
     },
     "csslint": {
         "src": [ "<%= grunt.getSourcePath() %>css/styles.css" ]
@@ -35,6 +53,17 @@
         "url": "http://plugins.svn.wordpress.org/swifty-page-manager/tags"
     },
     "send_mail": {
-        "to": "robert@heessels.com jeroen.hoekstra@longtermresults.nl job.hoop@alphamegahosting.com noemi.moosdijk@longtermresults.nl"
+        "to2": "robert@heessels.com jeroen.hoekstra@longtermresults.nl job.hoop@alphamegahosting.com noemi.moosdijk@longtermresults.nl",
+        "to": "robert@heessels.com"
+    },
+    "git_pull_all": {
+        "tagcode": "spm",
+        "paths": [
+            "..",
+            "../plugin/swifty-page-manager/lib/swifty_plugin"
+        ]
+    },
+    "replace": {
+        "obfuscate": "WILL BE LOADED LATER ON"
     }
 }
