@@ -191,7 +191,7 @@ var SPM = (function( $, document ) {
             // in worst case fallback to main page
             var back_location = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/';
 
-            if( typeof(Storage) !== "undefined" ) {
+            if( typeof( Storage ) !== 'undefined' ) {
                 if( sessionStorage.spm_back_location ) {
                     back_location = sessionStorage.spm_back_location;
                 }
@@ -732,7 +732,7 @@ var SPM = (function( $, document ) {
                             spm.setLabel(
                                 $li,
                                 '<span class="post_type post_type_published_draft_content">' +
-                                    spm_l10n[ 'status_published_draft_content_ucase' ] +
+                                    spm_l10n.status_published_draft_content_ucase +
                                 '</span>'
                             );
                         }
