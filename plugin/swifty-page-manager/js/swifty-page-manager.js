@@ -764,7 +764,7 @@ var SPM = (function( $, document ) {
                             spm.setLabel(
                                 $li,
                                 '<span class="post_type post_type_published_draft_content">' +
-                                    spm_l10n[ 'status_published_draft_content_ucase' ] +
+                                    spm_l10n.status_published_draft_content_ucase +
                                 '</span>'
                             );
                         }

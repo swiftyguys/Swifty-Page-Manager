@@ -65,5 +65,12 @@
     },
     "replace": {
         "obfuscate": "WILL BE LOADED LATER ON"
+    },
+    "po": {
+        "languages" : {
+            "nl": "nl_NL",
+            "sr": "sr_RS",
+            "zh-cn": "zh_CN"
+        }
     }
 }

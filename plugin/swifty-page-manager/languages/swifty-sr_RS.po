@@ -1,71 +1,67 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# Translation of Swifty Page Manager in Serbian
+# This file is distributed under the same license as the Swifty Page Manager package.
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-17 09:39+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2014-12-17 08:28:23+0000\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: GlotPress/0.1\n"
+"Project-Id-Version: Swifty Page Manager\n"
 
 #: swifty-page-manager.php:157 swifty-page-manager.php:309
 #: swifty-page-manager.php:354
 msgid "You do not have sufficient permissions to access this page. #314"
-msgstr ""
+msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #314"
 
 #: swifty-page-manager.php:337 swifty-page-manager.php:338
 #: swifty-page-manager.php:343 swifty-page-manager.php:395
 msgid "Swifty Page Manager"
-msgstr ""
+msgstr "Swifty Page Manager"
 
 #: swifty-page-manager.php:373
 msgid "draft"
-msgstr ""
+msgstr "skica"
 
 #: swifty-page-manager.php:374
 msgid "future"
-msgstr ""
+msgstr "budući"
 
 #: swifty-page-manager.php:375
 msgid "protected"
-msgstr ""
+msgstr "zaštićeni"
 
 #: swifty-page-manager.php:376
 msgid "pending"
-msgstr ""
+msgstr "na čekanju"
 
 #: swifty-page-manager.php:377
 msgid "private"
-msgstr ""
+msgstr "privatni"
 
 #: swifty-page-manager.php:378
 msgid "trash"
-msgstr ""
+msgstr "korpa za otpatke"
 
 #: swifty-page-manager.php:379
 msgid "Password protected page"
-msgstr ""
+msgstr "Stranica zaštićena lozinkom"
 
 #: swifty-page-manager.php:380
 msgid "No pages found."
-msgstr ""
+msgstr "Nisu pronađene stranice"
 
 #: swifty-page-manager.php:381
 msgid "Hidden"
-msgstr ""
+msgstr "Skrivene"
 
 #: swifty-page-manager.php:382
 msgid "Sorry, can't create a sub page to a page with status \"draft\"."
 msgstr ""
+"Žao nam je, ne možemo da kreiramo substranicu za stranicu sa statusom \"skica"
+"\"."
 
 #: swifty-page-manager.php:383
 msgid "published - draft content"
@@ -81,154 +77,157 @@ msgstr ""
 
 #: swifty-page-manager.php:419
 msgid "You do not have sufficient permissions to access this page. #359"
-msgstr ""
+msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #359"
 
 #: swifty-page-manager.php:431
 msgid "You do not have sufficient permissions to access this page. #371"
-msgstr ""
+msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #371"
 
 #: swifty-page-manager.php:466
 msgid "You do not have sufficient permissions to access this page. #465"
-msgstr ""
+msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #465"
 
 #: swifty-page-manager.php:534
 msgid "You do not have sufficient permissions to access this page. #588"
-msgstr ""
+msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #588"
 
 #: swifty-page-manager.php:546
 msgid "New page"
-msgstr ""
+msgstr "Nova stranica"
 
 #: swifty-page-manager.php:635
 msgid "You do not have sufficient permissions to access this page. #708"
-msgstr ""
+msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #708"
 
 #: swifty-page-manager.php:669
 msgid "You do not have sufficient permissions to access this page. #747"
-msgstr ""
+msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #747"
 
 #: swifty-page-manager.php:693
 msgid "You do not have sufficient permissions to access this page. #771"
-msgstr ""
+msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #771"
 
 #: swifty-page-manager.php:1017
 msgid "Unknown user"
-msgstr ""
+msgstr "Nepoznat korisnik"
 
 #: swifty-page-manager.php:1023
 msgid "[untitled page]"
-msgstr ""
+msgstr "[bezimena stranica]"
 
 #: view/page_tree.php:18
 msgctxt "headline of page with tree"
 msgid "Swifty Page Manager"
-msgstr ""
+msgstr "Swifty Page Manager"
 
 #: view/page_tree.php:81
 msgid "All"
-msgstr ""
+msgstr "Svi"
 
 #: view/page_tree.php:91
 msgid "Published"
-msgstr ""
+msgstr "Objavljen"
 
 #: view/page_tree.php:101 view/page_tree.php:423
 msgid "Draft"
-msgstr ""
+msgstr "Skica"
 
 #: view/page_tree.php:111
 msgid "Pending"
-msgstr ""
+msgstr "Na čekanju"
 
 #: view/page_tree.php:121
 msgid "Future"
-msgstr ""
+msgstr "Budućnost"
 
 #: view/page_tree.php:131
 msgid "Private"
-msgstr ""
+msgstr "Privatno"
 
 #: view/page_tree.php:140
 msgid "Trash"
-msgstr ""
+msgstr "Korpa za otpatke"
 
 #: view/page_tree.php:145
 msgid "Expand"
-msgstr ""
+msgstr "Proširi"
 
 #: view/page_tree.php:146
 msgid "Collapse"
-msgstr ""
+msgstr "Skupi"
 
 #: view/page_tree.php:151
 msgid "Clear search"
-msgstr ""
+msgstr "Obriši pretragu"
 
 #: view/page_tree.php:152
 msgid "Search"
-msgstr ""
+msgstr "Traži"
 
 #: view/page_tree.php:153
 msgid "Searching..."
-msgstr ""
+msgstr "Pretraga..."
 
 #: view/page_tree.php:154
 msgid "Nothing found."
-msgstr ""
+msgstr "Nijedan rezultat nije pronađen"
 
 #: view/page_tree.php:160
 msgid "Loading..."
-msgstr ""
+msgstr "Učitavanje..."
 
 #: view/page_tree.php:168
 msgid "Loading tree"
-msgstr ""
+msgstr "Učitavanje modela drveta"
 
 #: view/page_tree.php:177 view/page_tree.php:532
 msgid "Add page"
-msgstr ""
+msgstr "Dodaj stranicu"
 
 #: view/page_tree.php:181
 msgid "Edit page"
-msgstr ""
+msgstr "Uredi stranicu"
 
 #: view/page_tree.php:185
 msgid "Delete page"
-msgstr ""
+msgstr "Obriši stranicu"
 
 #: view/page_tree.php:189
 msgid "Edit page content"
-msgstr ""
+msgstr "Uredi sadržaj stranice"
 
 #: view/page_tree.php:193
 msgid "View page"
-msgstr ""
+msgstr "Pregledaj stranicu"
 
 #: view/page_tree.php:197
 msgid "Publish page"
-msgstr ""
+msgstr "Objavi stranicu"
 
 #: view/page_tree.php:216
 msgid "Are you sure you want to delete this page with all it's content?"
 msgstr ""
+"Da li ste sigurni da želite da obrišete ovu stranicu sa celokupnim sadržajem?"
 
 #: view/page_tree.php:225 view/page_tree.php:262 view/page_tree.php:513
 msgid "Cancel"
-msgstr ""
+msgstr "Otkaži"
 
 #: view/page_tree.php:228
 msgid "Delete"
-msgstr ""
+msgstr "Obriši"
 
 #: view/page_tree.php:252
 msgid ""
 "Are you sure you want to publish this page so it becomes visible to your "
 "visitors?"
 msgstr ""
+"Jeste li sigurni da želite da objavite ovu stranicu i da je vaši posetioci "
+"vide?"
 
 #: view/page_tree.php:266
 msgid "Publish"
-msgstr ""
+msgstr "Objavi"
 
 #: view/page_tree.php:279
 msgid ""
@@ -241,15 +240,26 @@ msgid ""
 "longer than 70 characters.<br /><br />Example:<br /><br />Swifty Page "
 "Manager - easily create a page tree in Wordpress"
 msgstr ""
+"Naziv stranice je tekst prikazan na tabulatorima pretraživača.<br />Takođe, "
+"to je kratki tekst prikazan u plavom polju pretraživača, kao što je Google."
+"<br /> Zato je važno da sadrži najvažnije ključne reči o kojima govori "
+"stranica.<br />Sve to navedite na početku teksta.<br /> To je jedan od "
+"mnogih načina koji vam pomažu da lako dođete do bolje rangirane pozicije "
+"prilikom pretraživanja. <br /> Tekst ne treba da bude duži od 70 karaktera. "
+"<br /><br /> <br /><br />Primer:<br /><br />Swifty Page Manager - lako "
+"kreira drvo stranice u Wordpress-u."
 
 #: view/page_tree.php:294
-#, php-format
 msgid ""
 "This is the link to your page. It is important that the name of the page is "
 "the main keyword of that page<br />or the name of the product or service "
 "that you offer on that page. Preferably right behind the domain name.<br /"
 "><br />Example:<br><br />%s/<b>keyword</b><br />%s/<b>product-or-service</b>"
 msgstr ""
+"Ovo je link za vašu stranicu. Važno je da naziv stranice bude glavna ključna "
+"reč te stranice<br />ili naziv proizvoda, odnosno usluge koju nudite na "
+"stranici. Najbolje, odmah iza naziva domena. <br /><br />Primer:<br><br />%s/"
+"<b>ključna reč</b><br />%s/<b>proizvod-ili-usluga</b>"
 
 #: view/page_tree.php:306
 msgid ""
@@ -258,83 +268,88 @@ msgid ""
 "you can see that page when you are logged in and it is not shown in the site "
 "menu."
 msgstr ""
+"Status <b>Uživo</b> znači da svi na svetu vide tu stranicu i da je prikazana "
+"na meniju vašeg site-a. <br />Status <b>Skica</b> znači da samo vi vidite tu "
+"stranicu kad ste prijavljeni, kao i da se ta stranica ne prikazuje na meniju "
+"stranice."
 
 #: view/page_tree.php:329
 msgid "Text in menu"
-msgstr ""
+msgstr "Tekst u meniju"
 
 #: view/page_tree.php:333 view/page_tree.php:348
 msgid "Title"
-msgstr ""
+msgstr "Naslov"
 
 #: view/page_tree.php:360
 msgid "Position"
-msgstr ""
+msgstr "Pozicioniranje"
 
 #: view/page_tree.php:366
 msgid "After"
-msgstr ""
+msgstr "Posle"
 
 #: view/page_tree.php:372
 msgid "As sub page of"
-msgstr ""
+msgstr "Kao substranica od"
 
 #: view/page_tree.php:380
 msgid "More"
-msgstr ""
+msgstr "Više"
 
 #: view/page_tree.php:384
 msgid "Url"
-msgstr ""
+msgstr "Url"
 
 #: view/page_tree.php:394
 msgid "In menu"
-msgstr ""
+msgstr "U meniju"
 
 #: view/page_tree.php:401 view/page_tree.php:461
 msgid "Show"
-msgstr ""
+msgstr "Prikaži"
 
 #: view/page_tree.php:408 view/page_tree.php:468 view/page_tree.php:496
 msgid "Hide"
-msgstr ""
+msgstr "Sakrij"
 
 #: view/page_tree.php:416
+#: lib/swifty_plugin/php/lib/swifty_class-tgm-plugin-activation.php:1420
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: view/page_tree.php:430
 msgid "Live"
-msgstr ""
+msgstr "Uživo"
 
 #: view/page_tree.php:436
 msgid "Template"
-msgstr ""
+msgstr "Šablon"
 
 #: view/page_tree.php:440
 msgid "Default template"
-msgstr ""
+msgstr "Podrazumevani šablon"
 
 #: view/page_tree.php:454
 msgid "Header"
-msgstr ""
+msgstr "Zaglavlje"
 
 #: view/page_tree.php:475
 msgid "Sidebar"
-msgstr ""
+msgstr "Bočna traka sa menijem"
 
 #: view/page_tree.php:482
 msgid "Left"
-msgstr ""
+msgstr "Levo"
 
 #: view/page_tree.php:489
 msgid "Right"
-msgstr ""
+msgstr "Desno"
 
 #: view/page_tree.php:503
 msgid "Less"
-msgstr ""
+msgstr "Manje"
 
 #: view/page_tree.php:517
 msgid "Save"
-msgstr ""
+msgstr "Sačuvaj"
