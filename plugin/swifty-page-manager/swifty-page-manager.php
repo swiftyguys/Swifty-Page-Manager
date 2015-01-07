@@ -38,13 +38,15 @@ class SwiftyPageManager
             require_once plugin_dir_path( __FILE__ ) . 'lib/swifty_plugin/lib_swifty_plugin_view.php';
         }
 
-        $this->is_swifty       = LibSwiftyPluginView::is_ss_mode();
+        $this->is_swifty = LibSwiftyPluginView::is_ss_mode();
 
         // Actions for visitors viewing the site
         if ( $this->is_swifty ) {
-            add_filter( 'page_link',     array( $this, 'page_link' ), 10, 2 );
-            add_action( 'parse_request', array( $this, 'parse_request' ) );
-            add_filter( 'wp_title',      array( $this, 'seo_wp_title' ), 10, 2 );
+            add_filter( 'page_link',         array( $this, 'page_link' ), 10, 2 );
+            add_action( 'parse_request',     array( $this, 'parse_request' ) );
+            add_filter( 'wp_title',          array( $this, 'seo_wp_title' ), 10, 2 );
+            add_filter( 'admin_footer_text', array( $this, 'empty_footer_text' ) );
+            add_filter( 'update_footer',     array( $this, 'empty_footer_text' ), 999 );
         }
 
         // Actions for admins, warning: is_admin is not a security check
@@ -56,6 +58,10 @@ class SwiftyPageManager
         // Swifty Probe Module include (used for testing and gamification)
         add_action( 'admin_enqueue_scripts', array( $this, 'add_module_swifty_probe' ) );
         // @endif
+    }
+
+    public function empty_footer_text() {
+        return '';
     }
 
     /**
@@ -322,8 +328,6 @@ class SwiftyPageManager
                 require $this->plugin_dir . '/view/swifty_admin_head.php';
             }
         }
-
-
     }
 
     /**
