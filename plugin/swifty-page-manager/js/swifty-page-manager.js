@@ -171,7 +171,7 @@ var SPM = (function( $, document ) {
 
                     break;
                 case 'edit':
-                    window.location = $li.data( 'editlink' );
+                    window.location = php_data.is_swifty_mode ? $li.data( 'swifty_edit_url' ) : $li.data( 'editlink' );
 
                     break;
                 case 'view':
@@ -189,15 +189,17 @@ var SPM = (function( $, document ) {
 
         $( document ).on( 'click', '.spm_back_button', function( /*ev*/ ) {
             // in worst case fallback to main page
-            var back_location = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/';
+            var backLocation = window.location.protocol + '//' +
+                               window.location.hostname + ':' +
+                               window.location.port + '/';
 
-            if( typeof(Storage) !== "undefined" ) {
-                if( sessionStorage.spm_back_location ) {
-                    back_location = sessionStorage.spm_back_location;
+            if ( typeof Storage !== 'undefined' ) {
+                if ( sessionStorage.back_location ) {
+                    backLocation = sessionStorage.back_location;
                 }
             }
 
-            window.location = back_location;
+            window.location = backLocation;
         });
 
         $( document ).on( 'click', '.spm-do-button', function( /*ev*/ ) {
