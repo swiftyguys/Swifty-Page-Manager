@@ -320,9 +320,13 @@ class SwiftyPageManager
 
         $currentScreen = get_current_screen();
 
-        if ( 'pages_page_page-tree' === $currentScreen->base ) {
-            /** @noinspection PhpIncludeInspection */
-            require $this->plugin_dir . '/view/admin_head.php';
+        if ( 'pages_page_page-tree' === $currentScreen->base ||
+           ( 'edit' === $currentScreen->base && 'page' === $currentScreen->post_type && 'trash' === get_query_var( 'post_status' ) )
+        ) {
+            if ( 'pages_page_page-tree' === $currentScreen->base ) {
+                /** @noinspection PhpIncludeInspection */
+                require $this->plugin_dir . '/view/admin_head.php';
+            }
 
             if( $this->is_swifty ) {
                 require $this->plugin_dir . '/view/swifty_admin_head.php';
@@ -370,7 +374,7 @@ class SwiftyPageManager
 
         wp_enqueue_style( 'jquery-alerts',  $this->plugin_dir_url . '/css/jquery.alerts.css', false,
                           $this->_plugin_version );
-        wp_enqueue_style( 'spm-font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css',
+        wp_enqueue_style( 'spm-font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css',
                           false, $this->_plugin_version );
 
         $oLocale = array(
