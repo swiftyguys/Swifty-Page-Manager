@@ -38,13 +38,15 @@ class SwiftyPageManager
             require_once plugin_dir_path( __FILE__ ) . 'lib/swifty_plugin/lib_swifty_plugin_view.php';
         }
 
-        $this->is_swifty       = LibSwiftyPluginView::is_ss_mode();
+        $this->is_swifty = LibSwiftyPluginView::is_ss_mode();
 
         // Actions for visitors viewing the site
         if ( $this->is_swifty ) {
-            add_filter( 'page_link',     array( $this, 'page_link' ), 10, 2 );
-            add_action( 'parse_request', array( $this, 'parse_request' ) );
-            add_filter( 'wp_title',      array( $this, 'seo_wp_title' ), 10, 2 );
+            add_filter( 'page_link',         array( $this, 'page_link' ), 10, 2 );
+            add_action( 'parse_request',     array( $this, 'parse_request' ) );
+            add_filter( 'wp_title',          array( $this, 'seo_wp_title' ), 10, 2 );
+            add_filter( 'admin_footer_text', array( $this, 'empty_footer_text' ) );
+            add_filter( 'update_footer',     array( $this, 'empty_footer_text' ), 999 );
         }
 
         // Actions for admins, warning: is_admin is not a security check
@@ -56,6 +58,10 @@ class SwiftyPageManager
         // Swifty Probe Module include (used for testing and gamification)
         add_action( 'admin_enqueue_scripts', array( $this, 'add_module_swifty_probe' ) );
         // @endif
+    }
+
+    public function empty_footer_text() {
+        return '';
     }
 
     /**
@@ -314,16 +320,18 @@ class SwiftyPageManager
 
         $currentScreen = get_current_screen();
 
-        if ( 'pages_page_page-tree' === $currentScreen->base ) {
-            /** @noinspection PhpIncludeInspection */
-            require $this->plugin_dir . '/view/admin_head.php';
+        if ( 'pages_page_page-tree' === $currentScreen->base ||
+           ( 'edit' === $currentScreen->base && 'page' === $currentScreen->post_type && 'trash' === get_query_var( 'post_status' ) )
+        ) {
+            if ( 'pages_page_page-tree' === $currentScreen->base ) {
+                /** @noinspection PhpIncludeInspection */
+                require $this->plugin_dir . '/view/admin_head.php';
+            }
 
             if( $this->is_swifty ) {
                 require $this->plugin_dir . '/view/swifty_admin_head.php';
             }
         }
-
-
     }
 
     /**
@@ -366,7 +374,7 @@ class SwiftyPageManager
 
         wp_enqueue_style( 'jquery-alerts',  $this->plugin_dir_url . '/css/jquery.alerts.css', false,
                           $this->_plugin_version );
-        wp_enqueue_style( 'spm-font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css',
+        wp_enqueue_style( 'spm-font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css',
                           false, $this->_plugin_version );
 
         $oLocale = array(
@@ -384,6 +392,9 @@ class SwiftyPageManager
         );
 
         wp_localize_script( 'spm', 'spm_l10n', $oLocale );
+        wp_localize_script( 'spm', 'php_data', array(
+            'is_swifty_mode' => LibSwiftyPluginView::is_ss_mode()
+        ) );
 
         /** @noinspection PhpIncludeInspection */
         require( $this->plugin_dir . '/view/page_tree.php' );
@@ -1076,6 +1087,7 @@ class SwiftyPageManager
 
         $page_json_data['metadata']['rel']             = $rel;
         $page_json_data['metadata']['permalink']       = htmlspecialchars_decode( get_permalink( $one_page->ID ) );
+        $page_json_data['metadata']['swifty_edit_url'] = add_query_arg( 'swcreator_edit', 'true', htmlspecialchars_decode( get_permalink( $one_page->ID ) ) );
         $page_json_data['metadata']['editlink']        = htmlspecialchars_decode( $editLink );
         $page_json_data['metadata']['modified_time']   = $post_modified_time;
         $page_json_data['metadata']['modified_author'] = $post_author;

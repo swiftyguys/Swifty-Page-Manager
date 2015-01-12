@@ -135,7 +135,7 @@ $post_type_object = get_post_type_object( $this->_post_type );
 
                 <li class="<?php echo ( !$post_count_trash ) ? 'spm-hidden' : '' ?>">
                     <a class="spm-status-trash"
-                       href="<?php esc_attr( admin_url() . 'edit.php?post_status=trash&post_type=page' ); ?>"
+                       href="<?php echo esc_attr( admin_url( 'edit.php?post_status=trash&post_type=page' ) ); ?>"
                        data-spm-status="trash">
                         <?php _e('Trash', 'swifty-page-manager') ?>
                         <span class="count">(<?php esc_html_e( $post_count_trash ); ?>)</span>
