@@ -392,7 +392,7 @@ class SwiftyPageManager
         );
 
         wp_localize_script( 'spm', 'spm_l10n', $oLocale );
-        wp_localize_script( 'spm', 'php_data', array(
+        wp_localize_script( 'spm', 'spm_data', array(
             'is_swifty_mode' => LibSwiftyPluginView::is_ss_mode()
         ) );
 

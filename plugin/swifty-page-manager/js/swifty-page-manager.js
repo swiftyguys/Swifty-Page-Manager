@@ -171,7 +171,7 @@ var SPM = (function( $, document ) {
 
                     break;
                 case 'edit':
-                    window.location = php_data.is_swifty_mode ? $li.data( 'swifty_edit_url' ) : $li.data( 'editlink' );
+                    window.location = spm_data.is_swifty_mode ? $li.data( 'swifty_edit_url' ) : $li.data( 'editlink' );
 
                     break;
                 case 'view':
