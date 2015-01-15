@@ -19,6 +19,27 @@ var SPM = (function( $, document ) {
 
         this.getStatusCounts();
         this.startListeners();
+
+        if ( spm_data.is_swifty_mode ) {
+            this.createTrashButton();
+        }
+    };
+
+    spm.createTrashButton = function() {
+        var $trashLink = $( '.spm-status-trash:visible' );
+        var $trashLinkLi, $lastLi;
+
+        if ( $trashLink.length ) {
+            $trashLinkLi = $trashLink.parent();
+            $lastLi = $( 'ul.spm-status-links' ).find( '> li:last' );
+
+            if ( $trashLinkLi.length && $lastLi.length ) {
+                $lastLi.find( 'form' ).append( $trashLink );
+                $trashLink.addClass( 'button button-small' ).css( 'margin', '0 0 0 20px' );
+                $trashLink.find( 'span' ).remove();
+                $trashLinkLi.remove();
+            }
+        }
     };
 
     spm.startListeners = function() {
@@ -599,6 +620,7 @@ var SPM = (function( $, document ) {
     };
 
     spm.updateStatusCount = function() {
+        var self = this;
         var dfd = $.Deferred();
 
         $.ajax({
@@ -623,6 +645,10 @@ var SPM = (function( $, document ) {
 
                 if ( $li.hasClass( 'spm-hidden' ) && statusCount === '1' && statusName !== 'any' ) {
                     $li.removeClass( 'spm-hidden' );
+
+                    if ( statusName === 'trash' && spm_data.is_swifty_mode ) {
+                        self.createTrashButton();
+                    }
                 }
 
                 if ( $statusLink.hasClass( 'current' ) &&
