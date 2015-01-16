@@ -302,6 +302,7 @@ li.spm-show-page-in-menu-no > a.spm-page-tree-element > ins {
     -moz-border-radius: 5px;
     border-radius: 5px;
     font-size: 11px;
+    z-index: 1000;
 }
 
 .button-secondary.spm-tooltip-button {
