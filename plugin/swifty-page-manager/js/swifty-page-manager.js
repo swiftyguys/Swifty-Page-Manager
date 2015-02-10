@@ -452,6 +452,7 @@ var SPM = (function( $, document ) {
     spm.preparePageActionButtons = function( $li ) {
         var $a = $li.find( '> a' );
         var isDraft = $a.find( '.post_type_draft' ).length;
+        var isDraftContent = $a.find( '.post_type_published_draft_content' ).length;
         var $tree = $li.closest( '.spm-tree-container' );
         var $tmpl = this.getPageActionButtonsTmpl();
 
@@ -473,7 +474,7 @@ var SPM = (function( $, document ) {
         $tmpl.find( 'span[data-spm-action=publish]' )
             .toggleClass( 'button-primary-disabled', ! $li.hasClass( 'spm-can-publish' ) );
 
-        if ( !isDraft ) {
+        if ( !isDraft && !isDraftContent ) {
             $tmpl.find( 'span[data-spm-action=publish]' ).hide();
         }
 
