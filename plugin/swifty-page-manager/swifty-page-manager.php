@@ -348,7 +348,21 @@ class SwiftyPageManager
                           'page-tree',
                           array( $this, 'view_page_tree' ) );
 
-        LibSwiftyPlugin::get_instance()->admin_add_swifty_menu( __('Swifty Page Manager', 'swifty-page-manager'), $this->swifty_admin_page, array( &$this, 'admin_spm_menu_page' ), true );
+        add_filter( 'swifty_admin_page_links_' . $this->swifty_admin_page, array( $this, 'hook_swifty_admin_page_links' ) );
+
+        LibSwiftyPlugin::get_instance()->admin_add_swifty_menu( __('Swifty Page Manager', 'swifty-page-manager'), __('Pages', 'swifty-page-manager'), $this->swifty_admin_page, array( &$this, 'admin_spm_menu_page' ), true );
+    }
+
+    /**
+     * Called via WP Action 'admin_menu' if can_edit_pages
+     *
+     * Add links to admin menu
+     */
+    public function hook_swifty_admin_page_links( $settings_links )
+    {
+        $settings_links['general'] = array( 'title' => 'General', 'method' => array( &$this, 'spm_tab_options_content' ) );
+
+        return $settings_links;
     }
 
     /**
@@ -403,12 +417,7 @@ class SwiftyPageManager
     // Our plugin admin menu page
     function admin_spm_menu_page()
     {
-        $admin_page_title = __( 'Swifty Page Manager', 'swifty-page-manager' );
-        $admin_page = $this->swifty_admin_page;
-        $tab_general_title = __( 'General', 'swifty-page-manager' );
-        $tab_general_method = array( $this, 'spm_tab_options_content' );
-
-        LibSwiftyPlugin::get_instance()->admin_options_menu_page( $admin_page_title, $admin_page, $tab_general_title, $tab_general_method );
+        LibSwiftyPlugin::get_instance()->admin_options_menu_page( $this->swifty_admin_page );
     }
 
     function spm_tab_options_content()
