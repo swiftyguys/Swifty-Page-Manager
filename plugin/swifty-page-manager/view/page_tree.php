@@ -195,7 +195,7 @@ $post_type_object = get_post_type_object( $this->_post_type );
             </span>
             <span class="button button-primary spm-button spm-page-button" data-spm-action="publish"
                   title="<?php esc_attr_e( 'Publish page', 'swifty-page-manager' ); ?>">
-                <span class="dashicons spm-icon dashicons-upload"></span>
+                <span class="spm_swifty_button">&#xe602;</span>
             </span>
         </span>
 
