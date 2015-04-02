@@ -401,7 +401,7 @@ class SwiftyPageManager
             'password_protected_page' => __( 'Password protected page', 'swifty-page-manager' ),
             'no_pages_found'          => __( 'No pages found.', 'swifty-page-manager' ),
             'hidden_page'             => __( 'Hidden', 'swifty-page-manager' ),
-            'no_sub_page_when_draft'  => __( "Sorry, can't create a sub page to a page with status \"draft\".", 'swifty-page-manager' ),
+            'no_sub_page_when_draft'  => __( "Unfortunately you can not create a sub page under a page with status 'Draft' because the draft page has not yet been published and thus technically does not exist yet. For now, just create it as a regular page and later you can drag and drop it to become a sub page.", 'swifty-page-manager' ),
             'status_published_draft_content_ucase' => ucfirst( __( 'published - draft content', 'swifty-page-manager' ) )
         );
 
