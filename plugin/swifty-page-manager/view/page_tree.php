@@ -168,6 +168,14 @@ $post_type_object = get_post_type_object( $this->_post_type );
                 <?php _e( 'Loading tree', 'swifty-page-manager' ); ?>
             </div>
 
+            <!-- SPM template no pages -->
+            <div class="spm-no-pages spm-hidden">
+            <span class="button button-primary spm-button spm-do-button spm-no-posts-add" data-spm-action="add"
+                  title="<?php esc_attr_e( 'Add page', 'swifty-page-manager' ) ?>">
+                <span class="dashicons spm-icon dashicons-plus"></span>
+            </span>
+            </div>
+
             <div style="clear: both;"></div>
         </div>
 
@@ -529,13 +537,5 @@ $post_type_object = get_post_type_object( $this->_post_type );
             </form>
         </span>
         <?php wp_nonce_field( 'inlineeditnonce', '_inline_edit' ) ?>
-
-        <!-- SPM template no pages -->
-        <div class="spm-no-pages spm-hidden">
-            <span class="button button-primary spm-button spm-do-button spm-no-posts-add" data-spm-action="add"
-                  title="<?php esc_attr_e( 'Add page', 'swifty-page-manager' ) ?>">
-                <span class="dashicons spm-icon dashicons-plus"></span>
-            </span>
-        </div>
     </div>
 </div>
