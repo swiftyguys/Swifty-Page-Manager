@@ -1229,10 +1229,10 @@ class SwiftyPageManager
                         'ID'         => $one_post->ID,
                         'menu_order' => $one_post->menu_order + 2
                     );
-                    $return_id = wp_update_post( $post_update );
+                    $return_id = wp_update_post( $post_update, true );
 
-                    if ( 0 === $return_id ) {
-                        die( 'Error: could not update post with id ' . $post_update->ID . '<br>Technical details: ' . print_r( $post_update ) );
+                    if (is_wp_error($return_id)) {
+                        die( 'Error: could not update post with id ' . $post_update['ID'] . '<br>Technical details: ' . print_r( $return_id, true ) );
                     }
                 }
 

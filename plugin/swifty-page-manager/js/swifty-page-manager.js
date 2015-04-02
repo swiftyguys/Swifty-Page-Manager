@@ -199,6 +199,10 @@ var SPM = (function( $, document ) {
                     window.location = $li.data( 'permalink' );
 
                     break;
+                case 'draginfo':
+                    jAlert( 'Drag and drop this page to change the order of the pages.' );
+
+                    break;
                 default:
                     $( '.spm-tmpl-container:visible' ).remove();
 
