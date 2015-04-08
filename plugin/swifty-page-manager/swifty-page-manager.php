@@ -1062,7 +1062,15 @@ class SwiftyPageManager
         }
 
         if ( current_user_can( $post_type_object->cap->delete_post, $page_id ) ) {
-            $arr_page_css_styles[] = 'spm-can-delete';
+            if( $one_page->post_parent ) {
+                $arr_page_css_styles[] = 'spm-can-delete';
+            } else {
+                $page_count = count( get_pages( 'parent=0' ) );
+                // we are not allowed to remove the last published page
+                if( ( $page_count > 1 ) || ( $one_page->post_status !== 'publish' ) ) {
+                    $arr_page_css_styles[] = 'spm-can-delete';
+                }
+            }
         }
 
         if ( $this->is_swifty ) {
