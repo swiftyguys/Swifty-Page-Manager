@@ -200,7 +200,6 @@ var SPM = (function( $, document ) {
 
                     break;
                 case 'draginfo':
-                    jAlert( 'Drag and drop this page to change the order of the pages.' );
 
                     break;
                 default:

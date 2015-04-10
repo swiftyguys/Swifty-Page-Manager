@@ -206,7 +206,7 @@ $post_type_object = get_post_type_object( $this->_post_type );
                 <span class="spm_swifty_button">&#xe602;</span>
             </span>
             <span class="button button-primary spm-button spm-page-button" data-spm-action="draginfo"
-                  title="<?php esc_attr_e( 'Drag and drop', 'swifty-page-manager' ); ?>">
+                  title="<?php esc_attr_e( 'Drag and drop this page to change the order of the pages', 'swifty-page-manager' ); ?>">
                 <span class="spm_swifty_button">&#xe013;</span>
             </span>
         </span>
