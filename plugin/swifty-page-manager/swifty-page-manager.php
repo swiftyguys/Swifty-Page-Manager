@@ -8,6 +8,8 @@ Author URI: http://swiftylife.com/plugins/
 Plugin URI: http://swiftylife.com/plugins/swifty-page-manager/
 */
 
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 class SwiftyPageManager
 {
     protected $plugin_file;

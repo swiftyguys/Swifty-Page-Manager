@@ -3,6 +3,9 @@
  * Variables that need to be set:
  * @var SwiftyPageManager $this
  */
+
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 $post_type_object = get_post_type_object( $this->_post_type );
 ?>
 
