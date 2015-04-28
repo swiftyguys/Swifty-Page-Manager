@@ -165,9 +165,6 @@ class SwiftyPageManager
             wp_die( __( 'You do not have sufficient permissions to access this page. #314' ) );
         }
 
-        /** @var wpdb $wpdb - Wordpress Database */
-        global $wpdb;
-
         // Check it's not an auto save routine
         if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
             return;
@@ -177,9 +174,11 @@ class SwiftyPageManager
               $post->post_type   === 'page'   &&
               $post->post_status === '__TMP__'
         ) {
-            $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->posts SET post_status = '%s' WHERE id = %d",
-                                          $_POST['post_status'],
-                                          $post_id ) );
+            $post_data = array(
+                'ID'           => $post_id,
+                'post_status'   => $_POST['post_status'],
+            );
+            wp_update_post( $post_data );
         }
     }
 
@@ -187,6 +186,7 @@ class SwiftyPageManager
      * Called via WP Action 'parse_request' if is_swifty
      *
      * Action function to make our overridden URLs work by changing the query params.
+     * the meta data "spm_url" contains the wanted url (without domain)
      *
      * @param wp $wp - WordPress object
      */
@@ -493,8 +493,6 @@ class SwiftyPageManager
          the reference node in the move,
          the new position relative to the reference node (one of "before", "after" or "inside")
         */
-        /** @var wpdb $wpdb - Wordpress Database */
-        global $wpdb;
 
         $node_id     = $_POST['node_id']; // the node that was moved
         $ref_node_id = $_POST['ref_node_id'];
@@ -555,9 +553,6 @@ class SwiftyPageManager
         if ( ! current_user_can( 'edit_pages' ) ) {
             wp_die( __( 'You do not have sufficient permissions to access this page. #588' ) );
         }
-
-        /** @var wpdb $wpdb - Wordpress Database */
-        global $wpdb;
 
         $post_id     = ! empty( $_POST['post_ID'] )    ? intval( $_POST['post_ID'] )  : null;
         $post_title  = ! empty( $_POST['post_title'] ) ? trim( $_POST['post_title'] ) : '';
