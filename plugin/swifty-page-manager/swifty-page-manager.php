@@ -1101,7 +1101,7 @@ class SwiftyPageManager
 
         $page_json_data['metadata']['rel']             = $rel;
         $page_json_data['metadata']['permalink']       = htmlspecialchars_decode( get_permalink( $one_page->ID ) );
-        $page_json_data['metadata']['swifty_edit_url'] = add_query_arg( 'swcreator_edit', 'true', htmlspecialchars_decode( get_permalink( $one_page->ID ) ) );
+        $page_json_data['metadata']['swifty_edit_url'] = add_query_arg( 'swcreator_edit', 'main', htmlspecialchars_decode( get_permalink( $one_page->ID ) ) );
         $page_json_data['metadata']['editlink']        = htmlspecialchars_decode( $editLink );
         $page_json_data['metadata']['modified_time']   = $post_modified_time;
         $page_json_data['metadata']['modified_author'] = $post_author;
