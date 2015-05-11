@@ -76,6 +76,7 @@ $post_type_object = get_post_type_object( $this->_post_type );
             <input type="hidden" name="spm_meta_post_type" value="<?php echo esc_attr( $this->_post_type ); ?>" />
 
             <ul class="spm-status-links spm-status-links-select-view">
+                <?php if( !$this->is_swifty ) : ?>
                 <li>
                     <a class="spm-status-any
                               <?php echo esc_attr( ('any' === $this->get_post_status()) ? 'current' : '' ); ?>"
@@ -144,6 +145,7 @@ $post_type_object = get_post_type_object( $this->_post_type );
                         <span class="count">(<?php esc_html_e( $post_count_trash ); ?>)</span>
                     </a> |
                 </li>
+                <?php endif; ?>
 
                 <li><a href="#" class="spm-open-all"><?php _e( 'Expand', 'swifty-page-manager' ); ?></a> |</li>
                 <li><a href="#" class="spm-close-all"><?php _e( 'Collapse', 'swifty-page-manager' ); ?></a></li>
