@@ -957,26 +957,30 @@ class SwiftyPageManager
             foreach ( $keys as $key ) {
                 $page = $pages[ $key ];
 
-                if ( isset( $this->_by_page_id[ $page->ID ] ) ) {
-                    $branch = &$this->_by_page_id[ $page->ID ];
-                    $branch->page = $page;
-
-                    unset( $branch );
+                if( $this->is_swifty && apply_filters( 'swifty_is_theme_area_page', false, $page->guid ) ) {
                     unset( $pages[ $key ] );
+                } else {
+                    if( isset( $this->_by_page_id[ $page->ID ] ) ) {
+                        $branch = &$this->_by_page_id[ $page->ID ];
+                        $branch->page = $page;
 
-                    $added = true;
-                } else if ( isset( $this->_by_page_id[ $page->post_parent ] ) ) {
-                    $parent_branch = &$this->_by_page_id[ $page->post_parent ];
-                    $new_branch = new stdClass();
-                    $new_branch->page = $page;
-                    $new_branch->children = array();
-                    $this->_by_page_id[ $new_branch->page->ID ] = &$new_branch;
-                    $parent_branch->children[] = &$new_branch; // Warning, does not sort children correctly
+                        unset( $branch );
+                        unset( $pages[ $key ] );
 
-                    unset( $new_branch );
-                    unset( $pages[ $key ] );
+                        $added = true;
+                    } else if( isset( $this->_by_page_id[ $page->post_parent ] ) ) {
+                        $parent_branch = &$this->_by_page_id[ $page->post_parent ];
+                        $new_branch = new stdClass();
+                        $new_branch->page = $page;
+                        $new_branch->children = array();
+                        $this->_by_page_id[ $new_branch->page->ID ] = &$new_branch;
+                        $parent_branch->children[ ] = &$new_branch; // Warning, does not sort children correctly
 
-                    $added = true;
+                        unset( $new_branch );
+                        unset( $pages[ $key ] );
+
+                        $added = true;
+                    }
                 }
             }
         }
