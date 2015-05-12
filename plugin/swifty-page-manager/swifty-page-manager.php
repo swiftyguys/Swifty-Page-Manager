@@ -112,6 +112,17 @@ class SwiftyPageManager
         }
     }
 
+    public function get_admin_page_title()
+    {
+        $swifty_SS2_hosting_name = apply_filters( 'swifty_SS2_hosting_name', false );
+        if( $swifty_SS2_hosting_name ) {
+            $admin_page_title = __( 'SwiftySite Pages', 'swifty' );
+        } else {
+            $admin_page_title = __( 'Swifty Page Manager', 'swifty' );
+        }
+        return $admin_page_title;
+    }
+
     /**
     /**
      * @param string $title
@@ -344,15 +355,15 @@ class SwiftyPageManager
     public function admin_menu()
     {
         add_submenu_page( 'edit.php?post_type=' . $this->_post_type,
-                          __( 'Swifty Page Manager', 'swifty-page-manager' ),
-                          __( 'Swifty Page Manager', 'swifty-page-manager' ),
+                          $this->get_admin_page_title(),
+                          $this->get_admin_page_title(),
                           'edit_pages',
                           'page-tree',
                           array( $this, 'view_page_tree' ) );
 
         add_filter( 'swifty_admin_page_links_' . $this->swifty_admin_page, array( $this, 'hook_swifty_admin_page_links' ) );
 
-        LibSwiftyPlugin::get_instance()->admin_add_swifty_menu( __('Swifty Page Manager', 'swifty-page-manager'), __('Pages', 'swifty-page-manager'), $this->swifty_admin_page, array( &$this, 'admin_spm_menu_page' ), true );
+        LibSwiftyPlugin::get_instance()->admin_add_swifty_menu( $this->get_admin_page_title(), __('Pages', 'swifty-page-manager'), $this->swifty_admin_page, array( &$this, 'admin_spm_menu_page' ), true );
     }
 
     /**

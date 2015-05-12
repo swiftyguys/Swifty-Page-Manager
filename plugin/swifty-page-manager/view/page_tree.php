@@ -18,7 +18,7 @@ $post_type_object = get_post_type_object( $this->_post_type );
         <div class="spm_panel_title_pos">
             <div class="spm_title">
 <?php endif ?>
-                <h2><?php _ex( 'Swifty Page Manager', 'headline of page with tree', 'swifty-page-manager' ); ?></h2>
+                <h2><?php echo $this->get_admin_page_title(); ?></h2>
 <?php if( $this->is_swifty ) : ?>
             </div>
         </div>
