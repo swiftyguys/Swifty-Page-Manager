@@ -367,13 +367,13 @@ class SwiftyPageManager
     }
 
     /**
-     * Called via WP Action 'admin_menu' if can_edit_pages
+     * Called via admin_menu hook
      *
      * Add links to admin menu
      */
     public function hook_swifty_admin_page_links( $settings_links )
     {
-        $settings_links['general'] = array( 'title' => 'General', 'method' => array( &$this, 'spm_tab_options_content' ) );
+        $settings_links['general'] = array( 'title' => __( 'General', 'swifty-page-manager' ), 'method' => array( &$this, 'spm_tab_options_content' ) );
 
         return $settings_links;
     }
