@@ -19,6 +19,27 @@ var SPM = (function( $, document ) {
 
         this.getStatusCounts();
         this.startListeners();
+
+        if ( spm_data.is_swifty_mode ) {
+            this.createTrashButton();
+        }
+    };
+
+    spm.createTrashButton = function() {
+        var $trashLink = $( '.spm-status-trash:visible' );
+        var $trashLinkLi, $lastLi;
+
+        if ( $trashLink.length ) {
+            $trashLinkLi = $trashLink.parent();
+            $lastLi = $( 'ul.spm-status-links' ).find( '> li:last' );
+
+            if ( $trashLinkLi.length && $lastLi.length ) {
+                $lastLi.find( 'form' ).append( $trashLink );
+                $trashLink.addClass( 'button button-small' ).css( 'margin', '0 0 0 20px' );
+                $trashLink.find( 'span' ).remove();
+                $trashLinkLi.remove();
+            }
+        }
     };
 
     spm.startListeners = function() {
@@ -171,11 +192,14 @@ var SPM = (function( $, document ) {
 
                     break;
                 case 'edit':
-                    window.location = php_data.is_swifty_mode ? $li.data( 'swifty_edit_url' ) : $li.data( 'editlink' );
+                    window.location = spm_data.is_swifty_mode ? $li.data( 'swifty_edit_url' ) : $li.data( 'editlink' );
 
                     break;
                 case 'view':
                     window.location = $li.data( 'permalink' );
+
+                    break;
+                case 'draginfo':
 
                     break;
                 default:
@@ -431,6 +455,7 @@ var SPM = (function( $, document ) {
     spm.preparePageActionButtons = function( $li ) {
         var $a = $li.find( '> a' );
         var isDraft = $a.find( '.post_type_draft' ).length;
+        var isDraftContent = $a.find( '.post_type_published_draft_content' ).length;
         var $tree = $li.closest( '.spm-tree-container' );
         var $tmpl = this.getPageActionButtonsTmpl();
 
@@ -452,7 +477,7 @@ var SPM = (function( $, document ) {
         $tmpl.find( 'span[data-spm-action=publish]' )
             .toggleClass( 'button-primary-disabled', ! $li.hasClass( 'spm-can-publish' ) );
 
-        if ( !isDraft ) {
+        if ( !isDraft && !isDraftContent ) {
             $tmpl.find( 'span[data-spm-action=publish]' ).hide();
         }
 
@@ -599,6 +624,7 @@ var SPM = (function( $, document ) {
     };
 
     spm.updateStatusCount = function() {
+        var self = this;
         var dfd = $.Deferred();
 
         $.ajax({
@@ -623,6 +649,10 @@ var SPM = (function( $, document ) {
 
                 if ( $li.hasClass( 'spm-hidden' ) && statusCount === '1' && statusName !== 'any' ) {
                     $li.removeClass( 'spm-hidden' );
+
+                    if ( statusName === 'trash' && spm_data.is_swifty_mode ) {
+                        self.createTrashButton();
+                    }
                 }
 
                 if ( $statusLink.hasClass( 'current' ) &&
