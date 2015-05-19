@@ -1,7 +1,7 @@
 <?php
 
 //include 'spm_story.php';
-include '../plugin/swifty-page-manager/lib/swifty_plugin/php/probe/ss_ception.php';
+require '../php/probe/ss_ception.php';
 
 ////////////////////////////////////////
 

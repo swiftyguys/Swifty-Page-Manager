@@ -1,5 +1,4 @@
 plugin/swifty-page-manager/lib/swifty_plugin
-test/tests/_output
 .idea
 *~
 storyplayer.json
