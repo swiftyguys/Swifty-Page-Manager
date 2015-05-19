@@ -3,6 +3,8 @@
  * Hide the wp-admin menus
  */
 
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 $currentScreen = get_current_screen();
 
 ?>

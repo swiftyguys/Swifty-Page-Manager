@@ -302,6 +302,7 @@ li.spm-show-page-in-menu-no > a.spm-page-tree-element > ins {
     -moz-border-radius: 5px;
     border-radius: 5px;
     font-size: 11px;
+    z-index: 1000;
 }
 
 .button-secondary.spm-tooltip-button {
@@ -444,6 +445,13 @@ label.spm-label-disabled {
     background-color: #1b7fba;
     color: white;
     cursor: pointer;
+}
+
+.spm_swifty_button {
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+    font-family: 'swiftysiteui';
 }
 
 .spm_panel_title_container .spm_panel_title_strike {

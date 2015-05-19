@@ -3,6 +3,9 @@
  * Variables that need to be set:
  * @var SwiftyPageManager $this
  */
+
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 $post_type_object = get_post_type_object( $this->_post_type );
 ?>
 
@@ -15,7 +18,7 @@ $post_type_object = get_post_type_object( $this->_post_type );
         <div class="spm_panel_title_pos">
             <div class="spm_title">
 <?php endif ?>
-                <h2><?php _ex( 'Swifty Page Manager', 'headline of page with tree', 'swifty-page-manager' ); ?></h2>
+                <h2><?php echo $this->get_admin_page_title(); ?></h2>
 <?php if( $this->is_swifty ) : ?>
             </div>
         </div>
@@ -73,6 +76,7 @@ $post_type_object = get_post_type_object( $this->_post_type );
             <input type="hidden" name="spm_meta_post_type" value="<?php echo esc_attr( $this->_post_type ); ?>" />
 
             <ul class="spm-status-links spm-status-links-select-view">
+                <?php if( !$this->is_swifty ) : ?>
                 <li>
                     <a class="spm-status-any
                               <?php echo esc_attr( ('any' === $this->get_post_status()) ? 'current' : '' ); ?>"
@@ -141,6 +145,7 @@ $post_type_object = get_post_type_object( $this->_post_type );
                         <span class="count">(<?php esc_html_e( $post_count_trash ); ?>)</span>
                     </a> |
                 </li>
+                <?php endif; ?>
 
                 <li><a href="#" class="spm-open-all"><?php _e( 'Expand', 'swifty-page-manager' ); ?></a> |</li>
                 <li><a href="#" class="spm-close-all"><?php _e( 'Collapse', 'swifty-page-manager' ); ?></a></li>
@@ -166,6 +171,14 @@ $post_type_object = get_post_type_object( $this->_post_type );
 
             <div class="spm-tree-container tree-default">
                 <?php _e( 'Loading tree', 'swifty-page-manager' ); ?>
+            </div>
+
+            <!-- SPM template no pages -->
+            <div class="spm-no-pages spm-hidden">
+            <span class="button button-primary spm-button spm-do-button spm-no-posts-add" data-spm-action="add"
+                  title="<?php esc_attr_e( 'Add page', 'swifty-page-manager' ) ?>">
+                <span class="dashicons spm-icon dashicons-plus"></span>
+            </span>
             </div>
 
             <div style="clear: both;"></div>
@@ -195,7 +208,11 @@ $post_type_object = get_post_type_object( $this->_post_type );
             </span>
             <span class="button button-primary spm-button spm-page-button" data-spm-action="publish"
                   title="<?php esc_attr_e( 'Publish page', 'swifty-page-manager' ); ?>">
-                <span class="dashicons spm-icon dashicons-upload"></span>
+                <span class="spm_swifty_button">&#xe602;</span>
+            </span>
+            <span class="button button-primary spm-button spm-page-button" data-spm-action="draginfo"
+                  title="<?php esc_attr_e( 'Drag and drop this page to change the order of the pages', 'swifty-page-manager' ); ?>">
+                <span class="spm_swifty_button">&#xe013;</span>
             </span>
         </span>
 
@@ -525,13 +542,5 @@ $post_type_object = get_post_type_object( $this->_post_type );
             </form>
         </span>
         <?php wp_nonce_field( 'inlineeditnonce', '_inline_edit' ) ?>
-
-        <!-- SPM template no pages -->
-        <div class="spm-no-pages spm-hidden">
-            <span class="button button-primary spm-button spm-do-button spm-no-posts-add" data-spm-action="add"
-                  title="<?php esc_attr_e( 'Add page', 'swifty-page-manager' ) ?>">
-                <span class="dashicons spm-icon dashicons-plus"></span>
-            </span>
-        </div>
     </div>
 </div>
