@@ -1,22 +1,26 @@
 ( function( $, probe ) {
     probe.SPM = probe.SPM || {};
+    var spm = probe.SPM;
 
-    probe.SPM.CheckRunning = {
-        Start: function( input ) {
-            probe.QueueStory(
+    $.extend( probe.SPM, {
+
+        OpenSPM: function( input ) {
+            return probe.QueueStory(
                 'WP.AdminOpenSubmenu',
                 {
                     'plugin_code': 'pages',
                     'submenu_text': input.plugin_name
-                },
-                'Step2'
+                }
             );
         },
 
-        Step2: function( input ) {
-            $( 'h2:contains("' + input.plugin_name + '")' ).MustExistOnce();
+        CheckRunning: function( input ) {
+            spm.OpenSPM( input ).next( function( input ) {
+                $( 'h2:contains("' + input.plugin_name + '")' ).MustExistOnce();
+            } );
         }
-    };
+
+    } );
 
     probe.SPM.NoPagesExist = {
         messageSel: '.spm-message',
@@ -72,6 +76,9 @@
         titleLabel: 'span:contains("Title")',   // dojh: translation issue -> Title.
         titleEdit: 'input[name="post_title"]',
         saveButton: 'input[value="Save"]',   // dojh: translation issue -> Save.
+        moreButton: 'input[value="More"]',   // dojh: translation issue -> Save.
+        statusLabel: 'span:contains("Title")',   // dojh: translation issue -> Title.
+        dfd_done: false,
 
         Start: function( input ) {
             probe.QueueStory(
@@ -99,53 +106,52 @@
             // Click on the 'Add page' button (+ button)
             $li.find( '.spm-page-button:eq(' + buttonNr + ')' ).MustBeVisible().Click();
 
-            if( input.action === 'add' ) {
-                // Wait for input field with label "Title" to become visible
-                $li.find( this.titleLabel ).WaitForVisible( 'Step4' );
-            } else {
-                input.wait_data = null;
-                $li.find( this.titleEdit ).WaitForVisible( 'Step3a' );
-            }
-        },
-
-        Step3a: function( input ) {
-            var $curPage = $( probe.Utils.getPageSelector( input.page ) );
-            var $li = $curPage.closest( 'li' );
-            var $titleLabel = $li.find( this.titleLabel );
-
-            // wait until a value has bee set in the input box
-            if ( input.wait_data && input.wait_data === input.page ) {
-                $li.find( this.titleLabel ).WaitForVisible( 'Step4' );
-            } else {
-                $titleLabel.WaitForVisible( 'Step3a', 5000, $titleLabel.next( 'span' ).find( 'input' ).val() );
-            }
+            $li.find( this.titleLabel ).WaitForVisible( 'Step4' );
         },
 
         Step4: function( input ) {
             var $curPage = $( probe.Utils.getPageSelector( input.page ) );
             var $li = $curPage.closest( 'li' );
-            var $titleLabel = $li.find( this.titleLabel );
-            var fields = probe.Utils.getFieldProps( input.values );
+            var $more = $li.find( this.moreButton );
 
-            if ( input.wait_data && input.wait_data === fields.post_title.value ) {
-                if ( input.action === 'add' ) {
-                    probe.Utils.setValues( input.values, 'add_mode' );
-                }
-
-                probe.Utils.setValues( input.values, 'post_status' );
-                probe.Utils.setValues( input.values, 'page_template' );
-
-                // Click the 'Save' confirm button
-                $li.find( this.saveButton ).MustBeVisible().Click();
-            } else {
-                if ( !this.running ) {
-                    this.running = true;
-
-                    probe.Utils.setValues( input.values, 'post_title' );
-                }
-
-                $titleLabel.WaitForVisible( 'Step4', 5000, $titleLabel.next( 'span' ).find( 'input' ).val() );
+            // In Swifty mode the More button must be clicked first
+            if( $more.length > 0 ) {
+                $more.Click();
             }
+
+            $li.find( this.statusLabel ).WaitForVisible( 'Step5' );
+        },
+
+        Step5: function( input ) {
+            var self = this;
+            var dfdArray = [];
+
+            dfdArray.push( probe.Utils.setValues( input.values, 'post_title' ) );
+
+            if ( input.action === 'add' ) {
+                dfdArray.push( probe.Utils.setValues( input.values, 'add_mode' ) );
+            }
+
+            dfdArray.push( probe.Utils.setValues( input.values, 'post_status' ) );
+            dfdArray.push( probe.Utils.setValues( input.values, 'page_template' ) );
+
+            $.when.apply( $, dfdArray ).done( function () {
+                self.dfd_done = true;
+            } );
+
+            probe.WaitForFn( 'Wait', 'Step6', 60000 );
+        },
+
+        Wait: function( /*input*/ ) {
+            return { 'wait_result': this.dfd_done };
+        },
+
+        Step6: function( input ) {
+            var $curPage = $( probe.Utils.getPageSelector( input.page ) );
+            var $li = $curPage.closest( 'li' );
+
+            // Click the 'Save' confirm button
+            $li.find( this.saveButton ).MustBeVisible().Click();
         }
     };
 
@@ -280,16 +286,23 @@
         },
 
         Step3: function( input ) {
-            var status = input.is_status === 'publish' ? '' : input.is_status;
-            var $statusSpan = $( probe.Utils.getPageSelector( input.page ) ).MustExist().find( ':nth-child( 2 )' );
-            var text = '';
+            if( input.is_status === 'publish' ) {
+                var $statusSpan = $( probe.Utils.getPageSelector( input.page ) ).MustExist().find( '.post_type_draft' );
+                if( $statusSpan.length > 0 ) {
+                    probe.SetFail( 'Page status does not equals the expected status "' + input.is_status + '"' );
+                }
+            } else {
+                var status = input.is_status === 'publish' ? '' : input.is_status;
+                var $statusSpan = $( probe.Utils.getPageSelector( input.page ) ).MustExist().find( ':nth-child( 2 )' );
+                var text = '';
 
-            if ( $statusSpan.is( 'span' ) ) {
-                text = $.trim( $statusSpan.text().toLowerCase() );
-            }
+                if( $statusSpan.is( 'span' ) ) {
+                    text = $.trim( $statusSpan.text().toLowerCase() );
+                }
 
-            if ( status !== text ) {
-                probe.SetFail( 'Page status does not equals the expected status "' + input.is_status + '"' );
+                if( status !== text ) {
+                    probe.SetFail( 'Page status does not equals the expected status "' + input.is_status + '"' );
+                }
             }
         }
     };
@@ -321,6 +334,10 @@
             // Click on the 'Delete page' button
             $( '.spm-page-button:eq(2)' ).MustBeVisible().Click();
 
+            $( this.deleteButton ).WaitForVisible( 'Step4' );
+        },
+
+        Step4: function( input ) {
             // Click the 'Delete' confirm button
             $( this.deleteButton ).MustBeVisible().Click();
         }
