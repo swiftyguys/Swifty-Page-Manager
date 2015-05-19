@@ -76,8 +76,8 @@ $post_type_object = get_post_type_object( $this->_post_type );
             <input type="hidden" name="spm_meta_post_type" value="<?php echo esc_attr( $this->_post_type ); ?>" />
 
             <ul class="spm-status-links spm-status-links-select-view">
-                <?php if( !$this->is_swifty ) : ?>
-                <li>
+
+                <li class="<?php echo ( $this->is_swifty ) ? 'spm-hidden' : '' ?>">
                     <a class="spm-status-any
                               <?php echo esc_attr( ('any' === $this->get_post_status()) ? 'current' : '' ); ?>"
                        href="<?php echo esc_attr( add_query_arg( 'status', 'any', $this->get_plugin_url() ) ); ?>"
@@ -87,7 +87,7 @@ $post_type_object = get_post_type_object( $this->_post_type );
                     </a> |
                 </li>
 
-                <li class="<?php echo ( !$post_count_publish ) ? 'spm-hidden' : '' ?>">
+                <li class="<?php echo ( !$post_count_publish || $this->is_swifty ) ? 'spm-hidden' : '' ?>">
                     <a class="spm-status-publish
                               <?php echo esc_attr( ('publish' === $this->get_post_status()) ? 'current' : '' ); ?>"
                        href="<?php echo esc_attr( add_query_arg( 'status', 'publish', $this->get_plugin_url() ) ); ?>"
@@ -97,7 +97,7 @@ $post_type_object = get_post_type_object( $this->_post_type );
                     </a> |
                 </li>
 
-                <li class="<?php echo ( !$post_count_draft ) ? 'spm-hidden' : '' ?>">
+                <li class="<?php echo ( !$post_count_draft || $this->is_swifty ) ? 'spm-hidden' : '' ?>">
                     <a class="spm-status-draft
                               <?php echo esc_attr( ( 'draft' === $this->get_post_status()) ? 'current' : '' ); ?>"
                        href="<?php echo esc_attr( add_query_arg( 'status', 'draft', $this->get_plugin_url() ) ); ?>"
@@ -107,7 +107,7 @@ $post_type_object = get_post_type_object( $this->_post_type );
                     </a> |
                 </li>
 
-                <li class="<?php echo ( !$post_count_pending ) ? 'spm-hidden' : '' ?>">
+                <li class="<?php echo ( !$post_count_pending || $this->is_swifty ) ? 'spm-hidden' : '' ?>">
                     <a class="spm-status-pending
                               <?php echo esc_attr( ('pending' === $this->get_post_status()) ? 'current' : '' ); ?>"
                        href="<?php echo esc_attr( add_query_arg( 'status', 'pending', $this->get_plugin_url() ) ); ?>"
@@ -117,7 +117,7 @@ $post_type_object = get_post_type_object( $this->_post_type );
                     </a> |
                 </li>
 
-                <li class="<?php echo ( !$post_count_future ) ? 'spm-hidden' : '' ?>">
+                <li class="<?php echo ( !$post_count_future || $this->is_swifty ) ? 'spm-hidden' : '' ?>">
                     <a class="spm-status-future
                               <?php echo esc_attr( ('future' === $this->get_post_status()) ? 'current' : '' ); ?>"
                        href="<?php echo esc_attr( add_query_arg( 'status', 'future', $this->get_plugin_url() ) ); ?>"
@@ -127,7 +127,7 @@ $post_type_object = get_post_type_object( $this->_post_type );
                     </a> |
                 </li>
 
-                <li class="<?php echo ( !$post_count_private ) ? 'spm-hidden' : '' ?>">
+                <li class="<?php echo ( !$post_count_private || $this->is_swifty ) ? 'spm-hidden' : '' ?>">
                     <a class="spm-status-private
                               <?php echo esc_attr( ('private' === $this->get_post_status()) ? 'current' : '' ); ?>"
                        href="<?php echo esc_attr( add_query_arg( 'status', 'private', $this->get_plugin_url() ) ); ?>"
@@ -137,7 +137,7 @@ $post_type_object = get_post_type_object( $this->_post_type );
                     </a> |
                 </li>
 
-                <li class="<?php echo ( !$post_count_trash ) ? 'spm-hidden' : '' ?>">
+                <li class="<?php echo ( !$post_count_trash || $this->is_swifty ) ? 'spm-hidden' : '' ?>">
                     <a class="spm-status-trash"
                        href="<?php echo esc_attr( admin_url( 'edit.php?post_status=trash&post_type=page' ) ); ?>"
                        data-spm-status="trash">
@@ -145,7 +145,7 @@ $post_type_object = get_post_type_object( $this->_post_type );
                         <span class="count">(<?php esc_html_e( $post_count_trash ); ?>)</span>
                     </a> |
                 </li>
-                <?php endif; ?>
+
 
                 <li><a href="#" class="spm-open-all"><?php _e( 'Expand', 'swifty-page-manager' ); ?></a> |</li>
                 <li><a href="#" class="spm-close-all"><?php _e( 'Collapse', 'swifty-page-manager' ); ?></a></li>

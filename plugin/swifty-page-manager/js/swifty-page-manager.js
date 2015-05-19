@@ -26,10 +26,10 @@ var SPM = (function( $, document ) {
     };
 
     spm.createTrashButton = function() {
-        var $trashLink = $( '.spm-status-trash:visible' );
+        var $trashLink = $( '.spm-status-trash' );
         var $trashLinkLi, $lastLi;
 
-        if ( $trashLink.length ) {
+        if ( $trashLink.length && ( spm.statusCounts[ 'trash' ] > 0 ) ) {
             $trashLinkLi = $trashLink.parent();
             $lastLi = $( 'ul.spm-status-links' ).find( '> li:last' );
 
@@ -648,7 +648,9 @@ var SPM = (function( $, document ) {
                 $statusLink.find( '.count' ).text( '(' + statusCount + ')' );
 
                 if ( $li.hasClass( 'spm-hidden' ) && statusCount === '1' && statusName !== 'any' ) {
-                    $li.removeClass( 'spm-hidden' );
+                    if( !spm_data.is_swifty_mode ) {
+                        $li.removeClass( 'spm-hidden' );
+                    }
 
                     if ( statusName === 'trash' && spm_data.is_swifty_mode ) {
                         self.createTrashButton();
