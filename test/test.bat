@@ -6,7 +6,8 @@ ECHO ON
 
 :: RUN CODECEPTION
 cd ../plugin/swifty-page-manager/lib/swifty_plugin/test/
-php codecept.phar run acceptance --steps --env firefox
+::php codecept.phar run acceptance --steps --env firefox --debug
+php codecept.phar run acceptance --steps --env firefox --silent
 
 :: STOP WEBDRIVER (SELENIUM)
 @ECHO OFF
