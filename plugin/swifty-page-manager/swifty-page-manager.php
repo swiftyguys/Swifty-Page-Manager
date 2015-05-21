@@ -30,16 +30,40 @@ class SwiftyPageManager
      */
     public function __construct()
     {
-        $this->plugin_file     = __FILE__ ;
-        $this->plugin_dir      = dirname( $this->plugin_file );
+        $this->plugin_file = __FILE__;
+        $this->plugin_dir = dirname( $this->plugin_file );
         $this->plugin_basename = basename( $this->plugin_dir );
-        $this->plugin_dir_url  = plugins_url( rawurlencode( basename( $this->plugin_dir ) ) );
-        $this->plugin_url      = $_SERVER['REQUEST_URI'];
+        $this->plugin_dir_url = plugins_url( rawurlencode( basename( $this->plugin_dir ) ) );
+        $this->plugin_url = $_SERVER[ 'REQUEST_URI' ];
 
-        if ( ! class_exists( 'LibSwiftyPluginView' ) ) {
+        if( ! class_exists( 'LibSwiftyPluginView' ) ) {
             require_once plugin_dir_path( __FILE__ ) . 'lib/swifty_plugin/php/lib_swifty_plugin_view.php';
         }
 
+        add_filter( 'swifty_active_plugins', array( $this, 'hook_swifty_active_plugins' ) );
+
+        // postpone further initialization to allow loading other plugins
+        add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
+    }
+
+    /**
+     * Called via Swifty filter 'swifty_active_plugins'
+     *
+     * Add the plugin name to the array
+     */
+    public function hook_swifty_active_plugins( $plugins )
+    {
+        $plugins[] = 'swifty-page-manager';
+        return $plugins;
+    }
+
+    /**
+     * Called via WP Action 'plugins_loaded'
+     *
+     * Initialize actions and filter
+     */
+    function plugins_loaded()
+    {
         $this->is_swifty = LibSwiftyPluginView::is_ss_mode();
 
         // Actions for visitors viewing the site
