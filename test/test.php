@@ -65,7 +65,7 @@ class ThisStory extends SSCeption {
                 'position'    => 'before',
             ) );
 
-            $this->Probe( 'SPM.PageExists', 'a at pos 3', array(
+            $this->Probe( 'SPM.PageExists', '1 at pos 3', array(
                 'plugin_name' => $this->pluginName,
                 'page'        => 'WP Page 1',
                 'at_pos'      => 3
