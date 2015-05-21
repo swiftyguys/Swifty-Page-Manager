@@ -14,7 +14,8 @@
             "<%= grunt.getDestPathPlugin() %>lib/swifty_plugin/README.md",
             "<%= grunt.getDestPathPlugin() %>lib/swifty_plugin/js",
             "<%= grunt.getDestPathPlugin() %>lib/swifty_plugin/css/*.less",
-            "<%= grunt.getDestPathPlugin() %>lib/swifty_plugin/php/probe"
+            "<%= grunt.getDestPathPlugin() %>lib/swifty_plugin/php/probe",
+            "<%= grunt.getDestPathPlugin() %>lib/swifty_plugin/test"
         ],
         "unwanted2": [
             "<%= grunt.getDestPathPlugin() %>lib/swifty_plugin/css"
@@ -71,7 +72,8 @@
             "nl": "nl_NL",
             "sr": "sr_RS",
             "zh-cn": "zh_CN",
-            "fy": "fy"
+            "fy": "fy",
+            "he": "he_IL"
         }
     }
 }

@@ -3,16 +3,16 @@ Contributors: SwiftyLife, robertheessels, chrisvermeulen, jeroenh, jeroenvermeul
 Donate link: http://swiftylife.com/plugins/donate/
 Tags: Swifty, page, pages, tree, menu, manage, hierarchy, structure
 Requires at least: 3.8
-Tested up to: 4.0
+Tested up to: 4.2.2
 Stable tag: RELEASE_TAG
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Makes creating and managing your pages easy.
+Creating and managing your pages made easy.
 
 == Description ==
 
-**Swifty Page Manager - makes creating and managing your pages easy.**
+**Swifty Page Manager - Creating and managing your pages made easy.**
 
 As you might have noticed, managing the pages of your WordPress site isn't very intuitive out of the box. We found a way to make it a whole lot easier. Here's how...
 
@@ -50,6 +50,7 @@ Swifty Page Manager is currently available in:
  * Nederlands
  * Simplified Chinese (by LoveFS)
  * Serbian (by [Borisa Djuraskovic](http://www.webhostinghub.com))
+ * Hebrew (by [Ahrale](http://atar4u.com))
 
 [Want to help add or improve translations? Click here.](http://swiftylife.com/plugins/translate/)
 
@@ -144,6 +145,13 @@ Try to describe the actions that lead up to the point where something is not wor
 Try it - it's free!
 
 == Changelog ==
+
+= 1.2.0 =
+ * Fixed bug: broken trash link
+ * Added a move button to the page manager pages, hovering it will display a help message
+ * Added language: Chinese (Thanks to: Ahrale).
+ * Numerous small inprovements
+ * Ready for Wordpress 4.2.2
 
 = 1.1.0 =
  * Fixed bug: post-type related
