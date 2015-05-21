@@ -29,7 +29,7 @@ var SPM = (function( $, document ) {
         var $trashLink = $( '.spm-status-trash' );
         var $trashLinkLi, $lastLi;
 
-        if ( $trashLink.length && ( spm.statusCounts[ 'trash' ] > 0 ) ) {
+        if ( $trashLink.length && ( spm.statusCounts.trash > 0 ) ) {
             $trashLinkLi = $trashLink.parent();
             $lastLi = $( 'ul.spm-status-links' ).find( '> li:last' );
 

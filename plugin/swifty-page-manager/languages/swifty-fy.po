@@ -1,8 +1,8 @@
-# Translation of Swifty Page Manager in Dutch
+# Translation of Swifty Page Manager in Frisian
 # This file is distributed under the same license as the Swifty Page Manager package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2015-01-12 19:07:27+0000\n"
+"PO-Revision-Date: +0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -30,105 +30,98 @@ msgstr ""
 #: swifty-page-manager.php:389
 msgid "You do not have sufficient permissions to access this page. #314"
 msgstr ""
-"Je hebt niet genoeg rechten om toegang tot deze pagina te krijgen. #314"
 
 #: swifty-page-manager.php:121
 msgid "Swifty Page Manager"
-msgstr "Swifty Page Manager"
+msgstr ""
 
 #: swifty-page-manager.php:408
 msgid "draft"
-msgstr "klad"
+msgstr ""
 
 #: swifty-page-manager.php:409
 msgid "future"
-msgstr "gepland"
+msgstr ""
 
 #: swifty-page-manager.php:410
 msgid "protected"
-msgstr "beschermd"
+msgstr ""
 
 #: swifty-page-manager.php:411
 msgid "pending"
-msgstr "wachtend"
+msgstr ""
 
 #: swifty-page-manager.php:412
 msgid "private"
-msgstr "privé"
+msgstr ""
 
 #: swifty-page-manager.php:413
 msgid "trash"
-msgstr "Verwijderd"
+msgstr ""
 
 #: swifty-page-manager.php:414
 msgid "Password protected page"
-msgstr "Wachtwoord beschermde pagina"
+msgstr ""
 
 #: swifty-page-manager.php:415
 msgid "No pages found."
-msgstr "Geen pagina's gevonden."
+msgstr ""
 
 #: swifty-page-manager.php:416
 msgid "Hidden"
-msgstr "Verborgen"
+msgstr ""
 
 #: swifty-page-manager.php:418
 msgid "published - draft content"
-msgstr "gepubliceerd - klad inhoud"
+msgstr ""
 
 #: swifty-page-manager.php:376
 msgid "General"
-msgstr "Algemeen"
+msgstr ""
 
 #: swifty-page-manager.php:438
 msgid "There are currently no settings for this plugin."
-msgstr "Er zijn momenteel geen instellingen voor deze plugin. "
+msgstr ""
 
 #: swifty-page-manager.php:452
 msgid "You do not have sufficient permissions to access this page. #359"
 msgstr ""
-"Je hebt niet genoeg rechten om toegang tot deze pagina te krijgen. #359"
 
 #: swifty-page-manager.php:464
 msgid "You do not have sufficient permissions to access this page. #371"
 msgstr ""
-"Je hebt niet genoeg rechten om toegang tot deze pagina te krijgen. #371"
 
 #: swifty-page-manager.php:499
 msgid "You do not have sufficient permissions to access this page. #465"
 msgstr ""
-"Je hebt niet genoeg rechten om toegang tot deze pagina te krijgen. #465"
 
 #: swifty-page-manager.php:565
 msgid "You do not have sufficient permissions to access this page. #588"
-msgstr "Je hebt onvoldoende rechten om toegang tot deze pagina te krijgen #588"
+msgstr ""
 
 #: swifty-page-manager.php:574
 msgid "New page"
-msgstr "Nieuwe pagina"
+msgstr ""
 
 #: swifty-page-manager.php:663
 msgid "You do not have sufficient permissions to access this page. #708"
 msgstr ""
-"Je hebt onvoldoende rechten om toegang tot deze pagina te krijgen. #708"
 
 #: swifty-page-manager.php:697
 msgid "You do not have sufficient permissions to access this page. #747"
 msgstr ""
-"Je hebt onvoldoende rechten om toegang tot deze pagina te krijgen. #747"
 
 #: swifty-page-manager.php:721
 msgid "You do not have sufficient permissions to access this page. #771"
 msgstr ""
-"Je hebt onvoldoende rechten om toegang tot deze pagina te krijgen. #771"
 
 #: swifty-page-manager.php:1049
 msgid "Unknown user"
-msgstr "Onbekende gebruiker"
+msgstr ""
 
 #: swifty-page-manager.php:1055
 msgid "[untitled page]"
-msgstr "[Pagina zonder titel]"
+msgstr ""
 
 #: view/page_tree.php:214
 msgid "Drag and drop this page to change the order of the pages"
@@ -136,111 +129,109 @@ msgstr ""
 
 #: view/page_tree.php:85
 msgid "All"
-msgstr "Alles"
+msgstr ""
 
 #: view/page_tree.php:95
 msgid "Published"
-msgstr "Gepubliceerd"
+msgstr ""
 
 #: view/page_tree.php:105 view/page_tree.php:440
 msgid "Draft"
-msgstr "Klad"
+msgstr ""
 
 #: view/page_tree.php:115
 msgid "Pending"
-msgstr "Wachtend"
+msgstr ""
 
 #: view/page_tree.php:125
 msgid "Future"
-msgstr "Gepland"
+msgstr ""
 
 #: view/page_tree.php:135
 msgid "Private"
-msgstr "Privé"
+msgstr ""
 
 #: view/page_tree.php:144
 msgid "Trash"
-msgstr "Prullenbak"
+msgstr ""
 
 #: view/page_tree.php:150
 msgid "Expand"
-msgstr "Uitklappen"
+msgstr ""
 
 #: view/page_tree.php:151
 msgid "Collapse"
-msgstr "Inklappen"
+msgstr ""
 
 #: view/page_tree.php:156
 msgid "Clear search"
-msgstr "Wis zoekcriteria"
+msgstr ""
 
 #: view/page_tree.php:157
 msgid "Search"
-msgstr "Zoek"
+msgstr ""
 
 #: view/page_tree.php:158
 msgid "Searching..."
-msgstr "Zoeken..."
+msgstr ""
 
 #: view/page_tree.php:159
 msgid "Nothing found."
-msgstr "Niets gevonden."
+msgstr ""
 
 #: view/page_tree.php:165
 msgid "Loading..."
-msgstr "Laden..."
+msgstr ""
 
 #: view/page_tree.php:173
 msgid "Loading tree"
-msgstr "Boom laden"
+msgstr ""
 
 #: view/page_tree.php:179 view/page_tree.php:190
 msgid "Add page"
-msgstr "Voeg pagina toe"
+msgstr ""
 
 #: view/page_tree.php:194
 msgid "Edit page"
-msgstr "Bewerk pagina"
+msgstr ""
 
 #: view/page_tree.php:198
 msgid "Delete page"
-msgstr "Verwijder pagina"
+msgstr ""
 
 #: view/page_tree.php:202
 msgid "Edit page content"
-msgstr "Bewerk paginainhoud"
+msgstr ""
 
 #: view/page_tree.php:206
 msgid "View page"
-msgstr "Bekijk pagina"
+msgstr ""
 
 #: view/page_tree.php:210
 msgid "Publish page"
-msgstr "Publiceer pagina"
+msgstr ""
 
 #: view/page_tree.php:233
 msgid "Are you sure you want to delete this page with all it's content?"
-msgstr "Weet je zeker dat je deze pagina inclusief inhoud wilt verwijderen?"
+msgstr ""
 
 #: view/page_tree.php:242 view/page_tree.php:279 view/page_tree.php:530
 msgid "Cancel"
-msgstr "Annuleer"
+msgstr ""
 
 #: view/page_tree.php:245
 msgid "Delete"
-msgstr "Verwijder"
+msgstr ""
 
 #: view/page_tree.php:269
 msgid ""
 "Are you sure you want to publish this page so it becomes visible to your "
 "visitors?"
 msgstr ""
-"Weet je zeker dat je deze pagina wilt publiceren, zodat deze zichtbaar wordt "
-"voor je bezoekers?"
 
 #: view/page_tree.php:283
 msgid "Publish"
-msgstr "Publiceren"
+msgstr ""
 
 #: view/page_tree.php:296
 msgid ""
@@ -253,14 +244,6 @@ msgid ""
 "longer than 70 characters.<br /><br />Example:<br /><br />Swifty Page "
 "Manager - easily create a page tree in Wordpress"
 msgstr ""
-"De titel van een pagina is de tekst die je in de tabs van de browser ziet."
-"<br />Het is ook de korte blauwe tekst zichtbaar in de zoekmachines, zoals "
-"Google.<br />Daarom is het belangrijk dat deze de meest belangrijke "
-"trefwoorden bevat, van waar de pagina overgaat.<br />Plaats deze aan het "
-"begin van de tekst.<br />Dat is één van de vele dingen die je kunt doen om "
-"hoger in de zoekmachines te komen.<br />De ideale lengte van deze tekst zou "
-"niet langer mogen zijn dan 70 karakters.<br /><br />Voorbeeld:<br /><br /"
-">Swifty Page Manager - maak gemakkelijk een paginastructuur in Wordpress"
 
 #: view/page_tree.php:311
 msgid ""
@@ -269,10 +252,6 @@ msgid ""
 "that you offer on that page. Preferably right behind the domain name.<br /"
 "><br />Example:<br><br />%s/<b>keyword</b><br />%s/<b>product-or-service</b>"
 msgstr ""
-"Dit is de link naar jouw pagina. Het is belangrijk dat de naam van de pagina "
-"het trefwoord is van die pagina<br /> of de naam van het product of service "
-"die je aanbiedt op die pagina. Het liefst direct na de domeinnaam.<br /><br /"
-">Voorbeeld:<br /><br />%s/<b>trefwoord</b><br />%s/<b>product-of-service</b>"
 
 #: view/page_tree.php:323
 msgid ""
@@ -281,88 +260,84 @@ msgid ""
 "you can see that page when you are logged in and it is not shown in the site "
 "menu."
 msgstr ""
-"Status <b>Publiceren</b> wil zeggen dat iedereen ter wereld jouw pagina kan "
-"zien en dat de pagina zichtbaar is in het menu.<br />Status <b>Klad</b> wil "
-"zeggen dat alleen jij de pagina kan zien wanneer je bent ingelogd en dat de "
-"pagina niet zichtbaar is in het menu."
 
 #: view/page_tree.php:346
 msgid "Text in menu"
-msgstr "Tekst in menu"
+msgstr ""
 
 #: view/page_tree.php:350 view/page_tree.php:365
 msgid "Title"
-msgstr "Titel"
+msgstr ""
 
 #: view/page_tree.php:377
 msgid "Position"
-msgstr "Positie"
+msgstr ""
 
 #: view/page_tree.php:383
 msgid "After"
-msgstr "Na"
+msgstr ""
 
 #: view/page_tree.php:389
 msgid "As sub page of"
-msgstr "Als subpagina van"
+msgstr ""
 
 #: view/page_tree.php:397
 msgid "More"
-msgstr "Meer"
+msgstr ""
 
 #: view/page_tree.php:401
 msgid "Url"
-msgstr "Url"
+msgstr ""
 
 #: view/page_tree.php:411
 msgid "In menu"
-msgstr "In menu"
+msgstr ""
 
 #: view/page_tree.php:418 view/page_tree.php:478
 msgid "Show"
-msgstr "Tonen"
+msgstr ""
 
 #: view/page_tree.php:425 view/page_tree.php:485 view/page_tree.php:513
 msgid "Hide"
-msgstr "Verbergen"
+msgstr ""
 
 #: view/page_tree.php:433
 #: lib/swifty_plugin/php/lib/swifty_class-tgm-plugin-activation.php:1422
 msgid "Status"
-msgstr "Status"
+msgstr ""
 
 #: view/page_tree.php:447
 msgid "Live"
-msgstr "Publiceren"
+msgstr ""
 
 #: view/page_tree.php:453
 msgid "Template"
-msgstr "Sjabloon"
+msgstr ""
 
 #: view/page_tree.php:457
 msgid "Default template"
-msgstr "Standaard sjabloon"
+msgstr ""
 
 #: view/page_tree.php:471
 msgid "Header"
-msgstr "Header"
+msgstr ""
 
 #: view/page_tree.php:492
 msgid "Sidebar"
-msgstr "Zijbalk"
+msgstr ""
 
 #: view/page_tree.php:499
 msgid "Left"
-msgstr "Links"
+msgstr ""
 
 #: view/page_tree.php:506
 msgid "Right"
-msgstr "Rechts"
+msgstr ""
 
 #: view/page_tree.php:520
 msgid "Less"
-msgstr "Minder"
+msgstr ""
 
 #: view/page_tree.php:534
 msgid "Save"
-msgstr "Opslaan"
+msgstr ""

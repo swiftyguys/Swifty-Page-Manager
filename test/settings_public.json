@@ -25,6 +25,10 @@
                 "wp_version": "3.9.1",
                 "wp_sha256sum": "73c21224d42156150b948ca645a296a2431f1dd6a19350e0d8a72e465adde56d"
             },
+            "wp_4.2.2": {
+                "wp_version": "4.2.2",
+                "wp_sha256sum": "3c4e2cc3af289366ff5352e35c3f80fca2dcaed3d56a79f33b25374c356c3f90"
+            },
             "wp_nl_3.9.1": {
                 "wp_version": "3.9.1",
                 "wp_sha256sum": "47b4b41025ba4d03fa89e9e94593a6cef1986985a86f922ec000b1eaf6c6b544"

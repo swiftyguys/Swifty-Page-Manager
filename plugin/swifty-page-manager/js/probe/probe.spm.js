@@ -14,10 +14,14 @@
             );
         },
 
-        CheckRunning: function( input ) {
-            spm.OpenSPM( input ).next( function( input ) {
+        CheckRunning: {
+            Start: function( input ) {
+                spm.OpenSPM( input ).next( 'Step2' );
+            },
+
+            Step2: function( input ) {
                 $( 'h2:contains("' + input.plugin_name + '")' ).MustExistOnce();
-            } );
+            }
         }
 
     } );
@@ -136,7 +140,9 @@
             dfdArray.push( probe.Utils.setValues( input.values, 'page_template' ) );
 
             $.when.apply( $, dfdArray ).done( function () {
-                self.dfd_done = true;
+                setTimeout( function() {
+                    self.dfd_done = true;
+                }, 1000 );
             } );
 
             probe.WaitForFn( 'Wait', 'Step6', 60000 );

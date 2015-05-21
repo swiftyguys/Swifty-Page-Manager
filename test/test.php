@@ -17,110 +17,110 @@ class ThisStory extends SSCeption {
         foreach( array( 'ss', 'wp' ) as $ss_mode ) {
             $this->SetCookie( 'ss_mode', $ss_mode );
 
-            $this->Probe( 'SPM.CheckRunning', array(
+            $this->Probe( 'SPM.CheckRunning', '', array(
                 "plugin_name" => $this->pluginName
             ) );
 
-            $this->Probe( 'WP.DeleteAllPages', array(
+            $this->Probe( 'WP.DeleteAllPages', '', array(
                 'plugin_name' => $this->pluginName
             ) );
 
-            $this->Probe( 'WP.EmptyTrash', array(
+            $this->Probe( 'WP.EmptyTrash', '', array(
                 'plugin_name' => $this->pluginName
             ) );
 
             // dojh Enable when bug is fixed
-            //        $this->Probe( 'SPM.NoPagesExist', array(
+            //        $this->Probe( 'SPM.NoPagesExist', '', array(
             //            'plugin_name' => $this->pluginName
             //        ) );
 
-            $this->Probe( 'WP.CreateXDraftPages', array(
+            $this->Probe( 'WP.CreateXDraftPages', '', array(
                 'plugin_name' => $this->pluginName,
                 'x_pages' => 4
             ) );
 
-                    $this->Probe( 'SPM.XPagesExist', array(
-                        'plugin_name' => $this->pluginName,
-                        'x_pages'     => 4
-                    ) );
+            $this->Probe( 'SPM.XPagesExist', '4', array(
+                'plugin_name' => $this->pluginName,
+                'x_pages'     => 4
+            ) );
 
-                    $this->Probe( 'SPM.MovePage', array(
-                        'plugin_name' => $this->pluginName,
-                        'page'        => 'WP Page 1',
-                        'destination' => 'WP Page 4',
-                        'position'    => 'before',
-                    ) );
+            $this->Probe( 'SPM.MovePage', '1 before 4', array(
+                'plugin_name' => $this->pluginName,
+                'page'        => 'WP Page 1',
+                'destination' => 'WP Page 4',
+                'position'    => 'before',
+            ) );
 
-                    $this->Probe( 'SPM.PageExists', array(
-                        'plugin_name' => $this->pluginName,
-                        'page'        => 'WP Page 1',
-                        'at_pos'      => 3
-                    ) );
+            $this->Probe( 'SPM.PageExists', 'a at pos 3', array(
+                'plugin_name' => $this->pluginName,
+                'page'        => 'WP Page 1',
+                'at_pos'      => 3
+            ) );
 
-                    $this->Probe( 'SPM.PageExists', array(
-                        'plugin_name' => $this->pluginName,
-                        'page'        => 'WP Page 3',
-                        'at_pos'      => 2
-                    ) );
+            $this->Probe( 'SPM.PageExists', '3 at pos 2', array(
+                'plugin_name' => $this->pluginName,
+                'page'        => 'WP Page 3',
+                'at_pos'      => 2
+            ) );
 
-                    $this->Probe( 'SPM.MovePage', array(
-                        'plugin_name' => $this->pluginName,
-                        'page'        => 'WP Page 1',
-                        'destination' => 'WP Page 2',
-                        'position'    => 'before',
-                    ) );
+            $this->Probe( 'SPM.MovePage', '1 before 2', array(
+                'plugin_name' => $this->pluginName,
+                'page'        => 'WP Page 1',
+                'destination' => 'WP Page 2',
+                'position'    => 'before',
+            ) );
 
-                    $this->Probe( 'SPM.PageExists', array(
-                        'plugin_name' => $this->pluginName,
-                        'page'        => 'WP Page 1',
-                        'at_pos'      => 1
-                    ) );
+            $this->Probe( 'SPM.PageExists', '1 at pos 1', array(
+                'plugin_name' => $this->pluginName,
+                'page'        => 'WP Page 1',
+                'at_pos'      => 1
+            ) );
 
-                    $this->Probe( 'SPM.PageExists', array(
-                        'plugin_name' => $this->pluginName,
-                        'page'  => 'WP Page 2',
-                        'at_pos'      => 2
-                    ) );
+            $this->Probe( 'SPM.PageExists', '2 at pos 2', array(
+                'plugin_name' => $this->pluginName,
+                'page'  => 'WP Page 2',
+                'at_pos'      => 2
+            ) );
 
-                    $this->Probe( 'SPM.MovePage', array(
-                        'plugin_name' => $this->pluginName,
-                        'page'        => 'WP Page 2',
-                        'destination' => 'WP Page 4',
-                        'position'    => 'after',
-                    ) );
+            $this->Probe( 'SPM.MovePage', '2 after 4', array(
+                'plugin_name' => $this->pluginName,
+                'page'        => 'WP Page 2',
+                'destination' => 'WP Page 4',
+                'position'    => 'after',
+            ) );
 
-                    $this->Probe( 'SPM.PageExists', array(
-                        'plugin_name' => $this->pluginName,
-                        'page'        => 'WP Page 2',
-                        'at_pos'      => 4
-                    ) );
+            $this->Probe( 'SPM.PageExists', '2 at pos 4', array(
+                'plugin_name' => $this->pluginName,
+                'page'        => 'WP Page 2',
+                'at_pos'      => 4
+            ) );
 
-                    $this->Probe( 'SPM.PageExists', array(
-                        'plugin_name' => $this->pluginName,
-                        'page'        => 'WP Page 4',
-                        'at_pos'      => 3
-                    ) );
+            $this->Probe( 'SPM.PageExists', '4 at pos 3', array(
+                'plugin_name' => $this->pluginName,
+                'page'        => 'WP Page 4',
+                'at_pos'      => 3
+            ) );
 
-                    $this->Probe( 'SPM.MovePage', array(
-                        'plugin_name' => $this->pluginName,
-                        'page'        => 'WP Page 2',
-                        'destination' => 'WP Page 1',
-                        'position'    => 'after',
-                    ) );
+            $this->Probe( 'SPM.MovePage', '2 before 1', array(
+                'plugin_name' => $this->pluginName,
+                'page'        => 'WP Page 2',
+                'destination' => 'WP Page 1',
+                'position'    => 'after',
+            ) );
 
-                    $this->Probe( 'SPM.PageExists', array(
-                        'plugin_name' => $this->pluginName,
-                        'page'        => 'WP Page 2',
-                        'at_pos'      => 2
-                    ) );
+            $this->Probe( 'SPM.PageExists', '2 at pos 2', array(
+                'plugin_name' => $this->pluginName,
+                'page'        => 'WP Page 2',
+                'at_pos'      => 2
+            ) );
 
-                    $this->Probe( 'SPM.PageExists', array(
-                        'plugin_name' => $this->pluginName,
-                        'page'        => 'WP Page 4',
-                        'at_pos'      => 4
-                    ) );
+            $this->Probe( 'SPM.PageExists', '4 at pos 4', array(
+                'plugin_name' => $this->pluginName,
+                'page'        => 'WP Page 4',
+                'at_pos'      => 4
+            ) );
 
-            $this->Probe( 'SPM.SavePage', array(
+            $this->Probe( 'SPM.SavePage', '4 -> page last', array(
                 'plugin_name' => $this->pluginName,
                 'action' => 'add',
                 'page' => 'WP Page 4',
@@ -144,12 +144,12 @@ class ThisStory extends SSCeption {
                 ) )
             ) );
 
-            $this->Probe( 'SPM.XPagesExist', array(
+            $this->Probe( 'SPM.XPagesExist', '5', array(
                 'plugin_name' => $this->pluginName,
                 'x_pages' => 5
             ) );
 
-            $this->Probe( 'SPM.SavePage', array(
+            $this->Probe( 'SPM.SavePage', '1 -> page second', array(
                 'plugin_name' => $this->pluginName,
                 'action' => 'add',
                 'page' => 'WP Page 1',
@@ -169,32 +169,32 @@ class ThisStory extends SSCeption {
                 ) )
             ) );
 
-            $this->Probe( 'SPM.XPagesExist', array(
+            $this->Probe( 'SPM.XPagesExist', '6', array(
                 'plugin_name' => $this->pluginName,
                 'x_pages' => 6
             ) );
 
-            $this->Probe( 'SPM.PageExists', array(
+            $this->Probe( 'SPM.PageExists', 'page last at pos 6', array(
                 'plugin_name' => $this->pluginName,
                 'page' => 'SPM Page last',
                 'x_pages' => 1,
                 'at_pos' => 6
             ) );
 
-            $this->Probe( 'SPM.CheckPageStatus', array(
+            $this->Probe( 'SPM.CheckPageStatus', 'page last = draft', array(
                 'plugin_name' => $this->pluginName,
                 'page' => 'SPM Page last',
                 'is_status' => 'draft'   // draft | publish
             ) );
 
-            $this->Probe( 'SPM.PageExists', array(
+            $this->Probe( 'SPM.PageExists', 'page second at pos 2', array(
                 'plugin_name' => $this->pluginName,
                 'page' => 'SPM Page second',
                 'x_pages' => 1,
                 'at_pos' => 2
             ) );
 
-            $this->Probe( 'SPM.SavePage', array(
+            $this->Probe( 'SPM.SavePage', 'page second -> tweede pagina; publish', array(
                 'plugin_name' => $this->pluginName,
                 'action' => 'edit',
                 'page' => 'SPM Page second',
@@ -214,54 +214,54 @@ class ThisStory extends SSCeption {
                 ) )
             ) );
 
-            $this->Probe( 'SPM.PageExists', array(
+            $this->Probe( 'SPM.PageExists', 'tweede pagina at pos 2', array(
                 'plugin_name' => $this->pluginName,
                 'page' => 'Tweede SPM Pagina',
                 'x_pages' => 1,
                 'at_pos' => 2
             ) );
 
-            $this->Probe( 'SPM.CheckPageStatus', array(
+            $this->Probe( 'SPM.CheckPageStatus', 'tweede pagina = publish', array(
                 'plugin_name' => $this->pluginName,
                 'page' => 'Tweede SPM Pagina',
                 'is_status' => 'publish'   // draft | publish
             ) );
 
-            $this->Probe( 'SPM.MovePage', array(
+            $this->Probe( 'SPM.MovePage', '2 inside tweede pagina', array(
                 'plugin_name' => $this->pluginName,
                 'page' => 'WP Page 2',
                 'destination' => 'Tweede SPM Pagina',
                 'position' => 'inside',
             ) );
 
-            $this->Probe( 'SPM.SubPageExist', array(
+            $this->Probe( 'SPM.SubPageExist', 'tweede pagina has sub 2', array(
                 'plugin_name' => $this->pluginName,
                 'page' => 'Tweede SPM Pagina',
                 'sub_page' => 'WP Page 2'
             ) );
 
-            $this->Probe( 'SPM.DeletePage', array(
+            $this->Probe( 'SPM.DeletePage', '3', array(
                 'plugin_name' => $this->pluginName,
                 'page' => 'WP Page 3',
             ) );
 
-            $this->Probe( 'SPM.XPagesExist', array(
+            $this->Probe( 'SPM.XPagesExist', '5', array(
                 'plugin_name' => $this->pluginName,
                 'x_pages' => 5
             ) );
 
-            $this->Probe( 'SPM.PublishPage', array(
+            $this->Probe( 'SPM.PublishPage', 'page last', array(
                 'plugin_name' => $this->pluginName,
                 'page' => 'SPM Page last',
             ) );
 
-            $this->Probe( 'SPM.CheckPageStatus', array(
+            $this->Probe( 'SPM.CheckPageStatus', 'page last = publish', array(
                 'plugin_name' => $this->pluginName,
                 'page' => 'SPM Page last',
                 'is_status' => 'publish'   // draft | publish
             ) );
 
-            $this->Probe( 'SPM.SavePage', array(
+            $this->Probe( 'SPM.SavePage', 'page inside', array(
                 'plugin_name' => $this->pluginName,
                 'action' => 'add',
                 'page' => 'SPM Page last',
@@ -281,13 +281,13 @@ class ThisStory extends SSCeption {
                 ) )
             ) );
 
-            $this->Probe( 'SPM.SubPageExist', array(
+            $this->Probe( 'SPM.SubPageExist', 'page last has sub page inside', array(
                 'plugin_name' => $this->pluginName,
                 'page' => 'SPM Page last',
                 'sub_page' => 'SPM Page inside'
             ) );
 
-            $this->Probe( 'SPM.XPagesExist', array(
+            $this->Probe( 'SPM.XPagesExist', '6', array(
                 'plugin_name' => $this->pluginName,
                 'x_pages' => 6
             ) );
@@ -296,7 +296,7 @@ class ThisStory extends SSCeption {
 
                 // dojh Add test for Edit Page button in SS mode
 
-                $this->Probe( 'SPM.EditPageContent', array(
+                $this->Probe( 'SPM.EditPageContent', '1 -> SPM Page 1', array(
                     'plugin_name' => $this->pluginName,
                     'page' => 'WP Page 1',
                     'values' => json_encode( array(
@@ -307,7 +307,7 @@ class ThisStory extends SSCeption {
                     ) )
                 ) );
 
-                $this->Probe( 'SPM.PageExists', array(
+                $this->Probe( 'SPM.PageExists', 'SPM Page 1 at pos 1', array(
                     'plugin_name' => $this->pluginName,
                     'page' => 'SPM Page 1',
                     'x_pages' => 1,
