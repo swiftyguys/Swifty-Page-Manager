@@ -22,6 +22,20 @@
             Step2: function( input ) {
                 $( 'h2:contains("' + input.plugin_name + '")' ).MustExistOnce();
             }
+        },
+
+        CheckSSMode: {
+            Start: function( input ) {
+                spm.OpenSPM( input ).next( 'Step2' );
+            },
+
+            Step2: function( input ) {
+                if( input.ss_mode === 'wp' ) {
+                    $( 'ul#adminmenu:visible' ).MustExistOnce();
+                } else {
+                    $( 'ul#adminmenu:visible' ).MustExistTimes( 0 );
+                }
+            }
         }
 
     } );

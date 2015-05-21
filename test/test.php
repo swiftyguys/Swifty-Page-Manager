@@ -14,11 +14,25 @@ class ThisStory extends SSCeption {
 
         $this->WPLogin();
 
-        foreach( array( 'ss', 'wp' ) as $ss_mode ) {
+        // When plugin runs for the first time (without other SS plugins), SS mode must be off
+        $this->DeleteCookie( 'ss_mode' );
+        $this->Probe( 'SPM.CheckSSMode', '', array(
+            "plugin_name" => $this->pluginName,
+            "ss_mode" => 'wp'
+        ) );
+
+        foreach( array( 'ss_force', 'wp' ) as $ss_mode ) {
+            $this->EchoMsg( "#\n#\n#\n# START RUNNING TESTS FOR MODE " . $ss_mode . "\n#\n#\n#" );
+
             $this->SetCookie( 'ss_mode', $ss_mode );
 
             $this->Probe( 'SPM.CheckRunning', '', array(
                 "plugin_name" => $this->pluginName
+            ) );
+
+            $this->Probe( 'SPM.CheckSSMode', '', array(
+                "plugin_name" => $this->pluginName,
+                "ss_mode" => $ss_mode
             ) );
 
             $this->Probe( 'WP.DeleteAllPages', '', array(
