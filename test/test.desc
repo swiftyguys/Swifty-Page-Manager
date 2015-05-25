@@ -1,0 +1,144 @@
+Run Check if SPM is installed correctly
+    Feature SPM main page
+    Scenario Check WP mode
+
+Run All tests in Swifty mode
+    Given I am in Swifty mode
+    Scenario Check Swifty mode
+    Featureset All features
+
+Run All tests in WP mode
+    Given I am in WP mode
+    Scenario Check WP mode
+    Featureset All features
+    Feature Edit page content
+
+
+Featureset All features
+    Feature No pages message
+    Feature Pages visible
+    Feature Drag and drop
+    Feature Add a page
+    Feature Edit page options
+    Feature Drag and drop (part 2)
+    Feature Delete page
+    Feature Publish page
+# dojh Make "Feature Edit page content" working with Swity mode, then remove the feature under "Run All tests in WP mode" and then add it here
+
+Feature SPM main page
+    Scenario SPM main page visible after fresh install
+        Given I have a fresh install
+        And I am logged in
+        And I am on SPM main page
+        Then I see the SPM main page
+
+Feature Swifty and WP mode
+    Scenario Check WP mode
+        Given I am logged in
+        And I am on SPM main page
+        Then I see SPM mode "WP"
+    Scenario Check Swifty mode
+        Given I am logged in
+        And I am on SPM main page
+        Then I see SPM mode "Swifty"
+
+Feature No pages message
+    Scenario Test if no pages messages is shown
+        When I delete all pages via WP
+        And I empty the trash via WP
+        And I am on SPM main page
+        Then I see the no pages message
+
+Feature Pages visible
+    Scenario Test is pages are visible after creating a few
+        When I create 4 test pages via WP
+        Given I am on SPM main page
+        Then I see 4 pages
+
+Feature Drag and drop
+    Scenario Drag page "WP Page 1" before page "WP Page 4" and back
+        Given I am on SPM main page
+        When I drag page "WP Page 1" before page "WP Page 4"
+        Then Page "WP Page 1" exist at pos 3
+        And Page "WP Page 3" exist at pos 2
+        When I drag page "WP Page 1" before page "WP Page 2"
+        Then Page "WP Page 1" exist at pos 1
+        And Page "WP Page 2" exist at pos 2
+
+    Scenario Drag page "WP Page 2" after page "WP Page 4" and back
+        Given I am on SPM main page
+        When I drag page "WP Page 2" after page "WP Page 4"
+        Then Page "WP Page 2" exist at pos 4
+        And Page "WP Page 4" exist at pos 3
+        When I drag page "WP Page 2" after page "WP Page 1"
+        Then Page "WP Page 2" exist at pos 2
+        And Page "WP Page 4" exist at pos 4
+
+Feature Add a page
+    Scenario Add page after "WP Page 4"
+        Given I am on SPM main page
+        When I add a page after page "WP Page 4"
+        - post_title: { "type": "text", "value": "SPM Page last" }
+        - add_mode: { "type": "radio", "value": "after" }
+        - post_status: { "type": "radio", "value": "draft" }
+        - page_template: { "type": "select", "value": "Full Width Page" }
+        Then I see 5 pages
+        And Page "SPM Page last" exist at pos 5
+        And Page "SPM Page last" has status "draft"
+
+    Scenario Add a page after "WP Page 1"
+        Given I am on SPM main page
+        When I add a page after page "WP Page 1"
+        - post_title: { "type": "text", "value": "SPM Page second" }
+        - add_mode: { "type": "radio", "value": "after" }
+        - post_status: { "type": "radio", "value": "draft" }
+        Then I see 6 pages
+        And Page "SPM Page second" exist at pos 2
+        And Page "SPM Page last" has status "draft"
+
+Feature Edit page options
+    Scenario Edit page options of page "SPM Page second"
+        Given I am on SPM main page
+        When I edit the options of page "SPM Page second"
+        - post_title: { "type": "text", "value": "Tweede SPM Pagina" }
+        - post_status: { "type": "radio", "value": "publish" }
+        - page_template: { "type": "select", "value": "Contributor Page" }
+        Then Page "Tweede SPM Pagina" exist at pos 2
+        And Page "Tweede SPM Pagina" has status "publish"
+
+Feature Drag and drop (part 2)
+    Scenario Drag page "WP Page 2" inside page "Tweede SPM Pagina"
+        Given I am on SPM main page
+        When I drag page "WP Page 2" inside page "Tweede SPM Pagina"
+        Then Page "Tweede SPM Pagina" has a sub-page "WP Page 2"
+
+Feature Delete page
+    Scenario Delete page "WP Page 3"
+        Given I am on SPM main page
+        When I delete page "WP Page 3"
+        Then I see 5 pages
+
+Feature Publish page
+    Scenario Publish page "SPM Page last"
+        Given I am on SPM main page
+        When I publish page "SPM Page last"
+        Then Page "SPM Page last" has status "publish"
+
+Feature Add a page (part 2)
+    Scenario Add page inside "SPM Page last"
+        Given I am on SPM main page
+        When I add a page inside page "SPM Page last"
+        - post_title: { "type": "text", "value": "SPM Page inside" }
+        - add_mode: { "type": "radio", "value": "inside" }
+        - post_status: { "type": "radio", "value": "publish" }
+        Then Page "SPM Page last" has a sub-page "SPM Page inside"
+        And I see 5 pages
+
+Feature Edit page content
+    Scenario Edit content of page "WP Page 1"
+        Given I am on SPM main page
+        When I click the edit content button for page "WP Page 1"
+        And I edit a page via WP
+        - post_title: { "type": "text", "value": "SPM Page 1" }
+        Given I am on SPM main page
+        Then Page "SPM Page 1" exist at pos 1

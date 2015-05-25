@@ -149,7 +149,7 @@ Try it - it's free!
 = 1.2.0 =
  * Fixed bug: broken trash link
  * Added a move button to the page manager pages, hovering it will display a help message
- * Added language: Chinese (Thanks to: Ahrale).
+ * Added language: Hebrew (Thanks to: Ahrale).
  * Numerous small inprovements
  * Ready for Wordpress 4.2.2
 
