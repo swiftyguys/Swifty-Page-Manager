@@ -25,6 +25,7 @@ Featureset All features
     Feature Publish page
 # dojh Make "Feature Edit page content" working with Swity mode, then remove the feature under "Run All tests in WP mode" and then add it here
 
+
 Feature SPM main page
     Scenario SPM main page visible after fresh install
         Given I have a fresh install

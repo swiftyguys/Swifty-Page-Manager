@@ -29,16 +29,6 @@ class ThisStory extends SSCeption {
         ////////////////////////////////////////
 
         $this->RegisterTry(
-            'I have a fresh install',
-            function() {
-                // When plugin runs for the first time (without other SS plugins), SS mode must be off
-                $this->DeleteCookie( 'ss_mode' );
-            }
-        );
-
-        ////////////////////////////////////////
-
-        $this->RegisterTry(
             'I am in Swifty mode',
             function() {
                 if( $this->GetTryFlag( 'ss_mode' ) !== 'ss_force' ) {
