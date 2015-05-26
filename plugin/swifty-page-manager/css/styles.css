@@ -97,7 +97,7 @@
     border: none;
     font-size: .8em;
     display: inline;
-    margin-right: .75ex;
+    margin-left: .75ex;
 }
 
 .spm-tree-container span.spm-page-in-menu {
@@ -110,7 +110,7 @@
     border: none;
     font-size: .8em;
     display: inline;
-    margin-right: .75ex;
+    margin-left: .75ex;
 }
 
 /*.spm-tree-container span.post_type_draft {*/

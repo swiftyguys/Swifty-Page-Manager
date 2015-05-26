@@ -687,7 +687,7 @@ var SPM = (function( $, document ) {
     spm.setLabel = function( $li, label ) {
         var aFirst = $li.find( 'a:first' );
 
-        aFirst.find( 'ins' ).first().after( label );
+        aFirst.append( label );
     };
 
     spm.bindCleanNodes = function () {
