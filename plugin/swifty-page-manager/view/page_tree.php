@@ -354,7 +354,7 @@ $post_type_object = get_post_type_object( $this->_post_type );
                                             </span>
                                             <span class="input-text-wrap">
                                                 <input name="post_title" type="text"
-                                                       class="spm-input spm-input-small spm-input-text" />
+                                                       class="spm-input spm-input-text" />
                                             </span>
                                         </label>
                                         <?php
