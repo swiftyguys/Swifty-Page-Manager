@@ -194,6 +194,10 @@ $post_type_object = get_post_type_object( $this->_post_type );
                   title="<?php esc_attr_e( 'Edit page', 'swifty-page-manager' ); ?>">
                 <span class="dashicons spm-icon dashicons-admin-generic"></span>
             </span>
+            <span class="button button-primary spm-button spm-page-button" data-spm-action="draginfo"
+                  title="<?php esc_attr_e( 'Drag and drop this page to change the order of the pages', 'swifty-page-manager' ); ?>">
+                <span class="spm_swifty_button">&#xe013;</span>
+            </span>
             <span class="button button-primary spm-button spm-page-button" data-spm-action="delete"
                   title="<?php esc_attr_e( 'Delete page', 'swifty-page-manager' ); ?>">
                 <span class="dashicons spm-icon dashicons-trash"></span>
@@ -209,10 +213,6 @@ $post_type_object = get_post_type_object( $this->_post_type );
             <span class="button button-primary spm-button spm-page-button" data-spm-action="publish"
                   title="<?php esc_attr_e( 'Publish page', 'swifty-page-manager' ); ?>">
                 <span class="spm_swifty_button">&#xe602;</span>
-            </span>
-            <span class="button button-primary spm-button spm-page-button" data-spm-action="draginfo"
-                  title="<?php esc_attr_e( 'Drag and drop this page to change the order of the pages', 'swifty-page-manager' ); ?>">
-                <span class="spm_swifty_button">&#xe013;</span>
             </span>
         </span>
 
@@ -354,7 +354,7 @@ $post_type_object = get_post_type_object( $this->_post_type );
                                             </span>
                                             <span class="input-text-wrap">
                                                 <input name="post_title" type="text"
-                                                       class="spm-input spm-input-small spm-input-text" />
+                                                       class="spm-input spm-input-text" />
                                             </span>
                                         </label>
                                         <?php

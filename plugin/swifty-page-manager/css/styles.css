@@ -97,7 +97,7 @@
     border: none;
     font-size: .8em;
     display: inline;
-    margin-right: .75ex;
+    margin-left: .75ex;
 }
 
 .spm-tree-container span.spm-page-in-menu {
@@ -110,7 +110,7 @@
     border: none;
     font-size: .8em;
     display: inline;
-    margin-right: .75ex;
+    margin-left: .75ex;
 }
 
 /*.spm-tree-container span.post_type_draft {*/
@@ -199,10 +199,6 @@
     margin-right: 0;
 }
 
-.inline-edit-row .input-text-wrap input[type=text].spm-input-small {
-    width: 50%;
-}
-
 li a.spm-page-tree-element {
     font-size: larger;
 }
@@ -239,11 +235,11 @@ li.spm-show-page-in-menu-no > a.spm-page-tree-element > ins {
 }
 
 .spm-tmpl-container .inline-edit-col-left {
-    width: 55%;
+    width: 80% !important;
 }
 
 .spm-tmpl-container .inline-edit-col-right {
-    width: 45%;
+    width: 20% !important;
 }
 
 .spm-tmpl-container fieldset.inline-edit-col-right .inline-edit-col {
