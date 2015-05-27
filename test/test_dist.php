@@ -1,7 +1,9 @@
 <?php
 
-include 'spm_story.php';
-//require '../php/probe/ss_ception.php';
+use DataSift\Storyplayer\PlayerLib\StoryTeller;
+use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
+
+include 'ss_story.php';
 
 ////////////////////////////////////////
 
@@ -61,3 +63,4 @@ class ThisStory extends SSStory {
 ////////////////////////////////////////
 
 $GLOBALS['ssStory'] = new ThisStory();
+$story = $GLOBALS['ssStory']->SetupStory( 'Swifty Page Manager' );
