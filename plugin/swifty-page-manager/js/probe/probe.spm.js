@@ -373,7 +373,7 @@
                 $( probe.Utils.getPageSelector( input.page ) ).MustExist().Click();
 
                 // Click on the 'Delete page' button
-                $( '.spm-page-button:eq(2)' ).MustBeVisible().Click();
+                $( '.spm-page-button[title="Delete page"]' ).MustBeVisible().Click();
 
                 $( this.deleteButton ).WaitForVisible( 'Step4' );
             },
@@ -402,7 +402,7 @@
                 $( probe.Utils.getPageSelector( input.page ) ).MustExist().Click();
 
                 // Click on the 'Publish page' button
-                $( '.spm-page-button:eq(5)' ).MustBeVisible().Click();
+                $( '.spm-page-button[title="Publish page"]' ).MustBeVisible().Click();
 
                 $( probe.Utils.getPageSelector( input.page ) ).WaitForFn( 'Wait3', 'Step4', 1000, new Date().getTime() + 800 );
             },
@@ -437,7 +437,7 @@
                 $( probe.Utils.getPageSelector( input.page ) ).MustExist().Click();
 
                 // Click on the 'Edit page content' button
-                $( '.spm-page-button:eq(3)' ).MustBeVisible().Click();
+                $( '.spm-page-button[title="Edit page content"]' ).MustBeVisible().Click();
             }
         }, {
             'page': '{{match 0}}'
