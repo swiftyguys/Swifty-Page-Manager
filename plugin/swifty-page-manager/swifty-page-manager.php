@@ -1098,7 +1098,7 @@ class SwiftyPageManager
         }
 
         if ( current_user_can( $post_type_object->cap->delete_post, $page_id ) ) {
-            if( $one_page->post_parent ) {
+            if( !$this->is_swifty || $one_page->post_parent ) {
                 $arr_page_css_styles[] = 'spm-can-delete';
             } else {
                 $page_count = count( get_pages( 'parent=0' ) );
