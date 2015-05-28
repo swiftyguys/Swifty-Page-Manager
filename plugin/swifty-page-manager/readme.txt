@@ -147,7 +147,7 @@ Try it - it's free!
 == Changelog ==
 
 = 1.2.1 =
- * Fixed important bug: 1.2.0 caused the plugin to confict with some other plugins. Please update asap!
+ * Fixed important bug: 1.2.0 caused the plugin to conflict with some other plugins. Please update asap!
  * Changed: Status labels for draft etc. are now after the page title instead of in front
  * Changed: Rearranged a few of the page icons
  * Changed: Input fields are now wider
