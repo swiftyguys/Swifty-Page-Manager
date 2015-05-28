@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-21 16:15+0200\n"
+"POT-Creation-Date: 2015-05-28 13:25+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -202,23 +202,23 @@ msgid "Edit page"
 msgstr ""
 
 #: ../plugin/swifty-page-manager/view/page_tree.php:198
-msgid "Delete page"
+msgid "Drag and drop this page to change the order of the pages"
 msgstr ""
 
 #: ../plugin/swifty-page-manager/view/page_tree.php:202
-msgid "Edit page content"
+msgid "Delete page"
 msgstr ""
 
 #: ../plugin/swifty-page-manager/view/page_tree.php:206
-msgid "View page"
+msgid "Edit page content"
 msgstr ""
 
 #: ../plugin/swifty-page-manager/view/page_tree.php:210
-msgid "Publish page"
+msgid "View page"
 msgstr ""
 
 #: ../plugin/swifty-page-manager/view/page_tree.php:214
-msgid "Drag and drop this page to change the order of the pages"
+msgid "Publish page"
 msgstr ""
 
 #: ../plugin/swifty-page-manager/view/page_tree.php:233

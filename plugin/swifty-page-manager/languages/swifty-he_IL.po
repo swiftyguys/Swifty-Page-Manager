@@ -123,7 +123,7 @@ msgstr "משתמש לא ידוע"
 msgid "[untitled page]"
 msgstr "[עמוד ללא כותרת]"
 
-#: view/page_tree.php:214
+#: view/page_tree.php:198
 msgid "Drag and drop this page to change the order of the pages"
 msgstr ""
 
@@ -195,19 +195,19 @@ msgstr "הוספת עמוד"
 msgid "Edit page"
 msgstr "עריכת העמוד"
 
-#: view/page_tree.php:198
+#: view/page_tree.php:202
 msgid "Delete page"
 msgstr "מחיקת העמוד"
 
-#: view/page_tree.php:202
+#: view/page_tree.php:206
 msgid "Edit page content"
 msgstr "עריכת תוכן העמוד"
 
-#: view/page_tree.php:206
+#: view/page_tree.php:210
 msgid "View page"
 msgstr "הצג את העמוד"
 
-#: view/page_tree.php:210
+#: view/page_tree.php:214
 msgid "Publish page"
 msgstr "פרסם את העמוד"
 

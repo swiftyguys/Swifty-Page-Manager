@@ -123,7 +123,7 @@ msgstr "未知用户"
 msgid "[untitled page]"
 msgstr "[无标题页面]"
 
-#: view/page_tree.php:214
+#: view/page_tree.php:198
 msgid "Drag and drop this page to change the order of the pages"
 msgstr ""
 
@@ -195,19 +195,19 @@ msgstr "新建页面"
 msgid "Edit page"
 msgstr "编辑属性"
 
-#: view/page_tree.php:198
+#: view/page_tree.php:202
 msgid "Delete page"
 msgstr "移至回收站"
 
-#: view/page_tree.php:202
+#: view/page_tree.php:206
 msgid "Edit page content"
 msgstr "编辑页面内容"
 
-#: view/page_tree.php:206
+#: view/page_tree.php:210
 msgid "View page"
 msgstr "查看页面"
 
-#: view/page_tree.php:210
+#: view/page_tree.php:214
 msgid "Publish page"
 msgstr "发布页面"
 

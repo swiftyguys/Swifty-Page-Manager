@@ -127,7 +127,7 @@ msgstr "Unknown user"
 msgid "[untitled page]"
 msgstr "[untitled page]"
 
-#: view/page_tree.php:214
+#: view/page_tree.php:198
 msgid "Drag and drop this page to change the order of the pages"
 msgstr "Drag and drop this page to change the order of the pages"
 
@@ -199,19 +199,19 @@ msgstr "Add page"
 msgid "Edit page"
 msgstr "Edit page"
 
-#: view/page_tree.php:198
+#: view/page_tree.php:202
 msgid "Delete page"
 msgstr "Delete page"
 
-#: view/page_tree.php:202
+#: view/page_tree.php:206
 msgid "Edit page content"
 msgstr "Edit page content"
 
-#: view/page_tree.php:206
+#: view/page_tree.php:210
 msgid "View page"
 msgstr "View page"
 
-#: view/page_tree.php:210
+#: view/page_tree.php:214
 msgid "Publish page"
 msgstr "Publish page"
 

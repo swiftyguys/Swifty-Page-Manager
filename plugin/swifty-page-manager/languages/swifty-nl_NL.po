@@ -134,7 +134,7 @@ msgstr "Onbekende gebruiker"
 msgid "[untitled page]"
 msgstr "[Pagina zonder titel]"
 
-#: view/page_tree.php:214
+#: view/page_tree.php:198
 msgid "Drag and drop this page to change the order of the pages"
 msgstr "Versleep deze pagina om de volgorde van pagina's te veranderen"
 
@@ -206,19 +206,19 @@ msgstr "Voeg pagina toe"
 msgid "Edit page"
 msgstr "Bewerk pagina"
 
-#: view/page_tree.php:198
+#: view/page_tree.php:202
 msgid "Delete page"
 msgstr "Verwijder pagina"
 
-#: view/page_tree.php:202
+#: view/page_tree.php:206
 msgid "Edit page content"
 msgstr "Bewerk paginainhoud"
 
-#: view/page_tree.php:206
+#: view/page_tree.php:210
 msgid "View page"
 msgstr "Bekijk pagina"
 
-#: view/page_tree.php:210
+#: view/page_tree.php:214
 msgid "Publish page"
 msgstr "Publiceer pagina"
 

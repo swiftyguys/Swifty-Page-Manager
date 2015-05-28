@@ -124,7 +124,7 @@ msgstr "Nepoznat korisnik"
 msgid "[untitled page]"
 msgstr "[bezimena stranica]"
 
-#: view/page_tree.php:214
+#: view/page_tree.php:198
 msgid "Drag and drop this page to change the order of the pages"
 msgstr ""
 
@@ -196,19 +196,19 @@ msgstr "Dodaj stranicu"
 msgid "Edit page"
 msgstr "Uredi stranicu"
 
-#: view/page_tree.php:198
+#: view/page_tree.php:202
 msgid "Delete page"
 msgstr "Obriši stranicu"
 
-#: view/page_tree.php:202
+#: view/page_tree.php:206
 msgid "Edit page content"
 msgstr "Uredi sadržaj stranice"
 
-#: view/page_tree.php:206
+#: view/page_tree.php:210
 msgid "View page"
 msgstr "Pregledaj stranicu"
 
-#: view/page_tree.php:210
+#: view/page_tree.php:214
 msgid "Publish page"
 msgstr "Objavi stranicu"
 
