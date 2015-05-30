@@ -39,8 +39,9 @@ class SwiftyPageManager
         $this->plugin_dir_url = plugins_url( rawurlencode( basename( $this->plugin_dir ) ) );
         $this->plugin_url = $_SERVER[ 'REQUEST_URI' ];
 
-        if( ! class_exists( 'LibSwiftyPluginView' ) ) {
-            require_once plugin_dir_path( __FILE__ ) . 'lib/swifty_plugin/php/lib_swifty_plugin_view.php';
+        require_once plugin_dir_path( __FILE__ ) . 'lib/swifty_plugin/php/autoload.php';
+        if( is_null( LibSwiftyPlugin::get_instance() ) ) {
+            new LibSwiftyPlugin();
         }
 
         add_filter( 'swifty_active_plugins', array( $this, 'hook_swifty_active_plugins' ) );
@@ -132,8 +133,8 @@ class SwiftyPageManager
                 add_filter( 'status_header',       array( $this, 'status_header' ) );
             }
 
+            require_once plugin_dir_path( __FILE__ ) . 'lib/swifty_plugin/php/autoload.php';
             if ( ! class_exists( 'LibSwiftyPlugin' ) ) {
-                require_once plugin_dir_path( __FILE__ ) . 'lib/swifty_plugin/php/lib_swifty_plugin.php';
                 new LibSwiftyPlugin();
             }
         }
