@@ -3,7 +3,7 @@
 use DataSift\Storyplayer\PlayerLib\StoryTeller;
 use DataSift\Storyplayer\Prose\E5xx_ActionFailed;
 
-include 'ss_story.php';
+include '../plugin/swifty-page-manager/lib/swifty_plugin/php/probe/ss_story.php';
 
 ////////////////////////////////////////
 

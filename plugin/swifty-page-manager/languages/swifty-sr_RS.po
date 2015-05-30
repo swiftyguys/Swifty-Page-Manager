@@ -11,15 +11,15 @@ msgstr ""
 "X-Generator: GlotPress/0.1\n"
 "Project-Id-Version: Swifty Page Manager\n"
 
-#: swifty-page-manager.php:143
+#: swifty-page-manager.php:147
 msgid "SwiftySite Pages"
 msgstr ""
 
-#: swifty-page-manager.php:390
+#: swifty-page-manager.php:394
 msgid "Pages"
 msgstr ""
 
-#: swifty-page-manager.php:441
+#: swifty-page-manager.php:445
 msgid ""
 "Unfortunately you can not create a sub page under a page with status 'Draft' "
 "because the draft page has not yet been published and thus technically does "
@@ -27,100 +27,100 @@ msgid ""
 "drag and drop it to become a sub page."
 msgstr ""
 
-#: swifty-page-manager.php:200 swifty-page-manager.php:352
-#: swifty-page-manager.php:413
+#: swifty-page-manager.php:204 swifty-page-manager.php:356
+#: swifty-page-manager.php:417
 msgid "You do not have sufficient permissions to access this page. #314"
 msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #314"
 
-#: swifty-page-manager.php:145
+#: swifty-page-manager.php:149
 msgid "Swifty Page Manager"
 msgstr "Swifty Page Manager"
 
-#: swifty-page-manager.php:432
+#: swifty-page-manager.php:436
 msgid "draft"
 msgstr "skica"
 
-#: swifty-page-manager.php:433
+#: swifty-page-manager.php:437
 msgid "future"
 msgstr "budući"
 
-#: swifty-page-manager.php:434
+#: swifty-page-manager.php:438
 msgid "protected"
 msgstr "zaštićeni"
 
-#: swifty-page-manager.php:435
+#: swifty-page-manager.php:439
 msgid "pending"
 msgstr "na čekanju"
 
-#: swifty-page-manager.php:436
+#: swifty-page-manager.php:440
 msgid "private"
 msgstr "privatni"
 
-#: swifty-page-manager.php:437
+#: swifty-page-manager.php:441
 msgid "trash"
 msgstr "korpa za otpatke"
 
-#: swifty-page-manager.php:438
+#: swifty-page-manager.php:442
 msgid "Password protected page"
 msgstr "Stranica zaštićena lozinkom"
 
-#: swifty-page-manager.php:439
+#: swifty-page-manager.php:443
 msgid "No pages found."
 msgstr "Nisu pronađene stranice"
 
-#: swifty-page-manager.php:440
+#: swifty-page-manager.php:444
 msgid "Hidden"
 msgstr "Skrivene"
 
-#: swifty-page-manager.php:442
+#: swifty-page-manager.php:446
 msgid "published - draft content"
 msgstr ""
 
-#: swifty-page-manager.php:400
+#: swifty-page-manager.php:404
 msgid "General"
 msgstr ""
 
-#: swifty-page-manager.php:462
+#: swifty-page-manager.php:466
 msgid "There are currently no settings for this plugin."
 msgstr ""
 
-#: swifty-page-manager.php:476
+#: swifty-page-manager.php:480
 msgid "You do not have sufficient permissions to access this page. #359"
 msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #359"
 
-#: swifty-page-manager.php:488
+#: swifty-page-manager.php:492
 msgid "You do not have sufficient permissions to access this page. #371"
 msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #371"
 
-#: swifty-page-manager.php:523
+#: swifty-page-manager.php:527
 msgid "You do not have sufficient permissions to access this page. #465"
 msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #465"
 
-#: swifty-page-manager.php:589
+#: swifty-page-manager.php:593
 msgid "You do not have sufficient permissions to access this page. #588"
 msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #588"
 
-#: swifty-page-manager.php:598
+#: swifty-page-manager.php:602
 msgid "New page"
 msgstr "Nova stranica"
 
-#: swifty-page-manager.php:687
+#: swifty-page-manager.php:691
 msgid "You do not have sufficient permissions to access this page. #708"
 msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #708"
 
-#: swifty-page-manager.php:721
+#: swifty-page-manager.php:725
 msgid "You do not have sufficient permissions to access this page. #747"
 msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #747"
 
-#: swifty-page-manager.php:745
+#: swifty-page-manager.php:749
 msgid "You do not have sufficient permissions to access this page. #771"
 msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #771"
 
-#: swifty-page-manager.php:1073
+#: swifty-page-manager.php:1077
 msgid "Unknown user"
 msgstr "Nepoznat korisnik"
 
-#: swifty-page-manager.php:1079
+#: swifty-page-manager.php:1083
 msgid "[untitled page]"
 msgstr "[bezimena stranica]"
 

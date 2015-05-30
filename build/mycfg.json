@@ -1,6 +1,7 @@
 {
     "base_path": "../plugin/swifty-page-manager/",
     "plugin_code": "swifty-page-manager",
+    "rel_swifty_plugin": "lib/swifty_plugin/",
     "jshint": {
         "src": [ "<%= grunt.getSourcePath() %>js/swifty-page-manager.js" ],
         "ignores": []
