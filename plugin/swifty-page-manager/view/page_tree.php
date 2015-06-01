@@ -472,6 +472,13 @@ $post_type_object = get_post_type_object( $this->_post_type );
                                                 </span>
                                             </label>
                                             <label class="alignleft">
+                                                <input name="spm_header_visibility" type="radio" value="default"
+                                                       class="spm-input-radio" />
+                                                <span class="checkbox-title">
+                                                    <?php esc_html_e( 'Default', 'swifty-page-manager' ) ?>
+                                                </span>
+                                            </label>
+                                            <label class="alignleft">
                                                 <input name="spm_header_visibility" type="radio" value="show"
                                                        class="spm-input-radio" />
                                                 <span class="checkbox-title">
@@ -490,6 +497,13 @@ $post_type_object = get_post_type_object( $this->_post_type );
                                             <label class="alignleft">
                                                 <span class="title spm-label-title">
                                                     <?php esc_html_e( 'Sidebar', 'swifty-page-manager' ) ?>
+                                                </span>
+                                            </label>
+                                            <label class="alignleft">
+                                                <input name="spm_sidebar_visibility" type="radio" value="default"
+                                                       class="spm-input-radio" />
+                                                <span class="checkbox-title">
+                                                    <?php esc_html_e( 'Default', 'swifty-page-manager' ) ?>
                                                 </span>
                                             </label>
                                             <label class="alignleft">

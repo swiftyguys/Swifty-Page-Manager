@@ -760,8 +760,8 @@ class SwiftyPageManager
 
         $defaults = array( 'spm_show_in_menu'       => 'show'
                          , 'spm_page_title_seo'     => $post->post_title
-                         , 'spm_header_visibility'  => 'hide'
-                         , 'spm_sidebar_visibility' => 'hide'
+                         , 'spm_header_visibility'  => 'default'
+                         , 'spm_sidebar_visibility' => 'default'
                          );
 
         foreach ( $defaults as $key => $val ) {
