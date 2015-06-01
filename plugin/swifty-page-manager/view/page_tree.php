@@ -449,20 +449,20 @@ $post_type_object = get_post_type_object( $this->_post_type );
                                             </label>
                                         </div>
                                         <label class="spm-advanced-feature">
-                                            <span class="title spm-label-title">
-                                                <?php esc_html_e( 'Template', 'swifty-page-manager' ) ?>
-                                            </span>
-                                            <select name="page_template">
-                                                <option value="default">
-                                                    <?php esc_html_e( 'Default template', 'swifty-page-manager' ) ?></option>
-                                                    <?php
-                                                        $templates = wp_get_theme()->get_page_templates();
-
-                                                        foreach ( $templates as $template_name => $template_filename ) {
-                                                            echo '<option value="' . $template_name .'">' . $template_filename . '</option>';
-                                                        }
-                                                    ?>
-                                            </select>
+<!--                                            <span class="title spm-label-title">-->
+<!--                                                --><?php //esc_html_e( 'Template', 'swifty-page-manager' ) ?>
+<!--                                            </span>-->
+<!--                                            <select name="page_template">-->
+<!--                                                <option value="default">-->
+<!--                                                    --><?php //esc_html_e( 'Default template', 'swifty-page-manager' ) ?><!--</option>-->
+<!--                                                    --><?php
+//                                                        $templates = wp_get_theme()->get_page_templates();
+//
+//                                                        foreach ( $templates as $template_name => $template_filename ) {
+//                                                            echo '<option value="' . $template_name .'">' . $template_filename . '</option>';
+//                                                        }
+//                                                    ?>
+<!--                                            </select>-->
                                         </label>
                                         <?php if ( $this->is_swifty ): ?>
                                         <div class="inline-edit-group spm-advanced-feature">

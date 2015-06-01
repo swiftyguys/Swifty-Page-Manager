@@ -65,7 +65,7 @@
             }
 
             dfds.add( probe.Utils.setValues( input.values, 'post_status' ) );
-            dfds.add( probe.Utils.setValues( input.values, 'page_template' ) );
+            //dfds.add( probe.Utils.setValues( input.values, 'page_template' ) );
 
             probe.WaitForDfds( dfds, 'Step6', 60000 );
         },

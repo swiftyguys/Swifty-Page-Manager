@@ -613,7 +613,7 @@ class SwiftyPageManager
         $post_data['post_title']    = $post_title;
         $post_data['post_status']   = $post_status;
         $post_data['post_type']     = $_POST['post_type'];
-        $post_data['page_template'] = $_POST['page_template'];
+//        $post_data['page_template'] = $_POST['page_template'];
 
         if ( isset( $post_id ) && ! empty( $post_id ) ) {  // We're in edit mode
             $post_data['ID'] = $post_id;
@@ -797,7 +797,7 @@ class SwiftyPageManager
 
         li.find( 'input[name="post_title"]' ).val( <?php echo json_encode( $post->post_title ); ?> );
         li.find( 'input[name="post_status"]' ).val( [ <?php echo json_encode( $post_status ); ?> ] );
-        li.find( 'select[name="page_template"]' ).val( [ <?php echo json_encode( $post->page_template ); ?> ] );
+<!--        li.find( 'select[name="page_template"]' ).val( [ --><?php //echo json_encode( $post->page_template ); ?><!-- ] );-->
         li.find( 'input[name="post_name"]' ).val( <?php echo json_encode( $spm_page_url ); ?> );
         li.find( 'input[name="spm_is_custom_url"]' ).val( <?php echo json_encode( $spm_is_custom_url ); ?> );
         li.find( 'input[name="spm_show_in_menu"]' ).val( [ <?php echo json_encode( $post_meta['spm_show_in_menu'] ); ?> ] );
