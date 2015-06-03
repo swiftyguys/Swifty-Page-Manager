@@ -82,7 +82,7 @@ $post_type_object = get_post_type_object( $this->_post_type );
                               <?php echo esc_attr( ('any' === $this->get_post_status()) ? 'current' : '' ); ?>"
                        href="<?php echo esc_attr( add_query_arg( 'status', 'any', $this->get_plugin_url() ) ); ?>"
                         data-spm-status="any">
-                        <?php _e('All', 'swifty-page-manager'); ?>
+                        <?php _e('All', 'swifty'); ?>
                         <span class="count">(<?php esc_html_e( $post_count_all ); ?>)</span>
                     </a> |
                 </li>
@@ -92,7 +92,7 @@ $post_type_object = get_post_type_object( $this->_post_type );
                               <?php echo esc_attr( ('publish' === $this->get_post_status()) ? 'current' : '' ); ?>"
                        href="<?php echo esc_attr( add_query_arg( 'status', 'publish', $this->get_plugin_url() ) ); ?>"
                         data-spm-status="publish">
-                        <?php _e('Published', 'swifty-page-manager'); ?>
+                        <?php _e('Published', 'swifty'); ?>
                         <span class="count">(<?php esc_html_e( $post_count_publish ); ?>)</span>
                     </a> |
                 </li>
@@ -102,7 +102,7 @@ $post_type_object = get_post_type_object( $this->_post_type );
                               <?php echo esc_attr( ( 'draft' === $this->get_post_status()) ? 'current' : '' ); ?>"
                        href="<?php echo esc_attr( add_query_arg( 'status', 'draft', $this->get_plugin_url() ) ); ?>"
                         data-spm-status="draft">
-                        <?php _e('Draft', 'swifty-page-manager'); ?>
+                        <?php _e('Draft', 'swifty'); ?>
                         <span class="count">(<?php esc_html_e( $post_count_draft ); ?>)</span>
                     </a> |
                 </li>
@@ -112,7 +112,7 @@ $post_type_object = get_post_type_object( $this->_post_type );
                               <?php echo esc_attr( ('pending' === $this->get_post_status()) ? 'current' : '' ); ?>"
                        href="<?php echo esc_attr( add_query_arg( 'status', 'pending', $this->get_plugin_url() ) ); ?>"
                         data-spm-status="pending">
-                        <?php _e('Pending', 'swifty-page-manager'); ?>
+                        <?php _e('Pending', 'swifty'); ?>
                         <span class="count">(<?php esc_html_e( $post_count_pending ); ?>)</span>
                     </a> |
                 </li>
@@ -122,7 +122,7 @@ $post_type_object = get_post_type_object( $this->_post_type );
                               <?php echo esc_attr( ('future' === $this->get_post_status()) ? 'current' : '' ); ?>"
                        href="<?php echo esc_attr( add_query_arg( 'status', 'future', $this->get_plugin_url() ) ); ?>"
                         data-spm-status="future">
-                        <?php _e('Future', 'swifty-page-manager'); ?>
+                        <?php _e('Future', 'swifty'); ?>
                         <span class="count">(<?php esc_html_e( $post_count_future ); ?>)</span>
                     </a> |
                 </li>
@@ -132,7 +132,7 @@ $post_type_object = get_post_type_object( $this->_post_type );
                               <?php echo esc_attr( ('private' === $this->get_post_status()) ? 'current' : '' ); ?>"
                        href="<?php echo esc_attr( add_query_arg( 'status', 'private', $this->get_plugin_url() ) ); ?>"
                         data-spm-status="private">
-                        <?php _e('Private', 'swifty-page-manager'); ?>
+                        <?php _e('Private', 'swifty'); ?>
                         <span class="count">(<?php esc_html_e( $post_count_private ); ?>)</span>
                     </a> |
                 </li>
@@ -141,28 +141,28 @@ $post_type_object = get_post_type_object( $this->_post_type );
                     <a class="spm-status-trash"
                        href="<?php echo esc_attr( admin_url( 'edit.php?post_status=trash&post_type=page' ) ); ?>"
                        data-spm-status="trash">
-                        <?php _e('Trash', 'swifty-page-manager') ?>
+                        <?php _e('Trash', 'swifty') ?>
                         <span class="count">(<?php esc_html_e( $post_count_trash ); ?>)</span>
                     </a> |
                 </li>
 
 
-                <li><a href="#" class="spm-open-all"><?php _e( 'Expand', 'swifty-page-manager' ); ?></a> |</li>
-                <li><a href="#" class="spm-close-all"><?php _e( 'Collapse', 'swifty-page-manager' ); ?></a></li>
+                <li><a href="#" class="spm-open-all"><?php _e( 'Expand', 'swifty' ); ?></a> |</li>
+                <li><a href="#" class="spm-close-all"><?php _e( 'Collapse', 'swifty' ); ?></a></li>
 
                 <li>
                     <form class="spm-search-form" method="get" action="">
                         <input type="text" name="search" class="spm-search" />
-                        <a title="<?php _e( 'Clear search', 'swifty-page-manager' ) ?>" class="spm-search-form-reset" href="#">x</a>
-                        <input type="button" class="spm-search-submit button button-small" value="<?php _e( 'Search', 'swifty-page-manager' ) ?>" />
-                        <span class="spm-search-form-working"><?php _e( 'Searching...', 'swifty-page-manager' ) ?></span>
-                        <span class="spm-search-form-no-hits"><?php _e( 'Nothing found.', 'swifty-page-manager' ) ?></span>
+                        <a title="<?php _e( 'Clear search', 'swifty' ) ?>" class="spm-search-form-reset" href="#">x</a>
+                        <input type="button" class="spm-search-submit button button-small" value="<?php _e( 'Search', 'swifty' ) ?>" />
+                        <span class="spm-search-form-working"><?php _e( 'Searching...', 'swifty' ) ?></span>
+                        <span class="spm-search-form-no-hits"><?php _e( 'Nothing found.', 'swifty' ) ?></span>
                     </form>
                 </li>
             </ul>
 
             <div class="spm-working">
-                <?php _e( 'Loading...', 'swifty-page-manager' ); ?>
+                <?php _e( 'Loading...', 'swifty' ); ?>
             </div>
 
             <div class="spm-message updated below-h2 hidden">
@@ -170,13 +170,13 @@ $post_type_object = get_post_type_object( $this->_post_type );
             </div>
 
             <div class="spm-tree-container tree-default">
-                <?php _e( 'Loading tree', 'swifty-page-manager' ); ?>
+                <?php _e( 'Loading tree', 'swifty' ); ?>
             </div>
 
             <!-- SPM template no pages -->
             <div class="spm-no-pages spm-hidden">
             <span class="button button-primary spm-button spm-do-button spm-no-posts-add" data-spm-action="add"
-                  title="<?php esc_attr_e( 'Add page', 'swifty-page-manager' ) ?>">
+                  title="<?php esc_attr_e( 'Add page', 'swifty' ) ?>">
                 <span class="dashicons spm-icon dashicons-plus"></span>
             </span>
             </div>
@@ -187,31 +187,31 @@ $post_type_object = get_post_type_object( $this->_post_type );
         <!-- SPM template page buttons-->
         <span class="spm-page-actions-tmpl __TMPL__" style="display:none;">
             <span class="button button-primary spm-button spm-page-button" data-spm-action="add"
-                  title="<?php esc_attr_e( 'Add page', 'swifty-page-manager' ); ?>">
+                  title="<?php esc_attr_e( 'Add page', 'swifty' ); ?>">
                 <span class="dashicons spm-icon dashicons-plus"></span>
             </span>
             <span class="button button-primary spm-button spm-page-button" data-spm-action="settings"
-                  title="<?php esc_attr_e( 'Edit page', 'swifty-page-manager' ); ?>">
+                  title="<?php esc_attr_e( 'Edit page', 'swifty' ); ?>">
                 <span class="dashicons spm-icon dashicons-admin-generic"></span>
             </span>
             <span class="button button-primary spm-button spm-page-button" data-spm-action="draginfo"
-                  title="<?php esc_attr_e( 'Drag and drop this page to change the order of the pages', 'swifty-page-manager' ); ?>">
+                  title="<?php esc_attr_e( 'Drag and drop this page to change the order of the pages', 'swifty' ); ?>">
                 <span class="spm_swifty_button">&#xe013;</span>
             </span>
             <span class="button button-primary spm-button spm-page-button" data-spm-action="delete"
-                  title="<?php esc_attr_e( 'Delete page', 'swifty-page-manager' ); ?>">
+                  title="<?php esc_attr_e( 'Delete page', 'swifty' ); ?>">
                 <span class="dashicons spm-icon dashicons-trash"></span>
             </span>
             <span class="button button-primary spm-button spm-page-button" data-spm-action="edit"
-                  title="<?php esc_attr_e( 'Edit page content', 'swifty-page-manager' ); ?>">
+                  title="<?php esc_attr_e( 'Edit page content', 'swifty' ); ?>">
                 <span class="dashicons spm-icon dashicons-edit"></span>
             </span>
             <span class="button button-primary spm-button spm-page-button" data-spm-action="view"
-                  title="<?php esc_attr_e( 'View page', 'swifty-page-manager' ); ?>">
+                  title="<?php esc_attr_e( 'View page', 'swifty' ); ?>">
                 <span class="dashicons spm-icon dashicons-visibility"></span>
             </span>
             <span class="button button-primary spm-button spm-page-button" data-spm-action="publish"
-                  title="<?php esc_attr_e( 'Publish page', 'swifty-page-manager' ); ?>">
+                  title="<?php esc_attr_e( 'Publish page', 'swifty' ); ?>">
                 <span class="spm_swifty_button">&#xe602;</span>
             </span>
         </span>
@@ -231,7 +231,7 @@ $post_type_object = get_post_type_object( $this->_post_type );
                                         <div class="inline-edit-group">
                                             <span class="title">
                                                 <?php _e( "Are you sure you want to delete this page with all it's content?",
-                                                          'swifty-page-manager' ); ?>
+                                                          'swifty' ); ?>
                                             </span>
                                         </div>
                                     </div>
@@ -239,10 +239,10 @@ $post_type_object = get_post_type_object( $this->_post_type );
                                 <fieldset class="inline-edit-col-right">
                                     <div class="inline-edit-group spm-buttons-confirm">
                                         <input type="button" class="button-secondary alignright spm-button spm-do-button"
-                                               data-spm-action="cancel" value="<?php esc_attr_e( 'Cancel', 'swifty-page-manager' ); ?>" />
+                                               data-spm-action="cancel" value="<?php esc_attr_e( 'Cancel', 'swifty' ); ?>" />
                                         <br class="clear">
                                         <input type="button" class="button-primary alignright spm-button spm-do-button"
-                                               data-spm-action="delete" value="<?php esc_attr_e( 'Delete', 'swifty-page-manager' ); ?>" />
+                                               data-spm-action="delete" value="<?php esc_attr_e( 'Delete', 'swifty' ); ?>" />
                                     </div>
                                 </fieldset>
                             </td>
@@ -267,7 +267,7 @@ $post_type_object = get_post_type_object( $this->_post_type );
                                         <div class="inline-edit-group">
                                             <span class="title">
                                                 <?php esc_html_e( 'Are you sure you want to publish this page so it becomes visible to your visitors?',
-                                                          'swifty-page-manager' ) ?>
+                                                          'swifty' ) ?>
                                             </span>
                                         </div>
                                     </div>
@@ -276,11 +276,11 @@ $post_type_object = get_post_type_object( $this->_post_type );
                                     <div class="inline-edit-group spm-buttons-confirm">
                                         <input type="button" class="button-secondary alignright spm-button spm-do-button"
                                                data-spm-action="cancel"
-                                               value="<?php esc_attr_e( 'Cancel', 'swifty-page-manager' ) ?>" />
+                                               value="<?php esc_attr_e( 'Cancel', 'swifty' ) ?>" />
                                         <br class="clear">
                                         <input type="button" class="button-primary alignright spm-button spm-do-button"
                                                data-spm-action="publish"
-                                               value="<?php esc_attr_e( 'Publish', 'swifty-page-manager' ) ?>" />
+                                               value="<?php esc_attr_e( 'Publish', 'swifty' ) ?>" />
                                     </div>
                                 </fieldset>
                             </td>
@@ -301,7 +301,7 @@ $post_type_object = get_post_type_object( $this->_post_type );
         'The text should ideally be no longer than 70 characters.<br /><br />' .
         'Example:<br /><br />' .
         'Swifty Page Manager - easily create a page tree in Wordpress',
-        'swifty-page-manager' );
+        'swifty' );
         ?>
         </span>
 
@@ -313,7 +313,7 @@ $post_type_object = get_post_type_object( $this->_post_type );
         'Example:<br><br />' .
         '%s/<b>keyword</b><br />' .
         '%s/<b>product-or-service</b>',
-        'swifty-page-manager' ), home_url(), home_url() );
+        'swifty' ), home_url(), home_url() );
         ?>
         </span>
 
@@ -322,7 +322,7 @@ $post_type_object = get_post_type_object( $this->_post_type );
         <?php
         _e( 'Status <b>Live</b> means that everyone in the world can see that page and that it is shown in your site menu.<br />' .
         'Status <b>Draft</b> means that only you can see that page when you are logged in and it is not shown in the site menu.',
-        'swifty-page-manager' );
+        'swifty' );
         ?>
         </span>
 
@@ -343,11 +343,11 @@ $post_type_object = get_post_type_object( $this->_post_type );
                                             <?php
                                                 if ( $this->is_swifty ) {
                                             ?>
-                                                <?php esc_html_e( 'Text in menu', 'swifty-page-manager' ) ?>
+                                                <?php esc_html_e( 'Text in menu', 'swifty' ) ?>
                                             <?php
                                                 } else {
                                             ?>
-                                                <?php esc_html_e( 'Title', 'swifty-page-manager' ) ?>
+                                                <?php esc_html_e( 'Title', 'swifty' ) ?>
                                             <?php
                                                 }
                                             ?>
@@ -362,7 +362,7 @@ $post_type_object = get_post_type_object( $this->_post_type );
                                         ?>
                                         <label class="spm-basic-feature">
                                             <span class="title spm-label-title">
-                                                <?php _e( 'Title', 'swifty-page-manager' ) ?>  <span class="button-secondary spm-tooltip-button" rel="spm-title-tooltip"><i class="fa fa-question"></i></span>
+                                                <?php _e( 'Title', 'swifty' ) ?>  <span class="button-secondary spm-tooltip-button" rel="spm-title-tooltip"><i class="fa fa-question"></i></span>
                                             </span>
                                             <span class="input-text-wrap">
                                                 <input name="spm_page_title_seo" type="text" class="spm-input spm-input-text" />
@@ -374,19 +374,19 @@ $post_type_object = get_post_type_object( $this->_post_type );
                                         <div class="inline-edit-group spm-basic-feature">
                                             <label class="alignleft">
                                                 <span class="title spm-label-title">
-                                                    <?php esc_html_e( 'Position', 'swifty-page-manager' ) ?>
+                                                    <?php esc_html_e( 'Position', 'swifty' ) ?>
                                                 </span>
                                             </label>
                                             <label class="alignleft">
                                                 <input name="add_mode" type="radio" value="after" class="spm-input-radio" />
                                                 <span class="checkbox-title">
-                                                    <?php esc_html_e( 'After', 'swifty-page-manager' ) ?>
+                                                    <?php esc_html_e( 'After', 'swifty' ) ?>
                                                 </span>
                                             </label>
                                             <label class="alignleft add_mode_inside">
                                                 <input name="add_mode" type="radio" value="inside" class="spm-input-radio" />
                                                 <span class="checkbox-title">
-                                                    <?php esc_html_e( 'As sub page of', 'swifty-page-manager' ) ?>
+                                                    <?php esc_html_e( 'As sub page of', 'swifty' ) ?>
                                                 </span>
                                             </label>
                                         </div>
@@ -394,11 +394,11 @@ $post_type_object = get_post_type_object( $this->_post_type );
                                         <div class="inline-edit-group spm-more">
                                             <input type="button" class="button-secondary alignright spm-button spm-do-button"
                                                    data-spm-action="more"
-                                                   value="<?php esc_attr_e( 'More', 'swifty-page-manager' ) ?>" />
+                                                   value="<?php esc_attr_e( 'More', 'swifty' ) ?>" />
                                         </div>
                                         <label class="spm-advanced-feature">
                                             <span class="title spm-label-title">
-                                                <?php _e( 'Url', 'swifty-page-manager' ) ?> <span class="button-secondary spm-tooltip-button" rel="spm-url-tooltip"><i class="fa fa-question"></i></span>
+                                                <?php _e( 'Url', 'swifty' ) ?> <span class="button-secondary spm-tooltip-button" rel="spm-url-tooltip"><i class="fa fa-question"></i></span>
                                             </span>
                                             <span class="input-text-wrap">
                                                 <input name="post_name" type="text" class="spm-input spm-input-text" />
@@ -408,21 +408,21 @@ $post_type_object = get_post_type_object( $this->_post_type );
                                         <div class="inline-edit-group spm-advanced-feature">
                                             <label class="alignleft">
                                                 <span class="title spm-label-title">
-                                                    <?php esc_html_e( 'In menu', 'swifty-page-manager' ) ?>
+                                                    <?php esc_html_e( 'In menu', 'swifty' ) ?>
                                                 </span>
                                             </label>
                                             <label class="alignleft">
                                                 <input name="spm_show_in_menu" type="radio" value="show"
                                                        class="spm-input-radio" />
                                                 <span class="checkbox-title">
-                                                    <?php esc_html_e( 'Show', 'swifty-page-manager' ) ?>
+                                                    <?php esc_html_e( 'Show', 'swifty' ) ?>
                                                 </span>
                                             </label>
                                             <label class="alignleft">
                                                 <input name="spm_show_in_menu" type="radio" value="hide"
                                                        class="spm-input-radio" />
                                                 <span class="checkbox-title">
-                                                    <?php esc_html_e( 'Hide', 'swifty-page-manager' ) ?>
+                                                    <?php esc_html_e( 'Hide', 'swifty' ) ?>
                                                 </span>
                                             </label>
                                         </div>
@@ -430,21 +430,21 @@ $post_type_object = get_post_type_object( $this->_post_type );
                                         <div class="inline-edit-group spm-advanced-feature">
                                             <label class="alignleft">
                                                 <span class="title spm-label-title">
-                                                    <?php _e( 'Status', 'swifty-page-manager' ) ?> <?php if ( $this->is_swifty ) { ?><span class="button-secondary spm-tooltip-button" rel="spm-status-tooltip"><i class="fa fa-question"></i></span><?php } ?>
+                                                    <?php _e( 'Status', 'swifty' ) ?> <?php if ( $this->is_swifty ) { ?><span class="button-secondary spm-tooltip-button" rel="spm-status-tooltip"><i class="fa fa-question"></i></span><?php } ?>
                                                 </span>
                                             </label>
                                             <label class="alignleft">
                                                 <input name="post_status" type="radio" value="draft"
                                                        class="spm-input-radio" />
                                                 <span class="checkbox-title">
-                                                    <?php esc_html_e( 'Draft', 'swifty-page-manager' ) ?>
+                                                    <?php esc_html_e( 'Draft', 'swifty' ) ?>
                                                 </span>
                                             </label>
                                             <label class="alignleft">
                                                 <input name="post_status" type="radio" value="publish"
                                                        class="spm-input-radio" />
                                                 <span class="checkbox-title">
-                                                    <?php esc_html_e( 'Live', 'swifty-page-manager' ) ?>
+                                                    <?php esc_html_e( 'Live', 'swifty' ) ?>
                                                 </span>
                                             </label>
                                         </div>
@@ -468,70 +468,70 @@ $post_type_object = get_post_type_object( $this->_post_type );
                                         <div class="inline-edit-group spm-advanced-feature">
                                             <label class="alignleft">
                                                 <span class="title spm-label-title">
-                                                    <?php esc_html_e( 'Header', 'swifty-page-manager' ) ?>
+                                                    <?php esc_html_e( 'Header', 'swifty' ) ?>
                                                 </span>
                                             </label>
                                             <label class="alignleft">
                                                 <input name="spm_header_visibility" type="radio" value="default"
                                                        class="spm-input-radio" />
                                                 <span class="checkbox-title">
-                                                    <?php esc_html_e( 'Default', 'swifty-page-manager' ) ?>
+                                                    <?php esc_html_e( 'Default', 'swifty' ) ?>
                                                 </span>
                                             </label>
                                             <label class="alignleft">
                                                 <input name="spm_header_visibility" type="radio" value="show"
                                                        class="spm-input-radio" />
                                                 <span class="checkbox-title">
-                                                    <?php esc_html_e( 'Show', 'swifty-page-manager' ) ?>
+                                                    <?php esc_html_e( 'Show', 'swifty' ) ?>
                                                 </span>
                                             </label>
                                             <label class="alignleft">
                                                 <input name="spm_header_visibility" type="radio" value="hide"
                                                        class="spm-input-radio" />
                                                 <span class="checkbox-title">
-                                                    <?php esc_html_e( 'Hide', 'swifty-page-manager' ) ?>
+                                                    <?php esc_html_e( 'Hide', 'swifty' ) ?>
                                                 </span>
                                             </label>
                                         </div>
                                         <div class="inline-edit-group spm-advanced-feature">
                                             <label class="alignleft">
                                                 <span class="title spm-label-title">
-                                                    <?php esc_html_e( 'Sidebar', 'swifty-page-manager' ) ?>
+                                                    <?php esc_html_e( 'Sidebar', 'swifty' ) ?>
                                                 </span>
                                             </label>
                                             <label class="alignleft">
                                                 <input name="spm_sidebar_visibility" type="radio" value="default"
                                                        class="spm-input-radio" />
                                                 <span class="checkbox-title">
-                                                    <?php esc_html_e( 'Default', 'swifty-page-manager' ) ?>
+                                                    <?php esc_html_e( 'Default', 'swifty' ) ?>
                                                 </span>
                                             </label>
                                             <label class="alignleft">
                                                 <input name="spm_sidebar_visibility" type="radio" value="left"
                                                        class="spm-input-radio" />
                                                 <span class="checkbox-title">
-                                                    <?php esc_html_e( 'Left', 'swifty-page-manager' ) ?>
+                                                    <?php esc_html_e( 'Left', 'swifty' ) ?>
                                                 </span>
                                             </label>
                                             <label class="alignleft">
                                                 <input name="spm_sidebar_visibility" type="radio" value="right"
                                                        class="spm-input-radio" />
                                                 <span class="checkbox-title">
-                                                    <?php esc_html_e( 'Right', 'swifty-page-manager' ) ?>
+                                                    <?php esc_html_e( 'Right', 'swifty' ) ?>
                                                 </span>
                                             </label>
                                             <label class="alignleft">
                                                 <input name="spm_sidebar_visibility" type="radio" value="hide"
                                                        class="spm-input-radio" />
                                                 <span class="checkbox-title">
-                                                    <?php esc_html_e( 'Hide', 'swifty-page-manager' ) ?>
+                                                    <?php esc_html_e( 'Hide', 'swifty' ) ?>
                                                 </span>
                                             </label>
                                             </span>
                                         </div>
                                         <div class="inline-edit-group spm-less">
                                             <input type="button" class="button-secondary alignright spm-button spm-do-button"
-                                                   data-spm-action="less" value="<?php esc_attr_e( 'Less', 'swifty-page-manager' ) ?>" />
+                                                   data-spm-action="less" value="<?php esc_attr_e( 'Less', 'swifty' ) ?>" />
                                         </div>
                                         <?php endif; // if ( $this->is_swifty ) ?>
                                     </div>
@@ -541,11 +541,11 @@ $post_type_object = get_post_type_object( $this->_post_type );
                                         <div class="inline-edit-group spm-buttons-confirm">
                                             <input type="button"
                                                    class="button-secondary alignright spm-button spm-do-button alignright"
-                                                   data-spm-action="cancel" value="<?php esc_attr_e( 'Cancel', 'swifty-page-manager' ) ?>" />
+                                                   data-spm-action="cancel" value="<?php esc_attr_e( 'Cancel', 'swifty' ) ?>" />
                                             <br class="clear">
                                             <input type="button"
                                                    class="button-primary alignright spm-button spm-do-button alignright"
-                                                   data-spm-action="save" value="<?php esc_attr_e( 'Save', 'swifty-page-manager' ) ?>" />
+                                                   data-spm-action="save" value="<?php esc_attr_e( 'Save', 'swifty' ) ?>" />
                                         </div>
                                     </div>
                                 </fieldset>
