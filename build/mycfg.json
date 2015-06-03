@@ -33,6 +33,10 @@
     "rename": {
         "post_requirejs": { "files": [
             {
+                "src": "<%= grunt.getDestPathPlugin() %>lib/swifty_plugin/css/swifty-admin.css",
+                "dest": "<%= grunt.getDestPathPlugin() %>css/swifty-admin.css"
+            },
+            {
                 "src": "<%= grunt.getDestPathPlugin() %>lib/swifty_plugin/css/swifty-font.css",
                 "dest": "<%= grunt.getDestPathPlugin() %>css/swifty-font.css"
             },
