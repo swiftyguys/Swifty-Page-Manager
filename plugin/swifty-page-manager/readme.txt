@@ -146,6 +146,9 @@ Try it - it's free!
 
 == Changelog ==
 
+= 1.3.1 =
+ * ...
+
 = 1.3.0 =
  * Is prepared for cooperating with upcoming Swifty plugins. Please update asap!
 

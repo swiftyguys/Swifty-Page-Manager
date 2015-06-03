@@ -79,6 +79,13 @@
             "zh-cn": "zh_CN",
             "fy": "fy",
             "he": "he_IL"
+        },
+        "files": {
+            "handlebars": [ "<%= grunt.getSourcePath() %>**/*.*" ],
+            "javascript": [
+                "<%= grunt.getSourcePath() %>js/**/*.js",
+                "!<%= grunt.getSourcePath() %>js/libs/**/*.js"
+            ]
         }
     }
 }

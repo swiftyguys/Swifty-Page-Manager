@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Swifty Page Manager package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2015-05-21 14:09:51+0000\n"
+"PO-Revision-Date: 2015-06-03 11:55:47+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -136,7 +136,7 @@ msgstr "[Pagina zonder titel]"
 
 #: view/page_tree.php:478 view/page_tree.php:506
 msgid "Default"
-msgstr ""
+msgstr "Standaard"
 
 #: view/page_tree.php:198
 msgid "Drag and drop this page to change the order of the pages"
