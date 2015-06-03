@@ -217,6 +217,8 @@ class SwiftyPageManager
                 'ID'           => $post_id,
                 'post_status'   => $_POST['post_status'],
             );
+            // no need to restore autosave, because this is only used for new pages which
+            // do not yet have an autosave
             wp_update_post( $post_data );
         }
     }
@@ -558,7 +560,8 @@ class SwiftyPageManager
                 'post_type'   => $this->_post_type
             );
 
-            $id_saved = wp_update_post( $post_to_save );
+            // $id_saved = wp_update_post( $post_to_save ); < now keeping autosave
+            $id_saved = LibSwiftyPlugin::get_instance()->wp_update_post_keep_autosave( $post_node->ID, $post_to_save );
 
             if ( 'inside' === $type && $id_saved ) {
                 $show_ref_page_in_menu = get_post_meta( $ref_node_id, 'spm_show_in_menu', true );
@@ -618,7 +621,8 @@ class SwiftyPageManager
         if ( isset( $post_id ) && ! empty( $post_id ) ) {  // We're in edit mode
             $post_data['ID'] = $post_id;
 
-            $post_id = wp_update_post( $post_data );
+            // $post_id = wp_update_post( $post_data ); < now keeping autosave
+            $post_id = LibSwiftyPlugin::get_instance()->wp_update_post_keep_autosave( $post_id, $post_data );
 
             if ( $post_id ) {
                 if ( $this->is_swifty ) {
@@ -969,10 +973,27 @@ class SwiftyPageManager
      */
     protected function _update_post_status( $post_id, $post_status )
     {
-        wp_update_post( array(
-            'ID'          => $post_id,
-            'post_status' => $post_status
-        ) );
+        if( $this->is_swifty && ( $post_status === 'publish' ) ) {
+            // use autosave content when publishing, remove autosave (no newer autosave record)
+            $autosave_content = LibSwiftyPluginView::get_instance()->get_autosave_version_if_newer( $post_id );
+            $post_data = array(
+                'ID' => $post_id,
+                'post_status' => $post_status
+            );
+
+            if( $autosave_content ) {
+                $post_data[ 'post_content' ] = $autosave_content;
+            }
+
+            wp_update_post( $post_data );
+        } else {
+            // remember current autosave
+            LibSwiftyPlugin::get_instance()->wp_update_post_keep_autosave( $post_id,
+                array(
+                    'ID' => $post_id,
+                    'post_status' => $post_status
+                ) );
+        }
     }
 
     /**
@@ -1277,7 +1298,8 @@ class SwiftyPageManager
                         'ID'         => $one_post->ID,
                         'menu_order' => $one_post->menu_order + 2
                     );
-                    $return_id = wp_update_post( $post_update, true );
+                    //$return_id = wp_update_post( $post_update, true ); < now keeping autosave
+                    $return_id = LibSwiftyPlugin::get_instance()->wp_update_post_keep_autosave( $one_post->ID, $post_update, true );
 
                     if (is_wp_error($return_id)) {
                         die( 'Error: could not update post with id ' . $post_update['ID'] . '<br>Technical details: ' . print_r( $return_id, true ) );
