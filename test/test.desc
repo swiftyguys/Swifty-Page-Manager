@@ -82,7 +82,7 @@ Feature Add a page
         - post_title: { "type": "text", "value": "SPM Page last" }
         - add_mode: { "type": "radio", "value": "after" }
         - post_status: { "type": "radio", "value": "draft" }
-        - page_template: { "type": "select", "value": "Full Width Page" }
+#        - page_template: { "type": "select", "value": "Full Width Page" }
         Then I see 5 pages
         And Page "SPM Page last" exist at pos 5
         And Page "SPM Page last" has status "draft"
@@ -103,7 +103,7 @@ Feature Edit page options
         When I edit the options of page "SPM Page second"
         - post_title: { "type": "text", "value": "Tweede SPM Pagina" }
         - post_status: { "type": "radio", "value": "publish" }
-        - page_template: { "type": "select", "value": "Contributor Page" }
+#        - page_template: { "type": "select", "value": "Contributor Page" }
         Then Page "Tweede SPM Pagina" exist at pos 2
         And Page "Tweede SPM Pagina" has status "publish"
 

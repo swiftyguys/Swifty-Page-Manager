@@ -449,26 +449,33 @@ $post_type_object = get_post_type_object( $this->_post_type );
                                             </label>
                                         </div>
                                         <label class="spm-advanced-feature">
-                                            <span class="title spm-label-title">
-                                                <?php esc_html_e( 'Template', 'swifty-page-manager' ) ?>
-                                            </span>
-                                            <select name="page_template">
-                                                <option value="default">
-                                                    <?php esc_html_e( 'Default template', 'swifty-page-manager' ) ?></option>
-                                                    <?php
-                                                        $templates = wp_get_theme()->get_page_templates();
-
-                                                        foreach ( $templates as $template_name => $template_filename ) {
-                                                            echo '<option value="' . $template_name .'">' . $template_filename . '</option>';
-                                                        }
-                                                    ?>
-                                            </select>
+<!--                                            <span class="title spm-label-title">-->
+<!--                                                --><?php //esc_html_e( 'Template', 'swifty-page-manager' ) ?>
+<!--                                            </span>-->
+<!--                                            <select name="page_template">-->
+<!--                                                <option value="default">-->
+<!--                                                    --><?php //esc_html_e( 'Default template', 'swifty-page-manager' ) ?><!--</option>-->
+<!--                                                    --><?php
+//                                                        $templates = wp_get_theme()->get_page_templates();
+//
+//                                                        foreach ( $templates as $template_name => $template_filename ) {
+//                                                            echo '<option value="' . $template_name .'">' . $template_filename . '</option>';
+//                                                        }
+//                                                    ?>
+<!--                                            </select>-->
                                         </label>
                                         <?php if ( $this->is_swifty ): ?>
                                         <div class="inline-edit-group spm-advanced-feature">
                                             <label class="alignleft">
                                                 <span class="title spm-label-title">
                                                     <?php esc_html_e( 'Header', 'swifty-page-manager' ) ?>
+                                                </span>
+                                            </label>
+                                            <label class="alignleft">
+                                                <input name="spm_header_visibility" type="radio" value="default"
+                                                       class="spm-input-radio" />
+                                                <span class="checkbox-title">
+                                                    <?php esc_html_e( 'Default', 'swifty-page-manager' ) ?>
                                                 </span>
                                             </label>
                                             <label class="alignleft">
@@ -490,6 +497,13 @@ $post_type_object = get_post_type_object( $this->_post_type );
                                             <label class="alignleft">
                                                 <span class="title spm-label-title">
                                                     <?php esc_html_e( 'Sidebar', 'swifty-page-manager' ) ?>
+                                                </span>
+                                            </label>
+                                            <label class="alignleft">
+                                                <input name="spm_sidebar_visibility" type="radio" value="default"
+                                                       class="spm-input-radio" />
+                                                <span class="checkbox-title">
+                                                    <?php esc_html_e( 'Default', 'swifty-page-manager' ) ?>
                                                 </span>
                                             </label>
                                             <label class="alignleft">

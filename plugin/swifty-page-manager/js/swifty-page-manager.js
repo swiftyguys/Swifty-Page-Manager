@@ -250,13 +250,13 @@ var SPM = (function( $, document ) {
                         'post_title': $li.find( 'input[name=post_title]' ).val(),
                         'add_mode': addMode,   // after | inside
                         'post_status': $li.find( 'input[name=post_status]:checked' ).val(),   // draft | publish
-                        'page_template': $li.find( 'select[name=page_template]' ).val(),
+                        //'page_template': $li.find( 'select[name=page_template]' ).val(),
                         'post_name': $li.find( 'input[name=post_name]' ).val() || $li.find( 'input[name=spm_url]' ).val(),
                         'spm_is_custom_url': $li.find( 'input[name=spm_is_custom_url]' ).val(),
                         'spm_show_in_menu': $li.find( 'input[name=spm_show_in_menu]:checked' ).val() || 'show',   // show | hide
                         'spm_page_title_seo': $li.find( 'input[name=spm_page_title_seo]' ).val(),
-                        'spm_header_visibility': $li.find( 'input[name=spm_header_visibility]:checked' ).val(),   // show | hide
-                        'spm_sidebar_visibility': $li.find( 'input[name=spm_sidebar_visibility]:checked' ).val(),   // left | right | hide
+                        'spm_header_visibility': $li.find( 'input[name=spm_header_visibility]:checked' ).val() || 'defaut',   // show | hide
+                        'spm_sidebar_visibility': $li.find( 'input[name=spm_sidebar_visibility]:checked' ).val() || 'defaut',   // left | right | hide
                         '_inline_edit': $inlineEdit.val()
                     };
 
@@ -325,8 +325,10 @@ var SPM = (function( $, document ) {
                             'post_title': 'Home',
                             'post_status': 'draft',
                             'add_mode': 'after',
-                            'page_template': 'default',
+                            //'page_template': 'default',
                             'spm_show_in_menu': 'show',
+                            'spm_header_visibility': 'default',
+                            'spm_sidebar_visibility': 'default',
                             '_inline_edit': $inlineEdit.val()
                         }
                     ).done(function() {
@@ -501,6 +503,8 @@ var SPM = (function( $, document ) {
 
         if ( action === 'add' ) {
             $tmpl.find( 'input[name=spm_show_in_menu][value=show]' ).prop( 'checked', true );
+            $tmpl.find( 'input[name=spm_header_visibility][value=default]' ).prop( 'checked', true );
+            $tmpl.find( 'input[name=spm_sidebar_visibility][value=default]' ).prop( 'checked', true );
 
             $tmpl.find( 'input[name=add_mode]' ).each(function() {
                 var labelText = $( this ).next().text();
