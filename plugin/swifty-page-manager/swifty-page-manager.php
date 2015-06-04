@@ -26,6 +26,7 @@ class SwiftyPageManager
     protected $_tree = null;
     protected $_by_page_id = null;
     protected $is_swifty = false;
+    protected $front_page_id = 0;
     protected $swifty_admin_page = 'swifty_page_manager_admin';
 
     /**
@@ -137,6 +138,8 @@ class SwiftyPageManager
             if ( ! class_exists( 'LibSwiftyPlugin' ) ) {
                 new LibSwiftyPlugin();
             }
+
+            $this->front_page_id = 'page' == get_option('show_on_front') ? (int) get_option( 'page_on_front' ) : 0;
         }
     }
 
@@ -1126,10 +1129,13 @@ class SwiftyPageManager
             if( !$this->is_swifty || $one_page->post_parent ) {
                 $arr_page_css_styles[] = 'spm-can-delete';
             } else {
-                $page_count = count( get_pages( 'parent=0' ) );
-                // we are not allowed to remove the last published page
-                if( ( $page_count > 1 ) || ( $one_page->post_status !== 'publish' ) ) {
-                    $arr_page_css_styles[] = 'spm-can-delete';
+                // we can not delete the front page
+                if( $this->front_page_id !== $page_id ) {
+                    $page_count = count( get_pages( 'parent=0' ) );
+                    // we are not allowed to remove the last published page
+                    if( ( $page_count > 1 ) || ( $one_page->post_status !== 'publish' ) ) {
+                        $arr_page_css_styles[] = 'spm-can-delete';
+                    }
                 }
             }
         }
