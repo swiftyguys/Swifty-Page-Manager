@@ -42,24 +42,38 @@ var SPM = (function( $, document ) {
         }
     };
 
+    spm.highlightSearch = function ( el ) {
+        var $wrapper = spm.getWrapper( el );
+        var searchString = $.trim( $wrapper.find( '.spm-search' ).attr( 'value' ) );
+
+        if ( searchString ) {
+            $wrapper.find( '.spm-search-form-no-hits' ).fadeOut( 'fast' );
+            $wrapper.find( '.spm-search-form-working' ).fadeIn( 'fast' );
+            $wrapper.find( '.spm-search-form-reset' );
+            $SPMTree.jstree( 'search', searchString );
+            $wrapper.find( '.spm-search-form-reset' ).fadeIn( 'fast' );
+        } else {
+            $wrapper.find( '.spm-search-form-no-hits' ).fadeOut( 'fast' );
+            $wrapper.find( '.cms-tpv-container' ).jstree( 'clear_search' );
+            $wrapper.find( '.spm-search-form-reset' ).fadeOut( 'fast' );
+        }
+
+        $wrapper.find( '.spm-search-form-working' ).fadeOut( 'fast' );
+    }
+
     spm.startListeners = function() {
         $( document ).on( 'click', '.spm-search-submit', function( /*ev*/ ) {
-            var $wrapper = spm.getWrapper( this );
-            var searchString = $.trim( $wrapper.find( '.spm-search' ).attr( 'value' ) );
 
-            if ( searchString ) {
-                $wrapper.find( '.spm-search-form-no-hits' ).fadeOut( 'fast' );
-                $wrapper.find( '.spm-search-form-working' ).fadeIn( 'fast' );
-                $wrapper.find( '.spm-search-form-reset' );
-                $SPMTree.jstree( 'search', searchString );
-                $wrapper.find( '.spm-search-form-reset' ).fadeIn( 'fast' );
-            } else {
-                $wrapper.find( '.spm-search-form-no-hits' ).fadeOut( 'fast' );
-                $wrapper.find( '.cms-tpv-container' ).jstree( 'clear_search' );
-                $wrapper.find( '.spm-search-form-reset' ).fadeOut( 'fast' );
-            }
+            spm.highlightSearch( this );
 
-            $wrapper.find( '.spm-search-form-working' ).fadeOut( 'fast' );
+            return false;
+        });
+
+        $( document ).on( 'submit', '.spm-search-form', function( ev ) {
+
+            ev.preventDefault(); // to stop the form from submitting
+
+            spm.highlightSearch( this );
 
             return false;
         });
