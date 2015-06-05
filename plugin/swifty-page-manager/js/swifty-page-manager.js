@@ -59,7 +59,7 @@ var SPM = (function( $, document ) {
         }
 
         $wrapper.find( '.spm-search-form-working' ).fadeOut( 'fast' );
-    }
+    };
 
     spm.startListeners = function() {
         $( document ).on( 'click', '.spm-search-submit', function( /*ev*/ ) {

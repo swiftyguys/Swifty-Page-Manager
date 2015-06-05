@@ -146,11 +146,11 @@ Try it - it's free!
 
 == Changelog ==
 
-= 1.3.1 =
- * ...
+= 1.4.0 =
+ * Fixed important bug: 1.3.0 was not compatible with PHP older than 5.3. 1.4.0 is. Please update asap!
 
 = 1.3.0 =
- * Is prepared for cooperating with upcoming Swifty plugins. Please update asap!
+ * Is prepared for cooperating with upcoming Swifty plugins.
 
 = 1.2.1 =
  * Fixed important bug: 1.2.0 caused the plugin to conflict with some other plugins. Please update asap!
