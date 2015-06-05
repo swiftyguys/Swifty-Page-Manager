@@ -1037,7 +1037,9 @@ class SwiftyPageManager
             foreach ( $keys as $key ) {
                 $page = $pages[ $key ];
 
-                if( $this->is_swifty && apply_filters( 'swifty_is_theme_area_page', false, $page->guid ) ) {
+                // we now check for this page, when we have the need for blacklisting more pages we can
+                // create a filter for it
+                if( $this->is_swifty && ( 'ninja_forms_preview_page' === $page->post_title ) ) {
                     unset( $pages[ $key ] );
                 } else {
                     if( isset( $this->_by_page_id[ $page->ID ] ) ) {
