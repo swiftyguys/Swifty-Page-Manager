@@ -608,6 +608,10 @@ class SwiftyPageManager
         $post_name   = ! empty( $_POST['post_name'] )  ? trim( $_POST['post_name'] )  : '';
         $post_status = $_POST['post_status'];
 
+        // better be safe with our menu slugs
+        $post_name = preg_replace("/[ ]/", "-", $post_name);
+        $post_name = preg_replace("/[^a-z0-9_-]/i", "", $post_name);
+
         if ( ! $post_title ) {
             $post_title = __( 'New page', 'swifty' );
         }
