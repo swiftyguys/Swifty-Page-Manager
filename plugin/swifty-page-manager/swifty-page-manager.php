@@ -254,8 +254,7 @@ class SwiftyPageManager
             $post_id = $this->get_post_id_from_spm_url( $wp->request );
 
             if( $post_id ) {
-                $post = get_post( $post_id );
-                $wp->query_vars = array( 'pagename' => $post->post_name );
+                $wp->query_vars = array( 'pagename' => get_page_uri( $post_id ) );
             }
         }
     }
