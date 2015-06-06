@@ -15,11 +15,11 @@ msgstr ""
 msgid "SwiftySite Pages"
 msgstr ""
 
-#: swifty-page-manager.php:399
+#: swifty-page-manager.php:403
 msgid "Pages"
 msgstr ""
 
-#: swifty-page-manager.php:450
+#: swifty-page-manager.php:454
 msgid ""
 "Unfortunately you can not create a sub page under a page with status 'Draft' "
 "because the draft page has not yet been published and thus technically does "
@@ -27,8 +27,8 @@ msgid ""
 "drag and drop it to become a sub page."
 msgstr ""
 
-#: swifty-page-manager.php:207 swifty-page-manager.php:361
-#: swifty-page-manager.php:422
+#: swifty-page-manager.php:207 swifty-page-manager.php:365
+#: swifty-page-manager.php:426
 msgid "You do not have sufficient permissions to access this page. #314"
 msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #314"
 
@@ -36,91 +36,91 @@ msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #314"
 msgid "Swifty Page Manager"
 msgstr "Swifty Page Manager"
 
-#: swifty-page-manager.php:441
+#: swifty-page-manager.php:445
 msgid "draft"
 msgstr "skica"
 
-#: swifty-page-manager.php:442
+#: swifty-page-manager.php:446
 msgid "future"
 msgstr "budući"
 
-#: swifty-page-manager.php:443
+#: swifty-page-manager.php:447
 msgid "protected"
 msgstr "zaštićeni"
 
-#: swifty-page-manager.php:444
+#: swifty-page-manager.php:448
 msgid "pending"
 msgstr "na čekanju"
 
-#: swifty-page-manager.php:445
+#: swifty-page-manager.php:449
 msgid "private"
 msgstr "privatni"
 
-#: swifty-page-manager.php:446
+#: swifty-page-manager.php:450
 msgid "trash"
 msgstr "korpa za otpatke"
 
-#: swifty-page-manager.php:447
+#: swifty-page-manager.php:451
 msgid "Password protected page"
 msgstr "Stranica zaštićena lozinkom"
 
-#: swifty-page-manager.php:448
+#: swifty-page-manager.php:452
 msgid "No pages found."
 msgstr "Nisu pronađene stranice"
 
-#: swifty-page-manager.php:449
+#: swifty-page-manager.php:453
 msgid "Hidden"
 msgstr "Skrivene"
 
-#: swifty-page-manager.php:451
+#: swifty-page-manager.php:455
 msgid "published - draft content"
 msgstr ""
 
-#: swifty-page-manager.php:409
+#: swifty-page-manager.php:413
 msgid "General"
 msgstr ""
 
-#: swifty-page-manager.php:471
+#: swifty-page-manager.php:475
 msgid "There are currently no settings for this plugin."
 msgstr ""
 
-#: swifty-page-manager.php:485
+#: swifty-page-manager.php:489
 msgid "You do not have sufficient permissions to access this page. #359"
 msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #359"
 
-#: swifty-page-manager.php:497
+#: swifty-page-manager.php:501
 msgid "You do not have sufficient permissions to access this page. #371"
 msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #371"
 
-#: swifty-page-manager.php:532
+#: swifty-page-manager.php:536
 msgid "You do not have sufficient permissions to access this page. #465"
 msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #465"
 
-#: swifty-page-manager.php:599
+#: swifty-page-manager.php:603
 msgid "You do not have sufficient permissions to access this page. #588"
 msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #588"
 
-#: swifty-page-manager.php:608
+#: swifty-page-manager.php:613
 msgid "New page"
 msgstr "Nova stranica"
 
-#: swifty-page-manager.php:698
+#: swifty-page-manager.php:715
 msgid "You do not have sufficient permissions to access this page. #708"
 msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #708"
 
-#: swifty-page-manager.php:732
+#: swifty-page-manager.php:749
 msgid "You do not have sufficient permissions to access this page. #747"
 msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #747"
 
-#: swifty-page-manager.php:756
+#: swifty-page-manager.php:773
 msgid "You do not have sufficient permissions to access this page. #771"
 msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #771"
 
-#: swifty-page-manager.php:1101
+#: swifty-page-manager.php:1120
 msgid "Unknown user"
 msgstr "Nepoznat korisnik"
 
-#: swifty-page-manager.php:1107
+#: swifty-page-manager.php:1126
 msgid "[untitled page]"
 msgstr "[bezimena stranica]"
 

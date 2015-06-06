@@ -14,11 +14,11 @@ msgstr ""
 msgid "SwiftySite Pages"
 msgstr "SwiftySite Pagina's"
 
-#: swifty-page-manager.php:399
+#: swifty-page-manager.php:403
 msgid "Pages"
 msgstr "Pagina's"
 
-#: swifty-page-manager.php:450
+#: swifty-page-manager.php:454
 msgid ""
 "Unfortunately you can not create a sub page under a page with status 'Draft' "
 "because the draft page has not yet been published and thus technically does "
@@ -30,8 +30,8 @@ msgstr ""
 "niet bestaat. Je kunt deze wel vast als een gewone pagina aanmaken en later "
 "slepen naar een sub-pagina positie."
 
-#: swifty-page-manager.php:207 swifty-page-manager.php:361
-#: swifty-page-manager.php:422
+#: swifty-page-manager.php:207 swifty-page-manager.php:365
+#: swifty-page-manager.php:426
 msgid "You do not have sufficient permissions to access this page. #314"
 msgstr ""
 "Je hebt niet genoeg rechten om toegang tot deze pagina te krijgen. #314"
@@ -40,97 +40,97 @@ msgstr ""
 msgid "Swifty Page Manager"
 msgstr "Swifty Page Manager"
 
-#: swifty-page-manager.php:441
+#: swifty-page-manager.php:445
 msgid "draft"
 msgstr "klad"
 
-#: swifty-page-manager.php:442
+#: swifty-page-manager.php:446
 msgid "future"
 msgstr "gepland"
 
-#: swifty-page-manager.php:443
+#: swifty-page-manager.php:447
 msgid "protected"
 msgstr "beschermd"
 
-#: swifty-page-manager.php:444
+#: swifty-page-manager.php:448
 msgid "pending"
 msgstr "wachtend"
 
-#: swifty-page-manager.php:445
+#: swifty-page-manager.php:449
 msgid "private"
 msgstr "privé"
 
-#: swifty-page-manager.php:446
+#: swifty-page-manager.php:450
 msgid "trash"
 msgstr "Verwijderd"
 
-#: swifty-page-manager.php:447
+#: swifty-page-manager.php:451
 msgid "Password protected page"
 msgstr "Wachtwoord beschermde pagina"
 
-#: swifty-page-manager.php:448
+#: swifty-page-manager.php:452
 msgid "No pages found."
 msgstr "Geen pagina's gevonden."
 
-#: swifty-page-manager.php:449
+#: swifty-page-manager.php:453
 msgid "Hidden"
 msgstr "Verborgen"
 
-#: swifty-page-manager.php:451
+#: swifty-page-manager.php:455
 msgid "published - draft content"
 msgstr "gepubliceerd - klad inhoud"
 
-#: swifty-page-manager.php:409
+#: swifty-page-manager.php:413
 msgid "General"
 msgstr "Algemeen"
 
-#: swifty-page-manager.php:471
+#: swifty-page-manager.php:475
 msgid "There are currently no settings for this plugin."
 msgstr "Er zijn momenteel geen instellingen voor deze plugin. "
 
-#: swifty-page-manager.php:485
+#: swifty-page-manager.php:489
 msgid "You do not have sufficient permissions to access this page. #359"
 msgstr ""
 "Je hebt niet genoeg rechten om toegang tot deze pagina te krijgen. #359"
 
-#: swifty-page-manager.php:497
+#: swifty-page-manager.php:501
 msgid "You do not have sufficient permissions to access this page. #371"
 msgstr ""
 "Je hebt niet genoeg rechten om toegang tot deze pagina te krijgen. #371"
 
-#: swifty-page-manager.php:532
+#: swifty-page-manager.php:536
 msgid "You do not have sufficient permissions to access this page. #465"
 msgstr ""
 "Je hebt niet genoeg rechten om toegang tot deze pagina te krijgen. #465"
 
-#: swifty-page-manager.php:599
+#: swifty-page-manager.php:603
 msgid "You do not have sufficient permissions to access this page. #588"
 msgstr "Je hebt onvoldoende rechten om toegang tot deze pagina te krijgen #588"
 
-#: swifty-page-manager.php:608
+#: swifty-page-manager.php:613
 msgid "New page"
 msgstr "Nieuwe pagina"
 
-#: swifty-page-manager.php:698
+#: swifty-page-manager.php:715
 msgid "You do not have sufficient permissions to access this page. #708"
 msgstr ""
 "Je hebt onvoldoende rechten om toegang tot deze pagina te krijgen. #708"
 
-#: swifty-page-manager.php:732
+#: swifty-page-manager.php:749
 msgid "You do not have sufficient permissions to access this page. #747"
 msgstr ""
 "Je hebt onvoldoende rechten om toegang tot deze pagina te krijgen. #747"
 
-#: swifty-page-manager.php:756
+#: swifty-page-manager.php:773
 msgid "You do not have sufficient permissions to access this page. #771"
 msgstr ""
 "Je hebt onvoldoende rechten om toegang tot deze pagina te krijgen. #771"
 
-#: swifty-page-manager.php:1101
+#: swifty-page-manager.php:1120
 msgid "Unknown user"
 msgstr "Onbekende gebruiker"
 
-#: swifty-page-manager.php:1107
+#: swifty-page-manager.php:1126
 msgid "[untitled page]"
 msgstr "[Pagina zonder titel]"
 
