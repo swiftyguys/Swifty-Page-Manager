@@ -146,6 +146,9 @@ Try it - it's free!
 
 == Changelog ==
 
+= 1.4.2 =
+ * A few small changes.
+
 = 1.4.1 =
  * A few small changes.
 

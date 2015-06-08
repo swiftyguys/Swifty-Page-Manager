@@ -14,11 +14,11 @@ msgstr ""
 msgid "SwiftySite Pages"
 msgstr ""
 
-#: swifty-page-manager.php:403
+#: swifty-page-manager.php:402
 msgid "Pages"
 msgstr ""
 
-#: swifty-page-manager.php:454
+#: swifty-page-manager.php:453
 msgid ""
 "Unfortunately you can not create a sub page under a page with status 'Draft' "
 "because the draft page has not yet been published and thus technically does "
@@ -26,8 +26,8 @@ msgid ""
 "drag and drop it to become a sub page."
 msgstr ""
 
-#: swifty-page-manager.php:207 swifty-page-manager.php:365
-#: swifty-page-manager.php:426
+#: swifty-page-manager.php:207 swifty-page-manager.php:364
+#: swifty-page-manager.php:425
 msgid "You do not have sufficient permissions to access this page. #314"
 msgstr "您没有足够的权限访问此页面. #314"
 
@@ -35,91 +35,91 @@ msgstr "您没有足够的权限访问此页面. #314"
 msgid "Swifty Page Manager"
 msgstr "Swifty Page Manager"
 
-#: swifty-page-manager.php:445
+#: swifty-page-manager.php:444
 msgid "draft"
 msgstr "草稿"
 
-#: swifty-page-manager.php:446
+#: swifty-page-manager.php:445
 msgid "future"
 msgstr "future"
 
-#: swifty-page-manager.php:447
+#: swifty-page-manager.php:446
 msgid "protected"
 msgstr "保护"
 
-#: swifty-page-manager.php:448
+#: swifty-page-manager.php:447
 msgid "pending"
 msgstr "pending"
 
-#: swifty-page-manager.php:449
+#: swifty-page-manager.php:448
 msgid "private"
 msgstr "私人"
 
-#: swifty-page-manager.php:450
+#: swifty-page-manager.php:449
 msgid "trash"
 msgstr "回收站"
 
-#: swifty-page-manager.php:451
+#: swifty-page-manager.php:450
 msgid "Password protected page"
 msgstr "受密码保护的页面"
 
-#: swifty-page-manager.php:452
+#: swifty-page-manager.php:451
 msgid "No pages found."
 msgstr "未找到页面。"
 
-#: swifty-page-manager.php:453
+#: swifty-page-manager.php:452
 msgid "Hidden"
 msgstr "隐藏"
 
-#: swifty-page-manager.php:455
+#: swifty-page-manager.php:454
 msgid "published - draft content"
 msgstr ""
 
-#: swifty-page-manager.php:413
+#: swifty-page-manager.php:412
 msgid "General"
 msgstr ""
 
-#: swifty-page-manager.php:475
+#: swifty-page-manager.php:474
 msgid "There are currently no settings for this plugin."
 msgstr ""
 
-#: swifty-page-manager.php:489
+#: swifty-page-manager.php:488
 msgid "You do not have sufficient permissions to access this page. #359"
 msgstr "您没有足够的权限访问此页面. #359"
 
-#: swifty-page-manager.php:501
+#: swifty-page-manager.php:500
 msgid "You do not have sufficient permissions to access this page. #371"
 msgstr "您没有足够的权限访问此页面. #371"
 
-#: swifty-page-manager.php:536
+#: swifty-page-manager.php:535
 msgid "You do not have sufficient permissions to access this page. #465"
 msgstr "您没有足够的权限访问此页面. #465"
 
-#: swifty-page-manager.php:603
+#: swifty-page-manager.php:602
 msgid "You do not have sufficient permissions to access this page. #588"
 msgstr "您没有足够的权限访问此页面. #588"
 
-#: swifty-page-manager.php:613
+#: swifty-page-manager.php:616
 msgid "New page"
 msgstr "新页面"
 
-#: swifty-page-manager.php:715
+#: swifty-page-manager.php:718
 msgid "You do not have sufficient permissions to access this page. #708"
 msgstr "您没有足够的权限访问此页面. #708"
 
-#: swifty-page-manager.php:749
+#: swifty-page-manager.php:752
 msgid "You do not have sufficient permissions to access this page. #747"
 msgstr "您没有足够的权限访问此页面. #747"
 
-#: swifty-page-manager.php:773
+#: swifty-page-manager.php:776
 msgid "You do not have sufficient permissions to access this page. #771"
 msgstr "您没有足够的权限访问此页面. #771"
 
-#: swifty-page-manager.php:1120
+#: swifty-page-manager.php:1123
 msgid "Unknown user"
 msgstr "未知用户"
 
-#: swifty-page-manager.php:1126
+#: swifty-page-manager.php:1129
 msgid "[untitled page]"
 msgstr "[无标题页面]"
 
