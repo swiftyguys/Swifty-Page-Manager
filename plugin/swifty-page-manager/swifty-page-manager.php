@@ -254,8 +254,7 @@ class SwiftyPageManager
             $post_id = $this->get_post_id_from_spm_url( $wp->request );
 
             if( $post_id ) {
-                $post = get_post( $post_id );
-                $wp->query_vars = array( 'pagename' => $post->post_name );
+                $wp->query_vars = array( 'pagename' => get_page_uri( $post_id ) );
             }
         }
     }
@@ -608,6 +607,10 @@ class SwiftyPageManager
         $post_title  = ! empty( $_POST['post_title'] ) ? trim( $_POST['post_title'] ) : '';
         $post_name   = ! empty( $_POST['post_name'] )  ? trim( $_POST['post_name'] )  : '';
         $post_status = $_POST['post_status'];
+
+        // better be safe with our menu slugs
+        $post_name = preg_replace("~[ ]~", "-", $post_name);
+        $post_name = preg_replace("~[^a-z0-9//_-]~i", "", $post_name);
 
         if ( ! $post_title ) {
             $post_title = __( 'New page', 'swifty' );
