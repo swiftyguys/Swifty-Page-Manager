@@ -471,10 +471,10 @@ class SwiftyPageManager
 
     function spm_tab_options_content()
     {
-        echo '<p>' . __( 'There are currently no settings for this plugin.', 'swifty' ) . '</p>';
 //        settings_fields( 'spm_plugin_options' );
 //        do_settings_sections( 'spm_plugin_options_page' );
 //        submit_button();
+        echo '<p>' . 'Swifty Page Manager ' . $this->_plugin_version . '</p>';
     }
 
     /**
