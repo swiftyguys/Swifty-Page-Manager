@@ -146,6 +146,9 @@ Try it - it's free!
 
 == Changelog ==
 
+= 1.4.3 =
+ * Shows version number on the setting page.
+
 = 1.4.2 =
  * A few small changes.
 
