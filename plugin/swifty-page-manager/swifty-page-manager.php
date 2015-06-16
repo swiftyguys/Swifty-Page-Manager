@@ -149,7 +149,7 @@ class SwiftyPageManager
         if( $swifty_SS2_hosting_name ) {
             $admin_page_title = __( 'SwiftySite Pages', 'swifty' );
         } else {
-            $admin_page_title = __( 'Swifty Page Manager', 'swifty' );
+            $admin_page_title = 'Swifty Page Manager';
         }
         return $admin_page_title;
     }
