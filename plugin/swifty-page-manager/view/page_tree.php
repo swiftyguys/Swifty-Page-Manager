@@ -191,7 +191,7 @@ $post_type_object = get_post_type_object( $this->_post_type );
                 <span class="dashicons spm-icon dashicons-plus"></span>
             </span>
             <span class="button button-primary spm-button spm-page-button" data-spm-action="settings"
-                  title="<?php esc_attr_e( 'Edit page', 'swifty' ); ?>">
+                  title="<?php esc_attr_e( 'Page settings', 'swifty' ); ?>">
                 <span class="dashicons spm-icon dashicons-admin-generic"></span>
             </span>
             <span class="button button-primary spm-button spm-page-button" data-spm-action="draginfo"
