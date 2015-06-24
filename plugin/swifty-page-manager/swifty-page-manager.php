@@ -592,6 +592,26 @@ class SwiftyPageManager
     }
 
     /**
+     * return true when given post_name is unique as slug and spm_url
+     */
+    public function spm_is_unique_spm_url( $post_id, $post_parent_id, $post_name )
+    {
+        // look for other pages using this post_name in the spm_url (is it not used for other pages?)
+        $spm_url_post_id = $this->get_post_id_from_spm_url( $post_name );
+        if( $spm_url_post_id && ( $spm_url_post_id !== $post_id ) ) {
+            return false;
+        }
+        // look for other pages using this post_name as slug (is it unique in siblings?)
+        global $wpdb;
+        $check_sql = "SELECT post_name FROM $wpdb->posts WHERE post_name = %s AND post_type IN ( 'page', 'attachment' ) AND ID != %d AND post_parent = %d LIMIT 1";
+        $post_name_check = $wpdb->get_var( $wpdb->prepare( $check_sql, $post_name, $post_id, $post_parent_id ) );
+        if( $post_name_check ) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Called via WP Ajax Action 'ajax_save_page' if can_edit_pages
      *
      * Ajax funtion to save a page
@@ -632,22 +652,14 @@ class SwiftyPageManager
         if ( isset( $post_id ) && ! empty( $post_id ) ) {  // We're in edit mode
             $post_data['ID'] = $post_id;
 
-            // test new menu url uniqueness in swifty mode
-            // ignore changes to the menu url when this test fails
-            $unique_spm_url = true;
-            if( $this->is_swifty ) {
-                $spm_url_post_id = $this->get_post_id_from_spm_url( $post_name );
-                if( $spm_url_post_id && ( $spm_url_post_id !== $post_id ) ) {
-                    $unique_spm_url = false;
-                }
-            }
-
             // $post_id = wp_update_post( $post_data ); < now keeping autosave
             $post_id = LibSwiftyPlugin::get_instance()->wp_update_post_keep_autosave( $post_id, $post_data );
 
             if( $post_id ) {
                 if( $this->is_swifty ) {
-                    if( $unique_spm_url ) {
+
+                    $post = get_post( $post_id );
+                    if( $this->spm_is_unique_spm_url( $post_id, $post->post_parent, $post_name ) ) {
                         $cur_spm_url = get_post_meta( $post_id, 'spm_url', true );
 
                         if( ! empty( $cur_spm_url ) ) {
@@ -687,7 +699,21 @@ class SwiftyPageManager
             $post_id = intval( $post_id );
 
             if ( $post_id ) {
+
+                $post = get_post( $post_id );
                 if ( $this->is_swifty ) {
+                    // make sure the menu url is unique
+                    if( $post_name === '' ) {
+                        $post_name = $post->post_name;
+                    }
+
+                    $nr = 2;
+                    $original_post_name = $post_name;
+                    while ( ! $this->spm_is_unique_spm_url( $post_id, $post->post_parent, $post_name ) ) {
+                        $post_name = $original_post_name . '-' . $nr++;
+                        $spm_is_custom_url = true;
+                    }
+
                     add_post_meta( $post_id, 'spm_url', $spm_is_custom_url ? $post_name : '', 1 );
                     add_post_meta( $post_id, 'spm_show_in_menu', $spm_show_in_menu, 1 );
                     add_post_meta( $post_id, 'spm_page_title_seo', $spm_page_title_seo, 1 );
