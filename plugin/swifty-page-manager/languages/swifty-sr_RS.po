@@ -32,10 +32,6 @@ msgstr ""
 msgid "You do not have sufficient permissions to access this page. #314"
 msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #314"
 
-#: swifty-page-manager.php:152
-msgid "Swifty Page Manager"
-msgstr "Swifty Page Manager"
-
 #: swifty-page-manager.php:444
 msgid "draft"
 msgstr "skica"
@@ -80,10 +76,6 @@ msgstr ""
 msgid "General"
 msgstr ""
 
-#: swifty-page-manager.php:474
-msgid "There are currently no settings for this plugin."
-msgstr ""
-
 #: swifty-page-manager.php:488
 msgid "You do not have sufficient permissions to access this page. #359"
 msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #359"
@@ -96,33 +88,37 @@ msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #371"
 msgid "You do not have sufficient permissions to access this page. #465"
 msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #465"
 
-#: swifty-page-manager.php:602
+#: swifty-page-manager.php:622
 msgid "You do not have sufficient permissions to access this page. #588"
 msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #588"
 
-#: swifty-page-manager.php:616
+#: swifty-page-manager.php:636
 msgid "New page"
 msgstr "Nova stranica"
 
-#: swifty-page-manager.php:718
+#: swifty-page-manager.php:744
 msgid "You do not have sufficient permissions to access this page. #708"
 msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #708"
 
-#: swifty-page-manager.php:752
+#: swifty-page-manager.php:778
 msgid "You do not have sufficient permissions to access this page. #747"
 msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #747"
 
-#: swifty-page-manager.php:776
+#: swifty-page-manager.php:802
 msgid "You do not have sufficient permissions to access this page. #771"
 msgstr "Nemate odgovarajuće dozvole za pristup ovoj stranici. #771"
 
-#: swifty-page-manager.php:1123
+#: swifty-page-manager.php:1149
 msgid "Unknown user"
 msgstr "Nepoznat korisnik"
 
-#: swifty-page-manager.php:1129
+#: swifty-page-manager.php:1155
 msgid "[untitled page]"
 msgstr "[bezimena stranica]"
+
+#: view/page_tree.php:194
+msgid "Page settings"
+msgstr ""
 
 #: view/page_tree.php:478 view/page_tree.php:506
 msgid "Default"
@@ -195,10 +191,6 @@ msgstr "Učitavanje modela drveta"
 #: view/page_tree.php:179 view/page_tree.php:190
 msgid "Add page"
 msgstr "Dodaj stranicu"
-
-#: view/page_tree.php:194
-msgid "Edit page"
-msgstr "Uredi stranicu"
 
 #: view/page_tree.php:202
 msgid "Delete page"

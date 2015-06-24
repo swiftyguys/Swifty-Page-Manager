@@ -146,6 +146,9 @@ Try it - it's free!
 
 == Changelog ==
 
+= 1.4.5 =
+ * Better protection against duplicate url's / slugs.
+
 = 1.4.4 =
  * Fixed an issue where 1.4.3. would give erros on some shared hosting accounts.
  * Renamed "Page edit" to "Page settings".

@@ -35,10 +35,6 @@ msgstr ""
 msgid "You do not have sufficient permissions to access this page. #314"
 msgstr "You do not have sufficient permissions to access this page. #314"
 
-#: swifty-page-manager.php:152
-msgid "Swifty Page Manager"
-msgstr "Swifty Page Manager"
-
 #: swifty-page-manager.php:444
 msgid "draft"
 msgstr "draft"
@@ -83,10 +79,6 @@ msgstr "published - draft content"
 msgid "General"
 msgstr "General"
 
-#: swifty-page-manager.php:474
-msgid "There are currently no settings for this plugin."
-msgstr "There are currently no settings for this plugin."
-
 #: swifty-page-manager.php:488
 msgid "You do not have sufficient permissions to access this page. #359"
 msgstr "You do not have sufficient permissions to access this page. #359"
@@ -99,33 +91,37 @@ msgstr "You do not have sufficient permissions to access this page. #371"
 msgid "You do not have sufficient permissions to access this page. #465"
 msgstr "You do not have sufficient permissions to access this page. #465"
 
-#: swifty-page-manager.php:602
+#: swifty-page-manager.php:622
 msgid "You do not have sufficient permissions to access this page. #588"
 msgstr "You do not have sufficient permissions to access this page. #588"
 
-#: swifty-page-manager.php:616
+#: swifty-page-manager.php:636
 msgid "New page"
 msgstr "New page"
 
-#: swifty-page-manager.php:718
+#: swifty-page-manager.php:744
 msgid "You do not have sufficient permissions to access this page. #708"
 msgstr "You do not have sufficient permissions to access this page. #708"
 
-#: swifty-page-manager.php:752
+#: swifty-page-manager.php:778
 msgid "You do not have sufficient permissions to access this page. #747"
 msgstr "You do not have sufficient permissions to access this page. #747"
 
-#: swifty-page-manager.php:776
+#: swifty-page-manager.php:802
 msgid "You do not have sufficient permissions to access this page. #771"
 msgstr "You do not have sufficient permissions to access this page. #771"
 
-#: swifty-page-manager.php:1123
+#: swifty-page-manager.php:1149
 msgid "Unknown user"
 msgstr "Unknown user"
 
-#: swifty-page-manager.php:1129
+#: swifty-page-manager.php:1155
 msgid "[untitled page]"
 msgstr "[untitled page]"
+
+#: view/page_tree.php:194
+msgid "Page settings"
+msgstr ""
 
 #: view/page_tree.php:478 view/page_tree.php:506
 msgid "Default"
@@ -198,10 +194,6 @@ msgstr "Loading tree"
 #: view/page_tree.php:179 view/page_tree.php:190
 msgid "Add page"
 msgstr "Add page"
-
-#: view/page_tree.php:194
-msgid "Edit page"
-msgstr "Edit page"
 
 #: view/page_tree.php:202
 msgid "Delete page"
