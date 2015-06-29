@@ -72,9 +72,9 @@ class SwiftyPageManager
         $this->is_swifty = LibSwiftyPluginView::is_ss_mode();
 
         // Actions for visitors viewing the site
+        add_action( 'parse_request',     array( $this, 'parse_request' ) );
         if ( $this->is_swifty ) {
             add_filter( 'page_link',         array( $this, 'page_link' ), 10, 2 );
-            add_action( 'parse_request',     array( $this, 'parse_request' ) );
             add_filter( 'wp_title',          array( $this, 'seo_wp_title' ), 10, 2 );
             add_filter( 'admin_footer_text', array( $this, 'empty_footer_text' ) );
             add_filter( 'update_footer',     array( $this, 'empty_footer_text' ), 999 );
@@ -241,7 +241,7 @@ class SwiftyPageManager
     }
 
     /**
-     * Called via WP Action 'parse_request' if is_swifty
+     * Called via WP Action 'parse_request'
      *
      * Action function to make our overridden URLs work by changing the query params.
      * the meta data "spm_url" contains the wanted url (without domain)
