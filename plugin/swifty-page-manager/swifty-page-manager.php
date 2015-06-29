@@ -850,7 +850,6 @@ class SwiftyPageManager
 
         li.find( 'input[name="post_title"]' ).val( <?php echo json_encode( $post->post_title ); ?> );
         li.find( 'input[name="post_status"]' ).val( [ <?php echo json_encode( $post_status ); ?> ] );
-<!--        li.find( 'select[name="page_template"]' ).val( [ --><?php //echo json_encode( $post->page_template ); ?><!-- ] );-->
         li.find( 'input[name="post_name"]' ).val( <?php echo json_encode( $spm_page_url ); ?> );
         li.find( 'input[name="spm_is_custom_url"]' ).val( <?php echo json_encode( $spm_is_custom_url ); ?> );
         li.find( 'input[name="spm_show_in_menu"]' ).val( [ <?php echo json_encode( $post_meta['spm_show_in_menu'] ); ?> ] );
