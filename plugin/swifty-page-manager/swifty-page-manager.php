@@ -73,8 +73,8 @@ class SwiftyPageManager
 
         // Actions for visitors viewing the site
         add_action( 'parse_request',     array( $this, 'parse_request' ) );
+        add_filter( 'page_link',         array( $this, 'page_link' ), 10, 2 );
         if ( $this->is_swifty ) {
-            add_filter( 'page_link',         array( $this, 'page_link' ), 10, 2 );
             add_filter( 'wp_title',          array( $this, 'seo_wp_title' ), 10, 2 );
             add_filter( 'admin_footer_text', array( $this, 'empty_footer_text' ) );
             add_filter( 'update_footer',     array( $this, 'empty_footer_text' ), 999 );
@@ -273,28 +273,31 @@ class SwiftyPageManager
      */
     public function page_link( /** @noinspection PhpUnusedParameterInspection */ $link, $post_id=false )
     {
-        $spm_url = get_post_meta( $post_id, 'spm_url', true );
+        if( $post_id ) {
+            $spm_url = get_post_meta( $post_id, 'spm_url', true );
 
-        if ( $spm_url ) {
-            $link = get_site_url( null, $spm_url );
-        } else {
-            $post = get_post( $post_id );
+            if( $spm_url ) {
+                $link = get_site_url( null, $spm_url );
+            } else {
+                if( $this->is_swifty ) {
+                    $post = get_post( $post_id );
 
-            // Hack: get_page_link() would return ugly permalink for drafts, so we will fake that our post is published.
-            if ( in_array( $post->post_status, array( 'draft', 'pending' ) ) ) {
-                $post->post_status = 'publish';
-                $post->post_name = sanitize_title( $post->post_name ? $post->post_name : $post->post_title, $post->ID );
+                    // Hack: get_page_link() would return ugly permalink for drafts, so we will fake that our post is published.
+                    if( in_array( $post->post_status, array( 'draft', 'pending' ) ) ) {
+                        $post->post_status = 'publish';
+                        $post->post_name = sanitize_title( $post->post_name ? $post->post_name : $post->post_title, $post->ID );
+                    }
+
+                    // If calling get_page_link inside page_link action, unhook this function so it doesn't loop infinitely
+                    remove_filter( 'page_link', array( $this, 'page_link' ) );
+
+                    $link = get_page_link( $post );
+
+                    // Re-hook this function
+                    add_filter( 'page_link', array( $this, 'page_link' ), 10, 2 );
+                }
             }
-
-            // If calling get_page_link inside page_link action, unhook this function so it doesn't loop infinitely
-            remove_filter( 'page_link', array( $this, 'page_link' ) );
-
-            $link = get_page_link( $post );
-
-            // Re-hook this function
-            add_filter( 'page_link', array( $this, 'page_link' ), 10, 2 );
         }
-
         return $link;
     }
 
