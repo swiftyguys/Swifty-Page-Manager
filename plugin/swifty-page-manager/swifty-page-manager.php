@@ -255,6 +255,8 @@ class SwiftyPageManager
 
             if( $post_id ) {
                 $wp->query_vars = array( 'pagename' => get_page_uri( $post_id ) );
+                // disable seo-redirect plugin for this url (other solution would be to set $_SERVER["REQUEST_URI"] to the uri)
+                remove_action( 'wp', 'WPSR_redirect', 1 );
             }
         }
     }
