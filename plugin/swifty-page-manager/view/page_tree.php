@@ -13,10 +13,10 @@ $post_type_object = get_post_type_object( $this->_post_type );
 <div class="wrap">
 
 <?php if( $this->is_swifty ) : ?>
-    <div class="spm_panel_title_container">
-        <div class="spm_panel_title_strike"></div>
-        <div class="spm_panel_title_pos">
-            <div class="spm_title">
+    <div class="swifty_panel_title_container">
+        <div class="swifty_panel_title_strike"></div>
+        <div class="swifty_panel_title_pos">
+            <div class="swifty_title">
 <?php endif ?>
                 <h2><?php echo $this->get_admin_page_title(); ?></h2>
 <?php if( $this->is_swifty ) : ?>

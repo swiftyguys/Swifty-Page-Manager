@@ -72,9 +72,9 @@ class SwiftyPageManager
         $this->is_swifty = LibSwiftyPluginView::is_ss_mode();
 
         // Actions for visitors viewing the site
+        add_action( 'parse_request',     array( $this, 'parse_request' ) );
+        add_filter( 'page_link',         array( $this, 'page_link' ), 10, 2 );
         if ( $this->is_swifty ) {
-            add_filter( 'page_link',         array( $this, 'page_link' ), 10, 2 );
-            add_action( 'parse_request',     array( $this, 'parse_request' ) );
             add_filter( 'wp_title',          array( $this, 'seo_wp_title' ), 10, 2 );
             add_filter( 'admin_footer_text', array( $this, 'empty_footer_text' ) );
             add_filter( 'update_footer',     array( $this, 'empty_footer_text' ), 999 );
@@ -241,7 +241,7 @@ class SwiftyPageManager
     }
 
     /**
-     * Called via WP Action 'parse_request' if is_swifty
+     * Called via WP Action 'parse_request'
      *
      * Action function to make our overridden URLs work by changing the query params.
      * the meta data "spm_url" contains the wanted url (without domain)
@@ -255,6 +255,8 @@ class SwiftyPageManager
 
             if( $post_id ) {
                 $wp->query_vars = array( 'pagename' => get_page_uri( $post_id ) );
+                // disable seo-redirect plugin for this url (other solution would be to set $_SERVER["REQUEST_URI"] to the uri)
+                remove_action( 'wp', 'WPSR_redirect', 1 );
             }
         }
     }
@@ -271,28 +273,31 @@ class SwiftyPageManager
      */
     public function page_link( /** @noinspection PhpUnusedParameterInspection */ $link, $post_id=false )
     {
-        $spm_url = get_post_meta( $post_id, 'spm_url', true );
+        if( $post_id ) {
+            $spm_url = get_post_meta( $post_id, 'spm_url', true );
 
-        if ( $spm_url ) {
-            $link = get_site_url( null, $spm_url );
-        } else {
-            $post = get_post( $post_id );
+            if( $spm_url ) {
+                $link = get_site_url( null, $spm_url );
+            } else {
+                if( $this->is_swifty ) {
+                    $post = get_post( $post_id );
 
-            // Hack: get_page_link() would return ugly permalink for drafts, so we will fake that our post is published.
-            if ( in_array( $post->post_status, array( 'draft', 'pending' ) ) ) {
-                $post->post_status = 'publish';
-                $post->post_name = sanitize_title( $post->post_name ? $post->post_name : $post->post_title, $post->ID );
+                    // Hack: get_page_link() would return ugly permalink for drafts, so we will fake that our post is published.
+                    if( in_array( $post->post_status, array( 'draft', 'pending' ) ) ) {
+                        $post->post_status = 'publish';
+                        $post->post_name = sanitize_title( $post->post_name ? $post->post_name : $post->post_title, $post->ID );
+                    }
+
+                    // If calling get_page_link inside page_link action, unhook this function so it doesn't loop infinitely
+                    remove_filter( 'page_link', array( $this, 'page_link' ) );
+
+                    $link = get_page_link( $post );
+
+                    // Re-hook this function
+                    add_filter( 'page_link', array( $this, 'page_link' ), 10, 2 );
+                }
             }
-
-            // If calling get_page_link inside page_link action, unhook this function so it doesn't loop infinitely
-            remove_filter( 'page_link', array( $this, 'page_link' ) );
-
-            $link = get_page_link( $post );
-
-            // Re-hook this function
-            add_filter( 'page_link', array( $this, 'page_link' ), 10, 2 );
         }
-
         return $link;
     }
 
@@ -850,7 +855,6 @@ class SwiftyPageManager
 
         li.find( 'input[name="post_title"]' ).val( <?php echo json_encode( $post->post_title ); ?> );
         li.find( 'input[name="post_status"]' ).val( [ <?php echo json_encode( $post_status ); ?> ] );
-<!--        li.find( 'select[name="page_template"]' ).val( [ --><?php //echo json_encode( $post->page_template ); ?><!-- ] );-->
         li.find( 'input[name="post_name"]' ).val( <?php echo json_encode( $spm_page_url ); ?> );
         li.find( 'input[name="spm_is_custom_url"]' ).val( <?php echo json_encode( $spm_is_custom_url ); ?> );
         li.find( 'input[name="spm_show_in_menu"]' ).val( [ <?php echo json_encode( $post_meta['spm_show_in_menu'] ); ?> ] );
