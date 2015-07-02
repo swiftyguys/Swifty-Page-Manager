@@ -146,6 +146,10 @@ Try it - it's free!
 
 == Changelog ==
 
+= 1.4.6 =
+ * Fixed: page settings not working in IE.
+ * Fixed: some issues with url's.
+
 = 1.4.5 =
  * Better protection against duplicate url's / slugs.
 
