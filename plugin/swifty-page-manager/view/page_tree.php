@@ -401,7 +401,7 @@ $post_type_object = get_post_type_object( $this->_post_type );
                                                 <?php _e( 'Url', 'swifty' ) ?> <span class="button-secondary spm-tooltip-button" rel="spm-url-tooltip"><i class="fa fa-question"></i></span>
                                             </span>
                                             <span class="input-text-wrap">
-                                                <input name="post_name" type="text" class="spm-input spm-input-text" />
+                                                <input id="post_name" name="post_name" type="text" class="spm-input spm-input-text" /><br><span id="spm_post_name_message"></span><span id="spm_post_name_error"></span>
                                                 <input name="spm_is_custom_url" type="hidden" value="0" />
                                             </span>
                                         </label>

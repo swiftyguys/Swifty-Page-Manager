@@ -127,7 +127,7 @@ class SwiftyPageManager
             add_action( 'admin_enqueue_scripts', array( $this, 'add_plugin_css' ) );
 
             if ( $this->is_swifty ) {
-                add_action( 'wp_ajax_spm_sanitize_url', array( $this, 'ajax_sanitize_url' ) );
+                add_action( 'wp_ajax_spm_sanitize_url_and_check', array( $this, 'ajax_sanitize_url_and_check' ) );
                 add_action( 'save_post',           array( $this, 'restore_page_status' ), 10, 2 );
                 add_filter( 'wp_insert_post_data', array( $this, 'set_tmp_page_status' ), 10, 2 );
                 add_filter( 'wp_list_pages',       array( $this, 'wp_list_pages' ) );
@@ -455,6 +455,7 @@ class SwiftyPageManager
             'password_protected_page' => __( 'Password protected page', 'swifty' ),
             'no_pages_found'          => __( 'No pages found.', 'swifty' ),
             'hidden_page'             => __( 'Hidden', 'swifty' ),
+            'checking_url'            => __( 'Checking url', 'swifty' ),
             'no_sub_page_when_draft'  => __( "Unfortunately you can not create a sub page under a page with status 'Draft' because the draft page has not yet been published and thus technically does not exist yet. For now, just create it as a regular page and later you can drag and drop it to become a sub page.", 'swifty' ),
             'status_published_draft_content_ucase' => ucfirst( __( 'published - draft content', 'swifty' ) )
         );
@@ -603,7 +604,7 @@ class SwiftyPageManager
     {
         // look for other pages using this post_name in the spm_url (is it not used for other pages?)
         $spm_url_post_id = $this->get_post_id_from_spm_url( $post_name );
-        if( $spm_url_post_id && ( $spm_url_post_id !== $post_id ) ) {
+        if( $spm_url_post_id && ( $spm_url_post_id != $post_id ) ) {
             return false;
         }
         // look for other pages using this post_name as slug (is it unique in siblings?)
@@ -870,10 +871,61 @@ class SwiftyPageManager
      * Called via WP Admin Ajax 'wp_ajax_spm_sanitize_url' if can_edit_pages && is_swifty
      *
      * Ajax function to use Wordpress' sanitize_title_with_dashes function to prepare an URL string
+     * and check the URL string for uniqueness
+     * _POST[ 'post_parent' ] - the parent ID of the post, use -1 with valid post_id to get the parent ID from the post
+     * _POST[ 'post_id' ]     - the post id, use 0 and valid post_parent for a new post
+     * _POST[ 'url' ]         - url that will be sanitized / checked
+     * _POST[ 'path' ]        - is the path of the post_parent, when creating a new post
+     * _POST[ 'do_sanitize' ] - 0 or 1 use the WP sanitize functions, used when a post title is used for the url
+     *
+     * returned json
+     * message - result of the call, no errors
+     * error   - a error was detected in the given url: wrong characters / existing url
+     * url     - if do_sanitize = 1, return the sanitized url, otherwise return the given url
+     *
      */
-    public function ajax_sanitize_url()
+    public function ajax_sanitize_url_and_check()
     {
-        echo sanitize_title_with_dashes( $_POST['url'] );
+        $result = array();
+        $result[ 'message' ] = __( 'Url is unique.', 'swifty' ); // no message everything is ok
+        $result[ 'error' ] = ''; // no message everything is ok
+
+        if( isset( $_POST[ 'url' ] ) && isset( $_POST[ 'post_parent' ] ) && isset( $_POST[ 'post_id' ] ) && isset( $_POST[ 'path' ] ) && isset( $_POST[ 'do_sanitize' ] ) ) {
+            $url = $_POST[ 'url' ];
+            $path = $_POST[ 'path' ];
+            $post_id = intval( $_POST[ 'post_id' ] );
+            $post_parent = intval( $_POST[ 'post_parent' ] );
+
+            if( $_POST[ 'do_sanitize' ] ) {
+                $url = sanitize_title_with_dashes( $url );
+            }
+
+            // this is the sanitize action that will be used when saving settings
+            $post_name = preg_replace("~[ ]~", "-", $url);
+            $post_name = preg_replace("~[^a-z0-9//_-]~i", "", $post_name);
+
+            if( $post_name !== $url ) {
+                $result[ 'message' ] = '';
+                $result[ 'error' ] = __( 'Url contains forbidden characters.', 'swifty' );
+            } else if( $post_id || ($post_parent >= 0)) {
+                // make sure no path delimeters are surrounding the post_name even when path is empty
+                $post_name = trim( $path, '/' ) . '/' . trim( $post_name, '/' );
+                $post_name = trim( $post_name, '/' );
+
+                if( ( $post_parent === -1 ) && $post_id ) {
+                    $post = get_post( $post_id );
+                    $post_parent = $post->post_parent;
+                }
+
+                if( ! $this->spm_is_unique_spm_url( $post_id, $post_parent, $post_name ) ) {
+                    $result[ 'message' ] = '';
+                    $result[ 'error' ] = __( 'Url is not unique.', 'swifty' );
+                }
+            }
+            $result[ 'url' ] = $url;
+        }
+
+        echo json_encode( $result );
         exit;
     }
 

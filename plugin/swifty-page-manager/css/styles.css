@@ -449,3 +449,13 @@ label.spm-label-disabled {
     font-size: 20px;
     font-family: 'swiftysiteui';
 }
+
+#spm_post_name_message {
+    color: green;
+    font-weight: bolder;
+}
+
+#spm_post_name_error {
+    color: red;
+    font-weight: bolder;
+}

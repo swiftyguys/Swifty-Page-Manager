@@ -61,6 +61,38 @@ var SPM = (function( $, document ) {
         $wrapper.find( '.spm-search-form-working' ).fadeOut( 'fast' );
     };
 
+    // only do a ajax call after 400ms, prevent multiple calls
+    spm.sanitize_url_and_check_timer = null;
+    spm.sanitize_url_and_check = function( post_parent, post_id, path, url, do_sanitize ) {
+
+        // clear unhandled timeouts and create a new one
+        clearTimeout( spm.sanitize_url_and_check_timer );
+        spm.sanitize_url_and_check_timer = setTimeout( function() {
+            $( '#spm_post_name_error' ).html( '' );
+            $( '#spm_post_name_message' ).html( spm_l10n.checking_url );
+
+            $.post(
+                ajaxurl,
+                {
+                    'action': 'spm_sanitize_url_and_check',
+                    'post_parent': post_parent,
+                    'post_id': post_id,
+                    'do_sanitize': do_sanitize,
+                    'path': path,
+                    'url': url
+                }
+            ).done( function( data ) {
+                    data = $.parseJSON( data );
+                    $( '#spm_post_name_message' ).html( data.message );
+                    $( '#spm_post_name_error' ).html( data.error );
+                    if( do_sanitize ) {
+                        $( 'input[name=post_name]' ).val( spm.generatePageUrl( path, data.url ) );
+                    }
+                }
+            );
+        }, 400 );
+    };
+
     spm.startListeners = function() {
         $( document ).on( 'click', '.spm-search-submit', function( /*ev*/ ) {
 
@@ -128,33 +160,29 @@ var SPM = (function( $, document ) {
         $( document ).on( 'keyup', 'input[name=post_title].spm-new-page', function( ev ) {
             var $li = $( this ).closest( 'li' );
             var isCustomUrl = $li.find( 'input[name=spm_is_custom_url]' ).val();
-            var path;
+            var path, post_parent;
 
-            if ( isCustomUrl && isCustomUrl === '0' ) {
+            if ( spm_data.is_swifty_mode && isCustomUrl && isCustomUrl === '0' ) {
                 path = spm.generatePathToPage( $li );
-
-                setTimeout(function() {
-                    $.post(
-                        ajaxurl,
-                        {
-                            'action': 'spm_sanitize_url',
-                            'url': ev.currentTarget.value
-                        }
-                    ).done(function( url ) {
-                        $( 'input[name=post_name]' ).val( spm.generatePageUrl( path, url ) );
-                    });
-                }, 100 );
+                post_parent = ( $li.data( 'cur-action' ) === 'add' ) ? $li.attr( 'id' ) : -1;
+                spm.sanitize_url_and_check(post_parent, 0, path, ev.currentTarget.value, 1);
             }
 
             return false;
         });
 
-        $( document ).on( 'keyup', 'input[name=post_name]', function( /*ev*/ ) {
+        $( document ).on( 'keyup', 'input[name=post_name]', function( ev ) {
             var $li = $( this ).closest( 'li' );
             var isCustomUrl = $li.find( 'input[name=spm_is_custom_url]' ).val();
 
-            if ( isCustomUrl && isCustomUrl === '0' ) {
+            if( isCustomUrl && isCustomUrl === '0' ) {
                 $li.find( 'input[name=spm_is_custom_url]' ).val( '1' );
+            }
+
+            if( spm_data.is_swifty_mode ) {
+                var post_parent = ( $li.data( 'cur-action' ) === 'add' ) ? $li.attr( 'id' ) : -1;
+                var post_id = ( $li.data( 'cur-action' ) === 'settings' ) ? $li.data( 'post_id' ) : 0;
+                spm.sanitize_url_and_check( post_parent, post_id, '', ev.currentTarget.value, 0 );
             }
 
             return false;
@@ -165,19 +193,27 @@ var SPM = (function( $, document ) {
             var isCustomUrl = $li.find( 'input[name=spm_is_custom_url]' ).val();
             var path, url;
 
-            if ( ! spm.validateSettings( $li ) ) {
+            if( !spm.validateSettings( $li ) ) {
                 return false;
             }
 
-            if ( isCustomUrl && isCustomUrl === '0' ) {
+            if( isCustomUrl && isCustomUrl === '0' ) {
                 path = spm.generatePathToPage( $li );
                 url = $li.find( 'input[name=post_title]' ).val() !== '' ?
-                      $li.find( 'input[name=post_name]' ).val().replace( /.*\/(.+)$/g, '$1' ) :
-                      '';
+                    $li.find( 'input[name=post_name]' ).val().replace( /.*\/(.+)$/g, '$1' ) :
+                    '';
 
                 $( 'input[name=post_name]' ).val( spm.generatePageUrl( path, url ) );
+            } else {
+                path = '';
+                url = $( 'input[name=post_name]' ).val();
             }
 
+            if( spm_data.is_swifty_mode ) {
+                var post_parent = ( $li.data( 'cur-action' ) === 'add' ) ? $li.attr( 'id' ) : -1;
+                var post_id = ( $li.data( 'cur-action' ) === 'settings' ) ? $li.data( 'post_id' ) : 0;
+                spm.sanitize_url_and_check( post_parent, post_id, path, url, 0 );
+            }
             return false;
         });
 
@@ -395,8 +431,10 @@ var SPM = (function( $, document ) {
         spm.$tooltips.tooltip( 'close' );
     };
 
+    // combine path with url,make sure no path delimeters are surrounding the delimeters
     spm.generatePageUrl = function( path, url ) {
         if ( url !== '' ) {
+            // check path delimeter
             if ( ! /\/$/.test( path ) ) {
                 path += '/';
             }
@@ -404,9 +442,11 @@ var SPM = (function( $, document ) {
 
         url = path + url;
 
+        // remove surrounding path delimeters
         return url.replace( /^\/|\/$/g, '' );
     };
 
+    // combine path of parent with url when new page is added as child
     spm.generatePathToPage = function( $li ) {
         var addMode = $li.find( 'input[name=add_mode]:checked' ).val();
         var siteUrl = $li.find( 'input[name=wp_site_url]' ).val();
