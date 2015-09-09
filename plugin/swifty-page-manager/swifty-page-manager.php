@@ -1112,6 +1112,7 @@ class SwiftyPageManager
         $args['numberposts'] = -1;
         $args['orderby'] = 'menu_order title';
         $args['order'] = 'ASC';
+        $args['suppress_filters'] = 0; // WPML plugin support
         $pages = get_posts( $args );
         $added = true;
 
