@@ -10,8 +10,8 @@ Plugin URI: http://swiftylife.com/plugins/swifty-page-manager/
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-global $swifty_buildUse;
-$swifty_buildUse = '/*@echo BUILDUSE*/';
+global $swifty_build_use;
+$swifty_build_use = '/*@echo BUILDUSE*/';
 
 class SwiftyPageManager
 {
