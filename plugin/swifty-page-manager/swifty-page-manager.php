@@ -162,14 +162,14 @@ class SwiftyPageManager
      */
     public function seo_wp_title( $title, $sep )
     {
-        if ( is_feed() ) {
+        if( is_feed() ) {
             return $title;
         }
 
         $seoTitle = get_post_meta( get_the_ID(), 'spm_page_title_seo', true );
 
-        if ( ! empty( $seoTitle ) ) {
-            return "$seoTitle $sep ";
+        if( ! empty( $seoTitle ) ) {
+            return "$seoTitle";
         }
 
         return $title;
