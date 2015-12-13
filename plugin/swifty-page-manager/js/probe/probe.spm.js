@@ -150,7 +150,6 @@
 
     probe.RegisterTry(
         /I drag page "(.*)" (before|after|inside) page "(.*)"/, {
-            step_size: 38,
             dnd_done: false,
 
             Start: function( input ) {
@@ -162,30 +161,28 @@
                 var $allPages = $( probe.Utils.getPageSelector() );
                 var $pageToMove = $( probe.Utils.getPageSelector( input.page ) );
                 var pageToMoveIndex = $allPages.index( $pageToMove );
-                var destinationIndex = $allPages.index( $( probe.Utils.getPageSelector( input.destination ) ) );
-                var multiplier = destinationIndex;
+                var $pageDestination = $( probe.Utils.getPageSelector( input.destination ) );
+                var destinationIndex = $allPages.index( $pageDestination );
                 var yMove;
 
-                if ( pageToMoveIndex < destinationIndex ) {
-                    multiplier = destinationIndex - pageToMoveIndex;
+                var startY = $pageToMove.find( '.jstree-icon' ).offset().top;
+                var endY = $pageDestination.find( '.jstree-icon' ).offset().top;
 
-                    if ( input.position === 'before' ) {
-                        multiplier--;
+                yMove = endY - startY;
+
+                if ( input.position === 'before' ) {
+                    if( pageToMoveIndex < destinationIndex ) {
+                        yMove -= 24;
+                    } else {
+                        yMove -= 16;
+                    }
+                } else if ( input.position === 'after' ) {
+                    if ( pageToMoveIndex < destinationIndex ) {
+                        yMove += 8;
+                    } else {
+                        yMove += 16;
                     }
                 } else {
-                    multiplier = pageToMoveIndex - destinationIndex;
-
-                    if ( input.position === 'after' ) {
-                        multiplier--;
-                    }
-
-                    multiplier *= -1;
-                }
-
-                yMove = multiplier * this.step_size;
-
-                if ( input.position === 'inside' ) {
-                    yMove--;
                 }
 
                 $pageToMove.simulate( 'drag-n-drop', {
@@ -229,15 +226,16 @@
             Step3: function( input ) {
                 var $page = $( probe.Utils.getPageSelector( input.page ) );
                 var actualPos;
+                var atPos = parseInt( input.at_pos, 10 );
 
                 if ( input.x_pages ) {
                     $page.MustExistTimes( input.x_pages );
                 }
 
-                if ( typeof input.at_pos === 'number' ) {
+                if ( atPos > 0 ) {
                     actualPos = $( probe.Utils.getPageSelector() ).index( $page ) + 1;
 
-                    if ( actualPos !== input.at_pos ) {
+                    if ( actualPos !== atPos ) {
                         probe.SetFail( 'Element exists on position ' + actualPos +
                                        ' and not on the expected position ' + input.at_pos );
                     }

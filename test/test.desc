@@ -1,6 +1,6 @@
-Run Check if SPM is installed correctly
-    Feature SPM main page
-    Scenario Check WP mode
+#Run Check if SPM is installed correctly
+#    Feature SPM main page
+#    Scenario Check WP mode
 
 Run All tests in Swifty mode
     Given I am in Swifty mode
@@ -11,7 +11,7 @@ Run All tests in WP mode
     Given I am in WP mode
     Scenario Check WP mode
     Featureset All features
-    Feature Edit page content
+#    Feature Edit page content
 
 
 Featureset All features
