@@ -854,6 +854,8 @@ class SwiftyPageManager
         ?>
         var li = jQuery( '#spm-id-<?php echo $post_id; ?>' );
 
+        li.find( '#spm_post_name_error' ).html( '' );
+        li.find( '#spm_post_name_message' ).html( '' );
         li.find( 'input[name="post_title"]' ).val( <?php echo json_encode( $post->post_title ); ?> );
         li.find( 'input[name="post_status"]' ).val( [ <?php echo json_encode( $post_status ); ?> ] );
         li.find( 'input[name="post_name"]' ).val( <?php echo json_encode( $spm_page_url ); ?> );
