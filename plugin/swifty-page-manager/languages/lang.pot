@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-08 08:23+0200\n"
+"POT-Creation-Date: 2015-06-24 13:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,10 +19,6 @@ msgstr ""
 
 #: ../plugin/swifty-page-manager/swifty-page-manager.php:150
 msgid "SwiftySite Pages"
-msgstr ""
-
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:152
-msgid "Swifty Page Manager"
 msgstr ""
 
 #: ../plugin/swifty-page-manager/swifty-page-manager.php:207
@@ -87,10 +83,6 @@ msgstr ""
 msgid "published - draft content"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:474
-msgid "There are currently no settings for this plugin."
-msgstr ""
-
 #: ../plugin/swifty-page-manager/swifty-page-manager.php:488
 msgid "You do not have sufficient permissions to access this page. #359"
 msgstr ""
@@ -103,31 +95,31 @@ msgstr ""
 msgid "You do not have sufficient permissions to access this page. #465"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:602
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:622
 msgid "You do not have sufficient permissions to access this page. #588"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:616
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:636
 msgid "New page"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:718
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:744
 msgid "You do not have sufficient permissions to access this page. #708"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:752
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:778
 msgid "You do not have sufficient permissions to access this page. #747"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:776
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:802
 msgid "You do not have sufficient permissions to access this page. #771"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:1123
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:1149
 msgid "Unknown user"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:1129
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:1155
 msgid "[untitled page]"
 msgstr ""
 
@@ -198,7 +190,7 @@ msgid "Add page"
 msgstr ""
 
 #: ../plugin/swifty-page-manager/view/page_tree.php:194
-msgid "Edit page"
+msgid "Page settings"
 msgstr ""
 
 #: ../plugin/swifty-page-manager/view/page_tree.php:198

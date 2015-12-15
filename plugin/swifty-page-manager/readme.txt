@@ -146,6 +146,17 @@ Try it - it's free!
 
 == Changelog ==
 
+= 1.4.6 =
+ * Fixed: page settings not working in IE.
+ * Fixed: some issues with url's.
+
+= 1.4.5 =
+ * Better protection against duplicate url's / slugs.
+
+= 1.4.4 =
+ * Fixed an issue where 1.4.3. would give erros on some shared hosting accounts.
+ * Renamed "Page edit" to "Page settings".
+
 = 1.4.3 =
  * Shows version number on the setting page.
 
