@@ -3,7 +3,7 @@ Contributors: SwiftyLife, robertheessels, chrisvermeulen, jeroenh, jeroenvermeul
 Donate link: http://swiftylife.com/plugins/donate/
 Tags: Swifty, page, pages, tree, menu, manage, hierarchy, structure
 Requires at least: 3.8
-Tested up to: 4.2.2
+Tested up to: 4.4
 Stable tag: RELEASE_TAG
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -69,7 +69,7 @@ Credits: this plugin is based on [CMS Tree Page View](http://wordpress.org/plugi
 
 **Automatic installation**
 
-The easiest way to get your hands on Swifty Page Manager is to go to your WordPress website, log in and go to the plugin menu in the Wordpress admin sidebar. Click “Add new” and search for “Swifty Page Manager” in the search field. When you found it, simply click “Install now” and you’re done.
+The easiest way to get your hands on Swifty Page Manager is to go to your WordPress website, log in and go to the plugin menu in the Wordpress admin sidebar. Click “Add new” and search for “Swifty Page Manager” in the search field. When you've found it, simply click “Install now” and you’re done.
 
 **Manual installation**
 
@@ -145,6 +145,13 @@ Try to describe the actions that lead up to the point where something is not wor
 Try it - it's free!
 
 == Changelog ==
+
+= 1.4.7 =
+ * Improved WPML compatiblity.
+ * Removed | character from title (only in Swifty mode; not in stand-alone plugin).
+ * Added real-time validation check for the url / slug (only in Swifty mode; not in stand-alone plugin).
+ * Ready for Wordpress 4.4
+ * New screenshots.
 
 = 1.4.6 =
  * Fixed: page settings not working in IE.

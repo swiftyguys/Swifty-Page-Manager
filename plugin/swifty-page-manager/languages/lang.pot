@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-24 13:22+0200\n"
+"POT-Creation-Date: 2015-12-15 10:46+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,56 +22,60 @@ msgid "SwiftySite Pages"
 msgstr ""
 
 #: ../plugin/swifty-page-manager/swifty-page-manager.php:207
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:364
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:425
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:369
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:430
 msgid "You do not have sufficient permissions to access this page. #314"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:402
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:407
 msgid "Pages"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:412
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:417
 msgid "General"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:444
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:449
 msgid "draft"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:445
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:450
 msgid "future"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:446
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:451
 msgid "protected"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:447
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:452
 msgid "pending"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:448
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:453
 msgid "private"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:449
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:454
 msgid "trash"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:450
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:455
 msgid "Password protected page"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:451
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:456
 msgid "No pages found."
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:452
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:457
 msgid "Hidden"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:453
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:458
+msgid "Checking url"
+msgstr ""
+
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:459
 msgid ""
 "Unfortunately you can not create a sub page under a page with status 'Draft' "
 "because the draft page has not yet been published and thus technically does "
@@ -79,47 +83,59 @@ msgid ""
 "drag and drop it to become a sub page."
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:454
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:460
 msgid "published - draft content"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:488
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:494
 msgid "You do not have sufficient permissions to access this page. #359"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:500
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:506
 msgid "You do not have sufficient permissions to access this page. #371"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:535
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:541
 msgid "You do not have sufficient permissions to access this page. #465"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:622
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:628
 msgid "You do not have sufficient permissions to access this page. #588"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:636
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:642
 msgid "New page"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:744
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:750
 msgid "You do not have sufficient permissions to access this page. #708"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:778
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:784
 msgid "You do not have sufficient permissions to access this page. #747"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:802
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:808
 msgid "You do not have sufficient permissions to access this page. #771"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:1149
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:890
+msgid "Url is unique."
+msgstr ""
+
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:909
+msgid "Url contains forbidden characters."
+msgstr ""
+
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:922
+msgid "Url is not unique."
+msgstr ""
+
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:1206
 msgid "Unknown user"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:1155
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:1212
 msgid "[untitled page]"
 msgstr ""
 
