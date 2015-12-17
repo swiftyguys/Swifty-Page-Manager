@@ -49,6 +49,9 @@ class SwiftyPageManager
 
         // postpone further initialization to allow loading other plugins
         add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
+
+        // remove ninja-forms admin notices
+        add_filter( 'nf_admin_notices', array( $this, 'hook_nf_admin_notices' ), 11 );
     }
 
     /**
@@ -89,6 +92,28 @@ class SwiftyPageManager
         // Swifty Probe Module include (used for testing and gamification)
         add_action( 'admin_enqueue_scripts', array( $this, 'add_module_swifty_probe' ) );
         // @endif
+    }
+
+    /**
+     * return true when the page manager is showed or pagelist with trashed pages
+     *
+     * @return bool
+     */
+    public function is_pagemanager_page() {
+        $currentScreen = get_current_screen();
+        return ($currentScreen && ( 'pages_page_page-tree' === $currentScreen->base ||
+                    ( 'edit' === $currentScreen->base && 'page' === $currentScreen->post_type && 'trash' === get_query_var( 'post_status' ) ) ) );
+    }
+
+    /** hide ninja forms notices when showing pagemanager or pagelist with trashed pages
+     *  do this by removing all ninja notices from array
+     */
+    public function hook_nf_admin_notices( $notices ) {
+
+        if( $this->is_pagemanager_page() ) {
+            $notices = array();
+        }
+        return $notices;
     }
 
     public function empty_footer_text() {
@@ -372,11 +397,8 @@ class SwiftyPageManager
         // hide update notices from this page
         remove_action( 'admin_notices', 'update_nag', 3 );
 
-        $currentScreen = get_current_screen();
-
-        if ( 'pages_page_page-tree' === $currentScreen->base ||
-           ( 'edit' === $currentScreen->base && 'page' === $currentScreen->post_type && 'trash' === get_query_var( 'post_status' ) )
-        ) {
+        if ( $this->is_pagemanager_page() ) {
+            $currentScreen = get_current_screen();
             if ( 'pages_page_page-tree' === $currentScreen->base ) {
                 /** @noinspection PhpIncludeInspection */
                 require $this->plugin_dir . '/view/admin_head.php';
