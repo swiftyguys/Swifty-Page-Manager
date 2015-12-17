@@ -146,6 +146,9 @@ Try it - it's free!
 
 == Changelog ==
 
+= 1.4.8 =
+ * Prevent Ninja Forms messages from showing on top of Swifty Page Manager.
+
 = 1.4.7 =
  * Improved WPML compatiblity.
  * Removed | character from title (only in Swifty mode; not in stand-alone plugin).
