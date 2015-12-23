@@ -159,6 +159,8 @@ $post_type_object = get_post_type_object( $this->_post_type );
                         <span class="spm-search-form-no-hits"><?php _e( 'Nothing found.', 'swifty' ) ?></span>
                     </form>
                 </li>
+
+                <?php $this->admin_language_switcher() ?>
             </ul>
 
             <div class="spm-working">

@@ -1450,6 +1450,79 @@ class SwiftyPageManager
         return $result;
     }
 
+    /**
+     * echo simple language switcher for WPML, 'sitepress' is used as plugin translation domain
+     */
+    function admin_language_switcher() {
+        // do nothing if WPML is not active
+        if( ! class_exists( 'SitePress' ) ) {
+            return;
+        }
+        if( ! SitePress::check_settings_integrity() ) {
+            return;
+        }
+
+        global $sitepress;
+
+        $languages_links   = array();
+
+        $current_language = $sitepress->get_current_language();
+        $current_language = $current_language ? $current_language : $sitepress->get_default_language();
+
+        if ( isset( $_SERVER[ 'QUERY_STRING' ] ) ) {
+            parse_str( $_SERVER[ 'QUERY_STRING' ], $query_vars );
+            unset( $query_vars[ 'lang' ], $query_vars[ 'admin_bar' ] );
+        } else {
+            $query_vars = array();
+        }
+        $query_string = http_build_query( $query_vars );
+        if ( empty( $query_string ) ) {
+            $query_string = '?';
+        } else {
+            $query_string = '?' . $query_string . '&';
+        }
+
+        foreach ( $sitepress->get_active_languages() as $lang ) {
+
+            $query = $query_string . 'lang=' . $lang[ 'code' ]; // the default language need to specified explicitly yoo in order to set the lang cookie
+
+            $link_url = admin_url( basename( $_SERVER[ 'SCRIPT_NAME' ] ) . $query );
+
+            $languages_links[ $lang[ 'code' ] ] = array(
+                'url'     => $link_url,
+                'current' => $lang[ 'code' ] == $current_language,
+                'anchor'  => $lang[ 'display_name' ]
+            );
+        }
+
+        $query = $query_string . 'lang=all';
+        $link_url = admin_url( basename( $_SERVER[ 'SCRIPT_NAME' ] ) . $query );
+
+        $languages_links[ 'all' ] = array(
+            'url'  => $link_url, 'current' => 'all' == $current_language, 'anchor' => __( 'All languages', 'sitepress' )
+        );
+
+        // we start with the current language in our select
+		$lang   = $languages_links[ $current_language ];
+
+        if ( $languages_links ) {
+?>
+<select onchange="window.location=this.value" style="margin: 0 0 0 20px;">
+<option value="<?php echo esc_url( $lang[ 'url' ] ); ?>"><?php echo $lang[ 'anchor' ]; ?></option>
+<?php
+            foreach ( $languages_links as $code => $lang ) {
+                if ( $code == $current_language )
+                    continue;
+                ?>
+                <option value="<?php echo esc_url( $lang[ 'url' ] ); ?>"><?php echo $lang[ 'anchor' ]; ?></option>
+                <?php
+            }
+?>
+</select>
+<?php
+        }
+    }
+
     // @if PROBE='include'
     /**
      * Swifty Probe Module include (used for testing and gamification)
