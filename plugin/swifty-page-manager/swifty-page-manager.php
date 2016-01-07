@@ -7,7 +7,6 @@ Version: // @echo RELEASE_TAG
 Author URI: http://swiftylife.com/plugins/
 Plugin URI: http://swiftylife.com/plugins/swifty-page-manager/
 */
-
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 global $swifty_build_use;
