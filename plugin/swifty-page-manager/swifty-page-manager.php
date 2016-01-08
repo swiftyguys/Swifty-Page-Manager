@@ -684,8 +684,10 @@ class SwiftyPageManager
 
             if( $post_id ) {
                 if( $this->is_swifty ) {
-
                     $post = get_post( $post_id );
+                    $spm_show_as_first = isset( $_POST['spm_show_as_first'] ) ? $_POST['spm_show_as_first'] : null;
+                    $spm_alt_menu_text = isset( $_POST['spm_alt_menu_text'] ) ? trim( $_POST['spm_alt_menu_text'] ) : null;
+
                     if( $this->spm_is_unique_spm_url( $post_id, $post->post_parent, $post_name ) ) {
                         $cur_spm_url = get_post_meta( $post_id, 'spm_url', true );
 
@@ -701,10 +703,21 @@ class SwiftyPageManager
 
                         update_post_meta( $post_id, 'spm_url', $spm_is_custom_url ? $post_name : '' );
                     }
+
                     update_post_meta( $post_id, 'spm_show_in_menu', $spm_show_in_menu );
                     update_post_meta( $post_id, 'spm_page_title_seo', $spm_page_title_seo );
                     update_post_meta( $post_id, 'spm_header_visibility', $spm_header_visibility );
                     update_post_meta( $post_id, 'spm_sidebar_visibility', $spm_sidebar_visibility );
+
+                    if ( ! is_null( $spm_show_as_first ) ) {
+                        update_post_meta( $post_id, 'spm_show_as_first', $spm_show_as_first );
+                    }
+
+                    if ( ! is_null( $spm_alt_menu_text ) ) {
+                        if ( $spm_show_as_first === 'show' ) {
+                            update_post_meta( $post_id, 'spm_alt_menu_text', $spm_alt_menu_text );
+                        }
+                    }
                 }
 
                 echo '1';
@@ -838,11 +851,24 @@ class SwiftyPageManager
         $spm_show_in_menu  = ( $post->post_status === 'private' ) ? 'hide' : 'show';
         $spm_is_custom_url = 0;
 
+        foreach( $post_meta as $key => $val ) {
+            if( is_array( $val ) && count( $val ) === 1 ) {
+                $post_meta[ $key ] = $val[ 0 ];
+            }
+        }
+
         $defaults = array( 'spm_show_in_menu'       => 'show'
                          , 'spm_page_title_seo'     => $post->post_title
                          , 'spm_header_visibility'  => 'default'
                          , 'spm_sidebar_visibility' => 'default'
                          );
+
+        if( $this->is_swifty ) {
+            $defaults = array_merge( $defaults, array(
+                'spm_show_as_first' => 'show',
+                'spm_alt_menu_text' => ''
+            ) );
+        }
 
         foreach ( $defaults as $key => $val ) {
             if ( ! isset( $post_meta[ $key ] ) ) {
@@ -851,8 +877,8 @@ class SwiftyPageManager
         }
 
         if ( $this->is_swifty ) {
-            if ( ! empty( $post_meta['spm_url'][0] ) ) {
-                $spm_page_url = $post_meta['spm_url'][0];
+            if ( ! empty( $post_meta['spm_url'] ) ) {
+                $spm_page_url = $post_meta['spm_url'];
                 $spm_is_custom_url = 1;
             } else {
                 $spm_page_url = wp_make_link_relative( get_page_link( $post_id ) );
@@ -872,6 +898,15 @@ class SwiftyPageManager
             $post_meta['spm_show_in_menu'] = 'show';
         }
 
+        $spm_alt_menu_text = '';
+
+        if( $this->is_swifty ) {
+            if( $post_meta[ 'spm_show_as_first' ] === 'hide' ) {
+                $spm_alt_menu_text = $post_meta[ 'spm_alt_menu_text' ];
+                $post_meta[ 'spm_alt_menu_text' ] = '';
+            }
+        }
+
         ?>
         var li = jQuery( '#spm-id-<?php echo $post_id; ?>' );
 
@@ -886,7 +921,18 @@ class SwiftyPageManager
         li.find( 'input[name="spm_header_visibility"]' ).val( [ <?php echo json_encode( $post_meta['spm_header_visibility'] ); ?> ] );
         li.find( 'input[name="spm_sidebar_visibility"]' ).val( [ <?php echo json_encode( $post_meta['spm_sidebar_visibility'] ); ?> ] );
 
-        <?php
+        <?php if ( $this->is_swifty ): ?>
+        li.find( 'input[name="spm_show_as_first"]' ).val( [ <?php echo json_encode( $post_meta[ 'spm_show_as_first' ] ); ?> ] );
+        li.find( 'input[name="spm_alt_menu_text"]' ).val( <?php echo json_encode( $post_meta[ 'spm_alt_menu_text' ] ); ?> );
+
+        if ( li.find( 'input[name="spm_show_as_first"]:checked' ).val() === 'hide' ) {
+            li.find( 'input[name="spm_alt_menu_text"]' )
+                .attr( 'data-alt_menu_text', <?php echo json_encode( $spm_alt_menu_text ); ?> )
+                .prop( 'disabled', true )
+                .val( '' );
+        }
+
+        <?php endif;
         exit;
     }
 

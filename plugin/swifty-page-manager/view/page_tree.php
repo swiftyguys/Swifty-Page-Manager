@@ -531,6 +531,30 @@ $post_type_object = get_post_type_object( $this->_post_type );
                                             </label>
                                             </span>
                                         </div>
+                                        <div class="inline-edit-group spm-advanced-feature">
+                                            <label class="alignleft">
+                                                <span class="title spm-label-title">
+                                                    <?php esc_html_e( 'Show as first', 'swifty' ) ?>
+                                                </span>
+                                            </label>
+                                            <label class="alignleft">
+                                                <input name="spm_show_as_first" type="radio" value="show"
+                                                    class="spm-input-radio" />
+                                                <span class="checkbox-title">
+                                                    <?php esc_html_e( 'Show', 'swifty' ) ?>
+                                                </span>
+                                                <input name="spm_alt_menu_text" type="text"
+                                                    placeholder="<?php esc_html_e( 'Alternative menu text', 'swifty' ) ?>"
+                                                    class="spm-input spm-input-text" />
+                                            </label>
+                                            <label class="alignleft">
+                                                <input name="spm_show_as_first" type="radio" value="hide"
+                                                    class="spm-input-radio" />
+                                                <span class="checkbox-title">
+                                                    <?php esc_html_e( 'Hide', 'swifty' ) ?>
+                                                </span>
+                                            </label>
+                                        </div>
                                         <div class="inline-edit-group spm-less">
                                             <input type="button" class="button-secondary alignright spm-button spm-do-button"
                                                    data-spm-action="less" value="<?php esc_attr_e( 'Less', 'swifty' ) ?>" />
