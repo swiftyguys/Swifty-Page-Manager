@@ -84,7 +84,8 @@ class SwiftyPageManager
 
         // Actions for admins, warning: is_admin is not a security check
         if ( is_admin() ) {
-            add_action( 'init', array( $this, 'admin_init' ) );
+            add_action( 'init',       array( $this, 'admin_init' ) );
+            add_action( 'admin_init', array( $this, 'hook_admin_init' ) );
         }
 
         // @if PROBE='include'
@@ -165,6 +166,60 @@ class SwiftyPageManager
 
             $this->front_page_id = 'page' == get_option('show_on_front') ? (int) get_option( 'page_on_front' ) : 0;
         }
+    }
+
+    /**
+     * add the spm options and settings and bind them to the correct setting section
+     */
+    function hook_admin_init()
+    {
+        // setting group name, name of option
+        register_setting( 'spm_plugin_options', 'spm_plugin_options' );
+
+        add_settings_section(
+            'spm_plugin_options_main_id',
+            '',
+            array( $this, 'spm_plugin_options_main_text_callback' ),
+            'spm_plugin_options_page'
+        );
+
+        add_settings_field(
+            'spm_plugin_options_page_tree_max_width',
+            __( 'Page tree max. width', 'swifty' ),
+            array( $this, 'plugin_setting_page_tree_max_width' ),
+            'spm_plugin_options_page',
+            'spm_plugin_options_main_id'
+        );
+    }
+
+    function spm_plugin_options_main_text_callback()
+    {
+    }
+
+    function plugin_setting_page_tree_max_width()
+    {
+        echo '<input'
+            . ' type="text"'
+            . ' id="spm_plugin_options_page_tree_max_width"'
+            . ' name="spm_plugin_options[page_tree_max_width]"'
+            . ' value="' . $this->get_page_tree_max_width() . '"'
+            . ' />';
+    }
+
+    function get_page_tree_max_width()
+    {
+        $options = get_option( 'spm_plugin_options' );
+
+        if(    ! $options
+            || ! isset( $options[ 'page_tree_max_width' ] )
+            || ! $options[ 'page_tree_max_width' ]
+        ) {
+            $options[ 'page_tree_max_width' ] = 900;
+
+            update_option( 'spm_plugin_options', $options );
+        }
+
+        return $options[ 'page_tree_max_width' ];
     }
 
     public function get_admin_page_title()
@@ -498,9 +553,10 @@ class SwiftyPageManager
 
     function spm_tab_options_content()
     {
-//        settings_fields( 'spm_plugin_options' );
-//        do_settings_sections( 'spm_plugin_options_page' );
-//        submit_button();
+        settings_fields( 'spm_plugin_options' );
+        do_settings_sections( 'spm_plugin_options_page' );
+        submit_button();
+
         echo '<p>' . 'Swifty Page Manager ' . $this->_plugin_version . '</p>';
     }
 

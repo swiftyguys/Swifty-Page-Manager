@@ -171,7 +171,7 @@ $post_type_object = get_post_type_object( $this->_post_type );
                 <p>Message goes here.</p>
             </div>
 
-            <div class="spm-tree-container tree-default">
+            <div class="spm-tree-container tree-default" style="max-width: <?php echo $this->get_page_tree_max_width(); ?>px;">
                 <?php _e( 'Loading tree', 'swifty' ); ?>
             </div>
 
