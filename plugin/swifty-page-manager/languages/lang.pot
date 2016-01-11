@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-15 10:46+0100\n"
+"POT-Creation-Date: 2016-01-11 16:17+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,65 +17,69 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:150
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:188
+msgid "Page tree max. width"
+msgstr ""
+
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:229
 msgid "SwiftySite Pages"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:207
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:369
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:430
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:286
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:448
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:506
 msgid "You do not have sufficient permissions to access this page. #314"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:407
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:483
 msgid "Pages"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:417
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:493
 msgid "General"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:449
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:525
 msgid "draft"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:450
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:526
 msgid "future"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:451
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:527
 msgid "protected"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:452
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:528
 msgid "pending"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:453
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:529
 msgid "private"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:454
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:530
 msgid "trash"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:455
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:531
 msgid "Password protected page"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:456
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:532
 msgid "No pages found."
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:457
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:533
 msgid "Hidden"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:458
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:534
 msgid "Checking url"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:459
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:535
 msgid ""
 "Unfortunately you can not create a sub page under a page with status 'Draft' "
 "because the draft page has not yet been published and thus technically does "
@@ -83,60 +87,64 @@ msgid ""
 "drag and drop it to become a sub page."
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:460
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:536
 msgid "published - draft content"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:494
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:571
 msgid "You do not have sufficient permissions to access this page. #359"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:506
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:583
 msgid "You do not have sufficient permissions to access this page. #371"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:541
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:618
 msgid "You do not have sufficient permissions to access this page. #465"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:628
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:705
 msgid "You do not have sufficient permissions to access this page. #588"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:642
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:719
 msgid "New page"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:750
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:840
 msgid "You do not have sufficient permissions to access this page. #708"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:784
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:874
 msgid "You do not have sufficient permissions to access this page. #747"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:808
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:898
 msgid "You do not have sufficient permissions to access this page. #771"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:890
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:1015
 msgid "Url is unique."
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:909
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:1034
 msgid "Url contains forbidden characters."
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:922
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:1047
 msgid "Url is not unique."
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:1206
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:1331
 msgid "Unknown user"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/swifty-page-manager.php:1212
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:1337
 msgid "[untitled page]"
+msgstr ""
+
+#: ../plugin/swifty-page-manager/swifty-page-manager.php:1603
+msgid "All languages"
 msgstr ""
 
 #: ../plugin/swifty-page-manager/view/page_tree.php:85
@@ -148,7 +156,7 @@ msgid "Published"
 msgstr ""
 
 #: ../plugin/swifty-page-manager/view/page_tree.php:105
-#: ../plugin/swifty-page-manager/view/page_tree.php:440
+#: ../plugin/swifty-page-manager/view/page_tree.php:442
 msgid "Draft"
 msgstr ""
 
@@ -192,68 +200,68 @@ msgstr ""
 msgid "Nothing found."
 msgstr ""
 
-#: ../plugin/swifty-page-manager/view/page_tree.php:165
+#: ../plugin/swifty-page-manager/view/page_tree.php:167
 msgid "Loading..."
 msgstr ""
 
-#: ../plugin/swifty-page-manager/view/page_tree.php:173
+#: ../plugin/swifty-page-manager/view/page_tree.php:175
 msgid "Loading tree"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/view/page_tree.php:179
-#: ../plugin/swifty-page-manager/view/page_tree.php:190
+#: ../plugin/swifty-page-manager/view/page_tree.php:181
+#: ../plugin/swifty-page-manager/view/page_tree.php:192
 msgid "Add page"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/view/page_tree.php:194
+#: ../plugin/swifty-page-manager/view/page_tree.php:196
 msgid "Page settings"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/view/page_tree.php:198
+#: ../plugin/swifty-page-manager/view/page_tree.php:200
 msgid "Drag and drop this page to change the order of the pages"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/view/page_tree.php:202
+#: ../plugin/swifty-page-manager/view/page_tree.php:204
 msgid "Delete page"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/view/page_tree.php:206
+#: ../plugin/swifty-page-manager/view/page_tree.php:208
 msgid "Edit page content"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/view/page_tree.php:210
+#: ../plugin/swifty-page-manager/view/page_tree.php:212
 msgid "View page"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/view/page_tree.php:214
+#: ../plugin/swifty-page-manager/view/page_tree.php:216
 msgid "Publish page"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/view/page_tree.php:233
+#: ../plugin/swifty-page-manager/view/page_tree.php:235
 msgid "Are you sure you want to delete this page with all it's content?"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/view/page_tree.php:242
-#: ../plugin/swifty-page-manager/view/page_tree.php:279
-#: ../plugin/swifty-page-manager/view/page_tree.php:544
+#: ../plugin/swifty-page-manager/view/page_tree.php:244
+#: ../plugin/swifty-page-manager/view/page_tree.php:281
+#: ../plugin/swifty-page-manager/view/page_tree.php:570
 msgid "Cancel"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/view/page_tree.php:245
+#: ../plugin/swifty-page-manager/view/page_tree.php:247
 msgid "Delete"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/view/page_tree.php:269
+#: ../plugin/swifty-page-manager/view/page_tree.php:271
 msgid ""
 "Are you sure you want to publish this page so it becomes visible to your "
 "visitors?"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/view/page_tree.php:283
+#: ../plugin/swifty-page-manager/view/page_tree.php:285
 msgid "Publish"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/view/page_tree.php:296
+#: ../plugin/swifty-page-manager/view/page_tree.php:298
 msgid ""
 "The title of the page is the text that is shown in the tabs of the browser."
 "<br />It is also the short text that is shown in blue in the search engines "
@@ -265,7 +273,7 @@ msgid ""
 "Manager - easily create a page tree in Wordpress"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/view/page_tree.php:311
+#: ../plugin/swifty-page-manager/view/page_tree.php:313
 #, php-format
 msgid ""
 "This is the link to your page. It is important that the name of the page is "
@@ -274,7 +282,7 @@ msgid ""
 "><br />Example:<br><br />%s/<b>keyword</b><br />%s/<b>product-or-service</b>"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/view/page_tree.php:323
+#: ../plugin/swifty-page-manager/view/page_tree.php:325
 msgid ""
 "Status <b>Live</b> means that everyone in the world can see that page and "
 "that it is shown in your site menu.<br />Status <b>Draft</b> means that only "
@@ -282,83 +290,93 @@ msgid ""
 "menu."
 msgstr ""
 
-#: ../plugin/swifty-page-manager/view/page_tree.php:346
+#: ../plugin/swifty-page-manager/view/page_tree.php:348
 msgid "Text in menu"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/view/page_tree.php:350
-#: ../plugin/swifty-page-manager/view/page_tree.php:365
+#: ../plugin/swifty-page-manager/view/page_tree.php:352
+#: ../plugin/swifty-page-manager/view/page_tree.php:367
 msgid "Title"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/view/page_tree.php:377
+#: ../plugin/swifty-page-manager/view/page_tree.php:379
 msgid "Position"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/view/page_tree.php:383
+#: ../plugin/swifty-page-manager/view/page_tree.php:385
 msgid "After"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/view/page_tree.php:389
+#: ../plugin/swifty-page-manager/view/page_tree.php:391
 msgid "As sub page of"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/view/page_tree.php:397
+#: ../plugin/swifty-page-manager/view/page_tree.php:399
 msgid "More"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/view/page_tree.php:401
+#: ../plugin/swifty-page-manager/view/page_tree.php:403
 msgid "Url"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/view/page_tree.php:411
+#: ../plugin/swifty-page-manager/view/page_tree.php:413
 msgid "In menu"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/view/page_tree.php:418
-#: ../plugin/swifty-page-manager/view/page_tree.php:485
+#: ../plugin/swifty-page-manager/view/page_tree.php:420
+#: ../plugin/swifty-page-manager/view/page_tree.php:487
+#: ../plugin/swifty-page-manager/view/page_tree.php:544
 msgid "Show"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/view/page_tree.php:425
-#: ../plugin/swifty-page-manager/view/page_tree.php:492
-#: ../plugin/swifty-page-manager/view/page_tree.php:527
+#: ../plugin/swifty-page-manager/view/page_tree.php:427
+#: ../plugin/swifty-page-manager/view/page_tree.php:494
+#: ../plugin/swifty-page-manager/view/page_tree.php:529
+#: ../plugin/swifty-page-manager/view/page_tree.php:554
 msgid "Hide"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/view/page_tree.php:433
+#: ../plugin/swifty-page-manager/view/page_tree.php:435
 msgid "Status"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/view/page_tree.php:447
+#: ../plugin/swifty-page-manager/view/page_tree.php:449
 msgid "Live"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/view/page_tree.php:471
+#: ../plugin/swifty-page-manager/view/page_tree.php:473
 msgid "Header"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/view/page_tree.php:478
-#: ../plugin/swifty-page-manager/view/page_tree.php:506
+#: ../plugin/swifty-page-manager/view/page_tree.php:480
+#: ../plugin/swifty-page-manager/view/page_tree.php:508
 msgid "Default"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/view/page_tree.php:499
+#: ../plugin/swifty-page-manager/view/page_tree.php:501
 msgid "Sidebar"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/view/page_tree.php:513
+#: ../plugin/swifty-page-manager/view/page_tree.php:515
 msgid "Left"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/view/page_tree.php:520
+#: ../plugin/swifty-page-manager/view/page_tree.php:522
 msgid "Right"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/view/page_tree.php:534
+#: ../plugin/swifty-page-manager/view/page_tree.php:537
+msgid "Show as first sub"
+msgstr ""
+
+#: ../plugin/swifty-page-manager/view/page_tree.php:547
+msgid "Alternative menu text"
+msgstr ""
+
+#: ../plugin/swifty-page-manager/view/page_tree.php:560
 msgid "Less"
 msgstr ""
 
-#: ../plugin/swifty-page-manager/view/page_tree.php:548
+#: ../plugin/swifty-page-manager/view/page_tree.php:574
 msgid "Save"
 msgstr ""

@@ -146,6 +146,12 @@ Try it - it's free!
 
 == Changelog ==
 
+= 1.5.0 =
+ * The maximum width of the view / tree can now be set in the settings screen, so the buttons can now be closer to the titles.
+ * Added a WPML language switcher.
+ * Fixed a problem with activate after install.
+ * Added an option for showing a main menu's title also as the first child in it's dropdown menu (only in Swifty mode; not in stand-alone plugin).
+
 = 1.4.8 =
  * Prevent Ninja Forms messages from showing on top of Swifty Page Manager.
 

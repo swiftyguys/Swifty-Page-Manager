@@ -10,31 +10,39 @@ msgstr ""
 "X-Generator: GlotPress/0.1\n"
 "Project-Id-Version: Swifty Page Manager\n"
 
-#: swifty-page-manager.php:458
+#: swifty-page-manager.php:1603
+msgid "All languages"
+msgstr ""
+
+#: swifty-page-manager.php:188
+msgid "Page tree max. width"
+msgstr ""
+
+#: swifty-page-manager.php:534
 msgid "Checking url"
 msgstr ""
 
-#: swifty-page-manager.php:890
+#: swifty-page-manager.php:1015
 msgid "Url is unique."
 msgstr ""
 
-#: swifty-page-manager.php:909
+#: swifty-page-manager.php:1034
 msgid "Url contains forbidden characters."
 msgstr ""
 
-#: swifty-page-manager.php:922
+#: swifty-page-manager.php:1047
 msgid "Url is not unique."
 msgstr ""
 
-#: swifty-page-manager.php:150
+#: swifty-page-manager.php:229
 msgid "SwiftySite Pages"
 msgstr ""
 
-#: swifty-page-manager.php:407
+#: swifty-page-manager.php:483
 msgid "Pages"
 msgstr ""
 
-#: swifty-page-manager.php:459
+#: swifty-page-manager.php:535
 msgid ""
 "Unfortunately you can not create a sub page under a page with status 'Draft' "
 "because the draft page has not yet been published and thus technically does "
@@ -42,104 +50,112 @@ msgid ""
 "drag and drop it to become a sub page."
 msgstr ""
 
-#: swifty-page-manager.php:207 swifty-page-manager.php:369
-#: swifty-page-manager.php:430
+#: swifty-page-manager.php:286 swifty-page-manager.php:448
+#: swifty-page-manager.php:506
 msgid "You do not have sufficient permissions to access this page. #314"
 msgstr ""
 
-#: swifty-page-manager.php:449
+#: swifty-page-manager.php:525
 msgid "draft"
 msgstr "טיוטה"
 
-#: swifty-page-manager.php:450
+#: swifty-page-manager.php:526
 msgid "future"
 msgstr "עתידי"
 
-#: swifty-page-manager.php:451
+#: swifty-page-manager.php:527
 msgid "protected"
 msgstr "מוגן"
 
-#: swifty-page-manager.php:452
+#: swifty-page-manager.php:528
 msgid "pending"
 msgstr "בהמתנה"
 
-#: swifty-page-manager.php:453
+#: swifty-page-manager.php:529
 msgid "private"
 msgstr "פרטי"
 
-#: swifty-page-manager.php:454
+#: swifty-page-manager.php:530
 msgid "trash"
 msgstr "פח"
 
-#: swifty-page-manager.php:455
+#: swifty-page-manager.php:531
 msgid "Password protected page"
 msgstr "עמוד מוגן בססמה"
 
-#: swifty-page-manager.php:456
+#: swifty-page-manager.php:532
 msgid "No pages found."
 msgstr "לא נמצאו עמודים."
 
-#: swifty-page-manager.php:457
+#: swifty-page-manager.php:533
 msgid "Hidden"
 msgstr "נסתר"
 
-#: swifty-page-manager.php:460
+#: swifty-page-manager.php:536
 msgid "published - draft content"
 msgstr ""
 
-#: swifty-page-manager.php:417
+#: swifty-page-manager.php:493
 msgid "General"
 msgstr ""
 
-#: swifty-page-manager.php:494
+#: swifty-page-manager.php:571
 msgid "You do not have sufficient permissions to access this page. #359"
 msgstr ""
 
-#: swifty-page-manager.php:506
+#: swifty-page-manager.php:583
 msgid "You do not have sufficient permissions to access this page. #371"
 msgstr ""
 
-#: swifty-page-manager.php:541
+#: swifty-page-manager.php:618
 msgid "You do not have sufficient permissions to access this page. #465"
 msgstr ""
 
-#: swifty-page-manager.php:628
+#: swifty-page-manager.php:705
 msgid "You do not have sufficient permissions to access this page. #588"
 msgstr ""
 
-#: swifty-page-manager.php:642
+#: swifty-page-manager.php:719
 msgid "New page"
 msgstr "עמוד חדש"
 
-#: swifty-page-manager.php:750
+#: swifty-page-manager.php:840
 msgid "You do not have sufficient permissions to access this page. #708"
 msgstr ""
 
-#: swifty-page-manager.php:784
+#: swifty-page-manager.php:874
 msgid "You do not have sufficient permissions to access this page. #747"
 msgstr ""
 
-#: swifty-page-manager.php:808
+#: swifty-page-manager.php:898
 msgid "You do not have sufficient permissions to access this page. #771"
 msgstr ""
 
-#: swifty-page-manager.php:1206
+#: swifty-page-manager.php:1331
 msgid "Unknown user"
 msgstr "משתמש לא ידוע"
 
-#: swifty-page-manager.php:1212
+#: swifty-page-manager.php:1337
 msgid "[untitled page]"
 msgstr "[עמוד ללא כותרת]"
 
-#: view/page_tree.php:194
+#: view/page_tree.php:537
+msgid "Show as first sub"
+msgstr ""
+
+#: view/page_tree.php:547
+msgid "Alternative menu text"
+msgstr ""
+
+#: view/page_tree.php:196
 msgid "Page settings"
 msgstr ""
 
-#: view/page_tree.php:478 view/page_tree.php:506
+#: view/page_tree.php:480 view/page_tree.php:508
 msgid "Default"
 msgstr ""
 
-#: view/page_tree.php:198
+#: view/page_tree.php:200
 msgid "Drag and drop this page to change the order of the pages"
 msgstr ""
 
@@ -151,7 +167,7 @@ msgstr "הכל"
 msgid "Published"
 msgstr "פורסם"
 
-#: view/page_tree.php:105 view/page_tree.php:440
+#: view/page_tree.php:105 view/page_tree.php:442
 msgid "Draft"
 msgstr "טיוטה"
 
@@ -195,57 +211,57 @@ msgstr "חיפוש..."
 msgid "Nothing found."
 msgstr "אין כלום."
 
-#: view/page_tree.php:165
+#: view/page_tree.php:167
 msgid "Loading..."
 msgstr "טוען..."
 
-#: view/page_tree.php:173
+#: view/page_tree.php:175
 msgid "Loading tree"
 msgstr "טוען את העץ"
 
-#: view/page_tree.php:179 view/page_tree.php:190
+#: view/page_tree.php:181 view/page_tree.php:192
 msgid "Add page"
 msgstr "הוספת עמוד"
 
-#: view/page_tree.php:202
+#: view/page_tree.php:204
 msgid "Delete page"
 msgstr "מחיקת העמוד"
 
-#: view/page_tree.php:206
+#: view/page_tree.php:208
 msgid "Edit page content"
 msgstr "עריכת תוכן העמוד"
 
-#: view/page_tree.php:210
+#: view/page_tree.php:212
 msgid "View page"
 msgstr "הצג את העמוד"
 
-#: view/page_tree.php:214
+#: view/page_tree.php:216
 msgid "Publish page"
 msgstr "פרסם את העמוד"
 
-#: view/page_tree.php:233
+#: view/page_tree.php:235
 msgid "Are you sure you want to delete this page with all it's content?"
 msgstr "בטוח שרוצה למחוק את העמוד הזה עם כל התוכן שלו?"
 
-#: view/page_tree.php:242 view/page_tree.php:279 view/page_tree.php:544
+#: view/page_tree.php:244 view/page_tree.php:281 view/page_tree.php:570
 msgid "Cancel"
 msgstr "ביטול"
 
-#: view/page_tree.php:245
+#: view/page_tree.php:247
 msgid "Delete"
 msgstr "מחיקה"
 
-#: view/page_tree.php:269
+#: view/page_tree.php:271
 msgid ""
 "Are you sure you want to publish this page so it becomes visible to your "
 "visitors?"
 msgstr "בטוח שרוצה לפרסם את העמוד כך שיוצג לכל המבקרים?"
 
-#: view/page_tree.php:283
+#: view/page_tree.php:285
 msgid "Publish"
 msgstr "פרסום"
 
-#: view/page_tree.php:296
+#: view/page_tree.php:298
 msgid ""
 "The title of the page is the text that is shown in the tabs of the browser."
 "<br />It is also the short text that is shown in blue in the search engines "
@@ -257,7 +273,7 @@ msgid ""
 "Manager - easily create a page tree in Wordpress"
 msgstr ""
 
-#: view/page_tree.php:311
+#: view/page_tree.php:313
 msgid ""
 "This is the link to your page. It is important that the name of the page is "
 "the main keyword of that page<br />or the name of the product or service "
@@ -265,7 +281,7 @@ msgid ""
 "><br />Example:<br><br />%s/<b>keyword</b><br />%s/<b>product-or-service</b>"
 msgstr ""
 
-#: view/page_tree.php:323
+#: view/page_tree.php:325
 msgid ""
 "Status <b>Live</b> means that everyone in the world can see that page and "
 "that it is shown in your site menu.<br />Status <b>Draft</b> means that only "
@@ -273,74 +289,75 @@ msgid ""
 "menu."
 msgstr ""
 
-#: view/page_tree.php:346
+#: view/page_tree.php:348
 msgid "Text in menu"
 msgstr "טקסט בתפריט"
 
-#: view/page_tree.php:350 view/page_tree.php:365
+#: view/page_tree.php:352 view/page_tree.php:367
 msgid "Title"
 msgstr "כותרת"
 
-#: view/page_tree.php:377
+#: view/page_tree.php:379
 msgid "Position"
 msgstr "מיקום"
 
-#: view/page_tree.php:383
+#: view/page_tree.php:385
 msgid "After"
 msgstr "אחרי"
 
-#: view/page_tree.php:389
+#: view/page_tree.php:391
 msgid "As sub page of"
 msgstr "כדף משנה של"
 
-#: view/page_tree.php:397
+#: view/page_tree.php:399
 msgid "More"
 msgstr "יותר"
 
-#: view/page_tree.php:401
+#: view/page_tree.php:403
 msgid "Url"
 msgstr "כתובת URL"
 
-#: view/page_tree.php:411
+#: view/page_tree.php:413
 msgid "In menu"
 msgstr "בתפריט"
 
-#: view/page_tree.php:418 view/page_tree.php:485
+#: view/page_tree.php:420 view/page_tree.php:487 view/page_tree.php:544
 msgid "Show"
 msgstr "הצג"
 
-#: view/page_tree.php:425 view/page_tree.php:492 view/page_tree.php:527
+#: view/page_tree.php:427 view/page_tree.php:494 view/page_tree.php:529
+#: view/page_tree.php:554
 msgid "Hide"
 msgstr "הסתר"
 
-#: view/page_tree.php:433
+#: view/page_tree.php:435
 msgid "Status"
 msgstr "מצב"
 
-#: view/page_tree.php:447
+#: view/page_tree.php:449
 msgid "Live"
 msgstr "חי"
 
-#: view/page_tree.php:471
+#: view/page_tree.php:473
 msgid "Header"
 msgstr "סרגל עליון"
 
-#: view/page_tree.php:499
+#: view/page_tree.php:501
 msgid "Sidebar"
 msgstr "סרגל צד"
 
-#: view/page_tree.php:513
+#: view/page_tree.php:515
 msgid "Left"
 msgstr "שמאל"
 
-#: view/page_tree.php:520
+#: view/page_tree.php:522
 msgid "Right"
 msgstr "ימין"
 
-#: view/page_tree.php:534
+#: view/page_tree.php:560
 msgid "Less"
 msgstr "פחות"
 
-#: view/page_tree.php:548
+#: view/page_tree.php:574
 msgid "Save"
 msgstr "שמירה"
