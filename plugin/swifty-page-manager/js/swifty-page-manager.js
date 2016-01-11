@@ -217,6 +217,27 @@ var SPM = (function( $, document ) {
             return false;
         });
 
+        $( document ).on( 'change', 'input[name=spm_show_as_first]', function( /*ev*/ ) {
+            var $radioBtn = $( this );
+            var $div = $radioBtn.closest( '.spm-advanced-feature' );
+            var $altMenuTextInput = $div.find( 'input[name=spm_alt_menu_text]' );
+            var altMenuText = $altMenuTextInput.val();
+
+            if( $radioBtn.val() === 'hide' ) {
+                $altMenuTextInput.attr( 'data-alt_menu_text', altMenuText )
+                    .prop( 'disabled', true )
+                    .val( '' );
+            } else {
+                altMenuText = $altMenuTextInput.attr( 'data-alt_menu_text' ) || '';
+
+                $altMenuTextInput.removeAttr( 'data-alt_menu_text' )
+                    .prop( 'disabled', false )
+                    .val( altMenuText );
+            }
+
+            return false;
+        });
+
         $( document ).on( 'click', '.spm-page-button:not(.button-primary-disabled)', function( /*ev*/ ) {
             var $button = $( this );
             var $li = $button.closest( 'li' );
@@ -305,8 +326,8 @@ var SPM = (function( $, document ) {
                         'spm_is_custom_url': $li.find( 'input[name=spm_is_custom_url]' ).val(),
                         'spm_show_in_menu': $li.find( 'input[name=spm_show_in_menu]:checked' ).val() || 'show',   // show | hide
                         'spm_page_title_seo': $li.find( 'input[name=spm_page_title_seo]' ).val(),
-                        'spm_header_visibility': $li.find( 'input[name=spm_header_visibility]:checked' ).val() || 'defaut',   // show | hide
-                        'spm_sidebar_visibility': $li.find( 'input[name=spm_sidebar_visibility]:checked' ).val() || 'defaut',   // left | right | hide
+                        'spm_header_visibility': $li.find( 'input[name=spm_header_visibility]:checked' ).val() || 'default',     // default | show | hide
+                        'spm_sidebar_visibility': $li.find( 'input[name=spm_sidebar_visibility]:checked' ).val() || 'default',   // default | left | right | hide
                         '_inline_edit': $inlineEdit.val()
                     };
 
@@ -315,9 +336,18 @@ var SPM = (function( $, document ) {
                             'parent_id': $li.attr( 'id' )
                         });
                     } else if ( curAction === 'settings' ) {   // Page editing
+                        var $showAsFirstInput = $li.find( 'input[name=spm_show_as_first]' );
+
                         $.extend( true, settings, {
                             'post_ID': $li.data( 'post_id' )
                         });
+
+                        if ( $showAsFirstInput.is( ':visible' ) ) {
+                            $.extend( true, settings, {
+                                'spm_show_as_first': $showAsFirstInput.filter( ':checked' ).val() || 'show',   // show | hide
+                                'spm_alt_menu_text': $li.find( 'input[name=spm_alt_menu_text]' ).val() || ''
+                            });
+                        }
                     }
 
                     $.post(
@@ -361,7 +391,7 @@ var SPM = (function( $, document ) {
                     break;
                 case 'less':
                 case 'more':
-                    $( '.spm-advanced-feature' )[ spmAction === 'less' ? 'hide' : 'show' ]();
+                    $( '.spm-advanced-feature' ).not( '.spm-hidden' )[ spmAction === 'less' ? 'hide' : 'show' ]();
                     $( '.spm-less' )[ spmAction === 'less' ? 'hide' : 'show' ]();
                     $( '.spm-more' )[ spmAction === 'less' ? 'show' : 'hide' ]();
 
@@ -572,12 +602,25 @@ var SPM = (function( $, document ) {
 
             $tmpl.find( 'input[name=add_mode]' ).addClass( 'spm-new-page' );
             $tmpl.find( 'input[name=post_title]' ).addClass( 'spm-new-page' );
+
+            $tmpl.find( 'input[name=spm_show_as_first]' )
+                .closest( '.inline-edit-group' )
+                .addClass( 'spm-hidden' );
         }
 
         if ( action === 'settings' ) {
             $tmpl.find( 'input[name=add_mode]' ).closest( '.inline-edit-group' ).hide();
-        }
 
+            if ( +isSwifty ) {
+                var $showAsFirstDiv = $tmpl.find( 'input[name=spm_show_as_first]' ).closest( '.inline-edit-group' );
+
+                if ( $li.is( '.jstree-leaf' ) ) {
+                    $showAsFirstDiv.addClass( 'spm-hidden' );
+                } else {
+                    $showAsFirstDiv.removeClass( 'spm-hidden' );
+                }
+            }
+        }
 
         if ( +isSwifty ) {
             $tmpl.find( '.spm-advanced-feature' ).hide();

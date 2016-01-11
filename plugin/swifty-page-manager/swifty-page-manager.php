@@ -7,7 +7,6 @@ Version: // @echo RELEASE_TAG
 Author URI: http://swiftylife.com/plugins/
 Plugin URI: http://swiftylife.com/plugins/swifty-page-manager/
 */
-
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 global $swifty_build_use;
@@ -85,7 +84,8 @@ class SwiftyPageManager
 
         // Actions for admins, warning: is_admin is not a security check
         if ( is_admin() ) {
-            add_action( 'init', array( $this, 'admin_init' ) );
+            add_action( 'init',       array( $this, 'admin_init' ) );
+            add_action( 'admin_init', array( $this, 'hook_admin_init' ) );
         }
 
         // @if PROBE='include'
@@ -166,6 +166,60 @@ class SwiftyPageManager
 
             $this->front_page_id = 'page' == get_option('show_on_front') ? (int) get_option( 'page_on_front' ) : 0;
         }
+    }
+
+    /**
+     * add the spm options and settings and bind them to the correct setting section
+     */
+    function hook_admin_init()
+    {
+        // setting group name, name of option
+        register_setting( 'spm_plugin_options', 'spm_plugin_options' );
+
+        add_settings_section(
+            'spm_plugin_options_main_id',
+            '',
+            array( $this, 'spm_plugin_options_main_text_callback' ),
+            'spm_plugin_options_page'
+        );
+
+        add_settings_field(
+            'spm_plugin_options_page_tree_max_width',
+            __( 'Page tree max. width', 'swifty' ),
+            array( $this, 'plugin_setting_page_tree_max_width' ),
+            'spm_plugin_options_page',
+            'spm_plugin_options_main_id'
+        );
+    }
+
+    function spm_plugin_options_main_text_callback()
+    {
+    }
+
+    function plugin_setting_page_tree_max_width()
+    {
+        echo '<input'
+            . ' type="text"'
+            . ' id="spm_plugin_options_page_tree_max_width"'
+            . ' name="spm_plugin_options[page_tree_max_width]"'
+            . ' value="' . $this->get_page_tree_max_width() . '"'
+            . ' />';
+    }
+
+    function get_page_tree_max_width()
+    {
+        $options = get_option( 'spm_plugin_options' );
+
+        if(    ! $options
+            || ! isset( $options[ 'page_tree_max_width' ] )
+            || ! $options[ 'page_tree_max_width' ]
+        ) {
+            $options[ 'page_tree_max_width' ] = 900;
+
+            update_option( 'spm_plugin_options', $options );
+        }
+
+        return $options[ 'page_tree_max_width' ];
     }
 
     public function get_admin_page_title()
@@ -499,9 +553,10 @@ class SwiftyPageManager
 
     function spm_tab_options_content()
     {
-//        settings_fields( 'spm_plugin_options' );
-//        do_settings_sections( 'spm_plugin_options_page' );
-//        submit_button();
+        settings_fields( 'spm_plugin_options' );
+        do_settings_sections( 'spm_plugin_options_page' );
+        submit_button();
+
         echo '<p>' . 'Swifty Page Manager ' . $this->_plugin_version . '</p>';
     }
 
@@ -685,8 +740,10 @@ class SwiftyPageManager
 
             if( $post_id ) {
                 if( $this->is_swifty ) {
-
                     $post = get_post( $post_id );
+                    $spm_show_as_first = isset( $_POST['spm_show_as_first'] ) ? $_POST['spm_show_as_first'] : null;
+                    $spm_alt_menu_text = isset( $_POST['spm_alt_menu_text'] ) ? trim( $_POST['spm_alt_menu_text'] ) : null;
+
                     if( $this->spm_is_unique_spm_url( $post_id, $post->post_parent, $post_name ) ) {
                         $cur_spm_url = get_post_meta( $post_id, 'spm_url', true );
 
@@ -702,10 +759,21 @@ class SwiftyPageManager
 
                         update_post_meta( $post_id, 'spm_url', $spm_is_custom_url ? $post_name : '' );
                     }
+
                     update_post_meta( $post_id, 'spm_show_in_menu', $spm_show_in_menu );
                     update_post_meta( $post_id, 'spm_page_title_seo', $spm_page_title_seo );
                     update_post_meta( $post_id, 'spm_header_visibility', $spm_header_visibility );
                     update_post_meta( $post_id, 'spm_sidebar_visibility', $spm_sidebar_visibility );
+
+                    if ( ! is_null( $spm_show_as_first ) ) {
+                        update_post_meta( $post_id, 'spm_show_as_first', $spm_show_as_first );
+                    }
+
+                    if ( ! is_null( $spm_alt_menu_text ) ) {
+                        if ( $spm_show_as_first === 'show' ) {
+                            update_post_meta( $post_id, 'spm_alt_menu_text', $spm_alt_menu_text );
+                        }
+                    }
                 }
 
                 echo '1';
@@ -839,11 +907,24 @@ class SwiftyPageManager
         $spm_show_in_menu  = ( $post->post_status === 'private' ) ? 'hide' : 'show';
         $spm_is_custom_url = 0;
 
+        foreach( $post_meta as $key => $val ) {
+            if( is_array( $val ) && count( $val ) === 1 ) {
+                $post_meta[ $key ] = $val[ 0 ];
+            }
+        }
+
         $defaults = array( 'spm_show_in_menu'       => 'show'
                          , 'spm_page_title_seo'     => $post->post_title
                          , 'spm_header_visibility'  => 'default'
                          , 'spm_sidebar_visibility' => 'default'
                          );
+
+        if( $this->is_swifty ) {
+            $defaults = array_merge( $defaults, array(
+                'spm_show_as_first' => 'show',
+                'spm_alt_menu_text' => ''
+            ) );
+        }
 
         foreach ( $defaults as $key => $val ) {
             if ( ! isset( $post_meta[ $key ] ) ) {
@@ -852,8 +933,8 @@ class SwiftyPageManager
         }
 
         if ( $this->is_swifty ) {
-            if ( ! empty( $post_meta['spm_url'][0] ) ) {
-                $spm_page_url = $post_meta['spm_url'][0];
+            if ( ! empty( $post_meta['spm_url'] ) ) {
+                $spm_page_url = $post_meta['spm_url'];
                 $spm_is_custom_url = 1;
             } else {
                 $spm_page_url = wp_make_link_relative( get_page_link( $post_id ) );
@@ -873,6 +954,15 @@ class SwiftyPageManager
             $post_meta['spm_show_in_menu'] = 'show';
         }
 
+        $spm_alt_menu_text = '';
+
+        if( $this->is_swifty ) {
+            if( $post_meta[ 'spm_show_as_first' ] === 'hide' ) {
+                $spm_alt_menu_text = $post_meta[ 'spm_alt_menu_text' ];
+                $post_meta[ 'spm_alt_menu_text' ] = '';
+            }
+        }
+
         ?>
         var li = jQuery( '#spm-id-<?php echo $post_id; ?>' );
 
@@ -887,7 +977,18 @@ class SwiftyPageManager
         li.find( 'input[name="spm_header_visibility"]' ).val( [ <?php echo json_encode( $post_meta['spm_header_visibility'] ); ?> ] );
         li.find( 'input[name="spm_sidebar_visibility"]' ).val( [ <?php echo json_encode( $post_meta['spm_sidebar_visibility'] ); ?> ] );
 
-        <?php
+        <?php if ( $this->is_swifty ): ?>
+        li.find( 'input[name="spm_show_as_first"]' ).val( [ <?php echo json_encode( $post_meta[ 'spm_show_as_first' ] ); ?> ] );
+        li.find( 'input[name="spm_alt_menu_text"]' ).val( <?php echo json_encode( $post_meta[ 'spm_alt_menu_text' ] ); ?> );
+
+        if ( li.find( 'input[name="spm_show_as_first"]:checked' ).val() === 'hide' ) {
+            li.find( 'input[name="spm_alt_menu_text"]' )
+                .attr( 'data-alt_menu_text', <?php echo json_encode( $spm_alt_menu_text ); ?> )
+                .prop( 'disabled', true )
+                .val( '' );
+        }
+
+        <?php endif;
         exit;
     }
 
@@ -1448,6 +1549,79 @@ class SwiftyPageManager
         }
 
         return $result;
+    }
+
+    /**
+     * echo simple language switcher for WPML, 'sitepress' is used as plugin translation domain
+     */
+    function admin_language_switcher() {
+        // do nothing if WPML is not active
+        if( ! class_exists( 'SitePress' ) ) {
+            return;
+        }
+        if( ! SitePress::check_settings_integrity() ) {
+            return;
+        }
+
+        global $sitepress;
+
+        $languages_links   = array();
+
+        $current_language = $sitepress->get_current_language();
+        $current_language = $current_language ? $current_language : $sitepress->get_default_language();
+
+        if ( isset( $_SERVER[ 'QUERY_STRING' ] ) ) {
+            parse_str( $_SERVER[ 'QUERY_STRING' ], $query_vars );
+            unset( $query_vars[ 'lang' ], $query_vars[ 'admin_bar' ] );
+        } else {
+            $query_vars = array();
+        }
+        $query_string = http_build_query( $query_vars );
+        if ( empty( $query_string ) ) {
+            $query_string = '?';
+        } else {
+            $query_string = '?' . $query_string . '&';
+        }
+
+        foreach ( $sitepress->get_active_languages() as $lang ) {
+
+            $query = $query_string . 'lang=' . $lang[ 'code' ]; // the default language need to specified explicitly yoo in order to set the lang cookie
+
+            $link_url = admin_url( basename( $_SERVER[ 'SCRIPT_NAME' ] ) . $query );
+
+            $languages_links[ $lang[ 'code' ] ] = array(
+                'url'     => $link_url,
+                'current' => $lang[ 'code' ] == $current_language,
+                'anchor'  => $lang[ 'display_name' ]
+            );
+        }
+
+        $query = $query_string . 'lang=all';
+        $link_url = admin_url( basename( $_SERVER[ 'SCRIPT_NAME' ] ) . $query );
+
+        $languages_links[ 'all' ] = array(
+            'url'  => $link_url, 'current' => 'all' == $current_language, 'anchor' => __( 'All languages', 'sitepress' )
+        );
+
+        // we start with the current language in our select
+		$lang   = $languages_links[ $current_language ];
+
+        if ( $languages_links ) {
+?>
+<select onchange="window.location=this.value" style="margin: 0 0 0 20px;">
+<option value="<?php echo esc_url( $lang[ 'url' ] ); ?>"><?php echo $lang[ 'anchor' ]; ?></option>
+<?php
+            foreach ( $languages_links as $code => $lang ) {
+                if ( $code == $current_language )
+                    continue;
+                ?>
+                <option value="<?php echo esc_url( $lang[ 'url' ] ); ?>"><?php echo $lang[ 'anchor' ]; ?></option>
+                <?php
+            }
+?>
+</select>
+<?php
+        }
     }
 
     // @if PROBE='include'
