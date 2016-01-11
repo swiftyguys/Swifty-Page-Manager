@@ -534,7 +534,7 @@ $post_type_object = get_post_type_object( $this->_post_type );
                                         <div class="inline-edit-group spm-advanced-feature">
                                             <label class="alignleft">
                                                 <span class="title spm-label-title">
-                                                    <?php esc_html_e( 'Show as first', 'swifty' ) ?>
+                                                    <?php esc_html_e( 'Show as first sub', 'swifty' ) ?>
                                                 </span>
                                             </label>
                                             <label class="alignleft">
