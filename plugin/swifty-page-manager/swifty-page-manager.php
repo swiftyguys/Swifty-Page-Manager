@@ -1559,11 +1559,19 @@ class SwiftyPageManager
         if( ! class_exists( 'SitePress' ) ) {
             return;
         }
-        if( ! SitePress::check_settings_integrity() ) {
+        // If check_settings_integrity exists then it should not fail, otherwise ignore.
+        if( method_exists( 'SitePress', 'check_settings_integrity' ) && ! SitePress::check_settings_integrity() ) {
             return;
         }
 
         global $sitepress;
+
+        // We need those methods, so make sure they are available.
+        if( !method_exists( $sitepress, 'get_current_language' ) ||
+            !method_exists( $sitepress, 'get_default_language' ) ||
+            !method_exists( $sitepress, 'get_active_languages' )) {
+            return;
+        }
 
         $languages_links   = array();
 
@@ -1603,7 +1611,7 @@ class SwiftyPageManager
             'url'  => $link_url, 'current' => 'all' == $current_language, 'anchor' => __( 'All languages', 'sitepress' )
         );
 
-        // we start with the current language in our select
+        // We start with the current language in our select.
 		$lang   = $languages_links[ $current_language ];
 
         if ( $languages_links ) {
