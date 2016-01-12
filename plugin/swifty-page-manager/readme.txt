@@ -146,9 +146,9 @@ Try it - it's free!
 
 == Changelog ==
 
-= 1.5.1 =
+= 1.5.2 =
  * Small bugfix for WMPL.
- 
+
 = 1.5.0 =
  * The maximum width of the view / tree can now be set in the settings screen, so the buttons can now be closer to the titles.
  * Added a WPML language switcher.
