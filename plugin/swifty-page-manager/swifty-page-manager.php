@@ -132,7 +132,7 @@ class SwiftyPageManager
                 $this->_post_status = $_GET['status'];
             }
 
-            load_plugin_textdomain( 'swifty', false, '/swifty-page-manager/languages' );
+            load_plugin_textdomain( 'swifty-page-manager', false, '/swifty-page-manager/languages' );
 
             add_action( 'admin_head', array( $this, 'admin_head' ) );
             add_action( 'admin_menu', array( $this, 'admin_menu') );
@@ -185,7 +185,7 @@ class SwiftyPageManager
 
         add_settings_field(
             'spm_plugin_options_page_tree_max_width',
-            __( 'Page tree max. width', 'swifty' ),
+            __( 'Page tree max. width', 'swifty-page-manager' ),
             array( $this, 'plugin_setting_page_tree_max_width' ),
             'spm_plugin_options_page',
             'spm_plugin_options_main_id'
@@ -226,7 +226,7 @@ class SwiftyPageManager
     {
         $swifty_SS2_hosting_name = apply_filters( 'swifty_SS2_hosting_name', false );
         if( $swifty_SS2_hosting_name ) {
-            $admin_page_title = __( 'SwiftySite Pages', 'swifty' );
+            $admin_page_title = __( 'SwiftySite Pages', 'swifty-page-manager' );
         } else {
             $admin_page_title = 'Swifty Page Manager';
         }
@@ -480,7 +480,7 @@ class SwiftyPageManager
 
         add_filter( 'swifty_admin_page_links_' . $this->swifty_admin_page, array( $this, 'hook_swifty_admin_page_links' ) );
 
-        LibSwiftyPlugin::get_instance()->admin_add_swifty_menu( $this->get_admin_page_title(), __('Pages', 'swifty'), $this->swifty_admin_page, array( &$this, 'admin_spm_menu_page' ), true );
+        LibSwiftyPlugin::get_instance()->admin_add_swifty_menu( $this->get_admin_page_title(), __('Pages', 'swifty-page-manager'), $this->swifty_admin_page, array( &$this, 'admin_spm_menu_page' ), true );
     }
 
     /**
@@ -490,7 +490,7 @@ class SwiftyPageManager
      */
     public function hook_swifty_admin_page_links( $settings_links )
     {
-        $settings_links['general'] = array( 'title' => __( 'General', 'swifty' ), 'method' => array( &$this, 'spm_tab_options_content' ) );
+        $settings_links['general'] = array( 'title' => __( 'General', 'swifty-page-manager' ), 'method' => array( &$this, 'spm_tab_options_content' ) );
 
         return $settings_links;
     }
@@ -522,18 +522,18 @@ class SwiftyPageManager
                           false, $this->_plugin_version );
 
         $oLocale = array(
-            'status_draft_ucase'      => ucfirst( __( 'draft', 'swifty' ) ),
-            'status_future_ucase'     => ucfirst( __( 'future', 'swifty' ) ),
-            'status_password_ucase'   => ucfirst( __( 'protected', 'swifty' ) ),
-            'status_pending_ucase'    => ucfirst( __( 'pending', 'swifty' ) ),
-            'status_private_ucase'    => ucfirst( __( 'private', 'swifty' ) ),
-            'status_trash_ucase'      => ucfirst( __( 'trash', 'swifty' ) ),
-            'password_protected_page' => __( 'Password protected page', 'swifty' ),
-            'no_pages_found'          => __( 'No pages found.', 'swifty' ),
-            'hidden_page'             => __( 'Hidden', 'swifty' ),
-            'checking_url'            => __( 'Checking url', 'swifty' ),
-            'no_sub_page_when_draft'  => __( "Unfortunately you can not create a sub page under a page with status 'Draft' because the draft page has not yet been published and thus technically does not exist yet. For now, just create it as a regular page and later you can drag and drop it to become a sub page.", 'swifty' ),
-            'status_published_draft_content_ucase' => ucfirst( __( 'published - draft content', 'swifty' ) )
+            'status_draft_ucase'      => ucfirst( __( 'draft', 'swifty-page-manager' ) ),
+            'status_future_ucase'     => ucfirst( __( 'future', 'swifty-page-manager' ) ),
+            'status_password_ucase'   => ucfirst( __( 'protected', 'swifty-page-manager' ) ),
+            'status_pending_ucase'    => ucfirst( __( 'pending', 'swifty-page-manager' ) ),
+            'status_private_ucase'    => ucfirst( __( 'private', 'swifty-page-manager' ) ),
+            'status_trash_ucase'      => ucfirst( __( 'trash', 'swifty-page-manager' ) ),
+            'password_protected_page' => __( 'Password protected page', 'swifty-page-manager' ),
+            'no_pages_found'          => __( 'No pages found.', 'swifty-page-manager' ),
+            'hidden_page'             => __( 'Hidden', 'swifty-page-manager' ),
+            'checking_url'            => __( 'Checking url', 'swifty-page-manager' ),
+            'no_sub_page_when_draft'  => __( "Unfortunately you can not create a sub page under a page with status 'Draft' because the draft page has not yet been published and thus technically does not exist yet. For now, just create it as a regular page and later you can drag and drop it to become a sub page.", 'swifty-page-manager' ),
+            'status_published_draft_content_ucase' => ucfirst( __( 'published - draft content', 'swifty-page-manager' ) )
         );
 
         wp_localize_script( 'spm', 'spm_l10n', $oLocale );
@@ -716,7 +716,7 @@ class SwiftyPageManager
         $post_name = preg_replace("~[^a-z0-9//_-]~i", "", $post_name);
 
         if ( ! $post_title ) {
-            $post_title = __( 'New page', 'swifty' );
+            $post_title = __( 'New page', 'swifty-page-manager' );
         }
 
         $spm_is_custom_url      = ! empty( $_POST['spm_is_custom_url'] ) ? intval( $_POST['spm_is_custom_url'] ) : null;
@@ -1012,7 +1012,7 @@ class SwiftyPageManager
     public function ajax_sanitize_url_and_check()
     {
         $result = array();
-        $result[ 'message' ] = __( 'Url is unique.', 'swifty' ); // no message everything is ok
+        $result[ 'message' ] = __( 'Url is unique.', 'swifty-page-manager' ); // no message everything is ok
         $result[ 'error' ] = ''; // no message everything is ok
 
         if( isset( $_POST[ 'url' ] ) && isset( $_POST[ 'post_parent' ] ) && isset( $_POST[ 'post_id' ] ) && isset( $_POST[ 'path' ] ) && isset( $_POST[ 'do_sanitize' ] ) ) {
@@ -1031,7 +1031,7 @@ class SwiftyPageManager
 
             if( $post_name !== $url ) {
                 $result[ 'message' ] = '';
-                $result[ 'error' ] = __( 'Url contains forbidden characters.', 'swifty' );
+                $result[ 'error' ] = __( 'Url contains forbidden characters.', 'swifty-page-manager' );
             } else if( $post_id || ($post_parent >= 0)) {
                 // make sure no path delimeters are surrounding the post_name even when path is empty
                 $post_name = trim( $path, '/' ) . '/' . trim( $post_name, '/' );
@@ -1044,7 +1044,7 @@ class SwiftyPageManager
 
                 if( ! $this->spm_is_unique_spm_url( $post_id, $post_parent, $post_name ) ) {
                     $result[ 'message' ] = '';
-                    $result[ 'error' ] = __( 'Url is not unique.', 'swifty' );
+                    $result[ 'error' ] = __( 'Url is not unique.', 'swifty-page-manager' );
                 }
             }
             $result[ 'url' ] = $url;
@@ -1328,13 +1328,13 @@ class SwiftyPageManager
         }
 
         if ( empty( $post_author ) ) {
-            $post_author = __( 'Unknown user', 'swifty' );
+            $post_author = __( 'Unknown user', 'swifty-page-manager' );
         }
 
         $title = get_the_title( $one_page->ID ); // so hooks and stuff will do their work
 
         if ( empty( $title ) ) {
-            $title = __( '[untitled page]', 'swifty' );
+            $title = __( '[untitled page]', 'swifty-page-manager' );
         }
 
         $arr_page_css_styles = array();
