@@ -146,6 +146,9 @@ Try it - it's free!
 
 == Changelog ==
 
+= 1.5.3 =
+ * Language strings now have the correct slug, so they can be translated better.
+
 = 1.5.2 =
  * Small bugfix for WMPL.
 

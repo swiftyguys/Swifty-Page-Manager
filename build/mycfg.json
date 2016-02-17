@@ -74,6 +74,7 @@
         "obfuscate": "WILL BE LOADED LATER ON"
     },
     "po": {
+        "file_slug": "swifty-page-manager-",
         "languages" : {
             "nl": "nl_NL",
             "sr": "sr_RS",
