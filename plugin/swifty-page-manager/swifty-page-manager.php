@@ -543,6 +543,8 @@ class SwiftyPageManager
 
         /** @noinspection PhpIncludeInspection */
         require( $this->plugin_dir . '/view/page_tree.php' );
+
+        do_action( 'swifty_page_manager_view_page_tree' );
     }
 
     // Our plugin admin menu page
@@ -874,12 +876,15 @@ class SwiftyPageManager
             wp_die( __( 'You do not have sufficient permissions to access this page. #747' ) );
         }
 
+        header( 'Content-Type: text/javascript' );
+
         $post_id = intval( $_POST['post_ID'] );
 
         if ( isset( $post_id ) && ! empty( $post_id ) ) {
             $this->_update_post_status( $post_id, 'publish' );
 
-            echo '1';
+            // return '1', unless overwritten in filter (scc wants to run some js code)
+            echo apply_filters( 'swifty_page_manager_publish_ajax_succes', '1', $post_id );
         } else {
             echo '0';   // fail, tell js
         }
@@ -1224,6 +1229,7 @@ class SwiftyPageManager
                     'post_status' => $post_status
                 ) );
         }
+        do_action( 'swifty_page_manager_publish', $post_id );
     }
 
     /**
