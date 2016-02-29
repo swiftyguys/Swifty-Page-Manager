@@ -28,6 +28,8 @@ class SwiftyPageManager
     protected $front_page_id = 0;
     protected $swifty_admin_page = 'swifty_page_manager_admin';
 
+    private $script_refresh_tree = '$SPMTree.jstree( \'refresh\' );';
+
     /**
      * Constructor
      */
@@ -842,6 +844,8 @@ class SwiftyPageManager
             wp_die( __( 'You do not have sufficient permissions to access this page. #708' ) );
         }
 
+        header( 'Content-Type: text/javascript' );
+
         $post_id = intval( $_POST['post_ID'] );
 
         if ( isset( $post_id ) && ! empty( $post_id ) ) {
@@ -851,16 +855,10 @@ class SwiftyPageManager
                 wp_delete_post( $menu_item_id, true );
             }
 
-            $post_data = wp_delete_post( $post_id, false );
-
-            if ( is_object( $post_data ) ) {
-                echo '1';
-            } else {
-                echo '0';   // fail, tell js
-            }
-        } else {
-            echo '0';   // fail, tell js
+            wp_delete_post( $post_id, false );
         }
+        // always refresh the tree
+        echo $this->script_refresh_tree;
 
         exit;
     }
@@ -883,10 +881,11 @@ class SwiftyPageManager
         if ( isset( $post_id ) && ! empty( $post_id ) ) {
             $this->_update_post_status( $post_id, 'publish' );
 
-            // return '1', unless overwritten in filter (scc wants to run some js code)
-            echo apply_filters( 'swifty_page_manager_publish_ajax_succes', '1', $post_id );
+            // return refresh, unless overwritten in filter (scc wants to run some js code)
+            echo apply_filters( 'swifty_page_manager_publish_ajax_succes', $this->script_refresh_tree, $post_id );
         } else {
-            echo '0';   // fail, tell js
+            // fail, only refresh tree
+            echo $this->script_refresh_tree;
         }
 
         exit;

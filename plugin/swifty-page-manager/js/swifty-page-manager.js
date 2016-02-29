@@ -380,9 +380,8 @@ var SPM = (function( $, document ) {
                             'post_ID': $li.data( 'post_id' ),
                             '_inline_edit': $inlineEdit.val()
                         }
-                    ).done(function() {
-                        $SPMTree.jstree( 'refresh' );
-                    });
+                    );
+                    // the ajax call will return with an refresh command
 
                     break;
                 case 'cancel':
