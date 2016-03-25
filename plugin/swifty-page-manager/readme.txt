@@ -1,9 +1,9 @@
 === Swifty Page Manager ===
-Contributors: SwiftyLife, robertheessels, chrisvermeulen, jeroenh, jeroenvermeulen, martijn-van-der-kooij, eenhoopjob, noemi-van-de-moosdijk
-Donate link: http://swiftylife.com/plugins/donate/
+Contributors: SwiftyOnline, robertheessels, chrisvermeulen, jeroenh, jeroenvermeulen, martijn-van-der-kooij, eenhoopjob, noemi-van-de-moosdijk
+Donate link: http://swifty.online/plugins/donate/
 Tags: Swifty, page, pages, tree, menu, manage, hierarchy, structure
 Requires at least: 3.8
-Tested up to: 4.4
+Tested up to: 4.4.2
 Stable tag: RELEASE_TAG
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -145,6 +145,9 @@ Try to describe the actions that lead up to the point where something is not wor
 Try it - it's free!
 
 == Changelog ==
+
+= 1.5.5 =
+ * Version bump for author update.
 
 = 1.5.4 =
  * Important speed improvement: determining draft state is now much quicker.
