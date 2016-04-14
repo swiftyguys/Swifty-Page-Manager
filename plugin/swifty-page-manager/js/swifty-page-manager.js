@@ -12,6 +12,7 @@ var SPM = (function( $, document ) {
     var spm = {};
 
     spm.statusCounts = {};
+    spm.areas = [ 'topbar', 'header', 'navbar', 'sidebar', 'extrasidebar', 'footer', 'bottombar' ];
 
     spm.init = function() {
         spm.$tooltips = $( '.spm-tooltip' ).clone().tooltip();
@@ -309,6 +310,7 @@ var SPM = (function( $, document ) {
                 case 'save':
                     var curAction = $li.data( 'cur-action' );
                     var addMode = $li.find( 'input[name=add_mode]:checked' ).val();
+                    var pageType = $li.find( 'input[name=page_type]:checked' ).val();
                     var settings;
 
                     if ( ! spm.validateSettings( $li ) ) {
@@ -320,16 +322,21 @@ var SPM = (function( $, document ) {
                         'post_type': 'page',
                         'post_title': $li.find( 'input[name=post_title]' ).val(),
                         'add_mode': addMode,   // after | inside
+                        'page_type': pageType, // default | same | copy
                         'post_status': $li.find( 'input[name=post_status]:checked' ).val(),   // draft | publish
                         //'page_template': $li.find( 'select[name=page_template]' ).val(),
                         'post_name': $li.find( 'input[name=post_name]' ).val() || $li.find( 'input[name=spm_url]' ).val(),
                         'spm_is_custom_url': $li.find( 'input[name=spm_is_custom_url]' ).val(),
                         'spm_show_in_menu': $li.find( 'input[name=spm_show_in_menu]:checked' ).val() || 'show',   // show | hide
                         'spm_page_title_seo': $li.find( 'input[name=spm_page_title_seo]' ).val(),
-                        'spm_header_visibility': $li.find( 'input[name=spm_header_visibility]:checked' ).val() || 'default',     // default | show | hide
-                        'spm_sidebar_visibility': $li.find( 'input[name=spm_sidebar_visibility]:checked' ).val() || 'default',   // default | left | right | hide
                         '_inline_edit': $inlineEdit.val()
                     };
+
+                    $.each( spm.areas, function ( i, area ) {
+                        settings[
+                            'spm_' + area + '_visibility'
+                        ] = $li.find( 'input[name=spm_' + area + '_visibility]:checked' ).val() || 'default';
+                    } );
 
                     if ( curAction === 'add' ) {   // Page creation
                         $.extend( true, settings, {
@@ -396,20 +403,25 @@ var SPM = (function( $, document ) {
 
                     break;
                 case 'add':
+                    var addData = {
+                        'action': 'spm_save_page',
+                        'post_type': 'page',
+                        'post_title': 'Home',
+                        'post_status': 'draft',
+                        'add_mode': 'after',
+                        'page_type': 'default',
+                        //'page_template': 'default',
+                        'spm_show_in_menu': 'show',
+                        '_inline_edit': $inlineEdit.val()
+                    };
+
+                    $.each( spm.areas, function ( i, area ) {
+                        addData[ 'spm_' + area + '_visibility' ] = 'default';
+                    } );
+
                     $.post(
                         ajaxurl,
-                        {
-                            'action': 'spm_save_page',
-                            'post_type': 'page',
-                            'post_title': 'Home',
-                            'post_status': 'draft',
-                            'add_mode': 'after',
-                            //'page_template': 'default',
-                            'spm_show_in_menu': 'show',
-                            'spm_header_visibility': 'default',
-                            'spm_sidebar_visibility': 'default',
-                            '_inline_edit': $inlineEdit.val()
-                        }
+                        addData
                     ).done(function() {
                         $SPMTree.jstree( 'refresh' );
                     });
@@ -586,20 +598,24 @@ var SPM = (function( $, document ) {
 
         if ( action === 'add' ) {
             $tmpl.find( 'input[name=spm_show_in_menu][value=show]' ).prop( 'checked', true );
-            $tmpl.find( 'input[name=spm_header_visibility][value=default]' ).prop( 'checked', true );
-            $tmpl.find( 'input[name=spm_sidebar_visibility][value=default]' ).prop( 'checked', true );
 
-            $tmpl.find( 'input[name=add_mode]' ).each(function() {
+            $.each( spm.areas, function ( i, area ) {
+                $tmpl.find( 'input[name=spm_' + area + '_visibility][value=default]' ).prop( 'checked', true );
+            } );
+
+            $tmpl.find( 'input[name=add_mode], input[name=page_type]:not(:first)' ).each(function() {
                 var labelText = $( this ).next().text();
 
                 $( this ).next().text( labelText + ' "' + self.getLiText( $li ) + '"' );
             });
 
             $tmpl.find( 'input[name=add_mode]' ).val( ['after'] );
+            $tmpl.find( 'input[name=page_type]' ).val( ['default'] );
             $tmpl.find( 'input[name=post_status]' ).val( ['draft'] );
             $tmpl.find( 'input[name=post_name]' ).val( '' );
 
             $tmpl.find( 'input[name=add_mode]' ).addClass( 'spm-new-page' );
+            $tmpl.find( 'input[name=page_type]' ).addClass( 'spm-new-page' );
             $tmpl.find( 'input[name=post_title]' ).addClass( 'spm-new-page' );
 
             $tmpl.find( 'input[name=spm_show_as_first]' )
@@ -608,7 +624,7 @@ var SPM = (function( $, document ) {
         }
 
         if ( action === 'settings' ) {
-            $tmpl.find( 'input[name=add_mode]' ).closest( '.inline-edit-group' ).hide();
+            $tmpl.find( 'input[name=add_mode], input[name=page_type]' ).closest( '.inline-edit-group' ).hide();
 
             if ( +isSwifty ) {
                 var $showAsFirstDiv = $tmpl.find( 'input[name=spm_show_as_first]' ).closest( '.inline-edit-group' );

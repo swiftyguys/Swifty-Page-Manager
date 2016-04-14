@@ -27,6 +27,7 @@ class SwiftyPageManager
     protected $is_swifty = false;
     protected $front_page_id = 0;
     protected $swifty_admin_page = 'swifty_page_manager_admin';
+    protected $areas = array( 'topbar', 'header', 'navbar', 'sidebar', 'extrasidebar', 'footer', 'bottombar' );
 
     private $script_refresh_tree = '$SPMTree.jstree( \'refresh\' );';
 
@@ -723,11 +724,9 @@ class SwiftyPageManager
             $post_title = __( 'New page', 'swifty-page-manager' );
         }
 
-        $spm_is_custom_url      = ! empty( $_POST['spm_is_custom_url'] ) ? intval( $_POST['spm_is_custom_url'] ) : null;
-        $spm_page_title_seo     = ! empty( $_POST['spm_page_title_seo'] ) ? trim( $_POST['spm_page_title_seo'] ) : '';
-        $spm_show_in_menu       = ! empty( $_POST['spm_show_in_menu'] ) ? $_POST['spm_show_in_menu'] : null;
-        $spm_header_visibility  = ! empty( $_POST['spm_header_visibility'] ) ? $_POST['spm_header_visibility']  : null;
-        $spm_sidebar_visibility = ! empty( $_POST['spm_sidebar_visibility'] ) ? $_POST['spm_sidebar_visibility'] : null;
+        $spm_is_custom_url  = ! empty( $_POST['spm_is_custom_url'] ) ? intval( $_POST['spm_is_custom_url'] ) : null;
+        $spm_page_title_seo = ! empty( $_POST['spm_page_title_seo'] ) ? trim( $_POST['spm_page_title_seo'] ) : '';
+        $spm_show_in_menu   = ! empty( $_POST['spm_show_in_menu'] ) ? $_POST['spm_show_in_menu'] : null;
 
         $post_data = array();
 
@@ -766,8 +765,16 @@ class SwiftyPageManager
 
                     update_post_meta( $post_id, 'spm_show_in_menu', $spm_show_in_menu );
                     update_post_meta( $post_id, 'spm_page_title_seo', $spm_page_title_seo );
-                    update_post_meta( $post_id, 'spm_header_visibility', $spm_header_visibility );
-                    update_post_meta( $post_id, 'spm_sidebar_visibility', $spm_sidebar_visibility );
+
+                    foreach( $this->areas as $area ) {
+                        $area_visibility = 'spm_' . $area . '_visibility';
+
+                        update_post_meta(
+                            $post_id,
+                            $area_visibility,
+                            ! empty( $_POST[ $area_visibility ] ) ? $_POST[ $area_visibility ] : null
+                        );
+                    }
 
                     if ( ! is_null( $spm_show_as_first ) ) {
                         update_post_meta( $post_id, 'spm_show_as_first', $spm_show_as_first );
@@ -790,6 +797,8 @@ class SwiftyPageManager
             $parent_id = intval( str_replace( 'spm-id-', '', $parent_id ) );
             $ref_post  = get_post( $parent_id );
             $add_mode  = $_POST['add_mode'];
+            $parent_post_meta = get_post_meta( $parent_id );
+            $page_type = $_POST['page_type'];
 
             $post_data['post_content'] = '';
             $post_data['menu_order']   = $this->_createSpaceForMove( $ref_post, $add_mode );
@@ -817,8 +826,45 @@ class SwiftyPageManager
                     add_post_meta( $post_id, 'spm_url', $spm_is_custom_url ? $post_name : '', 1 );
                     add_post_meta( $post_id, 'spm_show_in_menu', $spm_show_in_menu, 1 );
                     add_post_meta( $post_id, 'spm_page_title_seo', $spm_page_title_seo, 1 );
-                    add_post_meta( $post_id, 'spm_header_visibility', $spm_header_visibility, 1 );
-                    add_post_meta( $post_id, 'spm_sidebar_visibility', $spm_sidebar_visibility, 1 );
+
+                    foreach( $this->areas as $area ) {
+                        $v_key = 'spm_' . $area . '_visibility';
+
+                        // Page will be a copy of the parent, with or without the parent's content.
+                        if( $page_type && $page_type !== 'default' ) {
+                            $t_key = 'spm_' . $area . '_template';
+
+                            foreach ( array( $v_key, $t_key ) as $key ) {
+                                if( isset( $parent_post_meta[ $key ] ) ) {
+                                    $val = $parent_post_meta[ $key ];
+                                    $val = ( is_array( $val ) && count( $val ) === 1 ) ? $val[ 0 ] : $val;
+
+                                    add_post_meta( $post_id, $key, $val, 1 );
+                                }
+                            }
+                        } else {
+                            add_post_meta(
+                                $post_id,
+                                $v_key,
+                                ! empty( $_POST[ $v_key ] ) ? $_POST[ $v_key ] : null,
+                                1
+                            );
+                        }
+                    }
+
+                    if( $page_type && $page_type === 'copy' ) {
+                        $parent_content = $ref_post->post_content;
+                        $autosave_content = LibSwiftyPluginView::get_instance()->get_autosave_version_if_newer( $parent_id );
+
+                        if( $autosave_content ) {
+                            $parent_content = $autosave_content;
+                        }
+
+                        wp_update_post( array(
+                            'ID'           => $post_id,
+                            'post_content' => $parent_content,
+                        ) );
+                    }
                 }
 
                 // Store the new page id in the jstree_select cookie
@@ -917,11 +963,14 @@ class SwiftyPageManager
             }
         }
 
-        $defaults = array( 'spm_show_in_menu'       => 'show'
-                         , 'spm_page_title_seo'     => $post->post_title
-                         , 'spm_header_visibility'  => 'default'
-                         , 'spm_sidebar_visibility' => 'default'
-                         );
+        $defaults = array(
+            'spm_show_in_menu' => 'show',
+            'spm_page_title_seo' => $post->post_title,
+        );
+
+        foreach( $this->areas as $area ) {
+            $defaults[ 'spm_' . $area . '_visibility' ] = 'default';
+        }
 
         if( $this->is_swifty ) {
             $defaults = array_merge( $defaults, array(
@@ -978,10 +1027,10 @@ class SwiftyPageManager
         li.find( 'input[name="spm_is_custom_url"]' ).val( <?php echo json_encode( $spm_is_custom_url ); ?> );
         li.find( 'input[name="spm_show_in_menu"]' ).val( [ <?php echo json_encode( $post_meta['spm_show_in_menu'] ); ?> ] );
         li.find( 'input[name="spm_page_title_seo"]' ).val( <?php echo json_encode( $post_meta['spm_page_title_seo'] ); ?> );
-        li.find( 'input[name="spm_header_visibility"]' ).val( [ <?php echo json_encode( $post_meta['spm_header_visibility'] ); ?> ] );
-        li.find( 'input[name="spm_sidebar_visibility"]' ).val( [ <?php echo json_encode( $post_meta['spm_sidebar_visibility'] ); ?> ] );
-
-        <?php if ( $this->is_swifty ): ?>
+        <?php if ( $this->is_swifty ):
+            foreach( $this->areas as $area ) { ?>
+        li.find( 'input[name="spm_<?php echo $area; ?>_visibility"]' ).val( [ <?php echo json_encode( $post_meta['spm_' . $area . '_visibility'] ); ?> ] );
+            <?php } ?>
         li.find( 'input[name="spm_show_as_first"]' ).val( [ <?php echo json_encode( $post_meta[ 'spm_show_as_first' ] ); ?> ] );
         li.find( 'input[name="spm_alt_menu_text"]' ).val( <?php echo json_encode( $post_meta[ 'spm_alt_menu_text' ] ); ?> );
 

@@ -393,6 +393,31 @@ $post_type_object = get_post_type_object( $this->_post_type );
                                             </label>
                                         </div>
                                         <?php if ( $this->is_swifty ):  ?>
+                                         <div class="inline-edit-group spm-basic-feature">
+                                            <label class="alignleft">
+                                                <span class="title spm-label-title">
+                                                    <?php esc_html_e( 'Page type', 'swifty-page-manager' ) ?>
+                                                </span>
+                                            </label>
+                                            <label class="alignleft">
+                                                <input name="page_type" type="radio" value="default" class="spm-input-radio" />
+                                                <span class="checkbox-title">
+                                                    <?php esc_html_e( 'Default', 'swifty-page-manager' ) ?>
+                                                </span>
+                                            </label>
+                                            <label class="alignleft add_mode_inside">
+                                                <input name="page_type" type="radio" value="same" class="spm-input-radio" />
+                                                <span class="checkbox-title">
+                                                    <?php esc_html_e( 'Same as', 'swifty-page-manager' ) ?>
+                                                </span>
+                                            </label>
+                                            <label class="alignleft add_mode_inside">
+                                                <input name="page_type" type="radio" value="copy" class="spm-input-radio" />
+                                                <span class="checkbox-title">
+                                                    <?php esc_html_e( 'Also copy content of', 'swifty-page-manager' ) ?>
+                                                </span>
+                                            </label>
+                                        </div>
                                         <div class="inline-edit-group spm-more">
                                             <input type="button" class="button-secondary alignright spm-button spm-do-button"
                                                    data-spm-action="more"
@@ -470,6 +495,34 @@ $post_type_object = get_post_type_object( $this->_post_type );
                                         <div class="inline-edit-group spm-advanced-feature">
                                             <label class="alignleft">
                                                 <span class="title spm-label-title">
+                                                    <?php esc_html_e( 'Top bar', 'swifty-page-manager' ) ?>
+                                                </span>
+                                            </label>
+                                            <label class="alignleft">
+                                                <input name="spm_topbar_visibility" type="radio" value="default"
+                                                    class="spm-input-radio" />
+                                                <span class="checkbox-title">
+                                                    <?php esc_html_e( 'Default', 'swifty-page-manager' ) ?>
+                                                </span>
+                                            </label>
+                                            <label class="alignleft">
+                                                <input name="spm_topbar_visibility" type="radio" value="hide"
+                                                    class="spm-input-radio" />
+                                                <span class="checkbox-title">
+                                                    <?php esc_html_e( 'Hide', 'swifty-page-manager' ) ?>
+                                                </span>
+                                            </label>
+                                            <label class="alignleft">
+                                                <input name="spm_topbar_visibility" type="radio" value="show"
+                                                    class="spm-input-radio" />
+                                                <span class="checkbox-title">
+                                                    <?php esc_html_e( 'Show', 'swifty-page-manager' ) ?>
+                                                </span>
+                                            </label>
+                                        </div>
+                                        <div class="inline-edit-group spm-advanced-feature">
+                                            <label class="alignleft">
+                                                <span class="title spm-label-title">
                                                     <?php esc_html_e( 'Header', 'swifty-page-manager' ) ?>
                                                 </span>
                                             </label>
@@ -481,17 +534,45 @@ $post_type_object = get_post_type_object( $this->_post_type );
                                                 </span>
                                             </label>
                                             <label class="alignleft">
+                                                <input name="spm_header_visibility" type="radio" value="hide"
+                                                       class="spm-input-radio" />
+                                                <span class="checkbox-title">
+                                                    <?php esc_html_e( 'Hide', 'swifty-page-manager' ) ?>
+                                                </span>
+                                            </label>
+                                            <label class="alignleft">
                                                 <input name="spm_header_visibility" type="radio" value="show"
                                                        class="spm-input-radio" />
                                                 <span class="checkbox-title">
                                                     <?php esc_html_e( 'Show', 'swifty-page-manager' ) ?>
                                                 </span>
                                             </label>
+                                        </div>
+                                        <div class="inline-edit-group spm-advanced-feature">
                                             <label class="alignleft">
-                                                <input name="spm_header_visibility" type="radio" value="hide"
+                                                <span class="title spm-label-title">
+                                                    <?php esc_html_e( 'Nav Bar', 'swifty-page-manager' ) ?>
+                                                </span>
+                                            </label>
+                                            <label class="alignleft">
+                                                <input name="spm_navbar_visibility" type="radio" value="default"
                                                        class="spm-input-radio" />
                                                 <span class="checkbox-title">
+                                                    <?php esc_html_e( 'Default', 'swifty-page-manager' ) ?>
+                                                </span>
+                                            </label>
+                                            <label class="alignleft">
+                                                <input name="spm_navbar_visibility" type="radio" value="hide"
+                                                    class="spm-input-radio" />
+                                                <span class="checkbox-title">
                                                     <?php esc_html_e( 'Hide', 'swifty-page-manager' ) ?>
+                                                </span>
+                                            </label>
+                                            <label class="alignleft">
+                                                <input name="spm_navbar_visibility" type="radio" value="show"
+                                                    class="spm-input-radio" />
+                                                <span class="checkbox-title">
+                                                    <?php esc_html_e( 'Show', 'swifty-page-manager' ) ?>
                                                 </span>
                                             </label>
                                         </div>
@@ -509,6 +590,13 @@ $post_type_object = get_post_type_object( $this->_post_type );
                                                 </span>
                                             </label>
                                             <label class="alignleft">
+                                                <input name="spm_sidebar_visibility" type="radio" value="hide"
+                                                    class="spm-input-radio" />
+                                                <span class="checkbox-title">
+                                                    <?php esc_html_e( 'Hide', 'swifty-page-manager' ) ?>
+                                                </span>
+                                            </label>
+                                            <label class="alignleft">
                                                 <input name="spm_sidebar_visibility" type="radio" value="left"
                                                        class="spm-input-radio" />
                                                 <span class="checkbox-title">
@@ -522,14 +610,97 @@ $post_type_object = get_post_type_object( $this->_post_type );
                                                     <?php esc_html_e( 'Right', 'swifty-page-manager' ) ?>
                                                 </span>
                                             </label>
+                                        </div>
+                                        <div class="inline-edit-group spm-advanced-feature">
                                             <label class="alignleft">
-                                                <input name="spm_sidebar_visibility" type="radio" value="hide"
+                                                <span class="title spm-label-title">
+                                                    <?php esc_html_e( 'Extra Sidebar', 'swifty-page-manager' ) ?>
+                                                </span>
+                                            </label>
+                                            <label class="alignleft">
+                                                <input name="spm_extrasidebar_visibility" type="radio" value="default"
                                                        class="spm-input-radio" />
+                                                <span class="checkbox-title">
+                                                    <?php esc_html_e( 'Default', 'swifty-page-manager' ) ?>
+                                                </span>
+                                            </label>
+                                            <label class="alignleft">
+                                                <input name="spm_extrasidebar_visibility" type="radio" value="hide"
+                                                    class="spm-input-radio" />
                                                 <span class="checkbox-title">
                                                     <?php esc_html_e( 'Hide', 'swifty-page-manager' ) ?>
                                                 </span>
                                             </label>
-                                            </span>
+                                            <label class="alignleft">
+                                                <input name="spm_extrasidebar_visibility" type="radio" value="left"
+                                                    class="spm-input-radio" />
+                                                <span class="checkbox-title">
+                                                    <?php esc_html_e( 'Left', 'swifty-page-manager' ) ?>
+                                                </span>
+                                            </label>
+                                            <label class="alignleft">
+                                                <input name="spm_extrasidebar_visibility" type="radio" value="right"
+                                                    class="spm-input-radio" />
+                                                <span class="checkbox-title">
+                                                    <?php esc_html_e( 'Right', 'swifty-page-manager' ) ?>
+                                                </span>
+                                            </label>
+                                        </div>
+                                        <div class="inline-edit-group spm-advanced-feature">
+                                            <label class="alignleft">
+                                                <span class="title spm-label-title">
+                                                    <?php esc_html_e( 'Footer', 'swifty-page-manager' ) ?>
+                                                </span>
+                                            </label>
+                                            <label class="alignleft">
+                                                <input name="spm_footer_visibility" type="radio" value="default"
+                                                    class="spm-input-radio" />
+                                                <span class="checkbox-title">
+                                                    <?php esc_html_e( 'Default', 'swifty-page-manager' ) ?>
+                                                </span>
+                                            </label>
+                                            <label class="alignleft">
+                                                <input name="spm_footer_visibility" type="radio" value="hide"
+                                                    class="spm-input-radio" />
+                                                <span class="checkbox-title">
+                                                    <?php esc_html_e( 'Hide', 'swifty-page-manager' ) ?>
+                                                </span>
+                                            </label>
+                                            <label class="alignleft">
+                                                <input name="spm_footer_visibility" type="radio" value="show"
+                                                    class="spm-input-radio" />
+                                                <span class="checkbox-title">
+                                                    <?php esc_html_e( 'Show', 'swifty-page-manager' ) ?>
+                                                </span>
+                                            </label>
+                                        </div>
+                                        <div class="inline-edit-group spm-advanced-feature">
+                                            <label class="alignleft">
+                                                <span class="title spm-label-title">
+                                                    <?php esc_html_e( 'Bottom Bar', 'swifty-page-manager' ) ?>
+                                                </span>
+                                            </label>
+                                            <label class="alignleft">
+                                                <input name="spm_bottombar_visibility" type="radio" value="default"
+                                                    class="spm-input-radio" />
+                                                <span class="checkbox-title">
+                                                    <?php esc_html_e( 'Default', 'swifty-page-manager' ) ?>
+                                                </span>
+                                            </label>
+                                            <label class="alignleft">
+                                                <input name="spm_bottombar_visibility" type="radio" value="hide"
+                                                    class="spm-input-radio" />
+                                                <span class="checkbox-title">
+                                                    <?php esc_html_e( 'Hide', 'swifty-page-manager' ) ?>
+                                                </span>
+                                            </label>
+                                            <label class="alignleft">
+                                                <input name="spm_bottombar_visibility" type="radio" value="show"
+                                                    class="spm-input-radio" />
+                                                <span class="checkbox-title">
+                                                    <?php esc_html_e( 'Show', 'swifty-page-manager' ) ?>
+                                                </span>
+                                            </label>
                                         </div>
                                         <div class="inline-edit-group spm-advanced-feature">
                                             <label class="alignleft">
