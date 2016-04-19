@@ -74,7 +74,7 @@ class SwiftyPageManager
      */
     function plugins_loaded()
     {
-        $this->is_swifty = LibSwiftyPluginView::is_ss_mode();
+        add_action( 'after_setup_theme', array( $this, 'action_after_setup_theme' ), 9999 );
 
         // Actions for visitors viewing the site
         add_action( 'parse_request',     array( $this, 'parse_request' ) );
@@ -323,6 +323,14 @@ class SwiftyPageManager
     }
 
     /**
+     * When after_setup_theme is called all plugins and the theme are loaded. Now we can test if they are active.
+     */
+    public function action_after_setup_theme() {
+        $this->is_swifty = LibSwiftyPluginView::is_ss_mode();
+        //$this->is_swifty = LibSwiftyPluginView::is_swifty_plugin_active( 'swifty-site-designer' );
+    }
+
+    /**
      * Called via WP Action 'parse_request'
      *
      * Action function to make our overridden URLs work by changing the query params.
@@ -541,7 +549,7 @@ class SwiftyPageManager
 
         wp_localize_script( 'spm', 'spm_l10n', $oLocale );
         wp_localize_script( 'spm', 'spm_data', array(
-            'is_swifty_mode' => LibSwiftyPluginView::is_ss_mode()
+            'is_swifty_mode' => $this->is_swifty
         ) );
 
         /** @noinspection PhpIncludeInspection */
@@ -719,6 +727,7 @@ class SwiftyPageManager
         // better be safe with our menu slugs
         $post_name = preg_replace("~[ ]~", "-", $post_name);
         $post_name = preg_replace("~[^a-z0-9//_-]~i", "", $post_name);
+        $post_name = rtrim( $post_name, '/' );
 
         if ( ! $post_title ) {
             $post_title = __( 'New page', 'swifty-page-manager' );
@@ -1074,6 +1083,7 @@ class SwiftyPageManager
             $post_id = intval( $_POST[ 'post_id' ] );
             $post_parent = intval( $_POST[ 'post_parent' ] );
 
+            $url = rtrim( $url, '/' );
             if( $_POST[ 'do_sanitize' ] ) {
                 $url = sanitize_title_with_dashes( $url );
             }
