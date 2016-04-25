@@ -50,6 +50,7 @@ class SwiftyPageManager
         }
 
         add_filter( 'swifty_active_plugins', array( $this, 'hook_swifty_active_plugins' ) );
+        add_filter( 'swifty_active_plugin_versions', array( $this, 'hook_swifty_active_plugin_versions' ) );
 
         // postpone further initialization to allow loading other plugins
         add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
@@ -67,6 +68,16 @@ class SwiftyPageManager
     {
         $plugins[] = 'swifty-page-manager';
         return $plugins;
+    }
+
+    /**
+     * Called via Swifty filter 'swifty_active_plugin_versions'
+     *
+     * Add the plugin name as key to the array with plugin version
+     */
+    public function hook_swifty_active_plugin_versions( $plugins )
+    {
+        $plugins['swifty-page-manager'] = $this->_plugin_version;
     }
 
     /**
