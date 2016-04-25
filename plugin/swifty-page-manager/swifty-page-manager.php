@@ -77,7 +77,8 @@ class SwiftyPageManager
      */
     public function hook_swifty_active_plugin_versions( $plugins )
     {
-        $plugins['swifty-page-manager'] = $this->_plugin_version;
+        $plugins['swifty-page-manager'] = array( 'version' => $this->_plugin_version );
+        return $plugins;
     }
 
     /**
