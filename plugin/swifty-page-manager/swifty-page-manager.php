@@ -161,6 +161,8 @@ class SwiftyPageManager
 
             add_action( 'admin_head', array( $this, 'admin_head' ) );
             add_action( 'admin_menu', array( $this, 'admin_menu') );
+            add_filter( 'admin_add_swifty_menu', array( &$this, 'hook_admin_add_swifty_menu' ), 1, 4 );
+            add_filter( 'admin_add_swifty_admin', array( &$this, 'hook_admin_add_swifty_admin' ), 1, 8 );
             add_action( 'wp_ajax_spm_get_childs',    array( $this, 'ajax_get_childs' ) );
             add_action( 'wp_ajax_spm_save_page',     array( $this, 'ajax_save_page' ) );
             add_action( 'wp_ajax_spm_post_settings', array( $this, 'ajax_post_settings' ) );
@@ -506,6 +508,22 @@ class SwiftyPageManager
         add_filter( 'swifty_admin_page_links_' . $this->swifty_admin_page, array( $this, 'hook_swifty_admin_page_links' ) );
 
         LibSwiftyPlugin::get_instance()->admin_add_swifty_menu( $this->get_admin_page_title(), __('Pages', 'swifty-page-manager'), $this->swifty_admin_page, array( &$this, 'admin_spm_menu_page' ), true );
+    }
+
+    function hook_admin_add_swifty_menu( $page, $name, $key, $func )
+    {
+        if( ! $page ) {
+            $page = add_submenu_page( 'swifty_admin', $name, $name, 'manage_options', $key, $func );
+        }
+        return $page;
+    }
+
+    function hook_admin_add_swifty_admin( $done, $v1, $v2, $v3, $v4, $v5, $v6, $v7 )
+    {
+        if( ! $done ) {
+            add_menu_page( $v1, $v2, $v3, $v4, $v5, $v6, $v7 );
+        }
+        return true;
     }
 
     /**
