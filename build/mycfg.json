@@ -9,6 +9,9 @@
     "requirejs": {
         "do": false
     },
+    "requirejs2": {
+        "do": false
+    },
     "clean": {
         "unwanted": [
             "<%= grunt.getDestPathPlugin() %>js/probe",
@@ -28,7 +31,8 @@
             "<%= grunt.getDestPathPlugin() %>js/jquery.alerts.min.js": [ "<%= grunt.getSourcePath() %>js/jquery.alerts.js" ],
             "<%= grunt.getDestPathPlugin() %>js/jquery.biscuit.min.js": [ "<%= grunt.getSourcePath() %>js/jquery.biscuit.js" ],
             "<%= grunt.getDestPathPlugin() %>js/jquery.jstree.min.js": [ "<%= grunt.getSourcePath() %>js/jquery.jstree.js" ],
-            "<%= grunt.getDestPathPlugin() %>js/view.min.js": [ "<%= grunt.getSourcePath() %>lib/swifty_plugin/js/view.js" ]
+            "<%= grunt.getDestPathPlugin() %>js/view.min.js": [ "<%= grunt.getSourcePath() %>lib/swifty_plugin/js/view.js" ],
+            "<%= grunt.getDestPathPlugin() %>js/libs/bowser.min.js": [ "<%= grunt.getSourcePath() %>lib/swifty_plugin/js/lib/bowser.min.js" ]
         }
     },
     "rename": {

@@ -3,7 +3,7 @@ Contributors: SwiftyOnline, robertheessels, chrisvermeulen, jeroenh, jeroenverme
 Donate link: http://swifty.online/plugins/donate/
 Tags: Swifty, page, pages, tree, menu, manage, hierarchy, structure
 Requires at least: 3.8
-Tested up to: 4.4.2
+Tested up to: 4.5.2
 Stable tag: RELEASE_TAG
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -52,7 +52,7 @@ Swifty Page Manager is currently available in:
  * Serbian (by [Borisa Djuraskovic](http://www.webhostinghub.com))
  * Hebrew (by [Ahrale](http://atar4u.com))
 
-[Want to help add or improve translations? Click here.](http://swiftylife.com/plugins/translate/)
+[Want to help add or improve translations? Click here.](http://swifty.online/plugins/translate/)
 
 **Enjoy**
 
@@ -60,7 +60,7 @@ We hope that Swifty Page Manager makes your life a little easier and that you wi
 
 Credits: this plugin is based on [CMS Tree Page View](http://wordpress.org/plugins/cms-tree-page-view/).
 
-[Click here to get to know us a bit better](http://swiftylife.com/about/).
+[Click here to get to know us a bit better](http://swifty.online/about/).
 
 
 
@@ -123,7 +123,7 @@ If you put candy in your tree, make sure you put it low enough so that the kids 
 
 = Where can I find more info? =
 
-http://swiftylife.com/plugins/swifty-page-manager/
+http://swifty.online/plugins/swifty-page-manager/
 
 = I want to report a bug. Where can I do that? =
 
@@ -145,6 +145,10 @@ Try to describe the actions that lead up to the point where something is not wor
 Try it - it's free!
 
 == Changelog ==
+
+= 1.5.6 =
+ * All areas can now be turned on and off (Only for Swifty Site Designer theme).
+ * When adding a new page, you can optionally copy the area settings and content from the parent page. (Only for Swifty Site Designer theme).
 
 = 1.5.5 =
  * Version bump for author update.

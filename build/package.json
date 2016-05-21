@@ -1,8 +1,8 @@
 {
   "name": "Swifty-Page-Manager",
-  "version": "1.5.5",
+  "version": "1.5.6",
   "description": "Swifty Page Manager",
-  "author": "SwiftyLife.com",
+  "author": "Swifty.online",
   "license": "GPL-2.0+",
   "devDependencies": {
     "grunt": "^0.4.5",

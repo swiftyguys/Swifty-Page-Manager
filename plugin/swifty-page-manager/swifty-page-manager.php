@@ -2,10 +2,10 @@
 /*
 Plugin Name: Swifty Page Manager
 Description: Easily create, move and delete pages. Manage page settings.
-Author: SwiftyLife
+Author: SwiftyOnline
 Version: // @echo RELEASE_TAG
-Author URI: http://swiftylife.com/plugins/
-Plugin URI: http://swiftylife.com/plugins/swifty-page-manager/
+Author URI: http://swifty.online/plugins/
+Plugin URI: http://swifty.online/plugins/swifty-page-manager/
 */
 if ( ! defined( 'ABSPATH' ) ) exit;
 
