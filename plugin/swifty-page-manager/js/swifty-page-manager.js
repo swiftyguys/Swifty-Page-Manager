@@ -12,6 +12,7 @@ var SPM = (function( $, document ) {
     var spm = {};
 
     spm.statusCounts = {};
+    spm.areas = [ 'topbar', 'header', 'navbar', 'sidebar', 'extrasidebar', 'footer', 'bottombar' ];
 
     spm.init = function() {
         spm.$tooltips = $( '.spm-tooltip' ).clone().tooltip();
@@ -20,7 +21,7 @@ var SPM = (function( $, document ) {
         this.getStatusCounts();
         this.startListeners();
 
-        if ( spm_data.is_swifty_mode ) {
+        if ( spm_data.is_ssm_active ) {
             this.createTrashButton();
         }
     };
@@ -162,7 +163,7 @@ var SPM = (function( $, document ) {
             var isCustomUrl = $li.find( 'input[name=spm_is_custom_url]' ).val();
             var path, post_parent;
 
-            if ( spm_data.is_swifty_mode && isCustomUrl && isCustomUrl === '0' ) {
+            if ( spm_data.is_ssm_active && isCustomUrl && isCustomUrl === '0' ) {
                 path = spm.generatePathToPage( $li );
                 post_parent = ( $li.data( 'cur-action' ) === 'add' ) ? $li.attr( 'id' ) : -1;
                 spm.sanitize_url_and_check(post_parent, 0, path, ev.currentTarget.value, 1);
@@ -179,7 +180,7 @@ var SPM = (function( $, document ) {
                 $li.find( 'input[name=spm_is_custom_url]' ).val( '1' );
             }
 
-            if( spm_data.is_swifty_mode ) {
+            if( spm_data.is_ssm_active ) {
                 var post_parent = ( $li.data( 'cur-action' ) === 'add' ) ? $li.attr( 'id' ) : -1;
                 var post_id = ( $li.data( 'cur-action' ) === 'settings' ) ? $li.data( 'post_id' ) : 0;
                 spm.sanitize_url_and_check( post_parent, post_id, '', ev.currentTarget.value, 0 );
@@ -209,7 +210,7 @@ var SPM = (function( $, document ) {
                 url = $( 'input[name=post_name]' ).val();
             }
 
-            if( spm_data.is_swifty_mode ) {
+            if( spm_data.is_ssm_active ) {
                 var post_parent = ( $li.data( 'cur-action' ) === 'add' ) ? $li.attr( 'id' ) : -1;
                 var post_id = ( $li.data( 'cur-action' ) === 'settings' ) ? $li.data( 'post_id' ) : 0;
                 spm.sanitize_url_and_check( post_parent, post_id, path, url, 0 );
@@ -263,7 +264,7 @@ var SPM = (function( $, document ) {
 
                     break;
                 case 'edit':
-                    window.location = spm_data.is_swifty_mode ? $li.data( 'swifty_edit_url' ) : $li.data( 'editlink' );
+                    window.location = spm_data.is_ssm_active ? $li.data( 'swifty_edit_url' ) : $li.data( 'editlink' );
 
                     break;
                 case 'view':
@@ -309,6 +310,7 @@ var SPM = (function( $, document ) {
                 case 'save':
                     var curAction = $li.data( 'cur-action' );
                     var addMode = $li.find( 'input[name=add_mode]:checked' ).val();
+                    var pageType = $li.find( 'input[name=page_type]:checked' ).val();
                     var settings;
 
                     if ( ! spm.validateSettings( $li ) ) {
@@ -320,16 +322,21 @@ var SPM = (function( $, document ) {
                         'post_type': 'page',
                         'post_title': $li.find( 'input[name=post_title]' ).val(),
                         'add_mode': addMode,   // after | inside
+                        'page_type': pageType, // default | same | copy
                         'post_status': $li.find( 'input[name=post_status]:checked' ).val(),   // draft | publish
                         //'page_template': $li.find( 'select[name=page_template]' ).val(),
                         'post_name': $li.find( 'input[name=post_name]' ).val() || $li.find( 'input[name=spm_url]' ).val(),
                         'spm_is_custom_url': $li.find( 'input[name=spm_is_custom_url]' ).val(),
                         'spm_show_in_menu': $li.find( 'input[name=spm_show_in_menu]:checked' ).val() || 'show',   // show | hide
                         'spm_page_title_seo': $li.find( 'input[name=spm_page_title_seo]' ).val(),
-                        'spm_header_visibility': $li.find( 'input[name=spm_header_visibility]:checked' ).val() || 'default',     // default | show | hide
-                        'spm_sidebar_visibility': $li.find( 'input[name=spm_sidebar_visibility]:checked' ).val() || 'default',   // default | left | right | hide
                         '_inline_edit': $inlineEdit.val()
                     };
+
+                    $.each( spm.areas, function ( i, area ) {
+                        settings[
+                            'spm_' + area + '_visibility'
+                        ] = $li.find( 'input[name=spm_' + area + '_visibility]:checked' ).val() || 'default';
+                    } );
 
                     if ( curAction === 'add' ) {   // Page creation
                         $.extend( true, settings, {
@@ -390,26 +397,36 @@ var SPM = (function( $, document ) {
                     break;
                 case 'less':
                 case 'more':
-                    $( '.spm-advanced-feature' ).not( '.spm-hidden' )[ spmAction === 'less' ? 'hide' : 'show' ]();
-                    $( '.spm-less' )[ spmAction === 'less' ? 'hide' : 'show' ]();
-                    $( '.spm-more' )[ spmAction === 'less' ? 'show' : 'hide' ]();
+                    if( spm_data.is_ss_advanced ) {
+                        $( '.spm-advanced-feature' ).not( '.spm-hidden' ).show();
+                        $( '.spm-less, .spm-more' ).hide();
+                    } else {
+                        $( '.spm-advanced-feature' ).not( '.spm-hidden' )[ spmAction === 'less' ? 'hide' : 'show' ]();
+                        $( '.spm-less' )[ spmAction === 'less' ? 'hide' : 'show' ]();
+                        $( '.spm-more' )[ spmAction === 'less' ? 'show' : 'hide' ]();
+                    }
 
                     break;
                 case 'add':
+                    var addData = {
+                        'action': 'spm_save_page',
+                        'post_type': 'page',
+                        'post_title': 'Home',
+                        'post_status': 'draft',
+                        'add_mode': 'after',
+                        'page_type': 'default',
+                        //'page_template': 'default',
+                        'spm_show_in_menu': 'show',
+                        '_inline_edit': $inlineEdit.val()
+                    };
+
+                    $.each( spm.areas, function ( i, area ) {
+                        addData[ 'spm_' + area + '_visibility' ] = 'default';
+                    } );
+
                     $.post(
                         ajaxurl,
-                        {
-                            'action': 'spm_save_page',
-                            'post_type': 'page',
-                            'post_title': 'Home',
-                            'post_status': 'draft',
-                            'add_mode': 'after',
-                            //'page_template': 'default',
-                            'spm_show_in_menu': 'show',
-                            'spm_header_visibility': 'default',
-                            'spm_sidebar_visibility': 'default',
-                            '_inline_edit': $inlineEdit.val()
-                        }
+                        addData
                     ).done(function() {
                         $SPMTree.jstree( 'refresh' );
                     });
@@ -582,24 +599,28 @@ var SPM = (function( $, document ) {
             'publish': 'spm-page-publish-tmpl'
         }[ action ];
         var $tmpl = this.getPageActionsTmpl( selector );
-        var isSwifty = $tmpl.find( 'input[name=is_swifty]' ).val();
+        var isSSMActive = $tmpl.find( 'input[name=is_ssm_active]' ).val();
 
         if ( action === 'add' ) {
             $tmpl.find( 'input[name=spm_show_in_menu][value=show]' ).prop( 'checked', true );
-            $tmpl.find( 'input[name=spm_header_visibility][value=default]' ).prop( 'checked', true );
-            $tmpl.find( 'input[name=spm_sidebar_visibility][value=default]' ).prop( 'checked', true );
 
-            $tmpl.find( 'input[name=add_mode]' ).each(function() {
+            $.each( spm.areas, function ( i, area ) {
+                $tmpl.find( 'input[name=spm_' + area + '_visibility][value=default]' ).prop( 'checked', true );
+            } );
+
+            $tmpl.find( 'input[name=add_mode], input[name=page_type]:not(:first)' ).each(function() {
                 var labelText = $( this ).next().text();
 
                 $( this ).next().text( labelText + ' "' + self.getLiText( $li ) + '"' );
             });
 
             $tmpl.find( 'input[name=add_mode]' ).val( ['after'] );
+            $tmpl.find( 'input[name=page_type]' ).val( ['default'] );
             $tmpl.find( 'input[name=post_status]' ).val( ['draft'] );
             $tmpl.find( 'input[name=post_name]' ).val( '' );
 
             $tmpl.find( 'input[name=add_mode]' ).addClass( 'spm-new-page' );
+            $tmpl.find( 'input[name=page_type]' ).addClass( 'spm-new-page' );
             $tmpl.find( 'input[name=post_title]' ).addClass( 'spm-new-page' );
 
             $tmpl.find( 'input[name=spm_show_as_first]' )
@@ -608,9 +629,9 @@ var SPM = (function( $, document ) {
         }
 
         if ( action === 'settings' ) {
-            $tmpl.find( 'input[name=add_mode]' ).closest( '.inline-edit-group' ).hide();
+            $tmpl.find( 'input[name=add_mode], input[name=page_type]' ).closest( '.inline-edit-group' ).hide();
 
-            if ( +isSwifty ) {
+            if ( +isSSMActive ) {
                 var $showAsFirstDiv = $tmpl.find( 'input[name=spm_show_as_first]' ).closest( '.inline-edit-group' );
 
                 if ( $li.is( '.jstree-leaf' ) ) {
@@ -621,15 +642,19 @@ var SPM = (function( $, document ) {
             }
         }
 
-        if ( +isSwifty ) {
+        if ( +isSSMActive && ! spm_data.is_ss_advanced ) {
             $tmpl.find( '.spm-advanced-feature' ).hide();
         }
 
         $tmpl.find( 'label.add_mode_inside' )
             .toggleClass( 'spm-label-disabled', !$li.hasClass( 'spm-can-add-inside' ) );
 
-        $tmpl.find( '.spm-less' ).hide();
-        $tmpl.find( '.spm-more' ).show();
+        if( spm_data.is_ss_advanced ) {
+            $tmpl.find( '.spm-less, .spm-more' ).hide();
+        } else {
+            $tmpl.find( '.spm-less' ).hide();
+            $tmpl.find( '.spm-more' ).show();
+        }
 
         $li.data( 'cur-action', action );
         $li.find( '> a' ).after( $tmpl.removeAttr( 'style' ) );
@@ -748,11 +773,11 @@ var SPM = (function( $, document ) {
                 $statusLink.find( '.count' ).text( '(' + statusCount + ')' );
 
                 if ( $li.hasClass( 'spm-hidden' ) && statusCount === '1' && statusName !== 'any' ) {
-                    if( !spm_data.is_swifty_mode ) {
+                    if( !spm_data.is_ssm_active ) {
                         $li.removeClass( 'spm-hidden' );
                     }
 
-                    if ( statusName === 'trash' && spm_data.is_swifty_mode ) {
+                    if ( statusName === 'trash' && spm_data.is_ssm_active ) {
                         self.createTrashButton();
                     }
                 }
