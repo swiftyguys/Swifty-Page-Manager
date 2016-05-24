@@ -60,9 +60,6 @@
             "<%= grunt.getDestPathPlugin() %>css/jquery.alerts.min.css": [ "<%= grunt.getSourcePath() %>css/jquery.alerts.css" ]
         }
     },
-    "svn_check_tags": {
-        "url": "http://plugins.svn.wordpress.org/swifty-page-manager/tags"
-    },
     "send_mail": {
         "to2": "robert@heessels.com jeroen.hoekstra@longtermresults.nl job.hoop@alphamegahosting.com noemi.moosdijk@longtermresults.nl",
         "to": "robert@heessels.com"
@@ -73,6 +70,10 @@
             "..",
             "../plugin/swifty-page-manager/lib/swifty_plugin"
         ]
+    },
+    "svn": {
+        "path": "svn/swifty-page-manager/",
+        "url": "http://plugins.svn.wordpress.org/swifty-page-manager/"
     },
     "replace": {
         "obfuscate": "WILL BE LOADED LATER ON"

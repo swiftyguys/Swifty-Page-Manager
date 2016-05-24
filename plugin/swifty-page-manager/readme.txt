@@ -12,6 +12,8 @@ Creating and managing your pages made easy.
 
 == Description ==
 
+*Swifty Page Manager is part of the SwiftySite family of plugins and theme. Designed as a toolkit for the WordPress Professional to create entry level websites fast, easy and profitable. Helps to avoid those non-billable hours too. Search for the SwiftySite plugin and get all of this awesomeness today. For free.*
+
 **Swifty Page Manager - Creating and managing your pages made easy.**
 
 As you might have noticed, managing the pages of your WordPress site isn't very intuitive out of the box. We found a way to make it a whole lot easier. Here's how...
@@ -20,6 +22,7 @@ As you might have noticed, managing the pages of your WordPress site isn't very 
 
 1. It shows you how the pages of your WordPress site are positioned and related to each other in a so called page tree view.
 2. It alows you to manage the page settings (such as name, status etc.) in a very intuitive way.
+3. Easily drag-and-drop the pages to re-arrange them
 
 Try it – it’s free ;-)
 
@@ -27,6 +30,7 @@ Try it – it’s free ;-)
 
  * **Create a new page** (by clicking the + icon)
  * **Name a page** (for the menu in your site)
+ * **Give it a good title** (important for Google)
  * **Position a page** (on the same level as the previous one or as a sub)
  * **Publish a page** (by clicking the publish button)
  * **Put a page back on draft** (after it has been published – new pages start as draft)
@@ -35,6 +39,11 @@ Try it – it’s free ;-)
  * **Jump to a page to edit it** (by clicking the edit icon)
  * **Remove a page** (by clicking the trash bin icon)
  * **Retrieve a page** (by clicking the 'Trash'link)
+
+ **Extra Features when you have the full SwiftySite experience installed**
+
+ * **Choose which page area's you want shown or hidden** (Like hide the header but show the sidebar on this page)
+ * **Show or hide a page in the navigation menu** (allows you to create viewable pages that are not in your site menu, for instance landing pages)
 
 **Switch between simple and advanced**
 
@@ -61,6 +70,8 @@ We hope that Swifty Page Manager makes your life a little easier and that you wi
 Credits: this plugin is based on [CMS Tree Page View](http://wordpress.org/plugins/cms-tree-page-view/).
 
 [Click here to get to know us a bit better](http://swifty.online/about/).
+
+*Swifty Page Manager is part of the SwiftySite family of plugins and theme. Designed as a toolkit for the WordPress Professional to create entry level websites fast, easy and profitable. Helps to avoid those non-billable hours too. Search for the SwiftySite plugin and get all of this awesomeness today. For free.*
 
 
 
@@ -140,11 +151,22 @@ Try to describe the actions that lead up to the point where something is not wor
 
 2. Create, delete and move pages. Manage the page settings.
 
-3. Drag and drop pages to re-arrange them.
+3. Drag and drop pages to rearrange them.
+
+4. Super Powers Unlocked: Clone pages! When you have the full SwiftySite setup, you can reuse the previous page's layout and content when you create a new page.
+
+5. Super Powers Unlocked: Manage Areas! When you have the full SwiftySite setup, you can choose which areas must be shown or hidden on this page. Also change the slug if you like.
+
+6. Restore a page from the trash bin. Accidentally deleted a page? No worries. Just retrieve it from the trash bin.
 
 Try it - it's free!
 
+
 == Changelog ==
+
+= 3.0.0 =
+ Version 3.0.0 - 2016-05-24
+ * Version bump. This is part of the full SwiftySite 3 set op plugins and theme.
 
 = 1.5.6 =
  * All areas can now be turned on and off (Only for Swifty Site Designer theme).
