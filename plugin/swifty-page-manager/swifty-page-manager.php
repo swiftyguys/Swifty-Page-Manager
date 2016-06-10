@@ -98,9 +98,10 @@ class SwiftyPageManager
         add_action( 'parse_request',     array( $this, 'parse_request' ) );
         add_filter( 'page_link',         array( $this, 'page_link' ), 10, 2 );
         if ( $this->is_ssm_active ) {
-            add_filter( 'wp_title',          array( $this, 'seo_wp_title' ), 10, 2 );
-            add_filter( 'admin_footer_text', array( $this, 'empty_footer_text' ) );
-            add_filter( 'update_footer',     array( $this, 'empty_footer_text' ), 999 );
+            add_filter( 'wp_title',             array( $this, 'seo_wp_title' ), 10, 2 );
+            add_filter( 'document_title_parts', array( $this, 'seo_document_title_parts' ) );
+            add_filter( 'admin_footer_text',    array( $this, 'empty_footer_text' ) );
+            add_filter( 'update_footer',        array( $this, 'empty_footer_text' ), 999 );
         }
 
         // Actions for admins, warning: is_admin is not a security check
@@ -279,6 +280,27 @@ class SwiftyPageManager
         }
 
         return $title;
+    }
+
+    /**
+     * Change title for themes supporting the 'title-tag'.
+     * Return only seo title when set in SPM.
+     *
+     * @param $title_parts
+     * @return array
+     */
+    public function seo_document_title_parts( $title_parts ) {
+        if( is_feed() ) {
+            return $title_parts;
+        }
+
+        $seoTitle = get_post_meta( get_the_ID(), 'spm_page_title_seo', true );
+
+        if( ! empty( $seoTitle ) ) {
+            return array( 'title' => $seoTitle );
+        }
+
+        return $title_parts;
     }
 
     /**
