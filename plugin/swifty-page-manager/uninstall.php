@@ -3,6 +3,8 @@
  * Plugin Uninstall Procedure
  */
 
+exit();
+
 // Make sure that we are uninstalling
 if ( !defined( 'WP_UNINSTALL_PLUGIN' ) )
     exit();
