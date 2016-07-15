@@ -530,6 +530,10 @@ class SwiftyPageManager
         add_filter( 'swifty_admin_page_links_' . $this->swifty_admin_page, array( $this, 'hook_swifty_admin_page_links' ) );
 
         LibSwiftyPlugin::get_instance()->admin_add_swifty_menu( $this->get_admin_page_title(), __('Pages', 'swifty-page-manager'), $this->swifty_admin_page, array( &$this, 'admin_spm_menu_page' ), true );
+
+        if( get_option( 'ss2_hosting_name' ) !== 'AMH' ) {
+            do_action( 'swifty_setup_plugin_action_links', $this->plugin_basename, 'https://www.swifty.online/?rss3=wpaplgpg', __( 'More Swifty Plugins', 'swifty-page-manager' ) );
+        }
     }
 
     function hook_admin_add_swifty_menu( $page, $name, $key, $func )
