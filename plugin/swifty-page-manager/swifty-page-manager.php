@@ -89,7 +89,6 @@ class SwiftyPageManager
     function plugins_loaded()
     {
         $this->is_ssm_active = LibSwiftyPluginView::is_required_plugin_active( 'swifty-site' );
-        $this->is_ss_advanced = get_user_option( 'swifty_gui_mode' ) === 'advanced';
 
         // Priority high, so $required_theme_active_swifty_site_designer is set.
         add_action( 'after_setup_theme', array( $this, 'action_after_setup_theme' ), 9999 );
@@ -154,6 +153,10 @@ class SwiftyPageManager
     function admin_init()
     {
         if ( current_user_can( 'edit_pages' ) ) {
+            // get_user_option is used safe when 'init' action is triggered. Using this earlier can cause compatibility
+            // issues with other plugins, like BBPress.
+            $this->is_ss_advanced = get_user_option( 'swifty_gui_mode' ) === 'advanced';
+
             if ( ! empty( $_GET['status'] ) ) {
                 $this->_post_status = $_GET['status'];
             }
