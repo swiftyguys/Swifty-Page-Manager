@@ -67,43 +67,41 @@ A huge time saver is the ability to make a copy of an entire page. For certain p
  
 [Learn more about the powerful combination of Swifty plugins and theme](https://wordpress.org/plugins/swifty-site/)
  
-**List of features**
- 
- 
- – **Create a new page** (by clicking the + icon)
- – **Name a page** (for the menu on your site)
- – **Give it a good title** (important for Google)
- – **Position a page** (on the same level as the previous one or as a sub)
- – **Publish a page** (by clicking the publish button)
- – **Put a page back on draft** (after it has been published. New pages start as a draft)
- – **Move a page with drag and drop** (click and hold the page icon while you move it)
- – **Jump to a page to view it** (by clicking the view icon)
- – **Jump to a page to edit it** (by clicking the edit icon)
- – **Remove a page** (by clicking the trash bin icon)
- – **Restore a page** (by clicking the ‘Trash' link)
- 
- 
-**Get Swifty Page Manager.**   
-*FOR FREE.*
- 
-Go to the plugins page in the admin dashboard of your website. Search for Swifty Page Manager there. Click install. Click activate. You’re done. [Or follow these instructions.](https://wordpress.org/plugins/swifty-page-manager/installation/)
+>**List of features**   
+>*WHEN YOU USE THIS PLUGIN STAND-ALONE*
+>
+>- **Create a new page** (by clicking the + icon)   
+>- **Name a page** (for the menu on your site)   
+>- **Give it a good title** (important for Google)   
+>- **Position a page** (on the same level as the previous one or as a sub)   
+>- **Publish a page** (by clicking the publish button)   
+>- **Put a page back on draft** (after it has been published. New pages start as a draft)   
+>- **Move a page with drag and drop** (click and hold the page icon while you move it)   
+>- **Jump to a page to view it** (by clicking the view icon)   
+>- **Jump to a page to edit it** (by clicking the edit icon)   
+>- **Remove a page** (by clicking the trash bin icon)   
+>- **Restore a page** (by clicking the ‘Trash' link)   
 
-**Extra Features**
-*WHEN YOU HAVE THE FULL SWIFTYSITE EXPERIENCE INSTALLED*
- 
- 
- - **Automatically generated site navigation** (Your site menu is the exact same as your page tree)
- - **Show or hide a page in the navigation menu** (allows you to create viewable pages that are not in your site menu, for instance, landing pages)
- - **Choose which page area’s you want shown or hidden** (For example: hide the header but show the sidebar on this page)
- - **Re-use page types** (Create the perfect blog page or landing page and re-use that as often as you like)
- - **Touch-friendly navigation** (You can rename the auto-generated first button of the submenu)
- 
- 
-**Switch between simple and advanced**
+>**Extra Features**   
+>*WHEN YOU HAVE THE FULL SWIFTYSITE EXPERIENCE INSTALLED*
+>
+>- **Automatically generated site navigation** (Your site menu is the exact same as your page tree)   
+>- **Show or hide a page in the navigation menu** (allows you to create viewable pages that are not in your site menu, for instance, landing pages)   
+>- **Choose which page area’s you want shown or hidden** (For example: hide the header but show the sidebar on this page)   
+>- **Re-use page types** (Create the perfect blog page or landing page and re-use that as often as you like)   
+>- **Touch-friendly navigation** (You can rename the auto-generated first button of the submenu)   
+
+**Switch between simple and advanced**   
+*ENJOY THE BEST OF BOTH WORLDS*
 
 As with all the plugins the Swifty team develops, the Swifty Page Manager is focused on simplifying the things that you use most, making them easier and faster to work with.
 
 Once you've installed Swifty Page Manager you can manage your pages both in our new way, and in the native Wordpress way. You are free to use both of these modes any time you like.
+
+**Get Swifty Page Manager**   
+*FOR FREE*
+ 
+Go to the plugins page in the admin dashboard of your website. Search for Swifty Page Manager there. Click install. Click activate. You’re done. [Or follow these instructions.](https://wordpress.org/plugins/swifty-page-manager/installation/)
 
 **Languages**
 
@@ -115,7 +113,7 @@ Swifty Page Manager is currently available in:
  * Serbian (by [Borisa Djuraskovic](http://www.webhostinghub.com))
  * Hebrew (by [Ahrale](http://atar4u.com))
 
-[Want to help add or improve translations? Click here.](http://swifty.online/plugins/translate/)
+Would you like to see your language here or help improve the above translations? [Click here.](http://swifty.online/plugins/translate/)
 
 **Enjoy**
 
