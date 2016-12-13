@@ -813,7 +813,11 @@ class SwiftyPageManager
 
         $spm_is_custom_url  = ! empty( $_POST['spm_is_custom_url'] ) ? intval( $_POST['spm_is_custom_url'] ) : null;
         $spm_page_title_seo = ! empty( $_POST['spm_page_title_seo'] ) ? trim( $_POST['spm_page_title_seo'] ) : '';
+        $spm_page_description_seo = ! empty( $_POST['spm_page_description_seo'] ) ? trim( $_POST['spm_page_description_seo'] ) : '';
         $spm_show_in_menu   = ! empty( $_POST['spm_show_in_menu'] ) ? $_POST['spm_show_in_menu'] : null;
+
+        $yoast_se_noindex = $_POST['spm_page_se_noindex'];
+        $yoast_se_nofollow = $_POST['spm_page_se_nofollow'];
 
         $post_data = array();
 
@@ -852,10 +856,15 @@ class SwiftyPageManager
 
                     update_post_meta( $post_id, 'spm_show_in_menu', $spm_show_in_menu );
                     update_post_meta( $post_id, 'spm_page_title_seo', $spm_page_title_seo );
-                    if( ! empty( $spm_page_title_seo ) ) {
-                        if( defined( 'WPSEO_VERSION' ) && class_exists( 'WPSEO_Meta' ) ) {
+                    if( defined( 'WPSEO_VERSION' ) && class_exists( 'WPSEO_Meta' ) ) {
+                        if( ! empty( $spm_page_title_seo ) ) {
                             WPSEO_Meta::set_value( 'title', $spm_page_title_seo, $post_id );
                         }
+                        if( ! empty( $spm_page_description_seo ) ) {
+                            WPSEO_Meta::set_value( 'metadesc', $spm_page_description_seo, $post_id );
+                        }
+                        WPSEO_Meta::set_value( 'meta-robots-noindex', $yoast_se_noindex, $post_id );
+                        WPSEO_Meta::set_value( 'meta-robots-nofollow', $yoast_se_nofollow, $post_id );
                     }
 
                     foreach( $this->areas as $area ) {
@@ -918,10 +927,15 @@ class SwiftyPageManager
                     add_post_meta( $post_id, 'spm_url', $spm_is_custom_url ? $post_name : '', 1 );
                     add_post_meta( $post_id, 'spm_show_in_menu', $spm_show_in_menu, 1 );
                     add_post_meta( $post_id, 'spm_page_title_seo', $spm_page_title_seo, 1 );
-                    if( ! empty( $spm_page_title_seo ) ) {
-                        if( defined( 'WPSEO_VERSION' ) && class_exists( 'WPSEO_Meta' ) ) {
+                    if( defined( 'WPSEO_VERSION' ) && class_exists( 'WPSEO_Meta' ) ) {
+                        if( ! empty( $spm_page_title_seo ) ) {
                             WPSEO_Meta::set_value( 'title', $spm_page_title_seo, $post_id );
                         }
+                        if( ! empty( $spm_page_description_seo ) ) {
+                            WPSEO_Meta::set_value( 'metadesc', $spm_page_description_seo, $post_id );
+                        }
+                        WPSEO_Meta::set_value( 'meta-robots-noindex', $yoast_se_noindex, $post_id );
+                        WPSEO_Meta::set_value( 'meta-robots-nofollow', $yoast_se_nofollow, $post_id );
                     }
 
                     foreach( $this->areas as $area ) {
@@ -1113,14 +1127,22 @@ class SwiftyPageManager
             }
         }
 
-        if( empty( $post_meta['spm_page_title_seo'] ) ) {
-            if( defined( 'WPSEO_VERSION' ) && class_exists( 'WPSEO_Meta' ) ) {
+        if( defined( 'WPSEO_VERSION' ) && class_exists( 'WPSEO_Meta' ) ) {
+            if( empty( $post_meta['spm_page_title_seo'] ) ) {
                 $yoastTitle = WPSEO_Meta::get_value( 'title', $post_id );
                 if( ! empty( $yoastTitle ) ) {
                     // If we don't have an SPM title, use the Yoast title, if available.
                     $post_meta['spm_page_title_seo'] = $yoastTitle;
                 }
             }
+
+            $yoastDescription = WPSEO_Meta::get_value( 'metadesc', $post_id );
+            if( ! empty( $yoastDescription ) ) {
+                $post_meta['spm_page_description_seo'] = $yoastDescription;
+            }
+
+            $post_meta['yoast_se_noindex'] = WPSEO_Meta::get_value( 'meta-robots-noindex', $post_id );
+            $post_meta['yoast_se_nofollow'] = WPSEO_Meta::get_value( 'meta-robots-nofollow', $post_id );
         }
 
         ?>
@@ -1134,6 +1156,9 @@ class SwiftyPageManager
         li.find( 'input[name="spm_is_custom_url"]' ).val( <?php echo json_encode( $spm_is_custom_url ); ?> );
         li.find( 'input[name="spm_show_in_menu"]' ).val( [ <?php echo json_encode( $post_meta['spm_show_in_menu'] ); ?> ] );
         li.find( 'input[name="spm_page_title_seo"]' ).val( <?php echo json_encode( $post_meta['spm_page_title_seo'] ); ?> );
+        li.find( 'textarea[name="spm_page_description_seo"]' ).val( <?php echo json_encode( $post_meta['spm_page_description_seo'] ); ?> );
+        li.find( 'input[name="spm_se_noindex"]' ).val( [ <?php echo json_encode( $post_meta['yoast_se_noindex'] ); ?> ] );
+        li.find( 'input[name="spm_se_nofollow"]' ).val( [ <?php echo json_encode( $post_meta['yoast_se_nofollow'] ); ?> ] );
         <?php if ( $this->is_ssm_active ):
             foreach( $this->areas as $area ) { ?>
         li.find( 'input[name="spm_<?php echo $area; ?>_visibility"]' ).val( [ <?php echo json_encode( $post_meta['spm_' . $area . '_visibility'] ); ?> ] );

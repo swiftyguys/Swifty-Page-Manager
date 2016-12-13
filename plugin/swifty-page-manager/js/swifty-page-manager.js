@@ -329,6 +329,9 @@ var SPM = (function( $, document ) {
                         'spm_is_custom_url': $li.find( 'input[name=spm_is_custom_url]' ).val(),
                         'spm_show_in_menu': $li.find( 'input[name=spm_show_in_menu]:checked' ).val() || 'show',   // show | hide
                         'spm_page_title_seo': $li.find( 'input[name=spm_page_title_seo]' ).val(),
+                        'spm_page_description_seo': $li.find( 'textarea[name=spm_page_description_seo]' ).val(),
+                        'spm_page_se_noindex': $li.find( 'input[name=spm_se_noindex]:checked' ).val(),
+                        'spm_page_se_nofollow': $li.find( 'input[name=spm_se_nofollow]:checked' ).val(),
                         '_inline_edit': $inlineEdit.val()
                     };
 

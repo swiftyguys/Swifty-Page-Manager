@@ -307,6 +307,19 @@ $post_type_object = get_post_type_object( $this->_post_type );
         ?>
         </span>
 
+        <!-- SPM template description tooltip -->
+        <span class="spm-tooltip spm-description-tooltip" style="display:none;">
+        <?php
+        _e( 'The description of the page is the text that is shown in search engine results (like Google)<br />below the title.<br /><br />' .
+        'If you leave this empty, search engines will automatically generate a description<br />' .
+        'by taking a fragment of the text on the page.<br /><br />' .
+        'So leaving this empty is okay, but for your most important pages it is better<br />' .
+        'to write a good description here, so your page is optimally represented in the search results.<br /><br />'.
+        'The description should ideally be between 135 and 160 characters<br />and should contain the most important keyword of this page.<br />',
+        'swifty-page-manager' );
+        ?>
+        </span>
+
         <!-- SPM template url tooltip -->
         <span class="spm-tooltip spm-url-tooltip" style="display:none;">
         <?php
@@ -368,6 +381,20 @@ $post_type_object = get_post_type_object( $this->_post_type );
                                             </span>
                                             <span class="input-text-wrap">
                                                 <input name="spm_page_title_seo" type="text" class="spm-input spm-input-text" />
+                                            </span>
+                                        </label>
+                                        <?php
+                                            }
+                                        ?>
+                                        <?php
+                                            if ( $this->is_ssm_active && defined( 'WPSEO_VERSION' ) ) {
+                                        ?>
+                                        <label class="spm-advanced-feature">
+                                            <span class="title spm-label-title">
+                                                <?php _e( 'Description', 'swifty-page-manager' ) ?>  <span class="button-secondary spm-tooltip-button" rel="spm-description-tooltip"><i class="fa fa-question"></i></span>
+                                            </span>
+                                            <span class="input-text-wrap">
+                                                <textarea name="spm_page_description_seo" class="spm-input spm-input-text" rows="4" cols="50"></textarea>
                                             </span>
                                         </label>
                                         <?php
@@ -729,6 +756,56 @@ $post_type_object = get_post_type_object( $this->_post_type );
                                             </label>
                                         </div>
                                         <?php endif; // if ( $this->is_ssd_active ) ?>
+                                        <?php
+                                            if ( $this->is_ssm_active && defined( 'WPSEO_VERSION' ) ) {
+                                        ?>
+                                        <div class="inline-edit-group spm-advanced-feature">
+                                            <label class="alignleft">
+                                                <span class="title spm-label-title">
+                                                    <?php esc_html_e( 'Search engines', 'swifty-page-manager' ) ?>
+                                                </span>
+                                            </label>
+                                            <label class="alignleft">
+                                                <input name="spm_se_noindex" type="radio" value="0" class="spm-input-radio" />
+                                                <span class="checkbox-title">
+                                                    <?php esc_html_e( 'Default', 'swifty-page-manager' ) ?>
+                                                </span>
+                                            </label>
+                                            <label class="alignleft">
+                                                <input name="spm_se_noindex" type="radio" value="2" class="spm-input-radio" />
+                                                <span class="checkbox-title">
+                                                    <?php esc_html_e( 'May index', 'swifty-page-manager' ) ?>
+                                                </span>
+                                            </label>
+                                            <label class="alignleft">
+                                                <input name="spm_se_noindex" type="radio" value="1" class="spm-input-radio" />
+                                                <span class="checkbox-title">
+                                                    <?php esc_html_e( 'Must not index this page', 'swifty-page-manager' ) ?>
+                                                </span>
+                                            </label>
+                                        </div>
+                                        <div class="inline-edit-group spm-advanced-feature">
+                                            <label class="alignleft">
+                                                <span class="title spm-label-title">
+                                                    <?php esc_html_e( 'Search engines', 'swifty-page-manager' ) ?>
+                                                </span>
+                                            </label>
+                                            <label class="alignleft">
+                                                <input name="spm_se_nofollow" type="radio" value="0" class="spm-input-radio" />
+                                                <span class="checkbox-title">
+                                                    <?php esc_html_e( 'May follow links', 'swifty-page-manager' ) ?>
+                                                </span>
+                                            </label>
+                                            <label class="alignleft">
+                                                <input name="spm_se_nofollow" type="radio" value="1" class="spm-input-radio" />
+                                                <span class="checkbox-title">
+                                                    <?php esc_html_e( 'Must not follow links on this page', 'swifty-page-manager' ) ?>
+                                                </span>
+                                            </label>
+                                        </div>
+                                        <?php
+                                            }
+                                        ?>
                                         <div class="inline-edit-group spm-less">
                                             <input type="button" class="button-secondary alignright spm-button spm-do-button"
                                                    data-spm-action="less" value="<?php esc_attr_e( 'Less', 'swifty-page-manager' ) ?>" />
