@@ -94,5 +94,9 @@
                 "!<%= grunt.getSourcePath() %>js/libs/**/*.js"
             ]
         }
+    },
+    "docs": {
+        "changelog_id_sol": 6986,
+        "changelog_id_fd": 11000022503
     }
 }

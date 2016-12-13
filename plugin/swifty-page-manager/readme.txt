@@ -3,7 +3,7 @@ Contributors: SwiftyOnline, robertheessels, chrisvermeulen, jeroenh, jeroenverme
 Donate link: http://swifty.online/plugins/donate/
 Tags: Swifty, page, pages, tree, menu, manage, hierarchy, structure
 Requires at least: 3.8
-Tested up to: 4.5.2
+Tested up to: 4.7
 Stable tag: RELEASE_TAG
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -212,8 +212,14 @@ Try it - it's free!
 
 == Changelog ==
 
-= 3.0.0 =
- Version 3.0.0 - 2016-05-24
+= 3.0.1 - 2016-12-13 =
+ * If SwiftySite plugin is active, page titles set in Swifty Page Manager and titles set in YoastSEO will be synchronised. If there is a conflict in these titles, Swifty Page Manager's title will win (only in Swifty mode; not in stand-alone plugin).
+ * If both the SwiftySite and YoastSEO plugins are active, you can now enter a description meta tag and set if search engines may index and/or follow the page (only in Swifty mode; not in stand-alone plugin).
+ * Fixed: the title was not always used correctly as title tag (only in Swifty mode; not in stand-alone plugin).
+ * Fixed: sometimes the plugin could not be uninstalled.
+ * Fixed: a BBPress compatibility issue.
+
+= 3.0.0 - 2016-05-24 =
  * Version bump. This is part of the full SwiftySite 3 set op plugins and theme.
 
 = 1.5.6 =
