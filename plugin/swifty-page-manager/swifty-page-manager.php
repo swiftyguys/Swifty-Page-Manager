@@ -89,7 +89,6 @@ class SwiftyPageManager
     function plugins_loaded()
     {
         $this->is_ssm_active = LibSwiftyPluginView::is_required_plugin_active( 'swifty-site' );
-        $this->is_ss_advanced = get_user_option( 'swifty_gui_mode' ) === 'advanced';
 
         // Priority high, so $required_theme_active_swifty_site_designer is set.
         add_action( 'after_setup_theme', array( $this, 'action_after_setup_theme' ), 9999 );
@@ -98,9 +97,11 @@ class SwiftyPageManager
         add_action( 'parse_request',     array( $this, 'parse_request' ) );
         add_filter( 'page_link',         array( $this, 'page_link' ), 10, 2 );
         if ( $this->is_ssm_active ) {
-            add_filter( 'wp_title',          array( $this, 'seo_wp_title' ), 10, 2 );
-            add_filter( 'admin_footer_text', array( $this, 'empty_footer_text' ) );
-            add_filter( 'update_footer',     array( $this, 'empty_footer_text' ), 999 );
+            add_filter( 'wp_title',             array( $this, 'seo_wp_title' ), 10/*, 2*/ );
+            add_filter( 'document_title_parts', array( $this, 'seo_document_title_parts' ) );
+            add_filter( 'wpseo_title', array( $this, 'seo_wp_title' ) );
+            add_filter( 'admin_footer_text',    array( $this, 'empty_footer_text' ) );
+            add_filter( 'update_footer',        array( $this, 'empty_footer_text' ), 999 );
         }
 
         // Actions for admins, warning: is_admin is not a security check
@@ -153,6 +154,10 @@ class SwiftyPageManager
     function admin_init()
     {
         if ( current_user_can( 'edit_pages' ) ) {
+            // get_user_option is used safe when 'init' action is triggered. Using this earlier can cause compatibility
+            // issues with other plugins, like BBPress.
+            $this->is_ss_advanced = get_user_option( 'swifty_gui_mode' ) === 'advanced';
+
             if ( ! empty( $_GET['status'] ) ) {
                 $this->_post_status = $_GET['status'];
             }
@@ -266,7 +271,7 @@ class SwiftyPageManager
      * @param string $sep
      * @return string
      */
-    public function seo_wp_title( $title, $sep )
+    public function seo_wp_title( $title/*, $sep*/ )
     {
         if( is_feed() ) {
             return $title;
@@ -275,10 +280,45 @@ class SwiftyPageManager
         $seoTitle = get_post_meta( get_the_ID(), 'spm_page_title_seo', true );
 
         if( ! empty( $seoTitle ) ) {
+
+            if( defined( 'WPSEO_VERSION' ) && class_exists( 'WPSEO_Meta' ) ) {
+                if( $title !== $seoTitle ) {
+                    $yoastTitle = WPSEO_Meta::get_value( 'title', get_the_ID() );
+
+                    if( ! empty( $yoastTitle ) ) {
+                        if( $yoastTitle !== $seoTitle ) {
+                            // If a specific Yoast title is set AND a specific SPM title is set, we overwrite the Yoast title with the SPM title.
+                            WPSEO_Meta::set_value( 'title', $seoTitle, get_the_ID() );
+                        }
+                    }
+                }
+            }
+
             return "$seoTitle";
         }
 
         return $title;
+    }
+
+    /**
+     * Change title for themes supporting the 'title-tag'.
+     * Return only seo title when set in SPM.
+     *
+     * @param $title_parts
+     * @return array
+     */
+    public function seo_document_title_parts( $title_parts ) {
+        if( is_feed() ) {
+            return $title_parts;
+        }
+
+        $seoTitle = get_post_meta( get_the_ID(), 'spm_page_title_seo', true );
+
+        if( ! empty( $seoTitle ) ) {
+            return array( 'title' => $seoTitle );
+        }
+
+        return $title_parts;
     }
 
     /**
@@ -508,6 +548,10 @@ class SwiftyPageManager
         add_filter( 'swifty_admin_page_links_' . $this->swifty_admin_page, array( $this, 'hook_swifty_admin_page_links' ) );
 
         LibSwiftyPlugin::get_instance()->admin_add_swifty_menu( $this->get_admin_page_title(), __('Pages', 'swifty-page-manager'), $this->swifty_admin_page, array( &$this, 'admin_spm_menu_page' ), true );
+
+        if( get_option( 'ss2_hosting_name' ) !== 'AMH' ) {
+            do_action( 'swifty_setup_plugin_action_links', $this->plugin_basename, 'https://www.swifty.online/?rss3=wpaplgpg', __( 'More Swifty Plugins', 'swifty-page-manager' ) );
+        }
     }
 
     function hook_admin_add_swifty_menu( $page, $name, $key, $func )
@@ -769,7 +813,11 @@ class SwiftyPageManager
 
         $spm_is_custom_url  = ! empty( $_POST['spm_is_custom_url'] ) ? intval( $_POST['spm_is_custom_url'] ) : null;
         $spm_page_title_seo = ! empty( $_POST['spm_page_title_seo'] ) ? trim( $_POST['spm_page_title_seo'] ) : '';
+        $spm_page_description_seo = ! empty( $_POST['spm_page_description_seo'] ) ? trim( $_POST['spm_page_description_seo'] ) : '';
         $spm_show_in_menu   = ! empty( $_POST['spm_show_in_menu'] ) ? $_POST['spm_show_in_menu'] : null;
+
+        $yoast_se_noindex = $_POST['spm_page_se_noindex'];
+        $yoast_se_nofollow = $_POST['spm_page_se_nofollow'];
 
         $post_data = array();
 
@@ -808,6 +856,16 @@ class SwiftyPageManager
 
                     update_post_meta( $post_id, 'spm_show_in_menu', $spm_show_in_menu );
                     update_post_meta( $post_id, 'spm_page_title_seo', $spm_page_title_seo );
+                    if( defined( 'WPSEO_VERSION' ) && class_exists( 'WPSEO_Meta' ) ) {
+                        if( ! empty( $spm_page_title_seo ) ) {
+                            WPSEO_Meta::set_value( 'title', $spm_page_title_seo, $post_id );
+                        }
+                        if( ! empty( $spm_page_description_seo ) ) {
+                            WPSEO_Meta::set_value( 'metadesc', $spm_page_description_seo, $post_id );
+                        }
+                        WPSEO_Meta::set_value( 'meta-robots-noindex', $yoast_se_noindex, $post_id );
+                        WPSEO_Meta::set_value( 'meta-robots-nofollow', $yoast_se_nofollow, $post_id );
+                    }
 
                     foreach( $this->areas as $area ) {
                         $area_visibility = 'spm_' . $area . '_visibility';
@@ -869,6 +927,16 @@ class SwiftyPageManager
                     add_post_meta( $post_id, 'spm_url', $spm_is_custom_url ? $post_name : '', 1 );
                     add_post_meta( $post_id, 'spm_show_in_menu', $spm_show_in_menu, 1 );
                     add_post_meta( $post_id, 'spm_page_title_seo', $spm_page_title_seo, 1 );
+                    if( defined( 'WPSEO_VERSION' ) && class_exists( 'WPSEO_Meta' ) ) {
+                        if( ! empty( $spm_page_title_seo ) ) {
+                            WPSEO_Meta::set_value( 'title', $spm_page_title_seo, $post_id );
+                        }
+                        if( ! empty( $spm_page_description_seo ) ) {
+                            WPSEO_Meta::set_value( 'metadesc', $spm_page_description_seo, $post_id );
+                        }
+                        WPSEO_Meta::set_value( 'meta-robots-noindex', $yoast_se_noindex, $post_id );
+                        WPSEO_Meta::set_value( 'meta-robots-nofollow', $yoast_se_nofollow, $post_id );
+                    }
 
                     foreach( $this->areas as $area ) {
                         $v_key = 'spm_' . $area . '_visibility';
@@ -1059,6 +1127,24 @@ class SwiftyPageManager
             }
         }
 
+        if( defined( 'WPSEO_VERSION' ) && class_exists( 'WPSEO_Meta' ) ) {
+            if( empty( $post_meta['spm_page_title_seo'] ) ) {
+                $yoastTitle = WPSEO_Meta::get_value( 'title', $post_id );
+                if( ! empty( $yoastTitle ) ) {
+                    // If we don't have an SPM title, use the Yoast title, if available.
+                    $post_meta['spm_page_title_seo'] = $yoastTitle;
+                }
+            }
+
+            $yoastDescription = WPSEO_Meta::get_value( 'metadesc', $post_id );
+            if( ! empty( $yoastDescription ) ) {
+                $post_meta['spm_page_description_seo'] = $yoastDescription;
+            }
+
+            $post_meta['yoast_se_noindex'] = WPSEO_Meta::get_value( 'meta-robots-noindex', $post_id );
+            $post_meta['yoast_se_nofollow'] = WPSEO_Meta::get_value( 'meta-robots-nofollow', $post_id );
+        }
+
         ?>
         var li = jQuery( '#spm-id-<?php echo $post_id; ?>' );
 
@@ -1070,6 +1156,9 @@ class SwiftyPageManager
         li.find( 'input[name="spm_is_custom_url"]' ).val( <?php echo json_encode( $spm_is_custom_url ); ?> );
         li.find( 'input[name="spm_show_in_menu"]' ).val( [ <?php echo json_encode( $post_meta['spm_show_in_menu'] ); ?> ] );
         li.find( 'input[name="spm_page_title_seo"]' ).val( <?php echo json_encode( $post_meta['spm_page_title_seo'] ); ?> );
+        li.find( 'textarea[name="spm_page_description_seo"]' ).val( <?php echo json_encode( $post_meta['spm_page_description_seo'] ); ?> );
+        li.find( 'input[name="spm_se_noindex"]' ).val( [ <?php echo json_encode( $post_meta['yoast_se_noindex'] ); ?> ] );
+        li.find( 'input[name="spm_se_nofollow"]' ).val( [ <?php echo json_encode( $post_meta['yoast_se_nofollow'] ); ?> ] );
         <?php if ( $this->is_ssm_active ):
             foreach( $this->areas as $area ) { ?>
         li.find( 'input[name="spm_<?php echo $area; ?>_visibility"]' ).val( [ <?php echo json_encode( $post_meta['spm_' . $area . '_visibility'] ); ?> ] );
