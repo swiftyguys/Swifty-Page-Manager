@@ -97,8 +97,9 @@ class SwiftyPageManager
         add_action( 'parse_request',     array( $this, 'parse_request' ) );
         add_filter( 'page_link',         array( $this, 'page_link' ), 10, 2 );
         if ( $this->is_ssm_active ) {
-            add_filter( 'wp_title',             array( $this, 'seo_wp_title' ), 10, 2 );
+            add_filter( 'wp_title',             array( $this, 'seo_wp_title' ), 10/*, 2*/ );
             add_filter( 'document_title_parts', array( $this, 'seo_document_title_parts' ) );
+            add_filter( 'wpseo_title', array( $this, 'seo_wp_title' ) );
             add_filter( 'admin_footer_text',    array( $this, 'empty_footer_text' ) );
             add_filter( 'update_footer',        array( $this, 'empty_footer_text' ), 999 );
         }
@@ -270,7 +271,7 @@ class SwiftyPageManager
      * @param string $sep
      * @return string
      */
-    public function seo_wp_title( $title, $sep )
+    public function seo_wp_title( $title/*, $sep*/ )
     {
         if( is_feed() ) {
             return $title;
@@ -279,6 +280,20 @@ class SwiftyPageManager
         $seoTitle = get_post_meta( get_the_ID(), 'spm_page_title_seo', true );
 
         if( ! empty( $seoTitle ) ) {
+
+            if( defined( 'WPSEO_VERSION' ) && class_exists( 'WPSEO_Meta' ) ) {
+                if( $title !== $seoTitle ) {
+                    $yoastTitle = WPSEO_Meta::get_value( 'title', get_the_ID() );
+
+                    if( ! empty( $yoastTitle ) ) {
+                        if( $yoastTitle !== $seoTitle ) {
+                            // If a specific Yoast title is set AND a specific SPM title is set, we overwrite the Yoast title with the SPM title.
+                            WPSEO_Meta::set_value( 'title', $seoTitle, get_the_ID() );
+                        }
+                    }
+                }
+            }
+
             return "$seoTitle";
         }
 
@@ -837,6 +852,11 @@ class SwiftyPageManager
 
                     update_post_meta( $post_id, 'spm_show_in_menu', $spm_show_in_menu );
                     update_post_meta( $post_id, 'spm_page_title_seo', $spm_page_title_seo );
+                    if( ! empty( $spm_page_title_seo ) ) {
+                        if( defined( 'WPSEO_VERSION' ) && class_exists( 'WPSEO_Meta' ) ) {
+                            WPSEO_Meta::set_value( 'title', $spm_page_title_seo, $post_id );
+                        }
+                    }
 
                     foreach( $this->areas as $area ) {
                         $area_visibility = 'spm_' . $area . '_visibility';
@@ -898,6 +918,11 @@ class SwiftyPageManager
                     add_post_meta( $post_id, 'spm_url', $spm_is_custom_url ? $post_name : '', 1 );
                     add_post_meta( $post_id, 'spm_show_in_menu', $spm_show_in_menu, 1 );
                     add_post_meta( $post_id, 'spm_page_title_seo', $spm_page_title_seo, 1 );
+                    if( ! empty( $spm_page_title_seo ) ) {
+                        if( defined( 'WPSEO_VERSION' ) && class_exists( 'WPSEO_Meta' ) ) {
+                            WPSEO_Meta::set_value( 'title', $spm_page_title_seo, $post_id );
+                        }
+                    }
 
                     foreach( $this->areas as $area ) {
                         $v_key = 'spm_' . $area . '_visibility';
@@ -1085,6 +1110,16 @@ class SwiftyPageManager
             if( $post_meta[ 'spm_show_as_first' ] === 'hide' ) {
                 $spm_alt_menu_text = $post_meta[ 'spm_alt_menu_text' ];
                 $post_meta[ 'spm_alt_menu_text' ] = '';
+            }
+        }
+
+        if( empty( $post_meta['spm_page_title_seo'] ) ) {
+            if( defined( 'WPSEO_VERSION' ) && class_exists( 'WPSEO_Meta' ) ) {
+                $yoastTitle = WPSEO_Meta::get_value( 'title', $post_id );
+                if( ! empty( $yoastTitle ) ) {
+                    // If we don't have an SPM title, use the Yoast title, if available.
+                    $post_meta['spm_page_title_seo'] = $yoastTitle;
+                }
             }
         }
 

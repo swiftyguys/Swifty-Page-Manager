@@ -1,6 +1,6 @@
 :: START WEBDRIVER (SELENIUM)
 @ECHO OFF
-start "Selenium Server" /MIN java.exe -jar C:\selenium-server-standalone-2.45.0.jar >nul 2>&1
+start "Selenium Server" /MIN java.exe -jar C:\selenium-server-standalone-2.53.1.jar >nul 2>&1
 sleep 2 >nul 2>&1
 ECHO ON
 
