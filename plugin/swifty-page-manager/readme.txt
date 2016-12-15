@@ -263,7 +263,7 @@ Try it - it's free!
 
 = 1.4.4 =
  * Fixed an issue where 1.4.3. would give erros on some shared hosting accounts.
- * Renamed "Page edit" to "Page settings".
+ * Renamed 'Page edit' to 'Page settings'.
 
 = 1.4.3 =
  * Shows version number on the setting page.
